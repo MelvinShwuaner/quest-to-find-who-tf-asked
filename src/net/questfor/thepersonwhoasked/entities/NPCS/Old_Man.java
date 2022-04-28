@@ -14,6 +14,7 @@ public class Old_Man extends LivingEntity {
         hitbox = new Rectangle(0, 0, 46, 46);
         getImageInstance();
         setDialogues();
+        EntityType = 1;
 
     }
     public void getImageInstance() {

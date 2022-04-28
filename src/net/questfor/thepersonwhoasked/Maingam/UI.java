@@ -86,6 +86,13 @@ public class UI {
             x += gp.tilesize;
 
         }
+        g2.setFont(new Font("Arial", Font.PLAIN, 26));
+        g2.setColor(Color.white);
+        if(gp.keyM.checkFPS) {
+            if (gp.player.invincible == true) {
+                g2.drawString("" + gp.player.hitTime, 10, 200);
+            }
+        }
 
     }
 

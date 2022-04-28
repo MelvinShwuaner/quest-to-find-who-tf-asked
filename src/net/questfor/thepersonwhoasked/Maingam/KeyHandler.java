@@ -17,7 +17,7 @@ public class KeyHandler implements KeyListener {
     public static boolean pickup, attack, mine, build, jump;
     //advanced keys
     public static boolean enterpressed;
-
+    public int pause = 0;
 
     public boolean checkFPS;
 
@@ -58,7 +58,7 @@ public class KeyHandler implements KeyListener {
                         System.exit(0);
                     }
                 }
-            }
+            }else {
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
                     if (code == KeyEvent.VK_W) {
                         if (upPressed == false) {
@@ -83,12 +83,7 @@ public class KeyHandler implements KeyListener {
                     }
                     if (code == KeyEvent.VK_P) {
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.pauseState;
-                    }
 
-                    if (code == KeyEvent.VK_D) {
-                        if (rightPressed == false) {
-                            rightPressed = true;
-                        }
                     }
                     if (code == KeyEvent.VK_T) {
                         if (!checkFPS) {
@@ -104,12 +99,17 @@ public class KeyHandler implements KeyListener {
                         }
                     }
                 }
-                if(code == KeyEvent.VK_ENTER){
+                if (code == KeyEvent.VK_ENTER) {
                     enterpressed = true;
                 }
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.pauseState) {
                     if (code == KeyEvent.VK_P) {
-                        GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                        pause++;
+                        if (pause == 2) {
+                            GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                            MainGame.playmusic(0);
+                            pause = 0;
+                        }
                     }
                 }
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.dialogueState) {
@@ -117,6 +117,7 @@ public class KeyHandler implements KeyListener {
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
                     }
                 }
+            }
         }catch(Exception er){
             crash.main(er);
         }

@@ -74,7 +74,7 @@ public class EventHandler {
             if(gp.player.health != gp.player.maxhealth) {
                 GlobalGameThreadConfigs.GameState = gamestate;
                 UI.currentDialogue = "you drink the water. \n Your health has been recovered";
-                gp.player.health++;
+                gp.player.health = gp.player.maxhealth;
                 canTriggerEvent = false;
             }else{
                 GlobalGameThreadConfigs.GameState = gamestate;

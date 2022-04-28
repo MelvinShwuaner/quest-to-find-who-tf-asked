@@ -1,9 +1,6 @@
 package net.questfor.thepersonwhoasked.entities;
 
-import net.questfor.thepersonwhoasked.Maingam.MainGame;
-import net.questfor.thepersonwhoasked.Maingam.UI;
-import net.questfor.thepersonwhoasked.Maingam.UtilityTool;
-import net.questfor.thepersonwhoasked.Maingam.crash;
+import net.questfor.thepersonwhoasked.Maingam.*;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -28,6 +25,10 @@ public class LivingEntity {
     public String name;
     public boolean hitboxe = false;
     public int actionLock = 0;
+    public boolean invincible = false;
+    public int hitTime = 0;
+    public int EntityType; //0 = player, 1 = monster, 2 = NPC
+
     public String dialogues[] = new String[20];
     public int dialogueIndex = 0;
     public LivingEntity(MainGame gpp){
@@ -55,7 +56,15 @@ public class LivingEntity {
         hitboxe = false;
         gp.hregister.checkTile(this);
         gp.hregister.checkObject(this, false);
-        gp.hregister.PlayerColide(this);
+        gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
+        gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
+        boolean ContactPLayer = gp.hregister.PlayerColide(this);
+        if(this.EntityType == 2 && ContactPLayer){
+            if(!gp.player.invincible){
+                gp.player.health -= 1;
+                gp.player.invincible = true;
+            }
+        }
         if (!hitboxe) {
             switch (direction){
                 case"up":

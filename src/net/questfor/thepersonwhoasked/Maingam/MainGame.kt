@@ -84,9 +84,14 @@ class MainGame : JPanel(), Runnable {
                     GlobalGameThreadConfigs.NPCS[i].update()
                 }
             }
+            for(i in GlobalGameThreadConfigs.Monsters.indices){
+                if(GlobalGameThreadConfigs.Monsters[i] != null){
+                    GlobalGameThreadConfigs.Monsters[i].update()
+                }
+            }
         }
         if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.pauseState) {
-
+            stopmusic()
         }
     }
 
@@ -101,7 +106,7 @@ class MainGame : JPanel(), Runnable {
             drawStart = System.nanoTime()
         }
             tilemanager.draw(g2)
-            UI.draw(g)
+
 
         /*DISPLAYS ENTITYS AND OBJECTS*/
         GlobalGameThreadConfigs.entitylist.add(player)
@@ -115,6 +120,11 @@ class MainGame : JPanel(), Runnable {
                 GlobalGameThreadConfigs.entitylist.add(obj[i])
             }
         }
+        for(i in GlobalGameThreadConfigs.Monsters.indices){
+            if(GlobalGameThreadConfigs.Monsters[i] != null){
+                GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.Monsters[i])
+            }
+        }
         /*SORT ENTITYS IN POSITIONS*/
         GeneralHandler.main(g2)
 
@@ -126,6 +136,7 @@ class MainGame : JPanel(), Runnable {
                 g2.drawString("draw Time: $passed", 10, 400)
                 g2.drawString("FPS: $realFPS", 10, 300)
         }
+            UI.draw(g)
             g2.dispose()
         }
 
@@ -142,12 +153,14 @@ class MainGame : JPanel(), Runnable {
         var screenwidth = tilesize * maxscreencol
          @JvmField
         val screenheight = tilesize * maxscreenrow
+         @JvmField
         var keyM = KeyHandler()
          @JvmField
         var hregister = hitboxregister(MainGame())
         var MultiRender = MultiRenderer()
         var music = SoundHandler()
         var sound = SoundHandler()
+
          @JvmField
         var ehandler = EventHandler(MainGame())
         @JvmField
@@ -158,20 +171,24 @@ class MainGame : JPanel(), Runnable {
         var tilemanager = tilemanager()
         const val maxworldcol = 50
         const val maxworldrow = 50
+         var amogus = 0L;
 
         @JvmStatic
         fun setupOBJ() {
             MultiRender.Render(MainGame())
             MultiRender.setObjectRenderer()
-            MultiRender.setEntityRenderer()
+            MultiRender.setNPCrenderers()
+            MultiRender.setMonsterRenderers()
             playmusic(0)
 
             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState
         }
+         @JvmStatic
         fun playmusic(i: Int) {
             //PLAYS THE MUSIC
             music.setFile(i)
             music.play()
+            music.clip.microsecondPosition = amogus;
             music.loop()
         }
     }
@@ -212,6 +229,7 @@ class MainGame : JPanel(), Runnable {
 
     fun stopmusic() {
         //STOPS MUSIC
+        amogus = music.clip.microsecondPosition
         music.stop()
     }
 

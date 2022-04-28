@@ -13,6 +13,8 @@ public class Player extends LivingEntity {
     public int jumpstate = 0;
     public int jumpaction = 0;
     public static boolean isup = false;
+    public int isred = 1;
+    public boolean maxred = false;
 
     public Player(KeyHandler keyHandler, MainGame gpp) {
         super(gpp);
@@ -28,24 +30,28 @@ public class Player extends LivingEntity {
             hitbox.height = 32;
             hitboxdefaultx =  hitbox.x;
             hitboxdefaulty = hitbox.y;
+            EntityType = 0;
 
     }
 
     public void setdefaultvalues() {
         try {
+            //DEFAULT VALUES
             worldx = MainGame.tilesize * 23;
             worldy = MainGame.tilesize * 21;
             speed = 4;
             direction = "right";
-            worldz = 0;
+            worldz = 1;
             maxhealth = 10;
             health = maxhealth;
+            invincible = false;
         } catch (Exception e) {
             crash.main(e);
         }
     }
 
     public void getImageInstance() {
+        //IMAGES
         up1 = BufferedRenderer("player/boy_up_1");
         up2 = BufferedRenderer("player/boy_up_2");
         down1 = BufferedRenderer("player/boy_down_1");
@@ -57,6 +63,7 @@ public class Player extends LivingEntity {
     }
 
     public void update() {
+        //MOVEMENT
         try {
             if (GlobalGameThreadConfigs.isinTital == false) {
                 if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed) {
@@ -73,7 +80,14 @@ public class Player extends LivingEntity {
                         direction = "left";
                     }
                 }
-            } else if (GlobalGameThreadConfigs.isinTital = true) {
+                if(invincible == true){
+                    hitTime++;
+                    if(hitTime > 30){
+                        invincible = false;
+                        hitTime = 0;
+                    }
+                }
+            } else if (GlobalGameThreadConfigs.isinTital == true) {
                 actionLock++;
                 if (actionLock == 120) {
                     Random random = new Random();
@@ -96,10 +110,15 @@ public class Player extends LivingEntity {
             hitboxe = false;
             MainGame.hregister.checkTile(this);
             if(GlobalGameThreadConfigs.isinTital == false) {
+                //OBJECT COLLISIONS
                 int objindex = MainGame.hregister.checkObject(this, true);
                 pickupObject(objindex);
+
+                //ENTITY COLLISIONS
                 int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
                 interactNPC(npcindex);
+                int Monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
+                interactMonster(Monsterindex);
                 //CHECK EVENT
                 gp.ehandler.returnEvent();
                 KeyHandler.enterpressed = false;
@@ -157,6 +176,18 @@ public class Player extends LivingEntity {
             }
         } catch (Exception e) {
             crash.main(e);
+        }
+    }
+    private void interactMonster(int monsterindex) {
+        /*collision between player and monsters*/
+        if(monsterindex != 999) {
+
+            if (invincible == false){
+                health -= 1;
+                invincible = true;
+        }
+            worldx += 3;
+            worldy -= 3;
         }
     }
 
@@ -272,6 +303,31 @@ public class Player extends LivingEntity {
                         KeyHandler.jump = false;
                     }
 
+                }
+            }
+            if(invincible){
+                for(int y = 0; y < image.getHeight(); y++){
+                    for(int x = 0; x < image.getWidth(); x++){
+                        int p = image.getRGB(x, y);
+                        int a = (p >> 24) & 0xff;
+                        int r = (p >> 16) & 0xff;
+                        p = (a << 24) | (r << 16) | (0 << 8) | 0;
+                        image.setRGB(x, y, p);
+                        isred = 2;
+                    }
+                }
+            }
+            if(isred == 2){
+                if(invincible == false){
+                    up1 = BufferedRenderer("player/boy_up_1");
+                    up2 = BufferedRenderer("player/boy_up_2");
+                    down1 = BufferedRenderer("player/boy_down_1");
+                    down2 = BufferedRenderer("player/boy_down_2");
+                    right1 = BufferedRenderer("player/boy_right_1");
+                    right2 = BufferedRenderer("player/boy_right_2");
+                    left1 = BufferedRenderer("player/boy_left_1");
+                    left2 = BufferedRenderer("player/boy_left_2");
+                    isred = 1;
                 }
             }
             g2.drawImage(image, screenX, screenY, null);

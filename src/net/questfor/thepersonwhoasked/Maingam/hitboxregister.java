@@ -88,47 +88,18 @@ public class hitboxregister {
                 gp.obj[i].hitbox.x = (int) (gp.obj[i].worldx + gp.obj[i].hitbox.x);
                 gp.obj[i].hitbox.y = (int) (gp.obj[i].worldy + gp.obj[i].hitbox.y);
                 switch(entity.direction){
-                    case "up":
-                        entity.hitbox.y -= entity.speed;
-                        if(entity.hitbox.intersects(gp.obj[i].hitbox)){
-                            if(gp.obj[i].collision){
-                                entity.hitboxe = true;
-                            }if(player){
-                                index = i;
-                            }
-                        }
-                        break;
-                    case "down":
-                        entity.hitbox.y += entity.speed;
-                        if(entity.hitbox.intersects(gp.obj[i].hitbox)){
-                            if(gp.obj[i].collision){
-                                entity.hitboxe = true;
-                            }if(player){
-                                index = i;
-                            }
-                        }
-                        break;
-                    case "left":
-                        entity.hitbox.x -= entity.speed;
-                        if(entity.hitbox.intersects(gp.obj[i].hitbox)){
-                            if(gp.obj[i].collision){
-                                entity.hitboxe = true;
-                            }if(player){
-                                index = i;
-                            }
-                        }
-                        break;
-                    case "right":
-                        entity.hitbox.x += entity.speed;
-                        if(entity.hitbox.intersects(gp.obj[i].hitbox)){
-                            if(gp.obj[i].collision){
-                                entity.hitboxe = true;
-                            }if(player){
-                                index = i;
-                            }
-                        }
-                        break;
+                    case "up": entity.hitbox.y -= entity.speed; break;
+                    case "down": entity.hitbox.y += entity.speed; break;
+                    case "left": entity.hitbox.x -= entity.speed; break;
+                    case "right": entity.hitbox.x += entity.speed; break;
 
+                }
+                if(entity.hitbox.intersects(gp.obj[i].hitbox)){
+                    if(gp.obj[i].collision){
+                        entity.hitboxe = true;
+                    }if(player){
+                        index = i;
+                    }
                 }
                 entity.hitbox.x = entity.hitboxdefaultx;
                 entity.hitbox.y = entity.hitboxdefaulty;
@@ -149,38 +120,19 @@ public class hitboxregister {
                 target[i].hitbox.x = (int) (target[i].worldx + target[i].hitbox.x);
                 target[i].hitbox.y = (int) (target[i].worldy + target[i].hitbox.y);
                 switch(entity.direction){
-                    case "up":
-                        entity.hitbox.y -= entity.speed;
-                        if(entity.hitbox.intersects(target[i].hitbox)) {
-                            if (entity.worldz == target[i].worldz) {
-                                entity.hitboxe = true;
-                                index = i;
-                            }
-                        }
-                        break;
-                    case "down":
-                        entity.hitbox.y += entity.speed;
-                        if(entity.hitbox.intersects(target[i].hitbox)){
-                                entity.hitboxe = true;
-                                index = i;
+                    case "up": entity.hitbox.y -= entity.speed; break;
+                    case "down": entity.hitbox.y += entity.speed; break;
+                    case "left": entity.hitbox.x -= entity.speed; break;
+                    case "right": entity.hitbox.x += entity.speed; break;
 
+                }
+                if(entity.hitbox.intersects(target[i].hitbox)) {
+                    if (entity.worldz == 0) {
+                        if(target[i] != entity) {
+                            entity.hitboxe = true;
+                            index = i;
                         }
-                        break;
-                    case "left":
-                        entity.hitbox.x -= entity.speed;
-                        if(entity.hitbox.intersects(target[i].hitbox)){
-                                entity.hitboxe = true;
-                                index = i;
-                        }
-                        break;
-                    case "right":
-                        entity.hitbox.x += entity.speed;
-                        if(entity.hitbox.intersects(target[i].hitbox)) {
-                                entity.hitboxe = true;
-                                index = i;
-                        }
-                        break;
-
+                    }
                 }
                 entity.hitbox.x = entity.hitboxdefaultx;
                 entity.hitbox.y = entity.hitboxdefaulty;
@@ -191,49 +143,31 @@ public class hitboxregister {
 
         return index;
     }
-    public void PlayerColide(LivingEntity entity){
+    public boolean PlayerColide(LivingEntity entity){
+        boolean ContactPlayer = false;
         //checks collision between entity and player
         entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
         entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
         gp.player.hitbox.x = (int) (gp.player.worldx + gp.player.hitbox.x);
         gp.player.hitbox.y = (int) (gp.player.worldy + gp.player.hitbox.y);
         switch(entity.direction){
-            case "up":
-                entity.hitbox.y -= entity.speed;
-                if(entity.hitbox.intersects(gp.player.hitbox)) {
-                    if (entity.worldz == gp.player.worldz) {
-                        entity.hitboxe = true;
-
-                    }
-                }
-                break;
-            case "down":
-                entity.hitbox.y += entity.speed;
-                if(entity.hitbox.intersects(gp.player.hitbox)){
-                    entity.hitboxe = true;
-
-
-                }
-                break;
-            case "left":
-                entity.hitbox.x -= entity.speed;
-                if(entity.hitbox.intersects(gp.player.hitbox)){
-                    entity.hitboxe = true;
-
-                }
-                break;
-            case "right":
-                entity.hitbox.x += entity.speed;
-                if(entity.hitbox.intersects(gp.player.hitbox)) {
-                    entity.hitboxe = true;
-                }
-                break;
-
+            case "up": entity.hitbox.y -= entity.speed;break;
+            case "down": entity.hitbox.y += entity.speed;break;
+            case "left": entity.hitbox.x -= entity.speed;break;
+            case "right": entity.hitbox.x += entity.speed;break;
+        }
+        if(entity.hitbox.intersects(gp.player.hitbox)){
+            if (entity.worldz == gp.player.worldz) {
+                entity.hitboxe = true;
+                ContactPlayer = true;
+            }
         }
         entity.hitbox.x = entity.hitboxdefaultx;
         entity.hitbox.y = entity.hitboxdefaulty;
         gp.player.hitbox.x = gp.player.hitboxdefaultx;
         gp.player.hitbox.y = gp.player.hitboxdefaulty;
+
+        return ContactPlayer;
     }
 
 }

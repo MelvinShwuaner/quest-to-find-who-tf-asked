@@ -19,8 +19,6 @@ public class GeneralHandler {
         for(int i = 0; i < GlobalGameThreadConfigs.entitylist.size(); i++){
             GlobalGameThreadConfigs.entitylist.get(i).draw(g2);
         }
-        for(int i = 0; i < GlobalGameThreadConfigs.entitylist.size(); i++){
-            GlobalGameThreadConfigs.entitylist.remove(i);
-        }
+        GlobalGameThreadConfigs.entitylist.clear();
     }
 }
