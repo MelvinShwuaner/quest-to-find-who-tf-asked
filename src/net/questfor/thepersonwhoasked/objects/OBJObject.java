@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import static net.questfor.thepersonwhoasked.Maingam.MainGame.tilesize;
 
 public class OBJObject {
+    //sets default values
     public BufferedImage image, image2, image3;
     public String name;
     public boolean collision = false;
@@ -18,7 +19,6 @@ public class OBJObject {
     public int hitboxdefaultx = 0;
     public int hitboxdefaulty = 0;
     UtilityTool utool = new UtilityTool();
-
     public void draw(Graphics2D g2d) {
         try {
             double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class crash {
+    //if the System counters a error, it will call this function to create a crash report for you to report it to @bruhkid2345 at https://discord.gg/GA8tJwSNYm
     public static void main(Exception e) {
         JOptionPane.showMessageDialog(null, "An unexpected error has occured! save your data as your game might not function after leaving this msg \n please go to https://discord.gg/GA8tJwSNYm and message @bruhkid2345 your error message, check the error report!");
         try {

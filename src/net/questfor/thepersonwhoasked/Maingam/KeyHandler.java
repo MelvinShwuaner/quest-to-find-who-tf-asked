@@ -6,12 +6,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
+    //manages and handles key bindings
 
     @Override
     public void keyTyped(KeyEvent e) {
     }
+    //movement keys
     public static boolean upPressed, downPressed, rightPressed, leftPressed;
+    //general keys
     public static boolean pickup, attack, mine, build, jump;
+    //advanced keys
     public static boolean enterpressed;
 
 
@@ -20,6 +24,7 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         try {
+            //MANAGES KEY BINDINGS WHEN YOU PRESS THEM//
             int code = e.getKeyCode();
             if(GlobalGameThreadConfigs.isinTital) {
                 if (code == KeyEvent.VK_UP) {
@@ -119,6 +124,7 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        //MANAGES KEY BINDINGS WHEN YOU RELEASE THEM//
         try {
             int code = e.getKeyCode();
 

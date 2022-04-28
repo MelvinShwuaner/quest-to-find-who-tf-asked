@@ -3,6 +3,7 @@ package net.questfor.thepersonwhoasked.Maingam;
 import java.io.Serializable;
 
 public class GlobalDataStorage implements Serializable {
+    //the Main Manager of save and load systems, stores data when loading and saving
     int health;
     int chestplate_ID;
     int leggings_ID;

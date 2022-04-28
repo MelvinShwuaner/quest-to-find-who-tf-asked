@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class UI {
+    //basic values
     static MainGame gp;
     public static OBJHeart heart = new OBJHeart();
     static Font bit8Font, cursiveFont;
@@ -24,6 +25,7 @@ public class UI {
     static OBJkey key = new OBJkey();
     public static int commandnum = 0;
     public UI(MainGame GPP){
+        //sets the values
         try {
             this.gp = GPP;
             InputStream cursive = getClass().getResourceAsStream("/Fonts/Purisa Bold.ttf");
@@ -40,6 +42,7 @@ public class UI {
     }
 
     public static void draw(Graphics2D g2d) {
+        //draws uis
         g2 = g2d;
         g2.setFont(bit8Font);
         g2.setColor(Color.white);

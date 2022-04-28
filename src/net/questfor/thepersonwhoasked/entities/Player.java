@@ -5,7 +5,7 @@ import net.questfor.thepersonwhoasked.Maingam.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-
+//basic player
 public class Player extends LivingEntity {
     KeyHandler keyHandler;
     public int screenX;

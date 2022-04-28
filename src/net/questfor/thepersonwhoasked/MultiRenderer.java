@@ -9,6 +9,7 @@ public class MultiRenderer {
     public void Render(MainGame gpp) {
         this.gp = gpp;
     }
+    //render NPCS and MONSTERS
     public void setEntityRenderer(){
          GlobalGameThreadConfigs.NPCS[0] = new Old_Man(gp);
          GlobalGameThreadConfigs.NPCS[0].worldx = gp.tilesize * 21;

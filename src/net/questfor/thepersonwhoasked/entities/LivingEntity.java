@@ -8,7 +8,7 @@ import net.questfor.thepersonwhoasked.Maingam.crash;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
+//is the parent class for all entities including player
 public class LivingEntity {
     public MainGame gp;
     public double worldx;
@@ -33,6 +33,8 @@ public class LivingEntity {
     }
     public void setAction(){}
     public void speak(){
+        //dialogue functions
+
         if(dialogues[dialogueIndex] == null){
             dialogueIndex = 0;
         }
@@ -46,6 +48,7 @@ public class LivingEntity {
         }
     }
     public void update(){
+        //AI for Monsters And NPCS
         setAction();
         hitboxe = false;
         gp.hregister.checkTile(this);
@@ -80,6 +83,7 @@ public class LivingEntity {
     }
 
     public void draw(Graphics2D g2){
+        //RENDERER
         try {
             double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);
             double screenY = worldy - MainGame.player.worldy + MainGame.player.screenY;
@@ -125,6 +129,7 @@ public class LivingEntity {
         }
     }
     public BufferedImage BufferedRenderer(String imagePath){
+        //OPTIMIZES THE RENDERER TO MAKE IT MORE EFFICIENT
         UtilityTool utool = new UtilityTool();
         BufferedImage ScaledImage = null;
         try{

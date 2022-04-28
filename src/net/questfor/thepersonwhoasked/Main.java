@@ -5,7 +5,10 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.Maingam.crash;
 
 import javax.swing.*;
-
+/*
+just like its main, all classes and functions are built around this class.
+it creates a new window to store all data inside
+*/
 
 public abstract class Main{
     public static MainGame mainGame = new MainGame();

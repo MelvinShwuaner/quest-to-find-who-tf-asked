@@ -1,13 +1,14 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
-
+//MANAGES HITBOX'S AND COLLISIONS
 public class hitboxregister {
     static MainGame gp;
     hitboxregister(MainGame gpp){
         this.gp = gpp;
     }
     public void checkTile(LivingEntity entity) {
+        //checks collision between entity and world
         try {
             int entityleftworldx = (int) (entity.worldx + entity.hitbox.x);
             int entityrightworldx = (int) (entity.worldx + entity.hitbox.x + entity.hitbox.width);
@@ -78,6 +79,7 @@ public class hitboxregister {
         }
     }
     public int checkObject(LivingEntity entity, boolean player) {
+        //checks collision between objects and entities
         int index = 999;
         for(int i = 0; i < gp.obj.length; i++){
             if(gp.obj[i] != null){
@@ -138,6 +140,7 @@ public class hitboxregister {
         return index;
     }
     public int EntityColide(LivingEntity entity, LivingEntity[] target){
+        //checks collision between player and entity
         int index = 999;
         for(int i = 0; i < target.length; i++){
             if(target[i] != null){
@@ -189,6 +192,7 @@ public class hitboxregister {
         return index;
     }
     public void PlayerColide(LivingEntity entity){
+        //checks collision between entity and player
         entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
         entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
         gp.player.hitbox.x = (int) (gp.player.worldx + gp.player.hitbox.x);

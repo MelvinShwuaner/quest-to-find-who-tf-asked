@@ -16,8 +16,14 @@ import javax.swing.JPanel
 
 
 class MainGame : JPanel(), Runnable {
+    /*
+    is the secondary most important class in hierarchy, this has all the functions,
+    including drawing you and everything else in the game, it has very important values like tilesize to store data
+    and also manages objects.
+     */
 
     @JvmField
+    //sets default values for the game panel
     val menuBar = JMenuBar()
     var FPS = 60.0
     var drawcound: Long = 0
@@ -25,6 +31,7 @@ class MainGame : JPanel(), Runnable {
 
 
     init {
+        //assigns default values for the game panel
         addKeyListener(keyM)
         this.isFocusable = true
         this.preferredSize = Dimension(screenwidth, screenheight)
@@ -32,11 +39,15 @@ class MainGame : JPanel(), Runnable {
     }
 
     fun startgamethread() {
+        //starts the game thread, this is the ticks per secound of the game
         GlobalGameThreadConfigs.gameThread = Thread(this)
         GlobalGameThreadConfigs.gameThread!!.start()
     }
 
     override fun run() {
+        //happens on every tick interval the thread passes by,
+        // filters out extra ticks to make sure the CPU doesnt
+        // process ticks at a million times per secound
         val drawinterval = 1000000000 / FPS
         var nextframe = 0.0
         var LastFrame = System.nanoTime()
@@ -63,6 +74,7 @@ class MainGame : JPanel(), Runnable {
     }
 
     fun updateticks() {
+        //occures AFTER the filtered ticks are removed, happens on every tick that remains
         if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
             player.update()
             for (i in GlobalGameThreadConfigs.NPCS.indices) {
@@ -77,6 +89,7 @@ class MainGame : JPanel(), Runnable {
     }
 
     public override fun paintComponent(g: Graphics) {
+        //draws the screen of the game
         super.paintComponent(g)
         val g2 = g as Graphics2D
         var drawStart: Long = 0
@@ -108,6 +121,7 @@ class MainGame : JPanel(), Runnable {
 
 
      companion object {
+         //SETS ADVANCED AND CONFIG VALUES//
         const val originalTileSize = 16
         const val scale = 3
         @JvmField
@@ -144,6 +158,7 @@ class MainGame : JPanel(), Runnable {
             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState
         }
         fun playmusic(i: Int) {
+            //PLAYS THE MUSIC
             music.setFile(i)
             music.play()
             music.loop()
@@ -151,6 +166,7 @@ class MainGame : JPanel(), Runnable {
     }
 
     fun load() {
+        //LOAD MANAGER, LOADS SAVE FILES
         try {
             val loadf = FileInputStream("data.dat")
             val stream = BufferedInputStream(loadf)
@@ -164,10 +180,12 @@ class MainGame : JPanel(), Runnable {
     }
 
     fun playsound(i: Int) {
+        //PLAYS SOUND EFFECTS
         sound.setFile(i)
         sound.play()
     }
     fun save(){
+        //SAVE MANAGER, SAVES WORLD DATA AND PLAYER DATA
         var data: FileOutputStream?
         try {
             data = FileOutputStream("data.dat")
@@ -182,6 +200,7 @@ class MainGame : JPanel(), Runnable {
     }
 
     fun stopmusic() {
+        //STOPS MUSIC
         music.stop()
     }
 

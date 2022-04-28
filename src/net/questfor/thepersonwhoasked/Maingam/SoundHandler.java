@@ -6,6 +6,9 @@ import javax.sound.sampled.Clip;
 import java.net.URL;
 
 public class SoundHandler {
+        //asign and handle sounds
+        //IMPORTANT: THIS DOES NOT MANAGE SOUNDS,
+        // THIS HANDLES THEM AND ASSIGNS EACH TYPE OF SAND ITS SOUND FILE
         Clip clip;
         URL soundURL[] = new URL[30];
         public SoundHandler(){
@@ -15,6 +18,7 @@ public class SoundHandler {
                 soundURL[3] = getClass().getResource("/Sound/unlock.wav");
                 soundURL[4] = getClass().getResource("/Sound/fanfare.wav");
         }
+        //THESE ARE USED BY THE MAINGAME CLASS, IT DOES NOT USE THEM BY ITS SELF//
         public void setFile(int i){
                 try{
                 AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
