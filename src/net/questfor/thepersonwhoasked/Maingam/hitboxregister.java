@@ -82,7 +82,7 @@ public class hitboxregister {
         //checks collision between objects and entities
         int index = 999;
         for(int i = 0; i < gp.obj.length; i++){
-            if(gp.obj[i] != null){
+            if(gp.obj[i] != null && gp.obj[i].hitbox != null){
                 entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
                 entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
                 gp.obj[i].hitbox.x = (int) (gp.obj[i].worldx + gp.obj[i].hitbox.x);

@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
+import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.objects.OBJHeart;
 
 import net.questfor.thepersonwhoasked.objects.OBJkey;
@@ -13,7 +14,7 @@ import java.io.InputStream;
 public class UI {
     //basic values
     static MainGame gp;
-    public static OBJHeart heart = new OBJHeart();
+    public static LivingEntity heart = new OBJHeart(gp);
     static Font bit8Font, cursiveFont;
     static Graphics2D g2;
     public static boolean messageON = false;
@@ -22,7 +23,6 @@ public class UI {
     public static BufferedImage heart_full = heart.image;
     public static BufferedImage heart_half = heart.image2;
     public static BufferedImage heart_blank = heart.image3;
-    static OBJkey key = new OBJkey();
     public static int commandnum = 0;
     public UI(MainGame GPP){
         //sets the values

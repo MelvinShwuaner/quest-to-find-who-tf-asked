@@ -5,7 +5,7 @@ public class EventHandler {
     EventManager eventBus[][];
     //Handles all events and uses them, uses the values from eventManager to function
     int PreviousEventX, PreviousEventY;
-
+    boolean canTriggerEvent = true;
     EventHandler(MainGame gpp){
         this.gp = gpp;
         eventBus = new EventManager[MainGame.maxworldcol][MainGame.maxworldrow];
@@ -28,13 +28,24 @@ public class EventHandler {
         }
 
     }
-    public void returnEvent(){
+    public void returnEvent() {
         //REGISTERS ALL THE EVENTS AND THERE PROPERTIES
-            if (hit(27, 16, "right")) {damagepit(27, 16, GlobalGameThreadConfigs.dialogueState);}
-            if (hit(23, 12, "up")) {healpit(23, 12, GlobalGameThreadConfigs.dialogueState);}
-            if(hit(11, 10, "left")){teleport(11, 10, GlobalGameThreadConfigs.dialogueState);}
-    }
 
+        /*check if player can trigger an event*/
+        int XDistance = (int) Math.abs(gp.player.worldx - PreviousEventX);
+        int YDistance = (int) Math.abs(gp.player.worldy - PreviousEventY);
+        int Distance = Math.max(XDistance, YDistance);
+        if (Distance > gp.tilesize) {
+            canTriggerEvent = true;
+        }
+        if (canTriggerEvent) {
+            /*Assign events*/
+            if (hit(27, 16, "right")) {damagepit(27, 16, GlobalGameThreadConfigs.dialogueState);}
+            if (hit(23, 19, "any")) {damagepit(23, 19, GlobalGameThreadConfigs.dialogueState);}
+            if (hit(23, 12, "up")) {healpit(23, 12, GlobalGameThreadConfigs.dialogueState);}
+            if (hit(11, 10, "left")) {teleport(11, 10, GlobalGameThreadConfigs.dialogueState);}
+        }
+    }
     private void teleport(int col, int row, int GameState) {
         //TELEPORT EVENT
             if(gp.player.health != gp.player.maxhealth) {
@@ -54,8 +65,8 @@ public class EventHandler {
         GlobalGameThreadConfigs.GameState = GameState;
         UI.currentDialogue = "you fell into a pit! get out";
         gp.player.health--;
-        gp.player.worldx -= gp.tilesize;
         eventBus[col][row].eventDone = true;
+        canTriggerEvent = false;
     }
     public void healpit(int col, int row, int gamestate){
         //HEAL EVENT
@@ -64,16 +75,16 @@ public class EventHandler {
                 GlobalGameThreadConfigs.GameState = gamestate;
                 UI.currentDialogue = "you drink the water. \n Your health has been recovered";
                 gp.player.health++;
-                gp.player.worldy += MainGame.tilesize;
+                canTriggerEvent = false;
             }else{
                 GlobalGameThreadConfigs.GameState = gamestate;
                 UI.currentDialogue = "Your health is already full!";
-                gp.player.worldy += MainGame.tilesize;
+                canTriggerEvent = false;
             }
         }
     }
 
-    public boolean hit(int eventCol, int eventRow, String reqdirection){
+    public boolean hit(int eventCol, int eventRow, String ReqDirection){
         //HIT DETECTION AND MANAGER
         boolean hit = false;
         gp.player.hitbox.x = (int) gp.player.worldx + gp.player.hitbox.x;
@@ -81,8 +92,12 @@ public class EventHandler {
         eventBus[eventCol][eventRow].x = eventCol * gp.tilesize + eventBus[eventCol][eventRow].x;
         eventBus[eventCol][eventRow].y = eventRow * gp.tilesize + eventBus[eventCol][eventRow].y;
         if(gp.player.hitbox.intersects(eventBus[eventCol][eventRow]) && !eventBus[eventCol][eventRow].eventDone){
-            if(gp.player.direction.contentEquals(reqdirection) || reqdirection.contentEquals("any"));
+            if(gp.player.direction.contentEquals(ReqDirection) || ReqDirection.contentEquals("any"));
             hit = true;
+            //RECORD AND SAVE EVENT VALUES//
+            PreviousEventX = (int) gp.player.worldx;
+            PreviousEventY = (int) gp.player.worldy;
+
         }
         gp.player.hitbox.x = gp.player.hitboxdefaultx;
         gp.player.hitbox.y = gp.player.hitboxdefaulty;

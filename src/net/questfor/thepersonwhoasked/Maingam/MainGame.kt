@@ -2,17 +2,19 @@ package net.questfor.thepersonwhoasked.Maingam
 
 import net.questfor.thepersonwhoasked.Main
 import net.questfor.thepersonwhoasked.MultiRenderer
+import net.questfor.thepersonwhoasked.entities.LivingEntity
 import net.questfor.thepersonwhoasked.entities.Player
-import net.questfor.thepersonwhoasked.objects.OBJObject
 import net.questfor.thepersonwhoasked.tile.tilemanager
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.io.*
+import java.util.*
 import javax.swing.JMenuBar
 import javax.swing.JOptionPane
 import javax.swing.JPanel
+import kotlin.Comparator
 
 
 class MainGame : JPanel(), Runnable {
@@ -93,22 +95,30 @@ class MainGame : JPanel(), Runnable {
         super.paintComponent(g)
         val g2 = g as Graphics2D
         var drawStart: Long = 0
+
+        /*display FPS*/
         if (keyM.checkFPS) {
             drawStart = System.nanoTime()
         }
             tilemanager.draw(g2)
-            for (i in obj.indices) {
-                if (obj[i] != null) {
-                    obj[i]!!.draw(g2)
-                }
-            }
-            for (i in GlobalGameThreadConfigs.NPCS.indices) {
-                if (GlobalGameThreadConfigs.NPCS[i] != null) {
-                    GlobalGameThreadConfigs.NPCS[i].draw(g2)
-                }
-            }
-            player.draw(g2)
             UI.draw(g)
+
+        /*DISPLAYS ENTITYS AND OBJECTS*/
+        GlobalGameThreadConfigs.entitylist.add(player)
+        for(i in GlobalGameThreadConfigs.NPCS.indices){
+            if(GlobalGameThreadConfigs.NPCS[i] != null){
+                GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.NPCS[i])
+            }
+        }
+        for(i in obj.indices){
+            if(obj[i] != null){
+                GlobalGameThreadConfigs.entitylist.add(obj[i])
+            }
+        }
+        /*SORT ENTITYS IN POSITIONS*/
+        GeneralHandler.main(g2)
+
+        /*HANDLES FPS AND DRAW TIME FUNC*/
             if (keyM.checkFPS) {
                 var drawEND: Long = System.nanoTime()
                 var passed: Long = drawEND - drawStart
@@ -143,7 +153,7 @@ class MainGame : JPanel(), Runnable {
         @JvmField
         var player = Player(keyM, MainGame())
          @JvmField
-        var obj = arrayOfNulls<OBJObject>(10)
+        var obj = arrayOfNulls<LivingEntity>(10)
          @JvmField
         var tilemanager = tilemanager()
         const val maxworldcol = 50
@@ -152,6 +162,7 @@ class MainGame : JPanel(), Runnable {
         @JvmStatic
         fun setupOBJ() {
             MultiRender.Render(MainGame())
+            MultiRender.setObjectRenderer()
             MultiRender.setEntityRenderer()
             playmusic(0)
 

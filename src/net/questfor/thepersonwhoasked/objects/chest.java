@@ -1,19 +1,10 @@
 package net.questfor.thepersonwhoasked.objects;
-
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
-import net.questfor.thepersonwhoasked.Maingam.crash;
-
-import javax.imageio.ImageIO;
-
-public class chest extends OBJObject{
-    public chest(){
+import net.questfor.thepersonwhoasked.entities.LivingEntity;
+public class chest extends LivingEntity {
+    public chest(MainGame gp){
+        super(gp);
         name = "chest";
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/chest.png"));
-            utool.scaleimage(image, MainGame.tilesize, MainGame.tilesize);
-            collision = true;
-        }catch(Exception exx){
-            crash.main(exx);
-        }
+        down1 = BufferedRenderer("objects/chest.png");
     }
 }

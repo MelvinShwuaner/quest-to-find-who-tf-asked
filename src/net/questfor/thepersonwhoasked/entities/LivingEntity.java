@@ -18,12 +18,14 @@ public class LivingEntity {
     public int maxhealth;
     public int health;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public String direction;
+    public String direction = "down";
     public int spritecounter = 0;
     public int spritenumber = 1;
     public Rectangle hitbox;
     public int hitboxdefaultx, hitboxdefaulty;
-
+    public BufferedImage image, image2, image3;
+    public boolean collision = false;
+    public String name;
     public boolean hitboxe = false;
     public int actionLock = 0;
     public String dialogues[] = new String[20];
@@ -48,7 +50,7 @@ public class LivingEntity {
         }
     }
     public void update(){
-        //AI for Monsters And NPCS
+        /*AI for Monsters And NPCS*/
         setAction();
         hitboxe = false;
         gp.hregister.checkTile(this);

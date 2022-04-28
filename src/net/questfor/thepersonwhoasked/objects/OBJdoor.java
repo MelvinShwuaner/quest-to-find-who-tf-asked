@@ -1,19 +1,22 @@
 package net.questfor.thepersonwhoasked.objects;
-
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
-import net.questfor.thepersonwhoasked.Maingam.crash;
+import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
-import javax.imageio.ImageIO;
+import java.awt.*;
 
-public class OBJdoor extends  OBJObject{
-    public OBJdoor(){
+public class OBJdoor extends LivingEntity {
+    public OBJdoor(MainGame gp){
+        super(gp);
         name = "door";
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/door.png"));
-            utool.scaleimage(image, MainGame.tilesize, MainGame.tilesize);
-            collision = true;
-        }catch(Exception exx){
-            crash.main(exx);
-        }
+        down1 = BufferedRenderer("objects/door");
+        collision = true;
+        hitbox = new Rectangle();
+        hitbox.x = 0;
+        hitbox.y = 16;
+        hitbox.width = 48;
+        hitbox.height = 32;
+        hitboxdefaultx = hitbox.x;
+        hitboxdefaulty = hitbox.y;
+
     }
 }
