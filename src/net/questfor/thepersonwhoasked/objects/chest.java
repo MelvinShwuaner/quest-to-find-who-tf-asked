@@ -5,6 +5,6 @@ public class chest extends LivingEntity {
     public chest(MainGame gp){
         super(gp);
         name = "chest";
-        down1 = BufferedRenderer("objects/chest.png");
+        down1 = BufferedRenderer("objects/chest.png", gp.tilesize, gp.tilesize);
     }
 }

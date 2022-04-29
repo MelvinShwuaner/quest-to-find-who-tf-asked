@@ -17,6 +17,9 @@ public class SoundHandler {
                 soundURL[2] = getClass().getResource("/Sound/powerup.wav");
                 soundURL[3] = getClass().getResource("/Sound/unlock.wav");
                 soundURL[4] = getClass().getResource("/Sound/fanfare.wav");
+                soundURL[5] = getClass().getResource("/Sound/receivedamage.wav");
+                soundURL[6] = getClass().getResource("/Sound/hitmonster.wav");
+                soundURL[7] = getClass().getResource("/Sound/swingweapon.wav");
         }
         //THESE ARE USED BY THE MAINGAME CLASS, IT DOES NOT USE THEM BY ITS SELF//
         public void setFile(int i){

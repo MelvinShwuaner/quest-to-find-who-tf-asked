@@ -5,6 +5,6 @@ public class OBJkey extends LivingEntity {
     public OBJkey(MainGame gp){
         super(gp);
         name = "key";
-        down1 = BufferedRenderer("/entities/objects/key.png");
+        down1 = BufferedRenderer("/entities/objects/key.png", gp.tilesize, gp.tilesize);
     }
 }

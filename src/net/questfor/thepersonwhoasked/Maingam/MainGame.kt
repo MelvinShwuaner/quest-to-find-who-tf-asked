@@ -10,13 +10,8 @@ import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.io.*
-import java.util.*
-import javax.swing.JMenuBar
 import javax.swing.JOptionPane
 import javax.swing.JPanel
-import kotlin.Comparator
-
-
 class MainGame : JPanel(), Runnable {
     /*
     is the secondary most important class in hierarchy, this has all the functions,
@@ -26,7 +21,6 @@ class MainGame : JPanel(), Runnable {
 
     @JvmField
     //sets default values for the game panel
-    val menuBar = JMenuBar()
     var FPS = 60.0
     var drawcound: Long = 0
     var realFPS: Int = 0
@@ -35,6 +29,7 @@ class MainGame : JPanel(), Runnable {
     init {
         //assigns default values for the game panel
         addKeyListener(keyM)
+        addMouseListener(mouseH)
         this.isFocusable = true
         this.preferredSize = Dimension(screenwidth, screenheight)
         this.isDoubleBuffered = true
@@ -78,6 +73,7 @@ class MainGame : JPanel(), Runnable {
     fun updateticks() {
         //occures AFTER the filtered ticks are removed, happens on every tick that remains
         if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
+            //PLAY STATE RENDERING//
             player.update()
             for (i in GlobalGameThreadConfigs.NPCS.indices) {
                 if (GlobalGameThreadConfigs.NPCS[i] != null) {
@@ -86,10 +82,15 @@ class MainGame : JPanel(), Runnable {
             }
             for(i in GlobalGameThreadConfigs.Monsters.indices){
                 if(GlobalGameThreadConfigs.Monsters[i] != null){
-                    GlobalGameThreadConfigs.Monsters[i].update()
-                }
+                    if(!GlobalGameThreadConfigs.Monsters[i].dying) {
+                        GlobalGameThreadConfigs.Monsters[i].update()
+                    }
+                    if(!GlobalGameThreadConfigs.Monsters[i].alive){
+                        GlobalGameThreadConfigs.Monsters[i] = null
+                    }}
             }
         }
+        //PAUSE STATE RENDERING//
         if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.pauseState) {
             stopmusic()
         }
@@ -136,6 +137,7 @@ class MainGame : JPanel(), Runnable {
                 g2.drawString("draw Time: $passed", 10, 400)
                 g2.drawString("FPS: $realFPS", 10, 300)
         }
+        //UIS//
             UI.draw(g)
             g2.dispose()
         }
@@ -143,6 +145,7 @@ class MainGame : JPanel(), Runnable {
 
      companion object {
          //SETS ADVANCED AND CONFIG VALUES//
+         //TILES
         const val originalTileSize = 16
         const val scale = 3
         @JvmField
@@ -154,27 +157,38 @@ class MainGame : JPanel(), Runnable {
          @JvmField
         val screenheight = tilesize * maxscreenrow
          @JvmField
+         //KEY BINDINGS
         var keyM = KeyHandler()
+         //MOUSE BINDINGS
+         var mouseH = ClickHandler()
          @JvmField
+         //HITBOXES, RENDERING, AND SOUND
         var hregister = hitboxregister(MainGame())
         var MultiRender = MultiRenderer()
         var music = SoundHandler()
         var sound = SoundHandler()
+        var amogus = 0L;
 
          @JvmField
+         //EVENTS//
         var ehandler = EventHandler(MainGame())
         @JvmField
+        //PLAYER//
         var player = Player(keyM, MainGame())
          @JvmField
+         //OBJECT//
         var obj = arrayOfNulls<LivingEntity>(10)
          @JvmField
+         //WORLD RENDERER//
         var tilemanager = tilemanager()
         const val maxworldcol = 50
         const val maxworldrow = 50
-         var amogus = 0L;
+
+
 
         @JvmStatic
         fun setupOBJ() {
+            //ENTITES RENDERERS//
             MultiRender.Render(MainGame())
             MultiRender.setObjectRenderer()
             MultiRender.setNPCrenderers()

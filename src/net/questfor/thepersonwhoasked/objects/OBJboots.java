@@ -5,6 +5,6 @@ public class OBJboots extends LivingEntity {
     public OBJboots(MainGame gp){
         super(gp);
         name = "boots";
-        down1 = BufferedRenderer("objects/boots.png");
+        down1 = BufferedRenderer("objects/boots.png", gp.tilesize, gp.tilesize);
     }
 }

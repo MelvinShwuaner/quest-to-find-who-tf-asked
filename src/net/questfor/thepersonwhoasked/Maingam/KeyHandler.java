@@ -4,7 +4,6 @@ import net.questfor.thepersonwhoasked.entities.Player;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 public class KeyHandler implements KeyListener {
     //manages and handles key bindings
 
@@ -43,13 +42,8 @@ public class KeyHandler implements KeyListener {
                     if (UI.commandnum == 0) {
                         MainGame.player.worldx = MainGame.tilesize * 23;
                         MainGame.player.worldy = MainGame.tilesize * 21;
-                        for (int i = 0; i < GlobalGameThreadConfigs.NPCS.length; i++) {
-                            if (GlobalGameThreadConfigs.NPCS[i] != null) {
-                                GlobalGameThreadConfigs.NPCS[i].worldx = MainGame.tilesize * 21;
-                                GlobalGameThreadConfigs.NPCS[i].worldy = MainGame.tilesize * 21;
                                 GlobalGameThreadConfigs.isinTital = false;
-                            }
-                        }
+
                     }
                     if(UI.commandnum == 1){
                         //coming soon in later update
@@ -98,6 +92,9 @@ public class KeyHandler implements KeyListener {
                             jump = true;
                         }
                     }
+                    if(code == KeyEvent.VK_TAB){
+                        GlobalGameThreadConfigs.CharacterStats = true;
+                    }
                 }
                 if (code == KeyEvent.VK_ENTER) {
                     enterpressed = true;
@@ -115,6 +112,11 @@ public class KeyHandler implements KeyListener {
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.dialogueState) {
                     if (code == KeyEvent.VK_ENTER) {
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                    }
+                }
+                if(GlobalGameThreadConfigs.CharacterStats){
+                    if(code == KeyEvent.VK_TAB){
+                        GlobalGameThreadConfigs.CharacterStats = false;
                     }
                 }
             }

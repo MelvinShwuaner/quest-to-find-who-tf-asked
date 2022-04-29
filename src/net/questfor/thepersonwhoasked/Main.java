@@ -6,7 +6,7 @@ import net.questfor.thepersonwhoasked.Maingam.crash;
 
 import javax.swing.*;
 /*
-just like its main, all classes and functions are built around this class.
+just like its name, all classes and functions are built around this class.
 it creates a new window to store all data inside
 */
 

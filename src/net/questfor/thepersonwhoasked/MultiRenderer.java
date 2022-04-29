@@ -46,8 +46,21 @@ public class MultiRenderer {
         GlobalGameThreadConfigs.Monsters[0].worldy = gp.tilesize*36;
         GlobalGameThreadConfigs.Monsters[0].worldz = 0;
         GlobalGameThreadConfigs.Monsters[1] = new green_slime(gp);
-        GlobalGameThreadConfigs.Monsters[1].worldx = gp.tilesize*28;
+        GlobalGameThreadConfigs.Monsters[1].worldx = gp.tilesize*21;
         GlobalGameThreadConfigs.Monsters[1].worldy = gp.tilesize*36;
+        GlobalGameThreadConfigs.Monsters[2] = new green_slime(gp);
+        GlobalGameThreadConfigs.Monsters[2].worldx = gp.tilesize*22;
+        GlobalGameThreadConfigs.Monsters[2].worldy = gp.tilesize*36;
+        GlobalGameThreadConfigs.Monsters[3] = new green_slime(gp);
+        GlobalGameThreadConfigs.Monsters[3].worldx = gp.tilesize*22;
+        GlobalGameThreadConfigs.Monsters[3].worldy = gp.tilesize*35;
+        GlobalGameThreadConfigs.Monsters[4] = new green_slime(gp);
+        GlobalGameThreadConfigs.Monsters[4].worldx = gp.tilesize*22;
+        GlobalGameThreadConfigs.Monsters[4].worldy = gp.tilesize*34;
+        GlobalGameThreadConfigs.Monsters[5] = new green_slime(gp);
+        GlobalGameThreadConfigs.Monsters[5].worldx = gp.tilesize*24;
+        GlobalGameThreadConfigs.Monsters[5].worldy = gp.tilesize*35;
+
 
     }
 }

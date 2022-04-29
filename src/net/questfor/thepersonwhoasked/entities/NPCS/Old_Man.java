@@ -18,14 +18,14 @@ public class Old_Man extends LivingEntity {
 
     }
     public void getImageInstance() {
-        up1 = BufferedRenderer("NPCS/old man/oldman_up_1");
-        up2 = BufferedRenderer("NPCS/old man/oldman_up_2");
-        down1 = BufferedRenderer("NPCS/old man/oldman_down_1");
-        down2 = BufferedRenderer("NPCS/old man/oldman_down_2");
-        right1 = BufferedRenderer("NPCS/old man/oldman_right_1");
-        right2 = BufferedRenderer("NPCS/old man/oldman_right_2");
-        left1 = BufferedRenderer("NPCS/old man/oldman_left_1");
-        left2 = BufferedRenderer("NPCS/old man/oldman_left_2");
+        up1 = BufferedRenderer("NPCS/old man/oldman_up_1", gp.tilesize, gp.tilesize);
+        up2 = BufferedRenderer("NPCS/old man/oldman_up_2", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("NPCS/old man/oldman_down_1", gp.tilesize, gp.tilesize);
+        down2 = BufferedRenderer("NPCS/old man/oldman_down_2", gp.tilesize, gp.tilesize);
+        right1 = BufferedRenderer("NPCS/old man/oldman_right_1", gp.tilesize, gp.tilesize);
+        right2 = BufferedRenderer("NPCS/old man/oldman_right_2", gp.tilesize, gp.tilesize);
+        left1 = BufferedRenderer("NPCS/old man/oldman_left_1", gp.tilesize, gp.tilesize);
+        left2 = BufferedRenderer("NPCS/old man/oldman_left_2", gp.tilesize, gp.tilesize);
     }
     public void setAction() {
         actionLock++;

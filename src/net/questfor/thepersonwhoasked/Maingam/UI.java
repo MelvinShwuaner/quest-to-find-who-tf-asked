@@ -23,6 +23,9 @@ public class UI {
     public static BufferedImage heart_full = heart.image;
     public static BufferedImage heart_half = heart.image2;
     public static BufferedImage heart_blank = heart.image3;
+    public static int frameX;
+    public static int frameY;
+
     public static int commandnum = 0;
     public UI(MainGame GPP){
         //sets the values
@@ -63,7 +66,9 @@ public class UI {
         }
     }
     }
-
+    public static void displaySTATS(){
+        
+    }
     private static void drawPlayerBar() {
         int x = MainGame.tilesize/2;
         int y = MainGame.tilesize/2;

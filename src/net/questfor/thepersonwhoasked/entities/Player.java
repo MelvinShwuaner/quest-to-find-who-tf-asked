@@ -1,6 +1,9 @@
 package net.questfor.thepersonwhoasked.entities;
 
 import net.questfor.thepersonwhoasked.Maingam.*;
+import net.questfor.thepersonwhoasked.entities.NPCS.Old_Man;
+import net.questfor.thepersonwhoasked.objects.OBJ_IRON_SWORD;
+import net.questfor.thepersonwhoasked.objects.OBJ_SHIELD_WOOD;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,14 +16,16 @@ public class Player extends LivingEntity {
     public int jumpstate = 0;
     public int jumpaction = 0;
     public static boolean isup = false;
-    public int isred = 1;
-    public boolean maxred = false;
+    public boolean attacking = false;
+    public boolean hasattacked = false;
+    public boolean isattacking = false;
 
     public Player(KeyHandler keyHandler, MainGame gpp) {
         super(gpp);
             this.keyHandler = keyHandler;
             setdefaultvalues();
             getImageInstance();
+            getAttackInstance();
             screenX = MainGame.screenwidth / 2 - (MainGame.tilesize / 2);
             screenY = MainGame.screenheight / 2 - (MainGame.tilesize / 2);
             hitbox = new Rectangle();
@@ -45,28 +50,60 @@ public class Player extends LivingEntity {
             maxhealth = 10;
             health = maxhealth;
             invincible = false;
+            attackHitbox.width = 36;
+            attackHitbox.height = 36;
+            level = 1;
+            strength = 1;
+            dexterity = 1;
+            XP = 0;
+            MaxXP = 10;
+            bobux = 0;
+            currentweapon = new OBJ_IRON_SWORD(gp);
+            currentshield = new OBJ_SHIELD_WOOD(gp);
+            defence = getDefenceValues();
+            TrueAttackDamage = getAttackValues();
         } catch (Exception e) {
             crash.main(e);
         }
     }
 
+    private int getDefenceValues() {
+        return defence = dexterity * currentshield.defenceValue;
+    }
+
+    private int getAttackValues() {
+        return TrueAttackDamage = strength * currentweapon.AttackValue;
+    }
+
+    //IMAGES
     public void getImageInstance() {
-        //IMAGES
-        up1 = BufferedRenderer("player/boy_up_1");
-        up2 = BufferedRenderer("player/boy_up_2");
-        down1 = BufferedRenderer("player/boy_down_1");
-        down2 = BufferedRenderer("player/boy_down_2");
-        right1 = BufferedRenderer("player/boy_right_1");
-        right2 = BufferedRenderer("player/boy_right_2");
-        left1 = BufferedRenderer("player/boy_left_1");
-        left2 = BufferedRenderer("player/boy_left_2");
+        up1 = BufferedRenderer("player/boy_up_1", gp.tilesize, gp.tilesize);
+        up2 = BufferedRenderer("player/boy_up_2", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("player/boy_down_1", gp.tilesize, gp.tilesize);
+        down2 = BufferedRenderer("player/boy_down_2", gp.tilesize, gp.tilesize);
+        right1 = BufferedRenderer("player/boy_right_1", gp.tilesize, gp.tilesize);
+        right2 = BufferedRenderer("player/boy_right_2", gp.tilesize, gp.tilesize);
+        left1 = BufferedRenderer("player/boy_left_1", gp.tilesize, gp.tilesize);
+        left2 = BufferedRenderer("player/boy_left_2", gp.tilesize, gp.tilesize);
+    }
+    public void getAttackInstance(){
+        attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", gp.tilesize, gp.tilesize*2);
+        attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", gp.tilesize, gp.tilesize*2);
+        attackdown1 = BufferedRenderer("player/Attack/boy_attack_down_1", gp.tilesize, gp.tilesize*2);
+        attackdown2 = BufferedRenderer("player/Attack/boy_attack_down_2", gp.tilesize, gp.tilesize*2);
+        attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", gp.tilesize*2, gp.tilesize);
+        attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", gp.tilesize*2, gp.tilesize);
+        attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", gp.tilesize*2, gp.tilesize);
+        attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", gp.tilesize*2, gp.tilesize);
     }
 
     public void update() {
+        //PLAYER ATTACK//
         //MOVEMENT
         try {
             if (GlobalGameThreadConfigs.isinTital == false) {
                 if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed) {
+
                     if (keyHandler.upPressed) {
                         direction = "up";
                     }
@@ -80,6 +117,14 @@ public class Player extends LivingEntity {
                         direction = "left";
                     }
                 }
+                    isattacking = false;
+                    if(attacking == true){Attack();}else if
+                    (hasattacked == true){
+                        getImageInstance();
+                        hasattacked = false;
+                    }
+
+
                 if(invincible == true){
                     hitTime++;
                     if(hitTime > 30){
@@ -118,7 +163,7 @@ public class Player extends LivingEntity {
                 int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
                 interactNPC(npcindex);
                 int Monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
-                interactMonster(Monsterindex);
+                attacked(Monsterindex);
                 //CHECK EVENT
                 gp.ehandler.returnEvent();
                 KeyHandler.enterpressed = false;
@@ -160,7 +205,8 @@ public class Player extends LivingEntity {
                         worldx += this.speed;
                 }
             }
-            spritecounter++;
+            if(attacking == false) {
+                spritecounter++;
                 if (spritecounter > 12) {
                     if (spritenumber == 1) {
                         spritenumber = 2;
@@ -169,6 +215,7 @@ public class Player extends LivingEntity {
                     }
                     spritecounter = 0;
                 }
+            }
             if(worldz == 1){
                 speed = 2;
             }else{
@@ -178,12 +225,65 @@ public class Player extends LivingEntity {
             crash.main(e);
         }
     }
-    private void interactMonster(int monsterindex) {
+
+    private void Attack() {
+        spritecounter++;
+        if(spritecounter <= 10){
+            spritenumber = 1;
+        }
+        if(spritecounter > 10 && spritecounter <= 25){
+            spritenumber = 2;
+            int currentworldx = (int) worldx;
+            int currentworldy = (int) worldy;
+
+            int hitboxWidth = hitbox.width;
+            int hitboxHeight = hitbox.height;
+            switch (direction){
+                case "up" -> {worldy -= attackHitbox.height;}
+                case "down" -> {worldy += attackHitbox.height;}
+                case "left" -> {worldx -= attackHitbox.width;}
+                case "right" -> {worldx += attackHitbox.width;}
+            }
+            hitbox.width = attackHitbox.width;
+            hitbox.height = attackHitbox.height;
+            int attackindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
+            attackEntity(attackindex);
+            worldx = currentworldx;
+            worldy = currentworldy;
+            hitbox.width = hitboxWidth;
+            hitbox.height = hitboxHeight;
+
+        }
+        if(spritecounter > 25){
+            spritenumber = 1;
+            spritecounter = 0;
+            attacking = false;
+            hasattacked = true;
+        }
+    }
+
+    private void attackEntity(int attackindex) {
+        if(attackindex != 999){
+            if(GlobalGameThreadConfigs.Monsters[attackindex].invincible == false){
+                GlobalGameThreadConfigs.Monsters[attackindex].health--;
+                gp.playsound(6);
+                GlobalGameThreadConfigs.Monsters[attackindex].Hostile = true;
+                GlobalGameThreadConfigs.Monsters[attackindex].HostileTime = 0;
+                GlobalGameThreadConfigs.Monsters[attackindex].invincible = true;
+            }
+            if(GlobalGameThreadConfigs.Monsters[attackindex].health < 0){
+                GlobalGameThreadConfigs.Monsters[attackindex].dying = true;
+            }
+        }
+    }
+
+    private void attacked(int monsterindex) {
         /*collision between player and monsters*/
         if(monsterindex != 999) {
 
             if (invincible == false){
                 health -= 1;
+                gp.playsound(5);
                 invincible = true;
         }
             worldx += 3;
@@ -206,6 +306,12 @@ public class Player extends LivingEntity {
                     GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
                     GlobalGameThreadConfigs.NPCS[i].speak();
                 }
+            }else{
+                if(KeyHandler.attack == true){
+                    attacking = true;
+                    gp.playsound(7);
+                    KeyHandler.attack = false;
+                }
             }
         }catch (Exception e){
             crash.main(e);
@@ -215,77 +321,10 @@ public class Player extends LivingEntity {
     public void draw(Graphics2D g2) {
         try {
             BufferedImage image = null;
-            if(GlobalGameThreadConfigs.isinTital == false){
-            if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed){
-            switch (direction) {
-                case "up":
-                    if (spritenumber == 1) {
-                        image = up1;
-                    } else if (spritenumber == 2) {
-                        image = up2;
-                    }
-                    break;
-                case "down":
-                    if (spritenumber == 1) {
-                        image = down1;
-                    } else if (spritenumber == 2) {
-                        image = down2;
-                    }
-                    break;
-                case "right":
-                    if (spritenumber == 1) {
-                        image = right1;
-                    } else if (spritenumber == 2) {
-                        image = right2;
-                    }
-                    break;
-                case "left":
-                    if (spritenumber == 1) {
-                        image = left1;
-                    } else if (spritenumber == 2) {
-                        image = left2;
-                    }
-                    break;
-            }}else{
-                switch (direction){
-                    case "right" -> image = right1;
-                    case "left" -> image = left1;
-                    case "up" -> image = up1;
-                    case "down" -> image = down1;
-                }
-            }
-            }else{
-                switch (direction) {
-                    case "up":
-                        if (spritenumber == 1) {
-                            image = up1;
-                        } else if (spritenumber == 2) {
-                            image = up2;
-                        }
-                        break;
-                    case "down":
-                        if (spritenumber == 1) {
-                            image = down1;
-                        } else if (spritenumber == 2) {
-                            image = down2;
-                        }
-                        break;
-                    case "right":
-                        if (spritenumber == 1) {
-                            image = right1;
-                        } else if (spritenumber == 2) {
-                            image = right2;
-                        }
-                        break;
-                    case "left":
-                        if (spritenumber == 1) {
-                            image = left1;
-                        } else if (spritenumber == 2) {
-                            image = left2;
-                        }
-                        break;
-                }
-                }
+            int tempscreenx = screenX;
+            int tempscreeny = screenY;
+            //Try Reading this line. I will wait ;D
+            if(GlobalGameThreadConfigs.isinTital == false){if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed){switch (direction) {case "up": if (attacking == false){if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}}else{tempscreeny = screenY - gp.tilesize; if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}} break; case "down": if(attacking == false){if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}}break; case "right": if(attacking == false){if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}}break; case "left": if(attacking == false){if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;}}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}} break;}}else{switch (direction){case "right" -> {if(attacking == false){image = right1;}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}} }case "left" -> {if(attacking == false){image = left1;}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}}}case "up" -> {if(attacking == false){image = up1;}else{tempscreeny = screenY - gp.tilesize;if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}}} case "down" -> {if(attacking == false){image = down1;}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}}}}}}else{switch (direction) {case "up": if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}break; case "down": if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}break; case "right": if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}break; case "left": if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;} break;}}
             if(KeyHandler.jump == true){
                 jumpaction++;
                 if(jumpaction < 25){
@@ -318,19 +357,9 @@ public class Player extends LivingEntity {
                 }
             }
             if(isred == 2){
-                if(invincible == false){
-                    up1 = BufferedRenderer("player/boy_up_1");
-                    up2 = BufferedRenderer("player/boy_up_2");
-                    down1 = BufferedRenderer("player/boy_down_1");
-                    down2 = BufferedRenderer("player/boy_down_2");
-                    right1 = BufferedRenderer("player/boy_right_1");
-                    right2 = BufferedRenderer("player/boy_right_2");
-                    left1 = BufferedRenderer("player/boy_left_1");
-                    left2 = BufferedRenderer("player/boy_left_2");
-                    isred = 1;
-                }
+                if(invincible == false){getImageInstance(); getAttackInstance();isred = 1;}
             }
-            g2.drawImage(image, screenX, screenY, null);
+            g2.drawImage(image, tempscreenx, tempscreeny, null);
         }catch(Exception e){
             e.printStackTrace();
         }

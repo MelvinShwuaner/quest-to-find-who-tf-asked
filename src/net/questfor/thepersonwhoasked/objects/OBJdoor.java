@@ -8,7 +8,7 @@ public class OBJdoor extends LivingEntity {
     public OBJdoor(MainGame gp){
         super(gp);
         name = "door";
-        down1 = BufferedRenderer("objects/door");
+        down1 = BufferedRenderer("objects/door", gp.tilesize, gp.tilesize);
         collision = true;
         hitbox = new Rectangle();
         hitbox.x = 0;
