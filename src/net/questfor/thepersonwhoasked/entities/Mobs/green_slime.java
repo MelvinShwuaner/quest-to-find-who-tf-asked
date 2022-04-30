@@ -12,13 +12,17 @@ public class green_slime extends LivingEntity {
         EntityType = 2;
         name = "Green Slime";
         speed = 2;
-        maxhealth = 8;
+        maxhealth = 12;
+        TrueAttackDamage = 2;
+        defence = 1;
         health = maxhealth;
         hitbox = new Rectangle(3, 18, 42, 30);
         hitbox.height = 30;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         getImageInstance();
+        XP = 2;
+        level = 1;
     }
 
     public void getImageInstance() {
@@ -59,7 +63,7 @@ public class green_slime extends LivingEntity {
         actionLock++;
         Random random = new Random();
         int I = random.nextInt(100) + 1;
-        if (actionLock == 30) {
+        if (actionLock > 30) {
             if(I > 50) {
                 if (worldy < MainGame.player.worldy) {
                     direction = "down";

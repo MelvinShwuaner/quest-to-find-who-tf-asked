@@ -1,4 +1,6 @@
 package net.questfor.thepersonwhoasked.Maingam;
+import net.questfor.thepersonwhoasked.MultiRenderer;
+
 import static net.questfor.thepersonwhoasked.Maingam.UI.g2;
 public class EventHandler {
     MainGame gp;
@@ -55,7 +57,7 @@ public class EventHandler {
                     gp.player.worldy = MainGame.tilesize * 21;
                     gp.player.worldx = MainGame.tilesize * 23;
                     GlobalGameThreadConfigs.worldID = "/maps/world01.txt";
-                    MainGame.tilemanager.draw(g2);
+                    MainGame.tilemanager.loadmap(GlobalGameThreadConfigs.worldID);
                 }
         }
     }
@@ -81,6 +83,7 @@ public class EventHandler {
                 UI.currentDialogue = "Your health is already full!";
                 canTriggerEvent = false;
             }
+            gp.MultiRender.setMonsterRenderers();
         }
     }
 

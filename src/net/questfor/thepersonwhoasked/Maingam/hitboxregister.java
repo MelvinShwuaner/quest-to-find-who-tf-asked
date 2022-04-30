@@ -127,7 +127,7 @@ public class hitboxregister {
 
                 }
                 if(entity.hitbox.intersects(target[i].hitbox)) {
-                    if (gp.player.worldz == 0) {
+                    if (entity.worldz == 0) {
                         if(target[i] != entity) {
                             entity.hitboxe = true;
                             index = i;
@@ -157,7 +157,7 @@ public class hitboxregister {
             case "right": entity.hitbox.x += entity.speed;break;
         }
         if(entity.hitbox.intersects(gp.player.hitbox)){
-            if (0 == gp.player.worldz) {
+            if (entity.worldz == gp.player.worldz) {
                 entity.hitboxe = true;
                 ContactPlayer = true;
             }

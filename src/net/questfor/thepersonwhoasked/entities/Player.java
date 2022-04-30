@@ -2,11 +2,13 @@ package net.questfor.thepersonwhoasked.entities;
 
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.entities.NPCS.Old_Man;
-import net.questfor.thepersonwhoasked.objects.OBJ_IRON_SWORD;
-import net.questfor.thepersonwhoasked.objects.OBJ_SHIELD_WOOD;
+import net.questfor.thepersonwhoasked.objects.*;
 
+import javax.naming.event.ObjectChangeListener;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 //basic player
 public class Player extends LivingEntity {
@@ -20,28 +22,31 @@ public class Player extends LivingEntity {
     public boolean hasattacked = false;
     public boolean isattacking = false;
 
+    public static int objindex;
+
     public Player(KeyHandler keyHandler, MainGame gpp) {
         super(gpp);
-            this.keyHandler = keyHandler;
-            setdefaultvalues();
-            getImageInstance();
-            getAttackInstance();
-            screenX = MainGame.screenwidth / 2 - (MainGame.tilesize / 2);
-            screenY = MainGame.screenheight / 2 - (MainGame.tilesize / 2);
-            hitbox = new Rectangle();
-            hitbox.x = 8;
-            hitbox.y = 16;
-            hitbox.width = 32;
-            hitbox.height = 32;
-            hitboxdefaultx =  hitbox.x;
-            hitboxdefaulty = hitbox.y;
-            EntityType = 0;
-
+        this.keyHandler = keyHandler;
+        setdefaultvalues();
+        getImageInstance();
+        getAttackInstance();
+        GetItems();
+        screenX = MainGame.screenwidth / 2 - (MainGame.tilesize / 2);
+        screenY = MainGame.screenheight / 2 - (MainGame.tilesize / 2);
+        hitbox = new Rectangle();
+        hitbox.x = 8;
+        hitbox.y = 16;
+        hitbox.width = 32;
+        hitbox.height = 32;
+        hitboxdefaultx = hitbox.x;
+        hitboxdefaulty = hitbox.y;
+        EntityType = 0;
     }
 
     public void setdefaultvalues() {
         try {
             //DEFAULT VALUES
+            inventorysize = 20;
             worldx = MainGame.tilesize * 23;
             worldy = MainGame.tilesize * 21;
             speed = 4;
@@ -56,7 +61,7 @@ public class Player extends LivingEntity {
             strength = 1;
             dexterity = 1;
             XP = 0;
-            MaxXP = 10;
+            MaxXP = 4;
             bobux = 0;
             currentweapon = new OBJ_IRON_SWORD(gp);
             currentshield = new OBJ_SHIELD_WOOD(gp);
@@ -72,6 +77,7 @@ public class Player extends LivingEntity {
     }
 
     private int getAttackValues() {
+        attackHitbox = currentweapon.attackHitbox;
         return TrueAttackDamage = strength * currentweapon.AttackValue;
     }
 
@@ -86,15 +92,16 @@ public class Player extends LivingEntity {
         left1 = BufferedRenderer("player/boy_left_1", gp.tilesize, gp.tilesize);
         left2 = BufferedRenderer("player/boy_left_2", gp.tilesize, gp.tilesize);
     }
-    public void getAttackInstance(){
-        attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", gp.tilesize, gp.tilesize*2);
-        attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", gp.tilesize, gp.tilesize*2);
-        attackdown1 = BufferedRenderer("player/Attack/boy_attack_down_1", gp.tilesize, gp.tilesize*2);
-        attackdown2 = BufferedRenderer("player/Attack/boy_attack_down_2", gp.tilesize, gp.tilesize*2);
-        attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", gp.tilesize*2, gp.tilesize);
-        attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", gp.tilesize*2, gp.tilesize);
-        attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", gp.tilesize*2, gp.tilesize);
-        attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", gp.tilesize*2, gp.tilesize);
+
+    public void getAttackInstance() {
+        attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", gp.tilesize, gp.tilesize * 2);
+        attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", gp.tilesize, gp.tilesize * 2);
+        attackdown1 = BufferedRenderer("player/Attack/boy_attack_down_1", gp.tilesize, gp.tilesize * 2);
+        attackdown2 = BufferedRenderer("player/Attack/boy_attack_down_2", gp.tilesize, gp.tilesize * 2);
+        attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", gp.tilesize * 2, gp.tilesize);
+        attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", gp.tilesize * 2, gp.tilesize);
+        attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", gp.tilesize * 2, gp.tilesize);
+        attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", gp.tilesize * 2, gp.tilesize);
     }
 
     public void update() {
@@ -117,17 +124,19 @@ public class Player extends LivingEntity {
                         direction = "left";
                     }
                 }
-                    isattacking = false;
-                    if(attacking == true){Attack();}else if
-                    (hasattacked == true){
-                        getImageInstance();
-                        hasattacked = false;
-                    }
+                isattacking = false;
+                if (attacking == true) {
+                    Attack();
+                } else if
+                (hasattacked == true) {
+                    getImageInstance();
+                    hasattacked = false;
+                }
 
 
-                if(invincible == true){
+                if (invincible == true) {
                     hitTime++;
-                    if(hitTime > 30){
+                    if (hitTime > 30) {
                         invincible = false;
                         hitTime = 0;
                     }
@@ -154,9 +163,9 @@ public class Player extends LivingEntity {
             }
             hitboxe = false;
             MainGame.hregister.checkTile(this);
-            if(GlobalGameThreadConfigs.isinTital == false) {
+            if (GlobalGameThreadConfigs.isinTital == false) {
                 //OBJECT COLLISIONS
-                int objindex = MainGame.hregister.checkObject(this, true);
+                objindex = MainGame.hregister.checkObject(this, true);
                 pickupObject(objindex);
 
                 //ENTITY COLLISIONS
@@ -168,7 +177,7 @@ public class Player extends LivingEntity {
                 gp.ehandler.returnEvent();
                 KeyHandler.enterpressed = false;
             }
-            if (GlobalGameThreadConfigs.isinTital == false){
+            if (GlobalGameThreadConfigs.isinTital == false) {
                 if (!hitboxe) {
                     if (keyHandler.upPressed || keyHandler.downPressed) {
                         if (keyHandler.rightPressed || keyHandler.leftPressed) {
@@ -190,7 +199,7 @@ public class Player extends LivingEntity {
                         }
                     }
                 }
-        } else if (GlobalGameThreadConfigs.isinTital == true && hitboxe == false) {
+            } else if (GlobalGameThreadConfigs.isinTital == true && hitboxe == false) {
                 switch (this.direction) {
                     case "up":
                         worldy -= this.speed;
@@ -205,7 +214,7 @@ public class Player extends LivingEntity {
                         worldx += this.speed;
                 }
             }
-            if(attacking == false) {
+            if (attacking == false) {
                 spritecounter++;
                 if (spritecounter > 12) {
                     if (spritenumber == 1) {
@@ -216,9 +225,9 @@ public class Player extends LivingEntity {
                     spritecounter = 0;
                 }
             }
-            if(worldz == 1){
+            if (worldz == 1) {
                 speed = 2;
-            }else{
+            } else {
                 speed = 4;
             }
         } catch (Exception e) {
@@ -228,24 +237,30 @@ public class Player extends LivingEntity {
 
     private void Attack() {
         spritecounter++;
-        if(spritecounter <= 10){
+        if (spritecounter <= 10) {
             spritenumber = 1;
         }
-        if(spritecounter > 10 && spritecounter <= 25){
+        if (spritecounter > 10 && spritecounter <= 25) {
             spritenumber = 2;
             int currentworldx = (int) worldx;
             int currentworldy = (int) worldy;
 
             int hitboxWidth = hitbox.width;
             int hitboxHeight = hitbox.height;
-            switch (direction){
-                case "up" -> {worldy -= attackHitbox.height;}
-                case "down" -> {worldy += attackHitbox.height;}
-                case "left" -> {worldx -= attackHitbox.width;}
-                case "right" -> {worldx += attackHitbox.width;}
+            switch (direction) {
+                case "up" -> {
+                    worldy -= attackHitbox.height;
+                }
+                case "down" -> {
+                    worldy += attackHitbox.height;
+                }
+                case "left" -> {
+                    worldx -= attackHitbox.width;
+                }
+                case "right" -> {
+                    worldx += attackHitbox.width;
+                }
             }
-            hitbox.width = attackHitbox.width;
-            hitbox.height = attackHitbox.height;
             int attackindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
             attackEntity(attackindex);
             worldx = currentworldx;
@@ -254,7 +269,7 @@ public class Player extends LivingEntity {
             hitbox.height = hitboxHeight;
 
         }
-        if(spritecounter > 25){
+        if (spritecounter > 25) {
             spritenumber = 1;
             spritecounter = 0;
             attacking = false;
@@ -263,61 +278,141 @@ public class Player extends LivingEntity {
     }
 
     private void attackEntity(int attackindex) {
-        if(attackindex != 999){
-            if(GlobalGameThreadConfigs.Monsters[attackindex].invincible == false){
-                GlobalGameThreadConfigs.Monsters[attackindex].health--;
+        if (attackindex != 999) {
+            if (GlobalGameThreadConfigs.Monsters[attackindex].invincible == false) {
                 gp.playsound(6);
+                int damage = TrueAttackDamage - GlobalGameThreadConfigs.Monsters[attackindex].defence;
+                if (damage < 0) {
+                    damage = 0;
+                }
+                GlobalGameThreadConfigs.Monsters[attackindex].health -= damage;
                 GlobalGameThreadConfigs.Monsters[attackindex].Hostile = true;
                 GlobalGameThreadConfigs.Monsters[attackindex].HostileTime = 0;
                 GlobalGameThreadConfigs.Monsters[attackindex].invincible = true;
             }
-            if(GlobalGameThreadConfigs.Monsters[attackindex].health < 0){
-                GlobalGameThreadConfigs.Monsters[attackindex].dying = true;
+            if (GlobalGameThreadConfigs.Monsters[attackindex].dying == false) {
+                if (GlobalGameThreadConfigs.Monsters[attackindex].health < 0) {
+                    GlobalGameThreadConfigs.Monsters[attackindex].dying = true;
+                    UI.addMessages("Killed " + GlobalGameThreadConfigs.Monsters[attackindex].name);
+                    XP += GlobalGameThreadConfigs.Monsters[attackindex].XP;
+                    levelUpAchiver();
+                }
             }
+        }
+    }
+
+    private void levelUpAchiver() {
+        if (XP >= MaxXP) {
+            level++;
+            MaxXP = MaxXP * 2;
+            maxhealth += 2;
+            strength++;
+            dexterity++;
+            TrueAttackDamage = getAttackValues();
+            defence = getDefenceValues();
+            UI.addMessages("You have unlocked a new level! your now level " + level);
+            gp.playsound(8);
         }
     }
 
     private void attacked(int monsterindex) {
         /*collision between player and monsters*/
-        if(monsterindex != 999) {
-
-            if (invincible == false){
-                health -= 1;
+        if (monsterindex != 999) {
+            int damage = GlobalGameThreadConfigs.Monsters[monsterindex].TrueAttackDamage - defence;
+            if (damage < 0) {
+                damage = 0;
+            }
+            if (invincible == false) {
+                health -= damage;
+                UI.addMessages("You have been hit! health is now to " + gp.player.health);
                 gp.playsound(5);
                 invincible = true;
-        }
-            worldx += 3;
-            worldy -= 3;
+            }
         }
     }
 
     public void pickupObject(int i) {
         try {
+
             if (i != 999) {
+                if (gp.obj[i].EntityType == 3) {
+                    String text;
+                    if (inventory.size() != inventorysize) {
+                        inventory.add(gp.obj[i]);
+                        text = "Picked up " + gp.obj[i].name;
+                        gp.obj[i] = null;
+                        gp.playsound(1);
+                    } else {
+                        text = "Your inventory is full!";
+                    }
+                    UI.addMessages(text);
+                } else {
+                    switch (gp.obj[i].name) {
+                        case "chest" -> {
+                            if (KeyHandler.enterpressed) {
+                                if (!GlobalGameThreadConfigs.inchest) {
+                                    GlobalGameThreadConfigs.inchest = true;
+                                    GlobalGameThreadConfigs.CharacterStats = true;
+
+                                } else {
+                                    GlobalGameThreadConfigs.inchest = false;
+                                    GlobalGameThreadConfigs.CharacterStats = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                GlobalGameThreadConfigs.inchest = false;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             crash.main(e);
         }
     }
-    public void interactNPC(int i){
+
+    public void GetItems() {
+        inventory.add(currentweapon);
+        inventory.add(currentshield);
+        inventory.add(new OBJkey(gp));
+        inventory.add(new OBJdoor(gp));
+        inventory.add(new chest(gp));
+        inventory.add(new OBJHeart(gp));
+        inventory.add(new OBJkey(gp));
+        inventory.add(new OBJkey(gp));
+
+    }
+
+    public void interactNPC(int i) {
         try {
             if (i != 999) {
                 if (KeyHandler.enterpressed) {
                     GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
                     GlobalGameThreadConfigs.NPCS[i].speak();
                 }
-            }else{
-                if(KeyHandler.attack == true){
+            } else {
+                if (KeyHandler.attack == true) {
                     attacking = true;
                     gp.playsound(7);
                     KeyHandler.attack = false;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             crash.main(e);
         }
     }
 
+    public void convertItem(int code) {
+        int itemIndex = UI.getItemIndex();
+        if (itemIndex < inventory.size()){
+            LivingEntity SelectedItem = inventory.get(itemIndex);
+            if (code == 1){
+                currentweapon = SelectedItem;
+            }else if (code == 2) {
+                currentshield = SelectedItem;
+            }
+    }
+
+}
     public void draw(Graphics2D g2) {
         try {
             BufferedImage image = null;

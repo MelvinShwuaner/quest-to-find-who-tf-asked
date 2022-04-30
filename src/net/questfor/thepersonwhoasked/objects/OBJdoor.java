@@ -17,6 +17,8 @@ public class OBJdoor extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
+        EntityType = 3;
+        description = "how are you holding it?";
 
     }
 }

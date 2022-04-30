@@ -1,10 +1,10 @@
 package net.questfor.thepersonwhoasked.entities;
 
 import net.questfor.thepersonwhoasked.Maingam.*;
-
+import java.util.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 //is the parent class for all entities including player
 public class LivingEntity {
     //WORLD//
@@ -44,8 +44,9 @@ public class LivingEntity {
     public boolean invincible = false;
     public int hitTime = 0;
     //DATA//
-    public int EntityType; //0 = player, 1 = monster, 2 = NPC
+    public int EntityType; //0 = player, 1 = monster, 2 = NPC, 3 = Item, 4 = Object.
     public String name;
+    public ArrayList<LivingEntity> inventory = new ArrayList<>();
 
     public String dialogues[] = new String[20];
     public int dialogueIndex = 0;
@@ -62,9 +63,13 @@ public class LivingEntity {
     public LivingEntity currentshield;
     public int TrueAttackDamage;
     /**OBJECT DATA**/
-    public int AttackValue;
-    public int defenceValue;
-    public int Value;
+    public int AttackValue = 1;
+    public int defenceValue = 1;
+    public int Value = 1;
+    public int inventorysize = 20;
+    public String description = "";
+    public int SLOTTYPE; // 1 for mainhand, 2 for lefthand, 3 for helmet, 4 for chestplate, 5 for leggings, 6 for boots
+
 
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
@@ -89,7 +94,7 @@ public class LivingEntity {
         }
     }
     public void update(){
-
+        Regenerate();
         /*AI for Monsters And NPCS*/
         setAction();
         hitboxe = false;
@@ -98,6 +103,18 @@ public class LivingEntity {
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
         boolean ContactPLayer = gp.hregister.PlayerColide(this);
+        if(EntityType == 2 && ContactPLayer){
+            if(!MainGame.player.invincible){
+                int damage = TrueAttackDamage - gp.player.defence;
+                if(damage < 0){
+                    damage = 0;
+                }
+                MainGame.player.health-= damage;
+                UI.addMessages("You have been hit! health is now to "+gp.player.health);
+                MainGame.player.invincible = true;
+                gp.playsound(5);
+            }
+        }
         if (!hitboxe) {
             switch (direction){
                 case"up":
@@ -134,12 +151,14 @@ public class LivingEntity {
     }
 
     private void Regenerate() {
-        if(!Hostile){
+        if(!Hostile) {
             regenerationcooldown++;
-            if(regenerationcooldown > 200){
-                health++;
+            if (regenerationcooldown > 200) {
+                if (health < maxhealth){
+                    health++;
                 regenerationcooldown = 0;
             }
+        }
         }
     }
 
@@ -184,23 +203,24 @@ public class LivingEntity {
                         break;
                 }
                 //HP BAR
-                if (EntityType == 2 && Hostile){
-                    double onescale = gp.tilesize/maxhealth;
-                    double HPValue = onescale*health;
+                if (EntityType == 2 && Hostile) {
+                    double onescale = gp.tilesize / maxhealth;
+                    double HPValue = onescale * health;
                     g2.setColor(new Color(35, 35, 35));
-                    g2.fillRect((int) (screenX - 1), (int) screenY-16, gp.tilesize+2, 12);
+                    g2.fillRect((int) (screenX - 1), (int) screenY - 16, gp.tilesize + 2, 12);
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect((int) screenX, (int) screenY - 15, (int) HPValue, 10);
                     HostileTime++;
-                    if(HostileTime > 600){
+                    if (HostileTime > 600) {
                         HostileTime = 0;
                         Hostile = false;
                     }
 
-            }
-                if(invincible){
-                    for(int y = 0; y < image.getHeight(); y++){
-                        for(int x = 0; x < image.getWidth(); x++){
+                }
+
+                if (invincible) {
+                    for (int y = 0; y < image.getHeight(); y++) {
+                        for (int x = 0; x < image.getWidth(); x++) {
                             int p = image.getRGB(x, y);
                             int a = (p >> 24) & 0xff;
                             int r = (p >> 16) & 0xff;
@@ -210,12 +230,22 @@ public class LivingEntity {
                         }
                     }
                 }
-                if(dying){
+                if (dying) {
                     DieAnimation(g2);
                 }
-                if(isred == 2){
-                    if(invincible == false){getImageInstance();isred = 1;}
+                if (isred == 2) {
+                    if (invincible == false) {
+                        getImageInstance();
+                        isred = 1;
+                    }
                 }
+                g2.setFont(g2.getFont().deriveFont(Font.BOLD));
+                g2.setColor(Color.BLACK);
+                if (EntityType != 3) {
+                    if(EntityType != 4){
+                    g2.drawString("level: " + level, (int) screenX, (int) (screenY - 30));
+            }
+            }
                 g2.drawImage(image, (int) screenX, (int) screenY, MainGame.tilesize, MainGame.tilesize, null);
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
             }

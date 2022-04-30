@@ -5,6 +5,8 @@ public class OBJboots extends LivingEntity {
     public OBJboots(MainGame gp){
         super(gp);
         name = "boots";
-        down1 = BufferedRenderer("objects/boots.png", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/boots", gp.tilesize, gp.tilesize);
+        EntityType = 3;
+        description = "fast boots that are usefull when escaping the undead";
     }
 }

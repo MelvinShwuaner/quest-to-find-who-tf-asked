@@ -9,5 +9,7 @@ public class OBJHeart extends LivingEntity {
         image = BufferedRenderer("objects/heart_full", gp.tilesize, gp.tilesize);
         image2 = BufferedRenderer("objects/heart_half", gp.tilesize, gp.tilesize);
         image3 = BufferedRenderer("objects/heart_blank", gp.tilesize, gp.tilesize);
+        EntityType = 3;
+        down1 = image;
     }
 }

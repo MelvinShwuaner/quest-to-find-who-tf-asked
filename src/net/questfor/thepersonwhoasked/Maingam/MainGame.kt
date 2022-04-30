@@ -29,6 +29,7 @@ class MainGame : JPanel(), Runnable {
     init {
         //assigns default values for the game panel
         addKeyListener(keyM)
+        focusTraversalKeysEnabled = false;
         addMouseListener(mouseH)
         this.isFocusable = true
         this.preferredSize = Dimension(screenwidth, screenheight)
@@ -136,6 +137,11 @@ class MainGame : JPanel(), Runnable {
                 g2.color = Color.white
                 g2.drawString("draw Time: $passed", 10, 400)
                 g2.drawString("FPS: $realFPS", 10, 300)
+                g2.drawString("X: ${player.worldx}", 10, 200)
+                g2.drawString("Y: ${player.worldy}", 10, 220)
+                g2.drawString("Z: ${player.worldz}", 10, 180)
+                g2.drawString("WORLD ROW: ${(player.worldy + player.hitbox.y)/tilesize}", 10, 210)
+                g2.drawString("WORLD COL: ${(player.worldx + player.hitbox.x)/tilesize}", 10, 190)
         }
         //UIS//
             UI.draw(g)
@@ -158,13 +164,14 @@ class MainGame : JPanel(), Runnable {
         val screenheight = tilesize * maxscreenrow
          @JvmField
          //KEY BINDINGS
-        var keyM = KeyHandler()
+        var keyM = KeyHandler(MainGame())
          //MOUSE BINDINGS
          var mouseH = ClickHandler()
          @JvmField
          //HITBOXES, RENDERING, AND SOUND
         var hregister = hitboxregister(MainGame())
-        var MultiRender = MultiRenderer()
+         @JvmField
+         var MultiRender = MultiRenderer()
         var music = SoundHandler()
         var sound = SoundHandler()
         var amogus = 0L;
@@ -177,7 +184,7 @@ class MainGame : JPanel(), Runnable {
         var player = Player(keyM, MainGame())
          @JvmField
          //OBJECT//
-        var obj = arrayOfNulls<LivingEntity>(10)
+        var obj = arrayOfNulls<LivingEntity>(20)
          @JvmField
          //WORLD RENDERER//
         var tilemanager = tilemanager()
