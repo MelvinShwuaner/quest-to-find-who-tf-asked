@@ -18,6 +18,5 @@ public class GlobalGameThreadConfigs {
     public static LivingEntity NPCS[] = new LivingEntity[10];
     public static String worldID = "/maps/worldV2.txt";
     public static ArrayList<LivingEntity> entitylist = new ArrayList<>();
-
-
+    public static ArrayList<LivingEntity> projectilelist = new ArrayList<>();
 }

@@ -1,7 +1,5 @@
 package net.questfor.thepersonwhoasked.Maingam;
-import net.questfor.thepersonwhoasked.MultiRenderer;
 
-import static net.questfor.thepersonwhoasked.Maingam.UI.g2;
 public class EventHandler {
     MainGame gp;
     EventManager eventBus[][];

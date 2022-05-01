@@ -127,6 +127,12 @@ class MainGame : JPanel(), Runnable {
                 GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.Monsters[i])
             }
         }
+        for (i in GlobalGameThreadConfigs.projectilelist.indices) {
+            if (GlobalGameThreadConfigs.projectilelist[i] != null) {
+                GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.projectilelist[i])
+            }
+        }
+        //is the lead Renderer to handle all the different entites and objects.
         /*SORT ENTITYS IN POSITIONS*/
         GeneralHandler.main(g2)
 

@@ -9,6 +9,16 @@ import java.util.Comparator;
 public class GeneralHandler {
     public static void main(Graphics2D g2) {
         //is the lead Renderer to handle all the different entites and objects.
+        for (int i = 0; i < GlobalGameThreadConfigs.projectilelist.size(); i++) {
+            if (GlobalGameThreadConfigs.projectilelist.get(i) != null) {
+                if (GlobalGameThreadConfigs.projectilelist.get(i).alive) {
+                    GlobalGameThreadConfigs.projectilelist.get(i).update();
+                }
+                if (!GlobalGameThreadConfigs.projectilelist.get(i).alive) {
+                    GlobalGameThreadConfigs.projectilelist.remove(i);
+                }
+            }
+        }
         Collections.sort(GlobalGameThreadConfigs.entitylist, new Comparator<LivingEntity>() {
             @Override
             public int compare(LivingEntity e1, LivingEntity e2) {

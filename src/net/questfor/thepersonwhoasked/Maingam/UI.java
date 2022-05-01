@@ -2,7 +2,6 @@ package net.questfor.thepersonwhoasked.Maingam;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.objects.OBJHeart;
 
-import javax.management.monitor.GaugeMonitor;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
@@ -243,26 +242,31 @@ public class UI {
         //TEXT//
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(20F));
-        if (!GlobalGameThreadConfigs.inchest){
-        int textX = frameX + 20;
-        int textY = frameY + gp.tilesize;
-        final int lineHeight = 30;
-        g2.drawString("level: " + gp.player.level, textX, textY);
-        textY += lineHeight;
-        g2.drawString("health: " + gp.player.health + "/" + gp.player.maxhealth, textX, textY);
-        textY += lineHeight;
-        g2.drawString("strength: " + gp.player.strength, textX, textY);
-        textY += lineHeight;
-        g2.drawString("defence: " + gp.player.defence, textX, textY);
-        textY += lineHeight;
-        g2.drawString("dexterity: " + gp.player.dexterity, textX, textY);
-        textY += lineHeight;
-        g2.drawString("XP: " + gp.player.XP + "/" + gp.player.MaxXP, textX, textY);
-        textY += lineHeight;
-        g2.drawString("bobux: " + gp.player.bobux, textX, textY);
-        textY += lineHeight;
-        g2.drawString("weapon: " + gp.player.currentweapon.name, textX, textY);
-        textY += lineHeight;
+        if (!GlobalGameThreadConfigs.inchest) {
+            int textX = frameX + 20;
+            int textY = frameY + gp.tilesize;
+            final int lineHeight = 30;
+            g2.drawString("level: " + gp.player.level, textX, textY);
+            textY += lineHeight;
+            g2.drawString("health: " + gp.player.health + "/" + gp.player.maxhealth, textX, textY);
+            textY += lineHeight;
+            g2.drawString("strength: " + gp.player.strength, textX, textY);
+            textY += lineHeight;
+            g2.drawString("defence: " + gp.player.defence, textX, textY);
+            textY += lineHeight;
+            g2.drawString("dexterity: " + gp.player.dexterity, textX, textY);
+            textY += lineHeight;
+            g2.drawString("XP: " + gp.player.XP + "/" + gp.player.MaxXP, textX, textY);
+            textY += lineHeight;
+            g2.drawString("bobux: " + gp.player.bobux, textX, textY);
+            textY += lineHeight;
+            if (gp.player.currentweapon != null){
+                g2.drawString("weapon: " + gp.player.currentweapon.name, textX, textY);
+            textY += lineHeight;
+        }else{
+                g2.drawString("weapon: " + "none", textX, textY);
+                textY += lineHeight;
+            }
         g2.drawString("shield: " + gp.player.currentshield.name, textX, textY);
         textY += lineHeight;
     }
@@ -302,4 +306,4 @@ public class UI {
             }
         }
         //2022 words long -------------------//
-    }private static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Quest To Find Who Asked";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}private static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}
+    }private static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Adventure";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}private static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}

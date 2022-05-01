@@ -1,10 +1,7 @@
 package net.questfor.thepersonwhoasked.Maingam;
-
 import net.questfor.thepersonwhoasked.entities.Player;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 public class KeyHandler implements KeyListener {
     MainGame gp;
     KeyHandler(MainGame gpp){
@@ -19,8 +16,10 @@ public class KeyHandler implements KeyListener {
     public static boolean upPressed, downPressed, rightPressed, leftPressed;
     //general keys
     public static boolean pickup, attack, mine, build, jump, moveitem, moving;
+    public static boolean use = false;
     //advanced keys
     public static boolean enterpressed;
+    public static boolean primepowera, secpowera;
     public int pause = 0;
 
 
@@ -60,6 +59,9 @@ public class KeyHandler implements KeyListener {
                 }
             }else {
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
+                    if(code == KeyEvent.VK_Q){
+                        primepowera = true;
+                    }
                     if (code == KeyEvent.VK_W) {
                         if (upPressed == false) {
                             upPressed = true;
@@ -170,7 +172,6 @@ public class KeyHandler implements KeyListener {
                         }
                 }
             }
-
                 if (code == KeyEvent.VK_ENTER) {
                     enterpressed = true;
                 }
@@ -200,7 +201,9 @@ public class KeyHandler implements KeyListener {
         //MANAGES KEY BINDINGS WHEN YOU RELEASE THEM//
         try {
             int code = e.getKeyCode();
-
+            if(code == KeyEvent.VK_Q){
+                primepowera = false;
+            }
             if (code == KeyEvent.VK_W) {
                 upPressed = false;
             }

@@ -10,7 +10,7 @@ public class OBJ_IRON_AXE extends LivingEntity {
         super(gpp);
         name = "WoodCutter's axe";
         down1 = BufferedRenderer("objects/axe", gp.tilesize, gp.tilesize);
-        AttackValue = 2;
+        AttackValue = 5;
         attackHitbox.width = 30;
         attackHitbox.height = 36;
         EntityType = 3;

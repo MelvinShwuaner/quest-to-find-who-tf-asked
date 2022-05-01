@@ -69,6 +69,18 @@ public class MultiRenderer {
         gp.obj[i].worldx = gp.tilesize*24;
         gp.obj[i].worldy = gp.tilesize*21;
         i++;
+        gp.obj[i] = new OBJ_SHIELD_DIAMOND(gp);
+        gp.obj[i].worldx = gp.tilesize*24;
+        gp.obj[i].worldy = gp.tilesize*22;
+        i++;
+        gp.obj[i] = new chest(gp);
+        gp.obj[i].worldx = gp.tilesize*21;
+        gp.obj[i].worldy = gp.tilesize*23;
+        i++;
+        gp.obj[i] = new OBJ_POTION_HEALTH_1(gp);
+        gp.obj[i].worldx = gp.tilesize*20;
+        gp.obj[i].worldy = gp.tilesize*23;
+        i++;
     }
     /*render NPCS and MONSTERS*/
     public void setNPCrenderers(){

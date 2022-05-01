@@ -44,9 +44,13 @@ public class LivingEntity {
     public boolean invincible = false;
     public int hitTime = 0;
     //DATA//
+    public int primepowercool = 0;
     public int EntityType; //0 = player, 1 = monster, 2 = NPC, 3 = Item, 4 = Object.
     public String name;
     public ArrayList<LivingEntity> inventory = new ArrayList<>();
+    public int MaxMana;
+    public int Mana;
+    public Projectile projectile;
 
     public String dialogues[] = new String[20];
     public int dialogueIndex = 0;
@@ -59,6 +63,7 @@ public class LivingEntity {
     public int XP;
     public int MaxXP;
     public int bobux;
+
     public LivingEntity currentweapon;
     public LivingEntity currentshield;
     public int TrueAttackDamage;
@@ -68,8 +73,10 @@ public class LivingEntity {
     public int Value = 1;
     public int inventorysize = 20;
     public String description = "";
+    public int Type;
+    public int Type_sword = 1, Type_constumable = 2, Type_tool = 3, Type_object = 4, Type_armor = 5, Type_shield = 6, Type_projectile = 7;
     public int SLOTTYPE; // 1 for mainhand, 2 for lefthand, 3 for helmet, 4 for chestplate, 5 for leggings, 6 for boots
-
+    public int UseCost;
 
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
@@ -104,16 +111,10 @@ public class LivingEntity {
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
         boolean ContactPLayer = gp.hregister.PlayerColide(this);
         if(EntityType == 2 && ContactPLayer){
-            if(!MainGame.player.invincible){
-                int damage = TrueAttackDamage - gp.player.defence;
-                if(damage < 0){
-                    damage = 0;
-                }
-                MainGame.player.health-= damage;
-                UI.addMessages("You have been hit! health is now to "+gp.player.health);
-                MainGame.player.invincible = true;
-                gp.playsound(5);
-            }
+            AttackPLayer(TrueAttackDamage);
+        }
+        if(primepowercool < 30){
+            primepowercool++;
         }
         if (!hitboxe) {
             switch (direction){
@@ -161,7 +162,19 @@ public class LivingEntity {
         }
         }
     }
-
+    public void Use(LivingEntity target){}
+    public void AttackPLayer(int trueAttackDamage){
+        if(!MainGame.player.invincible){
+            int damage = trueAttackDamage - gp.player.defence;
+            if(damage < 0){
+                damage = 0;
+            }
+            MainGame.player.health-= damage;
+            UI.addMessages("You have been hit! health is now to "+gp.player.health);
+            MainGame.player.invincible = true;
+            gp.playsound(5);
+        }
+    }
     public void draw(Graphics2D g2){
         //RENDERER
         try {
@@ -265,7 +278,7 @@ public class LivingEntity {
         if(animationLength > startframe*5 && animationLength <= startframe*6){g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));}
         if(animationLength > startframe*6 && animationLength <= startframe*7){g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));}
         if(animationLength > startframe*7 && animationLength <= startframe*8){g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));}
-        if(animationLength > startframe*8){g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));dying = false;alive = false;}
+        if(animationLength > startframe*8){g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));alive = false;}
     }
 
     public BufferedImage BufferedRenderer(String imagePath, int width, int height){

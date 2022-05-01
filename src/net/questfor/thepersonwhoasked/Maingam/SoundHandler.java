@@ -22,6 +22,7 @@ public class SoundHandler {
                 soundURL[7] = getClass().getResource("/Sound/swingweapon.wav");
                 soundURL[8] = getClass().getResource("/Sound/levelup.wav");
                 soundURL[9] = getClass().getResource("/Sound/cursor.wav");
+                soundURL[10] = getClass().getResource("/Sound/burning.wav");
         }
         //THESE FUNCTIONS ARE USED BY THE MAINGAME CLASS, IT DOES NOT USE THEM BY ITS SELF//
         public void setFile(int i){

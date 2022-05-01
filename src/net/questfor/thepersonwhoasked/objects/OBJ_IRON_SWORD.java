@@ -25,5 +25,6 @@ public class OBJ_IRON_SWORD extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
+        Type = Type_sword;
     }
 }
