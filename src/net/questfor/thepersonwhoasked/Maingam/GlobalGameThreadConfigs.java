@@ -1,6 +1,7 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
+import net.questfor.thepersonwhoasked.tile_entites.TileEntity;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ public class GlobalGameThreadConfigs {
     public static boolean inchest = false;
     public static LivingEntity Monsters[] = new LivingEntity[20];
     public static LivingEntity NPCS[] = new LivingEntity[10];
+    public static TileEntity Tentity[] = new TileEntity[100];
     public static String worldID = "/maps/worldV2.txt";
     public static ArrayList<LivingEntity> entitylist = new ArrayList<>();
     public static ArrayList<LivingEntity> projectilelist = new ArrayList<>();

@@ -5,6 +5,7 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.Mobs.green_slime;
 import net.questfor.thepersonwhoasked.entities.NPCS.Old_Man;
 import net.questfor.thepersonwhoasked.objects.*;
+import net.questfor.thepersonwhoasked.tile_entites.IT_tree;
 
 public class MultiRenderer {
     /*SETS THE LOCATION OF ENTITIES ON THERE WORLD*/
@@ -53,7 +54,7 @@ public class MultiRenderer {
         gp.obj[i].worldx = gp.tilesize*40;
         gp.obj[i].worldy = gp.tilesize*23;
         i++;
-        gp.obj[i] = new OBJ_SHIELD_WOOD(gp);
+        gp.obj[i] = new OBJ_MANA_CRYSTAL(gp);
         gp.obj[i].worldx = gp.tilesize*24;
         gp.obj[i].worldy = gp.tilesize*23;
         i++;
@@ -61,11 +62,11 @@ public class MultiRenderer {
         gp.obj[i].worldx = gp.tilesize*25;
         gp.obj[i].worldy = gp.tilesize*23;
         i++;
-        gp.obj[i] = new OBJkey(gp);
+        gp.obj[i] = new OBJ_COIN_BRONZE(gp);
         gp.obj[i].worldx = gp.tilesize*26;
         gp.obj[i].worldy = gp.tilesize*23;
         i++;
-        gp.obj[i] = new OBJ_SHIELD_WOOD(gp);
+        gp.obj[i] = new OBJHeart(gp);
         gp.obj[i].worldx = gp.tilesize*24;
         gp.obj[i].worldy = gp.tilesize*21;
         i++;
@@ -121,7 +122,27 @@ public class MultiRenderer {
         GlobalGameThreadConfigs.Monsters[5] = new green_slime(gp);
         GlobalGameThreadConfigs.Monsters[5].worldx = gp.tilesize*24;
         GlobalGameThreadConfigs.Monsters[5].worldy = gp.tilesize*35;
-
+    }
+    public void setTileEntityRenderers(){int i = 0;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 27, 12);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 28, 12);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 29, 12);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 30, 12);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 31, 12);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 32, 12);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 33, 12);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 26, 20);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 26, 21);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 26, 22);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 20, 20);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 20, 21);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 20, 22);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 22, 24);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 23, 24);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 24, 24);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 22, 18);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 23, 18);i++;
+        GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 24, 18);i++;
 
     }
 }

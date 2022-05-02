@@ -21,6 +21,7 @@ public class OBJ_IRON_AXE extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
+        Type = Type_axe;
         description = "Any WoodCutter would adore a sturdy \n rusty iron axe?";
 
 

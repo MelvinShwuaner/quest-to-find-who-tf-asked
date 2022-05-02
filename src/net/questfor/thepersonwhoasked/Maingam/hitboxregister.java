@@ -128,11 +128,12 @@ public class hitboxregister {
                 }
                 if(entity.hitbox.intersects(target[i].hitbox)) {
                     if (entity.worldz == 0) {
-                        if(target[i] != entity) {
-                            entity.hitboxe = true;
+                        if (target[i] != entity) {
+                                entity.hitboxe = true;
                             index = i;
-                        }
+
                     }
+                }
                 }
                 entity.hitbox.x = entity.hitboxdefaultx;
                 entity.hitbox.y = entity.hitboxdefaulty;

@@ -5,13 +5,9 @@ import net.questfor.thepersonwhoasked.MultiRenderer
 import net.questfor.thepersonwhoasked.entities.LivingEntity
 import net.questfor.thepersonwhoasked.entities.Player
 import net.questfor.thepersonwhoasked.tile.tilemanager
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.Graphics
-import java.awt.Graphics2D
+import java.awt.*
 import java.io.*
-import javax.swing.JOptionPane
-import javax.swing.JPanel
+import javax.swing.*
 class MainGame : JPanel(), Runnable {
     /*
     is the secondary most important class in hierarchy, this has all the functions,
@@ -75,20 +71,30 @@ class MainGame : JPanel(), Runnable {
         //occures AFTER the filtered ticks are removed, happens on every tick that remains
         if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
             //PLAY STATE RENDERING//
+            /**PLAYER**/
             player.update()
+            /**NPCS**/
             for (i in GlobalGameThreadConfigs.NPCS.indices) {
                 if (GlobalGameThreadConfigs.NPCS[i] != null) {
                     GlobalGameThreadConfigs.NPCS[i].update()
                 }
             }
+            /**MOBS**/
             for(i in GlobalGameThreadConfigs.Monsters.indices){
                 if(GlobalGameThreadConfigs.Monsters[i] != null){
                     if(!GlobalGameThreadConfigs.Monsters[i].dying) {
                         GlobalGameThreadConfigs.Monsters[i].update()
                     }
                     if(!GlobalGameThreadConfigs.Monsters[i].alive){
+                        GlobalGameThreadConfigs.Monsters[i].HandleItems()
                         GlobalGameThreadConfigs.Monsters[i] = null
                     }}
+            }
+            /**TILE ENTITIES**/
+            for(i in GlobalGameThreadConfigs.Tentity.indices){
+                if(GlobalGameThreadConfigs.Tentity[i] != null){
+                    GlobalGameThreadConfigs.Tentity[i].update()
+                }
             }
         }
         //PAUSE STATE RENDERING//
@@ -104,7 +110,7 @@ class MainGame : JPanel(), Runnable {
         var drawStart: Long = 0
 
         /*display FPS*/
-        if (keyM.checkFPS) {
+        if (KeyHandler.checkFPS) {
             drawStart = System.nanoTime()
         }
             tilemanager.draw(g2)
@@ -132,12 +138,17 @@ class MainGame : JPanel(), Runnable {
                 GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.projectilelist[i])
             }
         }
-        //is the lead Renderer to handle all the different entites and objects.
+        /**TILE ENTITY RENDERING**/
+        for(i in GlobalGameThreadConfigs.Tentity.indices){
+            if(GlobalGameThreadConfigs.Tentity[i] != null){
+                GlobalGameThreadConfigs.Tentity[i].draw(g2)
+            }
+        }
         /*SORT ENTITYS IN POSITIONS*/
         GeneralHandler.main(g2)
 
         /*HANDLES FPS AND DRAW TIME FUNC*/
-            if (keyM.checkFPS) {
+            if (KeyHandler.checkFPS) {
                 var drawEND: Long = System.nanoTime()
                 var passed: Long = drawEND - drawStart
                 g2.color = Color.white
@@ -190,7 +201,7 @@ class MainGame : JPanel(), Runnable {
         var player = Player(keyM, MainGame())
          @JvmField
          //OBJECT//
-        var obj = arrayOfNulls<LivingEntity>(20)
+        var obj = arrayOfNulls<LivingEntity>(30)
          @JvmField
          //WORLD RENDERER//
         var tilemanager = tilemanager()
@@ -206,6 +217,7 @@ class MainGame : JPanel(), Runnable {
             MultiRender.setObjectRenderer()
             MultiRender.setNPCrenderers()
             MultiRender.setMonsterRenderers()
+            MultiRender.setTileEntityRenderers()
             playmusic(0)
 
             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState

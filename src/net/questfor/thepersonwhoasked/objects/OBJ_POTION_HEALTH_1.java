@@ -24,13 +24,10 @@ public class OBJ_POTION_HEALTH_1 extends LivingEntity {
         EntityType = 3;
     }
     public void Use(LivingEntity sourceentity){
-
             sourceentity.health += Value;
             gp.playsound(2);
             if(sourceentity.health > sourceentity.maxhealth){
                 sourceentity.health = sourceentity.maxhealth;
             }
-
-
     }
 }

@@ -9,7 +9,7 @@ public class Projectile extends LivingEntity{
         super(gpp);
 
     }
-    public void Set(int worldx, int worldy, String direction, boolean alive, LivingEntity sourceentity){
+    public void Set(int worldx, int worldy, String direction, boolean alive, LivingEntity sourceentity) {
         this.worldx = worldx;
         this.worldy = worldy;
         this.alive = alive;
@@ -21,13 +21,13 @@ public class Projectile extends LivingEntity{
         if(SourceEntity == gp.player){
             int monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
             if(monsterindex != 999){
-                gp.player.attackEntity(monsterindex, TrueAttackDamage);
+                gp.player.attackEntity(monsterindex, AttackValue);
                 alive = false;
             }
         }if(SourceEntity != gp.player){
             boolean contactPlayer = gp.hregister.PlayerColide(this);
             if(!gp.player.invincible && contactPlayer){
-                AttackPLayer(TrueAttackDamage);
+                AttackPLayer(AttackValue);
                 alive = false;
             }
         }
@@ -83,4 +83,6 @@ public class Projectile extends LivingEntity{
                 break;
         }
     }
+    public boolean haveresource(LivingEntity sourceEntity){boolean haveresource = false;return haveresource;}
+    public void RemoveResource(LivingEntity source){}
 }

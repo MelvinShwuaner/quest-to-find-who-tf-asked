@@ -3,6 +3,7 @@ package net.questfor.thepersonwhoasked.entities;
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
+import net.questfor.thepersonwhoasked.tile_entites.TileEntity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -43,6 +44,7 @@ public class Player extends LivingEntity {
     public void setdefaultvalues() {
         try {
             //DEFAULT VALUES
+            Ammo = 10;
             inventorysize = 20;
             worldx = MainGame.tilesize * 23;
             worldy = MainGame.tilesize * 21;
@@ -65,6 +67,9 @@ public class Player extends LivingEntity {
             defence = getDefenceValues();
             TrueAttackDamage = getAttackValues();
             projectile = new OBJ_FireBall(gp);
+            MaxMana = 4;
+            Mana = MaxMana;
+
         } catch (Exception e) {
             crash.main(e);
         }
@@ -150,8 +155,9 @@ public class Player extends LivingEntity {
                     }
                 }
             }
-            if(KeyHandler.primepowera && projectile.alive == false && primepowercool == 30){
+            if(KeyHandler.primepowera && projectile.alive == false && primepowercool == 30 && projectile.haveresource(this)){
                 projectile.Set((int) worldx, (int) worldy, direction, true, this);
+                projectile.RemoveResource(this);
                 GlobalGameThreadConfigs.projectilelist.add(projectile);
                 primepowercool = 0;
                 gp.playsound(10);
@@ -225,6 +231,7 @@ public class Player extends LivingEntity {
                 interactNPC(npcindex);
                 int Monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
                 attacked(Monsterindex);
+                int TentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
                 //CHECK EVENT
                 gp.ehandler.returnEvent();
                 KeyHandler.enterpressed = false;
@@ -315,11 +322,12 @@ public class Player extends LivingEntity {
             }
             int attackindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
             attackEntity(attackindex, TrueAttackDamage);
+            int TileentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
+            destroyTentity(TileentityI);
             worldx = currentworldx;
             worldy = currentworldy;
             hitbox.width = hitboxWidth;
             hitbox.height = hitboxHeight;
-
         }
         if (spritecounter > 25) {
             spritenumber = 1;
@@ -329,11 +337,23 @@ public class Player extends LivingEntity {
         }
     }
 
+    public void destroyTentity(int tileentityI) {
+        if(tileentityI != 999 && GlobalGameThreadConfigs.Tentity[tileentityI].distructuble && GlobalGameThreadConfigs.Tentity[tileentityI].ItemRequirements(this) && !GlobalGameThreadConfigs.Tentity[tileentityI].invincible) {
+            GlobalGameThreadConfigs.Tentity[tileentityI].health--;
+            GlobalGameThreadConfigs.Tentity[tileentityI].playSE();
+            GlobalGameThreadConfigs.Tentity[tileentityI].invincible = true;
+            if (GlobalGameThreadConfigs.Tentity[tileentityI].health < 0){
+                GlobalGameThreadConfigs.Tentity[tileentityI] = GlobalGameThreadConfigs.Tentity[tileentityI].getDestroyedForm();
+                GlobalGameThreadConfigs.Tentity[tileentityI].HandleItems();
+        }
+        }
+    }
+
     public void attackEntity(int attackindex, int dmg) {
         if (attackindex != 999) {
             if (GlobalGameThreadConfigs.Monsters[attackindex].invincible == false) {
                 gp.playsound(6);
-                int damage = TrueAttackDamage - GlobalGameThreadConfigs.Monsters[attackindex].defence;
+                int damage = dmg - GlobalGameThreadConfigs.Monsters[attackindex].defence;
                 if (damage < 0) {
                     damage = 0;
                 }
@@ -388,16 +408,23 @@ public class Player extends LivingEntity {
 
             if (i != 999) {
                 if (gp.obj[i].EntityType == 3) {
-                    String text;
-                    if (inventory.size() != inventorysize) {
-                        inventory.add(gp.obj[i]);
-                        text = "Picked up " + gp.obj[i].name;
+                    if (gp.obj[i].Type == 8) {
+                        gp.obj[i].Use(this);
                         gp.obj[i] = null;
-                        gp.playsound(1);
-                    } else {
-                        text = "Your inventory is full!";
                     }
-                    UI.addMessages(text);
+                    if (gp.obj[i] != null) {
+                        String text;
+                        if (inventory.size() != inventorysize) {
+                            inventory.add(gp.obj[i]);
+                            text = "Picked up " + gp.obj[i].name;
+                            gp.obj[i] = null;
+                            gp.playsound(1);
+                        } else {
+                            text = "Your inventory is full!";
+                        }
+
+                        UI.addMessages(text);
+                    }
                 } else {
                     switch (gp.obj[i].name) {
                         case "chest" -> {
@@ -413,6 +440,7 @@ public class Player extends LivingEntity {
                             }
                         }
                     }
+
                 }
             } else {
                 GlobalGameThreadConfigs.inchest = false;
@@ -523,6 +551,7 @@ public class Player extends LivingEntity {
                 if(invincible == false){getImageInstance(); getAttackInstance();isred = 1;}
             }
             g2.drawImage(image, tempscreenx, tempscreeny, null);
+
         }catch(Exception e){
             e.printStackTrace();
         }

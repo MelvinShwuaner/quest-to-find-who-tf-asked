@@ -50,6 +50,7 @@ public class LivingEntity {
     public ArrayList<LivingEntity> inventory = new ArrayList<>();
     public int MaxMana;
     public int Mana;
+    public int Ammo;
     public Projectile projectile;
 
     public String dialogues[] = new String[20];
@@ -73,8 +74,8 @@ public class LivingEntity {
     public int Value = 1;
     public int inventorysize = 20;
     public String description = "";
-    public int Type;
-    public int Type_sword = 1, Type_constumable = 2, Type_tool = 3, Type_object = 4, Type_armor = 5, Type_shield = 6, Type_projectile = 7;
+    public int Type = 0;
+    public int Type_sword = 1, Type_constumable = 2, Type_tool = 3, Type_object = 4, Type_armor = 5, Type_shield = 6, Type_projectile = 7, Type_Current = 8, Type_axe = 9;
     public int SLOTTYPE; // 1 for mainhand, 2 for lefthand, 3 for helmet, 4 for chestplate, 5 for leggings, 6 for boots
     public int UseCost;
 
@@ -109,6 +110,7 @@ public class LivingEntity {
         gp.hregister.checkObject(this, false);
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
+        gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
         boolean ContactPLayer = gp.hregister.PlayerColide(this);
         if(EntityType == 2 && ContactPLayer){
             AttackPLayer(TrueAttackDamage);
@@ -150,7 +152,27 @@ public class LivingEntity {
             }
         }
     }
-
+    public void HandleItems(){}
+    public void DropItems(LivingEntity droppedItem){
+        for(int i = 0; i < gp.obj.length; i++){
+            if(gp.obj[i] == null) {
+                gp.obj[i] = droppedItem;
+                int I = new Random().nextInt(100) + 1;
+                if (I > 50){
+                    gp.obj[i].worldx = worldx + gp.tilesize/2;
+            } else {
+                    gp.obj[i].worldx = worldx - gp.tilesize/2;
+                }
+                I = new Random().nextInt(100) + 1;
+                if(I > 50){
+                    gp.obj[i].worldy = worldy + gp.tilesize/2;
+                }else {
+                    gp.obj[i].worldy = worldy - gp.tilesize/2;
+                }
+                break;
+            }
+        }
+    }
     private void Regenerate() {
         if(!Hostile) {
             regenerationcooldown++;
@@ -230,7 +252,7 @@ public class LivingEntity {
                     }
 
                 }
-
+                if(EntityType != 4){
                 if (invincible) {
                     for (int y = 0; y < image.getHeight(); y++) {
                         for (int x = 0; x < image.getWidth(); x++) {
@@ -243,23 +265,28 @@ public class LivingEntity {
                         }
                     }
                 }
-                if (dying) {
-                    DieAnimation(g2);
-                }
                 if (isred == 2) {
                     if (invincible == false) {
                         getImageInstance();
                         isred = 1;
                     }
                 }
+            }else if(invincible){
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                }
+                if (dying) {
+                    DieAnimation(g2);
+                }
                 g2.setFont(g2.getFont().deriveFont(Font.BOLD));
                 g2.setColor(Color.BLACK);
                 if (EntityType != 3) {
-                    if(EntityType != 4){
-                    g2.drawString("level: " + level, (int) screenX, (int) (screenY - 30));
+                    if (EntityType != 4) {
+                        if (Type != Type_projectile){
+                            g2.drawString("level: " + level, (int) screenX, (int) (screenY - 30));
+                    }
+                }
             }
-            }
-                g2.drawImage(image, (int) screenX, (int) screenY, MainGame.tilesize, MainGame.tilesize, null);
+                g2.drawImage(image, (int) screenX, (int) screenY, null);
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
             }
         }catch (Exception e){

@@ -2,18 +2,18 @@ package net.questfor.thepersonwhoasked.Maingam;
 
 public class EventHandler {
     MainGame gp;
-    EventManager eventBus[][];
+    EventProperties eventBus[][];
     //Handles all events and uses them, uses the values from eventManager to function
     int PreviousEventX, PreviousEventY;
     boolean canTriggerEvent = true;
     EventHandler(MainGame gpp){
         this.gp = gpp;
-        eventBus = new EventManager[MainGame.maxworldcol][MainGame.maxworldrow];
+        eventBus = new EventProperties[MainGame.maxworldcol][MainGame.maxworldrow];
         int col = 0;
         int row = 0;
         while(col < MainGame.maxworldcol && row < MainGame.maxworldrow){
             //LOADS AND REGISTERS ALL SPOTS IN THE WORLD THAT CAN HAVE A EVENT
-            eventBus[col][row] = new EventManager();
+            eventBus[col][row] = new EventProperties();
             eventBus[col][row].x = 23;
             eventBus[col][row].y = 23;
             eventBus[col][row].width = 2;
@@ -46,7 +46,7 @@ public class EventHandler {
             if (hit(11, 10, "left")) {teleport(11, 10, GlobalGameThreadConfigs.dialogueState);}
         }
     }
-    private void teleport(int col, int row, int GameState) {
+    public void teleport(int col, int row, int GameState) {
         //TELEPORT EVENT
             if(gp.player.health != gp.player.maxhealth) {
                 GlobalGameThreadConfigs.GameState = GameState;
@@ -57,6 +57,7 @@ public class EventHandler {
                     GlobalGameThreadConfigs.worldID = "/maps/world01.txt";
                     MainGame.tilemanager.loadmap(GlobalGameThreadConfigs.worldID);
                 }
+                eventBus[col][row].eventDone = true;
         }
     }
 
@@ -81,7 +82,11 @@ public class EventHandler {
                 UI.currentDialogue = "Your health is already full!";
                 canTriggerEvent = false;
             }
+            if(gp.player.Mana < gp.player.MaxMana){
+                gp.player.Mana++;
+            }
             gp.MultiRender.setMonsterRenderers();
+            gp.MultiRender.setObjectRenderer();
         }
     }
 

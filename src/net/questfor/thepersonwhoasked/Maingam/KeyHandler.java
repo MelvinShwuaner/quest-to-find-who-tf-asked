@@ -23,7 +23,7 @@ public class KeyHandler implements KeyListener {
     public int pause = 0;
 
 
-    public boolean checkFPS;
+    public static boolean checkFPS;
 
     @Override
     public void keyPressed(KeyEvent e) {

@@ -3,6 +3,9 @@ package net.questfor.thepersonwhoasked.entities.Mobs;
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
+import net.questfor.thepersonwhoasked.objects.OBJHeart;
+import net.questfor.thepersonwhoasked.objects.OBJ_COIN_BRONZE;
+import net.questfor.thepersonwhoasked.objects.OBJ_MANA_CRYSTAL;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_ROCK;
 
 import java.awt.*;
@@ -90,7 +93,15 @@ public class green_slime extends LivingEntity {
             GlobalGameThreadConfigs.projectilelist.add(projectile);
             primepowercool = 0;
         }
-
+    }
+    public void HandleItems(){
+        int I = new Random().nextInt(100)+1;
+        if(I < 50){
+            DropItems(new OBJ_MANA_CRYSTAL(gp));
+            DropItems(new OBJHeart(gp));
+        }else {
+            DropItems(new OBJ_COIN_BRONZE(gp));
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 package net.questfor.thepersonwhoasked.objects.Projectiles;
 
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
+import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.entities.Projectile;
 
 import java.awt.*;
@@ -14,7 +15,7 @@ public class OBJ_ROCK extends Projectile {
         speed = 8;
         maxhealth = 80;
         health = maxhealth;
-        TrueAttackDamage = 2;
+        AttackValue = 4;
         UseCost = 1;
         alive = false;
         getImageInstance();
@@ -24,6 +25,7 @@ public class OBJ_ROCK extends Projectile {
         hitbox.width = 48;
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
+        Type = Type_projectile;
         hitboxdefaulty = hitbox.y;
     }
     public void getImageInstance(){
@@ -35,5 +37,15 @@ public class OBJ_ROCK extends Projectile {
         left2 = BufferedRenderer("objects/Projectile/rock_down_1", gp.tilesize, gp.tilesize);
         right1 = BufferedRenderer("objects/Projectile/rock_down_1", gp.tilesize, gp.tilesize);
         right2 = BufferedRenderer("objects/Projectile/rock_down_1", gp.tilesize, gp.tilesize);
+    }
+    public boolean haveresource(LivingEntity sourceEntity){
+        boolean haveresource = false;
+        if(sourceEntity.Ammo >= UseCost){
+            haveresource = true;
+        }
+        return haveresource;
+    }
+    public void RemoveResource(LivingEntity source){
+        source.Ammo -= UseCost;
     }
 }
