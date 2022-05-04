@@ -49,4 +49,9 @@ public class OBJ_FireBall extends Projectile {
     public void RemoveResource(LivingEntity source){
         source.Mana -= UseCost;
     }
+    public Color getparticleColor(){return new Color(0xF03200);}
+    public int getparticleSize(){return 10;}
+    public int getparticlespeed(){return 2;}
+    public int getparticleMaxHealth(){return 20;}
     }
+

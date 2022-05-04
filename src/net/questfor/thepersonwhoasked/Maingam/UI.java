@@ -1,13 +1,13 @@
 package net.questfor.thepersonwhoasked.Maingam;
+import net.questfor.thepersonwhoasked.MultiRenderer;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
-import net.questfor.thepersonwhoasked.objects.OBJHeart;
-import net.questfor.thepersonwhoasked.objects.OBJ_MANA_CRYSTAL;
+import net.questfor.thepersonwhoasked.objects.*;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.ArrayList;
-
 public class UI {
     //basic values
     static MainGame gp;
@@ -27,8 +27,8 @@ public class UI {
     public static BufferedImage crystal_blank = ManaCrystal.image2;
     //STATS//
     public static int frameX = gp.tilesize - 350;
-    public static int invX = (gp.tilesize * 9) + 350;
-
+    public static int invX = (gp.tilesize * 13) + 350;
+    public static String fullscreentext = "Windowed";
     public static int dframeX = invX;
     public static int frameY = gp.tilesize;
     public static boolean transitionfinushed = false;
@@ -38,6 +38,9 @@ public class UI {
     public static int frameWidth = gp.tilesize * 6;
     public static int frameHeight = gp.tilesize * 10;
     public static boolean slotstate = false;
+    public static int optionstate = 0;
+    public static int optionc = 0;
+
 
     public UI(MainGame GPP) {
         //sets the values
@@ -76,37 +79,236 @@ public class UI {
                 if (!GlobalGameThreadConfigs.CharacterStats) {
                     drawMessages();
                 }
+                if (GlobalGameThreadConfigs.CharacterStats) {
+                    if (!transitionfinushed) {
+                        frameX += 5;
+                        invX -= 5;
+                        dframeX = invX - (gp.tilesize * 3) - 24;
+                    }
+                    if (frameX == gp.tilesize - 45) {
+                        transitionfinushed = true;
+                    }
+                } else {
+                    if (frameX != gp.tilesize - 350) {
+                        frameX -= 5;
+                        invX += 5;
+                        dframeX = invX - (gp.tilesize * 3) - 24;
+                    } else {
+                        transitionfinushed = false;
+                    }
+                }
             }
             if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.pauseState) {
-                drawPlayerBar();
                 drawPauseScreen();
             }
             if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.dialogueState) {
                 drawPlayerBar();
                 drawDialogueScreen();
             }
-            if (GlobalGameThreadConfigs.CharacterStats) {
-                if (!transitionfinushed) {
-                    frameX += 5;
-                    invX -= 5;
-                    dframeX = invX - (gp.tilesize * 3) - 24;
-                }
-                if (frameX == gp.tilesize - 45) {
-                    transitionfinushed = true;
-                }
-            } else {
-                if (frameX != gp.tilesize - 350) {
-                    frameX -= 5;
-                    invX += 5;
-                    dframeX = invX - (gp.tilesize * 3) - 24;
-                } else {
-                    transitionfinushed = false;
-                }
+            if(GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.optionsstate){
+                drawoptionscreen();
             }
         }
     }
 
-    private static void DisplayChest() {
+    public static void drawoptionscreen() {
+        g2.setColor(Color.white);
+        g2.setFont(g2.getFont().deriveFont(24F));
+        int frameX = gp.tilesize*6;
+        int frameY = gp.tilesize;
+        int framewidth = gp.tilesize*8;
+        int frameheight = gp.tilesize*10;
+        drawSubWindow(frameX, frameY , framewidth, frameheight);
+        switch (optionstate){
+            case 0: option_top(frameX, frameY); break;
+            case 1: key_control(frameX, frameY); break;
+            case 2: EndGameConfirm(frameX, frameY); break;
+        }
+    }
+
+    public static void EndGameConfirm(int frameX, int frameY) {
+        int textx = frameX + gp.tilesize;
+        int texty = frameY +gp.tilesize*3;
+        currentDialogue = "Quit the game and return \n to title screen?";
+
+        for(String line: currentDialogue.split("\n")){
+            g2.drawString(line, textx, texty);
+            texty+= 40;
+        }
+        String text = "Yes";
+        textx = getXforCenterText(text);
+        texty += gp.tilesize*3;
+        g2.drawString(text, textx, texty);
+        if(commandnum == 0) {
+            g2.drawString(">", textx - 25, texty);
+            if (KeyHandler.enterpressed) {
+                    optionstate = 0;
+                    optionc = 0;
+                GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                gp.player.worldy = MainGame.tilesize * 21;
+                gp.player.worldx = MainGame.tilesize * 23;
+                GlobalGameThreadConfigs.isinTital = true;
+                gp.MultiRender.setObjectRenderer();
+                gp.MultiRender.setMonsterRenderers();
+                gp.MultiRender.setNPCrenderers();
+                gp.MultiRender.setTileEntityRenderers();
+                gp.player.inventory = new ArrayList<>();
+                gp.player.currentweapon = new OBJ_IRON_SWORD(gp);
+                gp.player.currentshield = new OBJ_SHIELD_WOOD(gp);
+                gp.player.inventory.add(gp.player.currentshield);
+                gp.player.inventory.add(gp.player.currentweapon);
+            }
+        }
+        text = "No";
+        textx = getXforCenterText(text);
+        texty += gp.tilesize;
+        g2.drawString(text, textx, texty);
+        if(commandnum == 1){
+            g2.drawString(">", textx, texty);
+            if(KeyHandler.enterpressed){
+                GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                optionstate = 0;
+                optionc = 0;
+            }
+        }
+
+    }
+
+    public static void option_top(int framex, int framey){
+        int textX;
+        int textY;
+        String text = "options";
+        textX = getXforCenterText(text);
+        textY = framey+gp.tilesize;
+        g2.drawString(text, textX, textY);
+
+        textX = framex + gp.tilesize;
+        textY += gp.tilesize*2;
+        g2.drawString("size: "+fullscreentext, textX, textY);
+        if(commandnum == 0) {
+            g2.drawString(">", textX - 25, textY);
+            if (KeyHandler.enterpressed) {
+                KeyHandler.enterpressed = false;
+                if (fullscreentext.equals("Windowed")){
+                fullscreentext = "Fullscreen";
+                MainGame.setFullscreenON(true);
+            }else if (fullscreentext.equals("Fullscreen")){
+                    fullscreentext = "Windowed";
+                    MainGame.setFullscreenON(false);
+                }
+                MainGame.togglefullscreen();
+
+        }
+        }
+        textY += gp.tilesize;
+        g2.drawString("Music Volume", textX, textY);
+        if(commandnum == 1){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += gp.tilesize;
+        g2.drawString("Sound Volume", textX, textY);
+        if(commandnum == 2){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += gp.tilesize;
+        g2.drawString("Controls", textX, textY);
+        if(commandnum == 3){
+            g2.drawString(">", textX-25, textY);
+            if (KeyHandler.enterpressed) {
+                KeyHandler.enterpressed = false;
+                optionstate = 1;
+                commandnum = 1;
+            }
+        }
+        textY += gp.tilesize;
+        g2.drawString("Leave Game", textX, textY);
+        if(commandnum == 4){
+            g2.drawString(">", textX-25, textY);
+            if(KeyHandler.enterpressed){
+                optionstate = 2;
+                commandnum = 0;
+                KeyHandler.enterpressed = false;
+            }
+        }
+        textY += gp.tilesize*2;
+        if(commandnum == 5){
+            g2.drawString(">", textX-25, textY);
+        }
+        g2.drawString("Exit", textX, textY);
+        g2.setStroke(new BasicStroke(3));
+        textX = framex + gp.tilesize*5;
+
+        textY = framey + gp.tilesize*3 + 27;
+        g2.drawRect(textX, textY, 120, 24);
+        int volumewidth = 24*gp.music.volumescale;
+        g2.fillRect(textX, textY, volumewidth, 24);
+
+        textY += gp.tilesize;
+        g2.drawRect(textX, textY, 120, 24);
+        volumewidth = 24*gp.sound.volumescale;
+        g2.fillRect(textX, textY, volumewidth, 24);
+    }
+    public static void key_control(int framex, int framey){
+        int textX;
+        int textY;
+        String text = "Controls";textX = getXforCenterText(text);
+        g2.setFont(g2.getFont().deriveFont(15F));
+        textY = framey+gp.tilesize;
+        g2.drawString(text, textX, textY);
+        textX = framex + 96;
+        textY += 24;
+        g2.drawString("move up: "+ KeyEvent.getKeyText(KeyHandler.UP), textX, textY);
+        if(commandnum == 1){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("move down: "+KeyEvent.getKeyText(KeyHandler.DOWN), textX, textY);
+        if(commandnum == 2){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("strafe right: "+KeyEvent.getKeyText(KeyHandler.RIGHT), textX, textY);
+        if(commandnum == 3){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("strafe left: "+KeyEvent.getKeyText(KeyHandler.LEFT), textX, textY);
+        if(commandnum == 4){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("PAUSE: "+KeyEvent.getKeyText(KeyHandler.PAUSE), textX, textY);
+        if(commandnum == 5){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("primary power: "+KeyEvent.getKeyText(KeyHandler.primepowerc), textX, textY);
+        if(commandnum == 6){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("secondary power: "+KeyEvent.getKeyText(KeyHandler.secpowerc), textX, textY);
+        if(commandnum == 7){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("data menu: "+KeyEvent.getKeyText(KeyHandler.FPSC), textX, textY);
+        if(commandnum == 8){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("inventory: "+KeyEvent.getKeyText(KeyHandler.INVENTORY), textX, textY);
+        if(commandnum == 9){
+            g2.drawString(">", textX-25, textY);
+        }
+        textY += 24;
+        g2.drawString("open: "+KeyEvent.getKeyText(KeyHandler.OPEN), textX, textY);
+        if(commandnum == 10){
+            g2.drawString(">", textX-25, textY);
+        }
+    }
+
+    public static void DisplayChest() {
         frameHeight = gp.tilesize * 5;
         //SLOTS
         final int slotXstart = frameX + 20;
@@ -146,7 +348,7 @@ public class UI {
         }
     }
 
-    private static void displayINV() {
+    public static void displayINV() {
         //FRAME
         int frameWidth = gp.tilesize * 6;
         int frameHeight = gp.tilesize * 5;
@@ -222,7 +424,7 @@ public class UI {
         }
     }
 
-    private static void drawMessages() {
+    public static void drawMessages() {
 
         int Messagex = gp.tilesize - 30;
         int Messagey = gp.tilesize * 4;
@@ -289,7 +491,7 @@ public class UI {
         messages.add(text);
         messageID.add(0);
     }
-    private static void drawPlayerBar() {
+    public static void drawPlayerBar() {
         int x = MainGame.tilesize / 2;
         int y = MainGame.tilesize / 2;
         int i = 0;
@@ -311,7 +513,6 @@ public class UI {
             x += gp.tilesize;
 
         }
-        g2.setFont(new Font("Arial", Font.PLAIN, 26));
         g2.setColor(Color.white);
         if (gp.keyM.checkFPS) {
             if (gp.player.invincible == true) {
@@ -334,5 +535,6 @@ public class UI {
             i++;
             x += 35;
         }
-        //2022 words long -------------------//
-    }private static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Adventure";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}private static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}
+    }
+    //2022 words long -------------------//
+     private static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Adventure";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}private static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}

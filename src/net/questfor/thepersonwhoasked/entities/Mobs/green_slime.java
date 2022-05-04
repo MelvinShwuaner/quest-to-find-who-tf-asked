@@ -103,5 +103,9 @@ public class green_slime extends LivingEntity {
             DropItems(new OBJ_COIN_BRONZE(gp));
         }
     }
+    public Color getparticleColor(){return new Color(0x388545);}
+    public int getparticleSize(){return 11;}
+    public int getparticlespeed(){return 1;}
+    public int getparticleMaxHealth(){return 23;}
 }
 

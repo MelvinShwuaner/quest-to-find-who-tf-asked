@@ -1,12 +1,7 @@
 package net.questfor.thepersonwhoasked.tile_entites;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
-import net.questfor.thepersonwhoasked.objects.OBJHeart;
-import net.questfor.thepersonwhoasked.objects.OBJ_COIN_BRONZE;
-import net.questfor.thepersonwhoasked.objects.OBJ_MANA_CRYSTAL;
-
-import java.util.Random;
-
+import java.awt.*;
 public class IT_tree extends TileEntity{
     public IT_tree(MainGame gpp, int col, int row) {
         super(gpp, col, row);
@@ -21,7 +16,9 @@ public class IT_tree extends TileEntity{
         return iscorrectItem;
     }
     public void playSE(){gp.playsound(11);}
-    public TileEntity getDestroyedForm(){
-        TileEntity destroyedForm = new IT_Tree_Trunk(gp, (int) (worldx/gp.tilesize), (int) worldy/gp.tilesize);
-        return destroyedForm;}
+    public TileEntity getDestroyedForm(){return new IT_Tree_Trunk(gp, (int) (worldx/gp.tilesize), (int) worldy/gp.tilesize);}
+    public Color getparticleColor(){return new Color(0x41321E);}
+    public int getparticleSize(){return 6;}
+    public int getparticlespeed(){return 1;}
+    public int getparticleMaxHealth(){return 20;}
 }

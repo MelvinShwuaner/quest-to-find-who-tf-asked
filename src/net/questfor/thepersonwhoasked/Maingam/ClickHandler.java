@@ -3,12 +3,15 @@ import java.awt.event.*;
 public class ClickHandler implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(e.getButton() == MouseEvent.BUTTON1){
+            if (e.getButton() == MouseEvent.BUTTON1) {
                 KeyHandler.attack = true;
-            }if(e.getButton() == MouseEvent.BUTTON3){
+            }
+        if (e.getButton() == MouseEvent.BUTTON3) {
             KeyHandler.use = true;
         }
-    }
+
+
+}
     //USELESS//
     //-------------------//
     @Override

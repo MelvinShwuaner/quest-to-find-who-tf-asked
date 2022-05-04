@@ -3,6 +3,7 @@ package net.questfor.thepersonwhoasked.entities;
 import net.questfor.thepersonwhoasked.Maingam.*;
 import java.util.*;
 import javax.imageio.ImageIO;
+import javax.xml.transform.Source;
 import java.awt.*;
 import java.awt.image.*;
 //is the parent class for all entities including player
@@ -52,7 +53,7 @@ public class LivingEntity {
     public int Mana;
     public int Ammo;
     public Projectile projectile;
-
+    public int cantalk = 0;
     public String dialogues[] = new String[20];
     public int dialogueIndex = 0;
     public int level;
@@ -89,16 +90,13 @@ public class LivingEntity {
     public void speak(){
         //dialogue functions
 
-        if(dialogues[dialogueIndex] == null){
-            dialogueIndex = 0;
-        }
         UI.currentDialogue = dialogues[dialogueIndex];
         dialogueIndex++;
         switch (gp.player.direction){
-            case "up" -> {direction = "down";worldy += MainGame.tilesize;}
-            case "down" -> {direction = "up"; worldy -= MainGame.tilesize;}
-            case "right" -> {direction = "left"; worldx += MainGame.tilesize;}
-            case "left" -> {direction = "right"; worldx -= MainGame.tilesize;}
+            case "up" -> {direction = "down";}
+            case "down" -> {direction = "up"; }
+            case "right" -> {direction = "left"; }
+            case "left" -> {direction = "right"; }
         }
     }
     public void update(){
@@ -117,6 +115,13 @@ public class LivingEntity {
         }
         if(primepowercool < 30){
             primepowercool++;
+        }
+        if(dialogues[dialogueIndex] == null){
+            cantalk++;
+        }
+        if(cantalk > 30){
+            cantalk = 0;
+            dialogueIndex = 0;
         }
         if (!hitboxe) {
             switch (direction){
@@ -271,9 +276,7 @@ public class LivingEntity {
                         isred = 1;
                     }
                 }
-            }else if(invincible){
-                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-                }
+            }
                 if (dying) {
                     DieAnimation(g2);
                 }
@@ -282,6 +285,7 @@ public class LivingEntity {
                 if (EntityType != 3) {
                     if (EntityType != 4) {
                         if (Type != Type_projectile){
+                            g2.setFont(g2.getFont().deriveFont(10F));
                             g2.drawString("level: " + level, (int) screenX, (int) (screenY - 30));
                     }
                 }
@@ -319,5 +323,32 @@ public class LivingEntity {
             crash.main(e);
         }
         return ScaledImage;
+    }
+
+    /**PARTICLES**/
+    public Color getparticleColor(){return null;}
+    public int getparticleSize(){return 0;}
+    public int getparticlespeed(){return 0;}
+    public int getparticleMaxHealth(){return 0;}
+    //SET PARTICLES AND THERE PROPERTIES
+    public void ParticlePropertyManager(LivingEntity Source, LivingEntity target){Color texture = Source.getparticleColor(); int size = Source.getparticleSize(); int speed = Source.getparticlespeed(); int MaxHealth = Source.getparticleMaxHealth();
+        Particle p1 = new Particle(gp, target, texture, size, speed, MaxHealth, -2, -1);
+        Particle p2 = new Particle(gp, target, texture, size, speed, MaxHealth, 2, -1);
+        Particle p3 = new Particle(gp, target, texture, size, speed, MaxHealth, -2, 1);
+        Particle p4 = new Particle(gp, target, texture, size, speed, MaxHealth, 2, 1);
+        GlobalGameThreadConfigs.particleList.add(p1);
+        GlobalGameThreadConfigs.particleList.add(p2);
+        GlobalGameThreadConfigs.particleList.add(p3);
+        GlobalGameThreadConfigs.particleList.add(p4);
+    }
+    public void ParticleAttackManager(LivingEntity Source, LivingEntity target){Color texture = target.getparticleColor(); int size = target.getparticleSize(); int speed = target.getparticlespeed(); int MaxHealth = target.getparticleMaxHealth();
+        Particle p1 = new Particle(gp, target, texture, size, speed, MaxHealth, -2, -1);
+        Particle p2 = new Particle(gp, target, texture, size, speed, MaxHealth, 2, -1);
+        Particle p3 = new Particle(gp, target, texture, size, speed, MaxHealth, -2, 1);
+        Particle p4 = new Particle(gp, target, texture, size, speed, MaxHealth, 2, 1);
+        GlobalGameThreadConfigs.particleList.add(p1);
+        GlobalGameThreadConfigs.particleList.add(p2);
+        GlobalGameThreadConfigs.particleList.add(p3);
+        GlobalGameThreadConfigs.particleList.add(p4);
     }
 }

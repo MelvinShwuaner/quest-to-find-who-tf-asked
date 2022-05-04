@@ -145,7 +145,7 @@ public class Player extends LivingEntity {
             //PLAYER ATTACK//
             if (KeyHandler.use) {
                 KeyHandler.use = false;
-                if (UI.transitionfinushed){
+                if (UI.transitionfinushed || GlobalGameThreadConfigs.CharacterStats){
                     convertItem(7);
                 }else {
                     if (hasweapon){
@@ -342,6 +342,7 @@ public class Player extends LivingEntity {
             GlobalGameThreadConfigs.Tentity[tileentityI].health--;
             GlobalGameThreadConfigs.Tentity[tileentityI].playSE();
             GlobalGameThreadConfigs.Tentity[tileentityI].invincible = true;
+            ParticlePropertyManager(GlobalGameThreadConfigs.Tentity[tileentityI], GlobalGameThreadConfigs.Tentity[tileentityI]);
             if (GlobalGameThreadConfigs.Tentity[tileentityI].health < 0){
                 GlobalGameThreadConfigs.Tentity[tileentityI] = GlobalGameThreadConfigs.Tentity[tileentityI].getDestroyedForm();
                 GlobalGameThreadConfigs.Tentity[tileentityI].HandleItems();
@@ -358,6 +359,7 @@ public class Player extends LivingEntity {
                     damage = 0;
                 }
                 GlobalGameThreadConfigs.Monsters[attackindex].health -= damage;
+                ParticleAttackManager( this, GlobalGameThreadConfigs.Monsters[attackindex]);
                 GlobalGameThreadConfigs.Monsters[attackindex].Hostile = true;
                 GlobalGameThreadConfigs.Monsters[attackindex].HostileTime = 0;
                 GlobalGameThreadConfigs.Monsters[attackindex].invincible = true;
@@ -453,12 +455,6 @@ public class Player extends LivingEntity {
     public void GetItems() {
         inventory.add(currentweapon);
         inventory.add(currentshield);
-        inventory.add(new OBJkey(gp));
-        inventory.add(new OBJdoor(gp));
-        inventory.add(new chest(gp));
-        inventory.add(new OBJHeart(gp));
-        inventory.add(new OBJkey(gp));
-        inventory.add(new OBJkey(gp));
 
     }
 
@@ -467,8 +463,12 @@ public class Player extends LivingEntity {
             if (i != 999) {
                 if (KeyHandler.enterpressed) {
                     GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
-                    GlobalGameThreadConfigs.NPCS[i].speak();
-                }
+                    if (GlobalGameThreadConfigs.NPCS[i].dialogues[GlobalGameThreadConfigs.NPCS[i].dialogueIndex] != null){
+                        GlobalGameThreadConfigs.NPCS[i].speak();
+                }else{
+                        GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                    }
+            }
             } else {
                 if (KeyHandler.attack == true) {
                     attacking = true;

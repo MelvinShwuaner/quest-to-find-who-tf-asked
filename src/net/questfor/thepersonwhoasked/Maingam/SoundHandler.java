@@ -1,8 +1,11 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
+import org.w3c.dom.events.MouseEvent;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import java.net.URL;
 
 public class SoundHandler {
@@ -11,6 +14,9 @@ public class SoundHandler {
         // THIS HANDLES THEM AND ASSIGNS EACH TYPE OF SOUND IN ITS SOUND FILE
         Clip clip;
         URL soundURL[] = new URL[30];
+        FloatControl fc;
+        int volumescale = 3;
+        float volume;
         public SoundHandler(){
                 soundURL[0] = getClass().getResource("/Sound/Adventure.wav");
                 soundURL[1] = getClass().getResource("/Sound/coin.wav");
@@ -31,6 +37,8 @@ public class SoundHandler {
                 AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
                 clip = AudioSystem.getClip();
                 clip.open(ais);
+                fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                ControlVolume();
                 }catch (Exception e){
                         crash.main(e);
                 }
@@ -55,5 +63,16 @@ public class SoundHandler {
                 }catch (Exception e){
                         crash.main(e);
                 }
+        }
+        public void ControlVolume(){
+                switch (volumescale){
+                        case 0 -> volume = -80f;
+                        case 1 -> volume = -20f;
+                        case 2 -> volume = -12f;
+                        case 3 -> volume = -5f;
+                        case 4 -> volume = 1f;
+                        case 5 -> volume = 6f;
+                }
+                fc.setValue(volume);
         }
 }

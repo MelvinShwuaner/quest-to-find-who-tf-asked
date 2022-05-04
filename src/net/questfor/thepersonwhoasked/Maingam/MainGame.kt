@@ -5,9 +5,12 @@ import net.questfor.thepersonwhoasked.MultiRenderer
 import net.questfor.thepersonwhoasked.entities.LivingEntity
 import net.questfor.thepersonwhoasked.entities.Player
 import net.questfor.thepersonwhoasked.tile.tilemanager
-import java.awt.*
+import java.awt.Color
+import java.awt.Dimension
 import java.io.*
-import javax.swing.*
+import javax.swing.JOptionPane
+import javax.swing.JPanel
+
 class MainGame : JPanel(), Runnable {
     /*
     is the secondary most important class in hierarchy, this has all the functions,
@@ -17,11 +20,9 @@ class MainGame : JPanel(), Runnable {
 
     @JvmField
     //sets default values for the game panel
-    var FPS = 60.0
+    var FPS = 59.0
     var drawcound: Long = 0
     var realFPS: Int = 0
-
-
     init {
         //assigns default values for the game panel
         addKeyListener(keyM)
@@ -53,11 +54,11 @@ class MainGame : JPanel(), Runnable {
             ticks += CurrentFrame - LastFrame
             LastFrame = CurrentFrame
             if (nextframe >= 1) {
-                repaint()
+                converttofullscreen()
+                drawtoscreen()
                 updateticks()
                 nextframe--
                 drawcound++
-
             }
             if (ticks >= 1000000000) {
                 realFPS = drawcound.toInt()
@@ -102,18 +103,14 @@ class MainGame : JPanel(), Runnable {
             stopmusic()
         }
     }
-
-    public override fun paintComponent(g: Graphics) {
-        //draws the screen of the game
-        super.paintComponent(g)
-        val g2 = g as Graphics2D
+    fun converttofullscreen(){
         var drawStart: Long = 0
 
         /*display FPS*/
         if (KeyHandler.checkFPS) {
             drawStart = System.nanoTime()
         }
-            tilemanager.draw(g2)
+        tilemanager.draw(GlobalGameThreadConfigs.g2)
 
 
         /*DISPLAYS ENTITYS AND OBJECTS*/
@@ -138,32 +135,42 @@ class MainGame : JPanel(), Runnable {
                 GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.projectilelist[i])
             }
         }
+        for (i in GlobalGameThreadConfigs.particleList.indices) {
+            if (GlobalGameThreadConfigs.particleList[i] != null) {
+                GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.particleList[i])
+            }
+        }
         /**TILE ENTITY RENDERING**/
         for(i in GlobalGameThreadConfigs.Tentity.indices){
             if(GlobalGameThreadConfigs.Tentity[i] != null){
-                GlobalGameThreadConfigs.Tentity[i].draw(g2)
+                GlobalGameThreadConfigs.Tentity[i].draw(GlobalGameThreadConfigs.g2)
             }
         }
         /*SORT ENTITYS IN POSITIONS*/
-        GeneralHandler.main(g2)
+        GeneralHandler.main(GlobalGameThreadConfigs.g2)
 
         /*HANDLES FPS AND DRAW TIME FUNC*/
-            if (KeyHandler.checkFPS) {
-                var drawEND: Long = System.nanoTime()
-                var passed: Long = drawEND - drawStart
-                g2.color = Color.white
-                g2.drawString("draw Time: $passed", 10, 400)
-                g2.drawString("FPS: $realFPS", 10, 300)
-                g2.drawString("X: ${player.worldx}", 10, 200)
-                g2.drawString("Y: ${player.worldy}", 10, 220)
-                g2.drawString("Z: ${player.worldz}", 10, 180)
-                g2.drawString("WORLD ROW: ${(player.worldy + player.hitbox.y)/tilesize}", 10, 210)
-                g2.drawString("WORLD COL: ${(player.worldx + player.hitbox.x)/tilesize}", 10, 190)
+        if (KeyHandler.checkFPS && GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
+            var drawEND: Long = System.nanoTime()
+            var passed: Long = drawEND - drawStart
+            GlobalGameThreadConfigs.g2.color = Color.white
+            GlobalGameThreadConfigs.g2.drawString("draw Time: $passed", 10, 400)
+            GlobalGameThreadConfigs.g2.drawString("FPS: $realFPS", 10, 300)
+            GlobalGameThreadConfigs.g2.drawString("X: ${player.worldx}", 10, 200)
+            GlobalGameThreadConfigs.g2.drawString("Y: ${player.worldy}", 10, 220)
+            GlobalGameThreadConfigs.g2.drawString("Z: ${player.worldz}", 10, 180)
+            GlobalGameThreadConfigs.g2.drawString("WORLD ROW: ${(player.worldy + player.hitbox.y)/tilesize}", 10, 210)
+            GlobalGameThreadConfigs.g2.drawString("WORLD COL: ${(player.worldx + player.hitbox.x)/tilesize}", 10, 190)
         }
         //UIS//
-            UI.draw(g)
-            g2.dispose()
-        }
+        UI.draw(GlobalGameThreadConfigs.g2)
+    }
+    fun drawtoscreen() {
+        val g = graphics
+        g.drawImage(GlobalGameThreadConfigs.tempscreen, 0, 0, screenwidth2, screenheight2, null)
+        g.dispose()
+    }
+
 
 
      companion object {
@@ -173,8 +180,9 @@ class MainGame : JPanel(), Runnable {
         const val scale = 3
         @JvmField
         var tilesize = originalTileSize * scale
-        var maxscreencol = 16
+        var maxscreencol = 20
         var maxscreenrow = 12
+
          @JvmField
         var screenwidth = tilesize * maxscreencol
          @JvmField
@@ -189,7 +197,9 @@ class MainGame : JPanel(), Runnable {
         var hregister = hitboxregister(MainGame())
          @JvmField
          var MultiRender = MultiRenderer()
-        var music = SoundHandler()
+         @JvmField
+         var music = SoundHandler()
+         @JvmField
         var sound = SoundHandler()
         var amogus = 0L;
 
@@ -207,21 +217,42 @@ class MainGame : JPanel(), Runnable {
         var tilemanager = tilemanager()
         const val maxworldcol = 50
         const val maxworldrow = 50
-
-
-
-        @JvmStatic
+         @JvmStatic
+         var screenwidth2 = screenwidth
+         @JvmStatic
+         var screenheight2 = screenheight
+         @JvmStatic
+         var FullscreenON = false
+         @JvmStatic
         fun setupOBJ() {
-            //ENTITES RENDERERS//
             MultiRender.Render(MainGame())
             MultiRender.setObjectRenderer()
             MultiRender.setNPCrenderers()
             MultiRender.setMonsterRenderers()
             MultiRender.setTileEntityRenderers()
+            MultiRender.setScreenRenderer()
             playmusic(0)
-
             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState
         }
+         @JvmStatic
+         fun togglefullscreen(){
+             if(FullscreenON){
+                 setFullScreen()
+
+             }else{
+                 screenheight2 = screenheight
+                 screenwidth2 = screenwidth
+                 GlobalGameThreadConfigs.gd.fullScreenWindow = null
+             }
+
+         }
+         @JvmStatic
+          fun setFullScreen() {
+             GlobalGameThreadConfigs.gd.fullScreenWindow = Main.window
+             screenwidth2 = Main.window.width;
+             screenheight2 = Main.window.height
+         }
+
          @JvmStatic
         fun playmusic(i: Int) {
             //PLAYS THE MUSIC

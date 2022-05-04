@@ -12,11 +12,15 @@ it creates a new window to store all data inside
 
 public abstract class Main{
     public static MainGame mainGame = new MainGame();
-    public static JFrame window = new JFrame();
+    public static JFrame window;
     public static GlobalDataStorage globalDataStorage = new GlobalDataStorage();
     public static ImageIcon urmom = new ImageIcon(Main.class.getClassLoader().getResource("shipgame/logo.png"));
     public static void main(String[] args) {
+        createnewwindow();
+    }
+    public static void createnewwindow(){
         try {
+            window = new JFrame();
             window.setResizable(false);
             window.setTitle("the quest to find out who asked");
             window.setIconImage(urmom.getImage());
@@ -31,5 +35,4 @@ public abstract class Main{
             crash.main(e);
         }
     }
-
-    }
+}

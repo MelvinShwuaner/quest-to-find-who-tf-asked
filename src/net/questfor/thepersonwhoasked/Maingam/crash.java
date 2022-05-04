@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class crash {
-    //if the System counters a error, it will call this function to create a crash report for you to report it to @bruhkid2345 at https://discord.gg/GA8tJwSNYm
+    //if the System counters a error, it will call this function to create a crash report for you to report it to @bruhkid2345 at https://discord.gg/tRva2AM2Gk
     public static void main(Exception e) {
         try {
             BufferedWriter CrashWriter = new BufferedWriter(new FileWriter("latestcrashreport.txt"));

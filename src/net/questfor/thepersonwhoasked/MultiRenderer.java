@@ -7,6 +7,9 @@ import net.questfor.thepersonwhoasked.entities.NPCS.Old_Man;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.tile_entites.IT_tree;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 public class MultiRenderer {
     /*SETS THE LOCATION OF ENTITIES ON THERE WORLD*/
     static MainGame gp;
@@ -145,4 +148,11 @@ public class MultiRenderer {
         GlobalGameThreadConfigs.Tentity[i] = new IT_tree(gp, 24, 18);i++;
 
     }
+
+    public void setScreenRenderer() {
+        GlobalGameThreadConfigs.tempscreen = new BufferedImage(MainGame.screenwidth, MainGame.screenheight, BufferedImage.TYPE_INT_ARGB);
+        GlobalGameThreadConfigs.g2 = (Graphics2D)GlobalGameThreadConfigs.tempscreen.getGraphics();
+
+    }
+
 }

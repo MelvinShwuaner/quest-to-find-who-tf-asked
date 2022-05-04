@@ -48,4 +48,8 @@ public class OBJ_ROCK extends Projectile {
     public void RemoveResource(LivingEntity source){
         source.Ammo -= UseCost;
     }
+    public Color getparticleColor(){return new Color(0x283200);}
+    public int getparticleSize(){return 11;}
+    public int getparticlespeed(){return 1;}
+    public int getparticleMaxHealth(){return 23;}
 }

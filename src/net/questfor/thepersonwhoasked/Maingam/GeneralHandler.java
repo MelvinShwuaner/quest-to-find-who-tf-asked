@@ -19,6 +19,17 @@ public class GeneralHandler {
                 }
             }
         }
+        for (int i = 0; i < GlobalGameThreadConfigs.particleList.size(); i++) {
+            if (GlobalGameThreadConfigs.particleList.get(i) != null) {
+                if (GlobalGameThreadConfigs.particleList.get(i).alive) {
+                    GlobalGameThreadConfigs.particleList.get(i).update();
+                }
+                if (!GlobalGameThreadConfigs.particleList.get(i).alive) {
+                    GlobalGameThreadConfigs.particleList.remove(i);
+                }
+            }
+        }
+
         Collections.sort(GlobalGameThreadConfigs.entitylist, new Comparator<LivingEntity>() {
             @Override
             public int compare(LivingEntity e1, LivingEntity e2) {

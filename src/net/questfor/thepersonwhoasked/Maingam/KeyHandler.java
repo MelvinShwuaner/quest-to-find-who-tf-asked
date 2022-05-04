@@ -20,10 +20,16 @@ public class KeyHandler implements KeyListener {
     //advanced keys
     public static boolean enterpressed;
     public static boolean primepowera, secpowera;
-    public int pause = 0;
-
-
+    public static int primepowerc = KeyEvent.VK_Q, secpowerc = KeyEvent.VK_E;
     public static boolean checkFPS;
+    public static int FPSC = KeyEvent.VK_T;
+    //DATA VALUS
+    public int pause = 0;
+    public int option = 0;
+    public static int UP = KeyEvent.VK_W, DOWN = KeyEvent.VK_S, RIGHT = KeyEvent.VK_D, LEFT = KeyEvent.VK_A;
+    public static int PAUSE = KeyEvent.VK_P;
+    public static int INVENTORY = KeyEvent.VK_TAB, OPEN = KeyEvent.VK_ENTER;
+
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -43,7 +49,7 @@ public class KeyHandler implements KeyListener {
                         UI.commandnum = 0;
                     }
                 }
-                if (code == KeyEvent.VK_ENTER) {
+                if (code == OPEN) {
                     if (UI.commandnum == 0) {
                         MainGame.player.worldx = MainGame.tilesize * 23;
                         MainGame.player.worldy = MainGame.tilesize * 21;
@@ -59,35 +65,35 @@ public class KeyHandler implements KeyListener {
                 }
             }else {
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
-                    if(code == KeyEvent.VK_Q){
+                    if(code == primepowerc){
                         primepowera = true;
                     }
-                    if (code == KeyEvent.VK_W) {
+                    if (code == UP) {
                         if (upPressed == false) {
                             upPressed = true;
 
                         }
                     }
-                    if (code == KeyEvent.VK_S) {
+                    if (code == DOWN) {
                         if (downPressed == false) {
                             downPressed = true;
                         }
                     }
-                    if (code == KeyEvent.VK_A) {
+                    if (code == LEFT) {
                         if (leftPressed == false) {
                             leftPressed = true;
                         }
                     }
-                    if (code == KeyEvent.VK_D) {
+                    if (code == RIGHT) {
                         if (rightPressed == false) {
                             rightPressed = true;
                         }
                     }
-                    if (code == KeyEvent.VK_P) {
+                    if (code == PAUSE) {
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.pauseState;
 
                     }
-                    if (code == KeyEvent.VK_T) {
+                    if (code == FPSC) {
                         if (!checkFPS) {
                             checkFPS = true;
                         } else if (checkFPS) {
@@ -137,7 +143,7 @@ public class KeyHandler implements KeyListener {
                         }
 
                     }
-                    if (code == KeyEvent.VK_TAB) {
+                    if (code == INVENTORY) {
                         if (!GlobalGameThreadConfigs.CharacterStats) {
                             GlobalGameThreadConfigs.CharacterStats = true;
                         } else {
@@ -171,12 +177,15 @@ public class KeyHandler implements KeyListener {
                             gp.player.convertItem(codenum);
                         }
                 }
+                    if(code == KeyEvent.VK_ESCAPE){
+                        GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.optionsstate;
+                    }
             }
-                if (code == KeyEvent.VK_ENTER) {
+                if (code == OPEN) {
                     enterpressed = true;
                 }
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.pauseState) {
-                    if (code == KeyEvent.VK_P) {
+                    if (code == PAUSE) {
                         pause++;
                         if (pause == 2) {
                             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
@@ -185,8 +194,76 @@ public class KeyHandler implements KeyListener {
                         }
                     }
                 }
+                if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.optionsstate) {
+                    if (code == KeyEvent.VK_ESCAPE) {
+                        option++;
+                        if (option == 2) {
+                            GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                            option = 0;
+                            UI.optionstate = 0;
+                        }
+                    }
+                    int maxcommandnum = 0;
+                    switch (UI.optionstate){
+                        case 0 -> maxcommandnum = 5;
+                        case 1 -> maxcommandnum = 10;
+                        case 2 -> maxcommandnum = 2;
+                    }
+                    if (code == KeyEvent.VK_UP) {
+                        UI.commandnum--;
+                        gp.playsound(9);
+                        if (UI.commandnum < 0) {
+                            UI.commandnum = maxcommandnum;
+                        }
+                    }
+                    else if (code == KeyEvent.VK_DOWN) {
+                        UI.commandnum++;
+                        gp.playsound(9);
+                        if (UI.commandnum > maxcommandnum) {
+                            UI.commandnum = 0;
+                        }
+                    }
+                    else if(code == KeyEvent.VK_LEFT){
+                        if(UI.optionstate == 0){
+                            if(UI.commandnum == 1 && MainGame.music.volumescale > 0){
+                                MainGame.music.volumescale--;
+                                gp.music.ControlVolume();
+                                gp.playsound(9);
+                            }else if(UI.commandnum == 2 && MainGame.sound.volumescale > 0){
+                                MainGame.sound.volumescale--;
+                                gp.playsound(9);
+                            }
+                        }
+                    }
+                    else if(code == KeyEvent.VK_RIGHT){
+                        if(UI.optionstate == 0){
+                            if(UI.commandnum == 1 && MainGame.music.volumescale < 5){
+                                MainGame.music.volumescale++;
+                                gp.music.ControlVolume();
+                                gp.playsound(9);
+                            }else if(UI.commandnum == 2 && MainGame.sound.volumescale < 5){
+                                MainGame.sound.volumescale++;
+                                gp.playsound(9);
+                            }
+                        }
+                    }
+                    if(code != KeyEvent.VK_DOWN && code != OPEN && code != KeyEvent.VK_UP && UI.optionstate == 1){
+                        switch (UI.commandnum){
+                            case 1 -> UP = code;
+                            case 2 -> DOWN = code;
+                            case 3 -> RIGHT = code;
+                            case 4 -> LEFT = code;
+                            case 5 -> PAUSE = code;
+                            case 6 -> primepowerc = code;
+                            case 7 -> secpowerc = code;
+                            case 8 -> FPSC = code;
+                            case 9 -> INVENTORY = code;
+                            case 10 -> OPEN = code;
+                        }
+                    }
+                }
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.dialogueState) {
-                    if (code == KeyEvent.VK_ENTER) {
+                    if (code == OPEN) {
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
                     }
                 }
@@ -201,19 +278,19 @@ public class KeyHandler implements KeyListener {
         //MANAGES KEY BINDINGS WHEN YOU RELEASE THEM//
         try {
             int code = e.getKeyCode();
-            if(code == KeyEvent.VK_Q){
+            if(code == primepowerc){
                 primepowera = false;
             }
-            if (code == KeyEvent.VK_W) {
+            if (code == UP) {
                 upPressed = false;
             }
-            if (code == KeyEvent.VK_S) {
+            if (code == DOWN) {
                 downPressed = false;
             }
-            if (code == KeyEvent.VK_A) {
+            if (code == LEFT) {
                 leftPressed = false;
             }
-            if (code == KeyEvent.VK_D) {
+            if (code == RIGHT) {
                 rightPressed = false;
             }
         }catch(Exception err){

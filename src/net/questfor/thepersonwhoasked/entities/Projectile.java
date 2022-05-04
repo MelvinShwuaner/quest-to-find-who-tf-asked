@@ -22,11 +22,14 @@ public class Projectile extends LivingEntity{
             int monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
             if(monsterindex != 999){
                 gp.player.attackEntity(monsterindex, AttackValue);
+                ParticlePropertyManager(SourceEntity.projectile, GlobalGameThreadConfigs.Monsters[monsterindex]);
                 alive = false;
             }
         }if(SourceEntity != gp.player){
             boolean contactPlayer = gp.hregister.PlayerColide(this);
             if(!gp.player.invincible && contactPlayer){
+                ParticlePropertyManager(SourceEntity.projectile, gp.player);
+
                 AttackPLayer(AttackValue);
                 alive = false;
             }
