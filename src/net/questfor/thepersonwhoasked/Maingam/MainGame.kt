@@ -7,8 +7,6 @@ import net.questfor.thepersonwhoasked.entities.Player
 import net.questfor.thepersonwhoasked.tile.tilemanager
 import java.awt.Color
 import java.awt.Dimension
-import java.io.*
-import javax.swing.JOptionPane
 import javax.swing.JPanel
 
 class MainGame : JPanel(), Runnable {
@@ -164,7 +162,9 @@ class MainGame : JPanel(), Runnable {
         }
         //UIS//
         UI.draw(GlobalGameThreadConfigs.g2)
-    }
+        //GlobalGameThreadConfigs.g2.color = Color(0, 0, 0, 220)
+        //GlobalGameThreadConfigs.g2.fillRect(0, 0, screenwidth, screenheight)
+        }
     fun drawtoscreen() {
         val g = graphics
         g.drawImage(GlobalGameThreadConfigs.tempscreen, 0, 0, screenwidth2, screenheight2, null)
@@ -221,7 +221,7 @@ class MainGame : JPanel(), Runnable {
          var screenwidth2 = screenwidth
          @JvmStatic
          var screenheight2 = screenheight
-         @JvmStatic
+         @JvmField
          var FullscreenON = false
          @JvmStatic
         fun setupOBJ() {
@@ -231,6 +231,7 @@ class MainGame : JPanel(), Runnable {
             MultiRender.setMonsterRenderers()
             MultiRender.setTileEntityRenderers()
             MultiRender.setScreenRenderer()
+            GlobalSaveManager.loadconfigs()
             playmusic(0)
             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState
         }
@@ -238,11 +239,11 @@ class MainGame : JPanel(), Runnable {
          fun togglefullscreen(){
              if(FullscreenON){
                  setFullScreen()
-
              }else{
                  screenheight2 = screenheight
                  screenwidth2 = screenwidth
                  GlobalGameThreadConfigs.gd.fullScreenWindow = null
+
              }
 
          }
@@ -263,38 +264,12 @@ class MainGame : JPanel(), Runnable {
         }
     }
 
-    fun load() {
-        //LOAD MANAGER, LOADS SAVE FILES
-        try {
-            val loadf = FileInputStream("data.dat")
-            val stream = BufferedInputStream(loadf)
-            val ois = ObjectInputStream(stream)
-            Main.globalDataStorage = ois.readObject() as GlobalDataStorage
-            val amogus = Main.globalDataStorage.health
-            JOptionPane.showMessageDialog(null, amogus)
-        } catch (exx: Exception) {
-            crash.main(exx)
-        }
-    }
+
 
     fun playsound(i: Int) {
         //PLAYS SOUND EFFECTS
         sound.setFile(i)
         sound.play()
-    }
-    fun save(){
-        //SAVE MANAGER, SAVES WORLD DATA AND PLAYER DATA
-        var data: FileOutputStream?
-        try {
-            data = FileOutputStream("data.dat")
-            val datastream = BufferedOutputStream(data)
-            val o = ObjectOutputStream(datastream)
-            Main.globalDataStorage.health = 30
-            o.writeObject(Main.globalDataStorage)
-            o.close()
-        } catch (er: Exception) {
-            crash.main(er)
-        }
     }
 
     fun stopmusic() {

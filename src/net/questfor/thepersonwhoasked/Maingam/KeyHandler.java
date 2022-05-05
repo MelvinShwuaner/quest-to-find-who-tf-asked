@@ -36,6 +36,9 @@ public class KeyHandler implements KeyListener {
         try {
             //MANAGES KEY BINDINGS WHEN YOU PRESS THEM//
             int code = e.getKeyCode();
+            if(code == KeyEvent.VK_R){
+                gp.tilemanager.loadmap(GlobalGameThreadConfigs.worldID);
+            }
             if(GlobalGameThreadConfigs.isinTital) {
                 if (code == KeyEvent.VK_UP) {
                     UI.commandnum--;
@@ -51,8 +54,8 @@ public class KeyHandler implements KeyListener {
                 }
                 if (code == OPEN) {
                     if (UI.commandnum == 0) {
-                        MainGame.player.worldx = MainGame.tilesize * 23;
-                        MainGame.player.worldy = MainGame.tilesize * 21;
+                        MainGame.player.worldx = MainGame.tilesize * 10;
+                        MainGame.player.worldy = MainGame.tilesize * 9;
                         GlobalGameThreadConfigs.isinTital = false;
 
                     }
@@ -194,6 +197,22 @@ public class KeyHandler implements KeyListener {
                         }
                     }
                 }
+                if(GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.GameOverState){
+                    if (code == KeyEvent.VK_UP) {
+                        UI.commandnum--;
+                        gp.playsound(9);
+                        if (UI.commandnum < 0) {
+                            UI.commandnum = 1;
+                        }
+                    }
+                    else if (code == KeyEvent.VK_DOWN) {
+                        UI.commandnum++;
+                        gp.playsound(9);
+                        if (UI.commandnum > 1) {
+                            UI.commandnum = 0;
+                        }
+                    }
+                }
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.optionsstate) {
                     if (code == KeyEvent.VK_ESCAPE) {
                         option++;
@@ -205,7 +224,7 @@ public class KeyHandler implements KeyListener {
                     }
                     int maxcommandnum = 0;
                     switch (UI.optionstate){
-                        case 0 -> maxcommandnum = 5;
+                        case 0 -> maxcommandnum = 6;
                         case 1 -> maxcommandnum = 10;
                         case 2 -> maxcommandnum = 2;
                     }

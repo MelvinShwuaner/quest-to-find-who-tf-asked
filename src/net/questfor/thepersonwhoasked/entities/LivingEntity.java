@@ -1,13 +1,14 @@
 package net.questfor.thepersonwhoasked.entities;
 
 import net.questfor.thepersonwhoasked.Maingam.*;
+
+import java.io.Serializable;
 import java.util.*;
 import javax.imageio.ImageIO;
-import javax.xml.transform.Source;
 import java.awt.*;
 import java.awt.image.*;
 //is the parent class for all entities including player
-public class LivingEntity {
+public class LivingEntity implements Serializable {
     //WORLD//
     public MainGame gp;
     public double worldx;
@@ -22,8 +23,8 @@ public class LivingEntity {
     public boolean dying = false;
     public int regenerationcooldown = 0;
     //RENDERER//
-    public BufferedImage image, image2, image3;
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public transient BufferedImage image, image2, image3;
+    public transient  BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage attackup1, attackup2, attackdown1, attackdown2,
             attackleft1, attackleft2, attackright1, attackright2;
     //MOVEMENT AND ANIMATION//
@@ -47,7 +48,7 @@ public class LivingEntity {
     //DATA//
     public int primepowercool = 0;
     public int EntityType; //0 = player, 1 = monster, 2 = NPC, 3 = Item, 4 = Object.
-    public String name;
+    public String name = "";
     public ArrayList<LivingEntity> inventory = new ArrayList<>();
     public int MaxMana;
     public int Mana;
@@ -100,6 +101,9 @@ public class LivingEntity {
         }
     }
     public void update(){
+        if(up1 == null && image == null){
+            getImageInstance();
+        }
         Regenerate();
         /*AI for Monsters And NPCS*/
         setAction();

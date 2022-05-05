@@ -12,7 +12,7 @@ public class OBJ_POTION_HEALTH_1 extends LivingEntity {
         Value = 3;
         Type = Type_constumable;
         name = "Red Potion";
-        down1 = BufferedRenderer("objects/potion_red", gp.tilesize, gp.tilesize);
+        getImageInstance();
         description = "a excellant choice for cheap low polly \npotion for a quick refill! \n heals your health by "+Value;
         hitbox = new Rectangle();
         hitbox.x = 0;
@@ -29,5 +29,10 @@ public class OBJ_POTION_HEALTH_1 extends LivingEntity {
             if(sourceentity.health > sourceentity.maxhealth){
                 sourceentity.health = sourceentity.maxhealth;
             }
+    }
+
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("objects/potion_red", gp.tilesize, gp.tilesize);
     }
 }

@@ -21,6 +21,9 @@ public class TileEntity extends LivingEntity {
     public void playSE(){}
     public TileEntity getDestroyedForm(){return null;}
     public void update() {
+        if(down1 == null){
+            getImageInstance();
+        }
         if(invincible){
             hitTime++;
             if(hitTime > 20){

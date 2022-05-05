@@ -19,12 +19,10 @@ public class MultiRenderer {
     public void setObjectRenderer(){
         /*RENDER OBJECTS*/
         gp.obj[0] = new chest(gp);
-        gp.obj[0].worldx = gp.tilesize*21;
-        gp.obj[0].worldy = gp.tilesize*22;
+        gp.obj[0].worldx = gp.tilesize*11;
+        gp.obj[0].worldy = gp.tilesize*8;
         gp.obj[0].inventory.add(new OBJkey(gp));
-        gp.obj[1] = new OBJdoor(gp);
-        gp.obj[1].worldx = gp.tilesize*23;
-        gp.obj[1].worldy = gp.tilesize*25;
+        gp.obj[1] = new OBJdoor(gp, 23, 25);
         gp.obj[2] = new OBJkey(gp);
         gp.obj[2].worldx = gp.tilesize*25;
         gp.obj[2].worldy = gp.tilesize*19;
@@ -32,8 +30,8 @@ public class MultiRenderer {
         gp.obj[3].worldx = gp.tilesize*23;
         gp.obj[3].worldy = gp.tilesize*19;
         gp.obj[4] = new OBJ_IRON_AXE(gp);
-        gp.obj[4].worldx = gp.tilesize*33;
-        gp.obj[4].worldy = gp.tilesize*21;
+        gp.obj[4].worldx = gp.tilesize*17;
+        gp.obj[4].worldy = gp.tilesize*20;
         gp.obj[5] = new OBJ_IRON_SWORD(gp);
         gp.obj[5].worldx = gp.tilesize*32;
         gp.obj[5].worldy = gp.tilesize*21;
@@ -42,20 +40,14 @@ public class MultiRenderer {
         gp.obj[i].worldx = gp.tilesize*35;
         gp.obj[i].worldy = gp.tilesize*23;
         i++;
-        gp.obj[i] = new OBJdoor(gp);
-        gp.obj[i].worldx = gp.tilesize*31;
-        gp.obj[i].worldy = gp.tilesize*23;
+        gp.obj[i] = new OBJdoor(gp, 10, 12);
         i++;
         gp.obj[i] = new OBJ_IRON_SWORD(gp);
         gp.obj[i].worldx = gp.tilesize*30;
         gp.obj[i].worldy = gp.tilesize*23;
-        gp.obj[i] = new OBJdoor(gp);
-        gp.obj[i].worldx = gp.tilesize*29;
-        gp.obj[i].worldy = gp.tilesize*38;
+        gp.obj[i] = new OBJdoor(gp, 29, 38);
         i++;
-        gp.obj[i] = new OBJdoor(gp);
-        gp.obj[i].worldx = gp.tilesize*40;
-        gp.obj[i].worldy = gp.tilesize*23;
+        gp.obj[i] = new OBJdoor(gp, 40, 23);
         i++;
         gp.obj[i] = new OBJ_MANA_CRYSTAL(gp);
         gp.obj[i].worldx = gp.tilesize*24;
@@ -101,9 +93,13 @@ public class MultiRenderer {
         GlobalGameThreadConfigs.NPCS[2].worldy = gp.tilesize * 23;
         GlobalGameThreadConfigs.NPCS[2].worldz = 0;
         GlobalGameThreadConfigs.NPCS[3] = new Old_Man(gp);
-        GlobalGameThreadConfigs.NPCS[3].worldx = gp.tilesize * 24;
-        GlobalGameThreadConfigs.NPCS[3].worldy = gp.tilesize * 24;
+        GlobalGameThreadConfigs.NPCS[3].worldx = gp.tilesize * 11;
+        GlobalGameThreadConfigs.NPCS[3].worldy = gp.tilesize * 9;
         GlobalGameThreadConfigs.NPCS[3].worldz = 0;
+        GlobalGameThreadConfigs.NPCS[3].speed = 0;
+        GlobalGameThreadConfigs.NPCS[3].dialogues[1] = "Hello. its a nice day \n outside isnt it?";
+        GlobalGameThreadConfigs.NPCS[3].dialogues[2] = "You should go to the main square,\n were all going to be there";
+        GlobalGameThreadConfigs.NPCS[3].dialogues[3] = "OK bye!";
     }
     public  void setMonsterRenderers(){
         GlobalGameThreadConfigs.Monsters[0] = new green_slime(gp);

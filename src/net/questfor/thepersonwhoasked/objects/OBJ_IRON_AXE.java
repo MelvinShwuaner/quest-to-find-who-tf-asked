@@ -9,7 +9,6 @@ public class OBJ_IRON_AXE extends LivingEntity {
     public OBJ_IRON_AXE(MainGame gpp) {
         super(gpp);
         name = "WoodCutter's axe";
-        down1 = BufferedRenderer("objects/axe", gp.tilesize, gp.tilesize);
         AttackValue = 5;
         attackHitbox.width = 30;
         attackHitbox.height = 36;
@@ -23,8 +22,11 @@ public class OBJ_IRON_AXE extends LivingEntity {
         hitboxdefaulty = hitbox.y;
         Type = Type_axe;
         description = "Any WoodCutter would adore a sturdy \n rusty iron axe?";
-
-
+        getImageInstance();
     }
 
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("objects/axe", gp.tilesize, gp.tilesize);
+    }
 }

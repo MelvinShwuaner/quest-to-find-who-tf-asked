@@ -25,12 +25,11 @@ public class green_slime extends LivingEntity {
         hitbox.height = 30;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
-        getImageInstance();
+
         XP = 7;
         level = 5;
         projectile = new OBJ_ROCK(gpp);
     }
-
     public void getImageInstance() {
         up1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", gp.tilesize, gp.tilesize);
         up2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", gp.tilesize, gp.tilesize);
@@ -42,6 +41,9 @@ public class green_slime extends LivingEntity {
         left2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", gp.tilesize, gp.tilesize);
     }
     public void setAction(){
+        if(up1 == null){
+            getImageInstance();
+        }
         if(!Hostile) {
             actionLock++;
             if (actionLock == 120) {

@@ -17,6 +17,7 @@ public class GlobalGameThreadConfigs {
     public  static int pauseState= 2;
     public  static int dialogueState = 3;
     public  static int optionsstate = 4;
+    public static int GameOverState = 5;
     public static boolean inchest = false;
     public static LivingEntity Monsters[] = new LivingEntity[20];
     public static LivingEntity NPCS[] = new LivingEntity[10];
@@ -26,8 +27,8 @@ public class GlobalGameThreadConfigs {
     public static ArrayList<LivingEntity> particleList = new ArrayList<>();
     public static ArrayList<LivingEntity> projectilelist = new ArrayList<>();
     public static BufferedImage tempscreen;
+
     public static Graphics2D g2;
     public static GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     public static GraphicsDevice gd = ge.getDefaultScreenDevice();
-
 }

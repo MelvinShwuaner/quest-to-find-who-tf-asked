@@ -46,8 +46,8 @@ public class Player extends LivingEntity {
             //DEFAULT VALUES
             Ammo = 10;
             inventorysize = 20;
-            worldx = MainGame.tilesize * 23;
-            worldy = MainGame.tilesize * 21;
+            worldx = MainGame.tilesize * 10;
+            worldy = MainGame.tilesize * 9;
             speed = 4;
             direction = "right";
             worldz = 1;
@@ -136,6 +136,11 @@ public class Player extends LivingEntity {
     }
 
     public void update() {
+        for(int i = 0; i < inventory.size(); i++){
+            if (inventory.get(i).down1 == null){
+                inventory.get(i).getImageInstance();
+            }
+        }
         try {
             if(currentweapon == null){
                 hasweapon = false;
@@ -221,7 +226,7 @@ public class Player extends LivingEntity {
             }
             hitboxe = false;
             MainGame.hregister.checkTile(this);
-            if (GlobalGameThreadConfigs.isinTital == false) {
+
                 //OBJECT COLLISIONS
                 objindex = MainGame.hregister.checkObject(this, true);
                 pickupObject(objindex);
@@ -235,7 +240,7 @@ public class Player extends LivingEntity {
                 //CHECK EVENT
                 gp.ehandler.returnEvent();
                 KeyHandler.enterpressed = false;
-            }
+
             if (GlobalGameThreadConfigs.isinTital == false) {
                 if (!hitboxe) {
                     if (keyHandler.upPressed || keyHandler.downPressed) {
@@ -258,7 +263,7 @@ public class Player extends LivingEntity {
                         }
                     }
                 }
-            } else if (GlobalGameThreadConfigs.isinTital == true && hitboxe == false) {
+            } else if (GlobalGameThreadConfigs.isinTital && hitboxe == false) {
                 switch (this.direction) {
                     case "up":
                         worldy -= this.speed;
@@ -288,6 +293,12 @@ public class Player extends LivingEntity {
                 speed = 2;
             } else {
                 speed = 4;
+            }
+            if(health <= 0){
+                GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.GameOverState;
+                gp.stopmusic();
+                UI.commandnum = 0;
+                gp.playsound(12);
             }
         } catch (Exception e) {
             crash.main(e);
@@ -374,7 +385,6 @@ public class Player extends LivingEntity {
             }
         }
     }
-
     public void levelUpAchiver() {
         if (XP >= MaxXP) {
             level++;
@@ -441,6 +451,17 @@ public class Player extends LivingEntity {
                                 }
                             }
                         }
+                        case "door" -> {
+                            if (KeyHandler.enterpressed){
+                                KeyHandler.enterpressed = false;
+                                gp.obj[i] = new OBJdooropen(gp, (int) gp.obj[i].worldx, (int) gp.obj[i].worldy);
+                        }
+                    }
+                    case "door open" -> {
+                            if(KeyHandler.enterpressed){
+                                gp.obj[i] = new OBJdoor(gp, (int) gp.obj[i].worldx/gp.tilesize, (int) gp.obj[i].worldy/gp.tilesize);
+                            }
+                    }
                     }
 
                 }
@@ -551,6 +572,8 @@ public class Player extends LivingEntity {
                 if(invincible == false){getImageInstance(); getAttackInstance();isred = 1;}
             }
             g2.drawImage(image, tempscreenx, tempscreeny, null);
+            //g2.setColor(new Color(255, 232, 0, 220));
+            //GlobalGameThreadConfigs.g2.fillRect(tempscreenx-24, tempscreeny-24, gp.tilesize*2, gp.tilesize*2);
 
         }catch(Exception e){
             e.printStackTrace();

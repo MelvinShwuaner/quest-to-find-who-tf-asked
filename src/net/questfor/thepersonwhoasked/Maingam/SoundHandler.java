@@ -1,7 +1,4 @@
 package net.questfor.thepersonwhoasked.Maingam;
-
-import org.w3c.dom.events.MouseEvent;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -15,7 +12,7 @@ public class SoundHandler {
         Clip clip;
         URL soundURL[] = new URL[30];
         FloatControl fc;
-        int volumescale = 3;
+        int volumescale;
         float volume;
         public SoundHandler(){
                 soundURL[0] = getClass().getResource("/Sound/Adventure.wav");
@@ -30,6 +27,7 @@ public class SoundHandler {
                 soundURL[9] = getClass().getResource("/Sound/cursor.wav");
                 soundURL[10] = getClass().getResource("/Sound/burning.wav");
                 soundURL[11] = getClass().getResource("/Sound/cuttree.wav");
+                soundURL[12] = getClass().getResource("/Sound/gameover.wav");
         }
         //THESE FUNCTIONS ARE USED BY THE MAINGAME CLASS, IT DOES NOT USE THEM BY ITS SELF//
         public void setFile(int i){

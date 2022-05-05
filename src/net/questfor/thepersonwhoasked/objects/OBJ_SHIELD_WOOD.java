@@ -9,8 +9,8 @@ public class OBJ_SHIELD_WOOD extends LivingEntity {
     public OBJ_SHIELD_WOOD(MainGame gpp) {
         super(gpp);
         name = "Wooden Shield";
-        down1 = BufferedRenderer("objects/shield_wood", gp.tilesize, gp.tilesize);
         defenceValue = 1;
+        getImageInstance();
         Value = 1;
         description = "a "+name+" that tho is weak, \n it still does its job";
         hitbox = new Rectangle();
@@ -23,4 +23,8 @@ public class OBJ_SHIELD_WOOD extends LivingEntity {
         EntityType = 3;
     }
 
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("objects/shield_wood", gp.tilesize, gp.tilesize);
+    }
 }

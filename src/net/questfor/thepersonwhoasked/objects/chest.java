@@ -8,7 +8,7 @@ public class chest extends LivingEntity {
     public chest(MainGame gp){
         super(gp);
         name = "chest";
-        down1 = BufferedRenderer("objects/chest", gp.tilesize, gp.tilesize);
+        getImageInstance();
         EntityType = 4;
         collision = true;
         description = "basic 16*16 chest. can store 10 items";
@@ -19,7 +19,10 @@ public class chest extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
+    }
 
-
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("objects/chest", gp.tilesize, gp.tilesize);
     }
 }

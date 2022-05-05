@@ -11,7 +11,6 @@ public class OBJ_IRON_SWORD extends LivingEntity {
     public OBJ_IRON_SWORD(MainGame gpp) {
         super(gpp);
         name = "Iron sword";
-        down1 = BufferedRenderer("objects/sword_normal", gpp.tilesize, gpp.tilesize);
         AttackValue = 2;
         Value = 3;
         description = "a "+name+" that is common amongst villages. \n has a attack dmg of 2 and Value of 3";
@@ -26,5 +25,11 @@ public class OBJ_IRON_SWORD extends LivingEntity {
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
         Type = Type_sword;
+        getImageInstance();
+    }
+
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("objects/sword_normal", gp.tilesize, gp.tilesize);
     }
 }

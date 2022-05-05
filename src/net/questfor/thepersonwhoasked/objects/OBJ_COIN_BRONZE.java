@@ -13,7 +13,7 @@ public class OBJ_COIN_BRONZE extends LivingEntity {
         Type = Type_Current;
         EntityType = 3;
         name = "Bronze coin";
-        down1 = BufferedRenderer("objects/coin_bronze", gp.tilesize, gp.tilesize);
+        getImageInstance();
         Value = 1;
         hitbox = new Rectangle();
         hitbox.x = 0;
@@ -27,7 +27,10 @@ public class OBJ_COIN_BRONZE extends LivingEntity {
         gp.playsound(1);
         UI.addMessages("bronze coin picked up! value now ");
         gp.player.bobux += Value;
+    }
 
-
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("objects/coin_bronze", gp.tilesize, gp.tilesize);
     }
 }

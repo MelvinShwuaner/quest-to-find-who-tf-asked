@@ -13,7 +13,6 @@ public class IT_Tree_Trunk extends TileEntity {
         super(gpp, col, row);
         this.worldx = gp.tilesize * col;
         this.worldy = gp.tilesize*row;
-        down1 = BufferedRenderer("TileEntity/trunk", gp.tilesize, gp.tilesize);
         EntityType = 3;
         hitbox = new Rectangle(0, 0, 0, 0);
         collision = false;
@@ -27,5 +26,10 @@ public class IT_Tree_Trunk extends TileEntity {
         }else {
             DropItems(new OBJ_COIN_BRONZE(gp));
         }
+    }
+
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("TileEntity/trunk", gp.tilesize, gp.tilesize);
     }
 }

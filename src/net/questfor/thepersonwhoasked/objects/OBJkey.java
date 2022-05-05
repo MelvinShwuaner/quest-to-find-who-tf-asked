@@ -8,7 +8,7 @@ public class OBJkey extends LivingEntity {
     public OBJkey(MainGame gp){
         super(gp);
         name = "key";
-        down1 = BufferedRenderer("objects/key", gp.tilesize, gp.tilesize);
+        getImageInstance();
         description = "a "+name+" that is always used in dungeons, \n always can pick a door";
         hitbox = new Rectangle();
         hitbox.x = 0;
@@ -18,5 +18,10 @@ public class OBJkey extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
+    }
+
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("objects/key", gp.tilesize, gp.tilesize);
     }
 }

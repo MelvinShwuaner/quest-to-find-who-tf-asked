@@ -9,7 +9,7 @@ public class OBJ_SHIELD_DIAMOND extends LivingEntity {
     public OBJ_SHIELD_DIAMOND(MainGame gpp) {
         super(gpp);
         name = "Diamond Shield";
-        down1 = BufferedRenderer("objects/shield_diamond", gp.tilesize, gp.tilesize);
+        getImageInstance();
         defenceValue = 4;
         Value = 1;
         description = "a "+name+" that is created in \ndark forges of \namogus town";
@@ -21,5 +21,10 @@ public class OBJ_SHIELD_DIAMOND extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
+    }
+
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("objects/shield_diamond", gp.tilesize, gp.tilesize);
     }
 }

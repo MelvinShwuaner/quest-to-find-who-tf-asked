@@ -1,8 +1,6 @@
 package net.questfor.thepersonwhoasked.Maingam;
-import net.questfor.thepersonwhoasked.MultiRenderer;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.objects.*;
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -39,7 +37,6 @@ public class UI {
     public static int frameHeight = gp.tilesize * 10;
     public static boolean slotstate = false;
     public static int optionstate = 0;
-    public static int optionc = 0;
 
 
     public UI(MainGame GPP) {
@@ -108,6 +105,66 @@ public class UI {
             if(GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.optionsstate){
                 drawoptionscreen();
             }
+            if(GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.GameOverState){
+                drawDeathScreen();
+            }
+        }
+    }
+
+    public static void drawDeathScreen() {
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, MainGame.screenwidth, MainGame.screenheight);
+        int x;
+        int y;
+        String text;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 110));
+        text = "Game Over";
+        g2.setColor(Color.BLACK);
+        x = getXforCenterText(text);
+        y = gp.tilesize * 4;
+        g2.drawString(text, x, y);
+        g2.setColor(Color.WHITE);
+        g2.drawString(text, x - 4, y);
+        g2.setFont(g2.getFont().deriveFont(50F));
+        text = "Retry";
+        x = getXforCenterText(text);
+        y += gp.tilesize * 4;
+        g2.drawString(text, x, y);
+        if (commandnum == 0) {
+            g2.drawString(">", x - 40, y);
+            if (KeyHandler.enterpressed) {
+                KeyHandler.enterpressed = false;
+                GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                GlobalSaveManager globalSaveManager = new GlobalSaveManager();
+                globalSaveManager.loadplayerworlddata();
+                for(int i = 0; i < GlobalGameThreadConfigs.entitylist.size(); i++){
+                    GlobalGameThreadConfigs.entitylist.get(i).getImageInstance();
+                }
+            }
+        }
+        //--------------//
+        text = "Quit";
+        x = getXforCenterText(text);
+        y += 55;
+        g2.drawString(text, x, y);
+        if (commandnum == 1) {
+            g2.drawString(">", x - 40, y);
+            if (KeyHandler.enterpressed) {
+                KeyHandler.enterpressed = false;
+                GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                gp.player.worldy = MainGame.tilesize * 21;
+                gp.player.worldx = MainGame.tilesize * 23;
+                GlobalGameThreadConfigs.isinTital = true;
+                gp.MultiRender.setObjectRenderer();
+                gp.MultiRender.setMonsterRenderers();
+                gp.MultiRender.setNPCrenderers();
+                gp.MultiRender.setTileEntityRenderers();
+                gp.player.inventory = new ArrayList<>();
+                gp.player.currentweapon = new OBJ_IRON_SWORD(gp);
+                gp.player.currentshield = new OBJ_SHIELD_WOOD(gp);
+                gp.player.inventory.add(gp.player.currentshield);
+                gp.player.inventory.add(gp.player.currentweapon);
+            }
         }
     }
 
@@ -143,7 +200,7 @@ public class UI {
             g2.drawString(">", textx - 25, texty);
             if (KeyHandler.enterpressed) {
                     optionstate = 0;
-                    optionc = 0;
+
                 GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
                 gp.player.worldy = MainGame.tilesize * 21;
                 gp.player.worldx = MainGame.tilesize * 23;
@@ -156,6 +213,7 @@ public class UI {
                 gp.player.currentweapon = new OBJ_IRON_SWORD(gp);
                 gp.player.currentshield = new OBJ_SHIELD_WOOD(gp);
                 gp.player.inventory.add(gp.player.currentshield);
+                gp.player.health = gp.player.maxhealth;
                 gp.player.inventory.add(gp.player.currentweapon);
             }
         }
@@ -164,11 +222,11 @@ public class UI {
         texty += gp.tilesize;
         g2.drawString(text, textx, texty);
         if(commandnum == 1){
-            g2.drawString(">", textx, texty);
+            g2.drawString(">", textx-25, texty);
             if(KeyHandler.enterpressed){
-                GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
                 optionstate = 0;
-                optionc = 0;
+                commandnum = 4;
+                KeyHandler.enterpressed = false;
             }
         }
 
@@ -191,13 +249,13 @@ public class UI {
                 KeyHandler.enterpressed = false;
                 if (fullscreentext.equals("Windowed")){
                 fullscreentext = "Fullscreen";
-                MainGame.setFullscreenON(true);
+                MainGame.FullscreenON = (true);
             }else if (fullscreentext.equals("Fullscreen")){
+
                     fullscreentext = "Windowed";
-                    MainGame.setFullscreenON(false);
+                    MainGame.FullscreenON = (false);
                 }
                 MainGame.togglefullscreen();
-
         }
         }
         textY += gp.tilesize;
@@ -230,11 +288,27 @@ public class UI {
                 KeyHandler.enterpressed = false;
             }
         }
-        textY += gp.tilesize*2;
+        textY += gp.tilesize;
+        g2.drawString("Save Data", textX, textY);
         if(commandnum == 5){
             g2.drawString(">", textX-25, textY);
+            if(KeyHandler.enterpressed){
+                KeyHandler.enterpressed = false;
+                GlobalSaveManager globalSaveManager = new GlobalSaveManager();
+                globalSaveManager.saveplayerworlddata();
+            }
         }
-        g2.drawString("Exit", textX, textY);
+        textY += gp.tilesize;
+        if(commandnum == 6){
+            g2.drawString(">", textX-25, textY);
+            if(KeyHandler.enterpressed){
+                GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                KeyHandler.enterpressed = false;
+                GlobalSaveManager.saveconfigs();
+            }
+        }
+        g2.drawString("Exit And Save", textX, textY);
+
         g2.setStroke(new BasicStroke(3));
         textX = framex + gp.tilesize*5;
 
@@ -537,4 +611,4 @@ public class UI {
         }
     }
     //2022 words long -------------------//
-     private static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Adventure";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}private static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}
+     public static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Adventure";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}public static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}

@@ -11,9 +11,7 @@ public class OBJHeart extends LivingEntity {
     public OBJHeart(MainGame gp) {
         super(gp);
         name = "heart";
-        image = BufferedRenderer("objects/heart_full", gp.tilesize, gp.tilesize);
-        image2 = BufferedRenderer("objects/heart_half", gp.tilesize, gp.tilesize);
-        image3 = BufferedRenderer("objects/heart_blank", gp.tilesize, gp.tilesize);
+        getImageInstance();
         EntityType = 3;
         Type = Type_Current;
         hitbox = new Rectangle();
@@ -60,4 +58,11 @@ public class OBJHeart extends LivingEntity {
             UI.addMessages("you have lost " + 1+"HP" + " your health is now " + gp.player.health);
         }
 }
+
+    @Override
+    public void getImageInstance() {
+        image = BufferedRenderer("objects/heart_full", gp.tilesize, gp.tilesize);
+        image2 = BufferedRenderer("objects/heart_half", gp.tilesize, gp.tilesize);
+        image3 = BufferedRenderer("objects/heart_blank", gp.tilesize, gp.tilesize);
+    }
 }

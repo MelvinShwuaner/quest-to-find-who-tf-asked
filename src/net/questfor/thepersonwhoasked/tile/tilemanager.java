@@ -111,7 +111,6 @@ public class tilemanager {
         try {
             int worldcol = 0;
             int worldrow = 0;
-
             while (worldcol < MainGame.maxworldcol && worldrow < MainGame.maxworldrow) {
                 int tileID = mapRendererID[worldcol][worldrow];
                 int worldX = worldcol * MainGame.tilesize;
@@ -122,7 +121,7 @@ public class tilemanager {
                         (worldX - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
                         && worldY + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
                         (worldY - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
-                    g2.drawImage(tile[tileID].image, (int) screenX, (int) screenY, null);
+                         g2.drawImage(tile[tileID].image, (int) screenX, (int) screenY, null);
                 }
                 worldcol++;
                 if (worldcol == MainGame.maxworldcol) {

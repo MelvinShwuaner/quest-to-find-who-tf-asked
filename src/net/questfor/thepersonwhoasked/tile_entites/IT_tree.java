@@ -7,7 +7,7 @@ public class IT_tree extends TileEntity{
         super(gpp, col, row);
         this.worldx = gp.tilesize * col;
         this.worldy = gp.tilesize*row;
-        down1 = BufferedRenderer("TileEntity/drytree", gp.tilesize, gp.tilesize);
+
         distructuble = true;
         health = 2;
     }
@@ -21,4 +21,9 @@ public class IT_tree extends TileEntity{
     public int getparticleSize(){return 6;}
     public int getparticlespeed(){return 1;}
     public int getparticleMaxHealth(){return 20;}
+
+    @Override
+    public void getImageInstance() {
+        down1 = BufferedRenderer("TileEntity/drytree", gp.tilesize, gp.tilesize);
+    }
 }

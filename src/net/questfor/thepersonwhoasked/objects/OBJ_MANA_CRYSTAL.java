@@ -13,8 +13,7 @@ public class OBJ_MANA_CRYSTAL extends LivingEntity {
         Type = Type_Current;
         EntityType = 3;
         name = "Mana Crystal";
-        image = BufferedRenderer("objects/manacrystal_full", gp.tilesize, gp.tilesize);
-        image2 = BufferedRenderer("objects/manacrystal_blank", gp.tilesize, gp.tilesize);
+        getImageInstance();
         Random random = new Random();
         hitbox = new Rectangle();
         hitbox.x = 0;
@@ -51,7 +50,11 @@ public class OBJ_MANA_CRYSTAL extends LivingEntity {
         }else{
             UI.addMessages("you have lost " + 1+"Mana" + " your Mana is now " + gp.player.Mana);
         }
+    }
 
-
+    @Override
+    public void getImageInstance() {
+        image = BufferedRenderer("objects/manacrystal_full", gp.tilesize, gp.tilesize);
+        image2 = BufferedRenderer("objects/manacrystal_blank", gp.tilesize, gp.tilesize);
     }
 }
