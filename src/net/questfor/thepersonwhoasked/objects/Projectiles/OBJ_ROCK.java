@@ -1,9 +1,7 @@
 package net.questfor.thepersonwhoasked.objects.Projectiles;
-
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.entities.Projectile;
-
 import java.awt.*;
 
 public class OBJ_ROCK extends Projectile {

@@ -1,6 +1,11 @@
 package net.questfor.thepersonwhoasked.Maingam;
+
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
-import net.questfor.thepersonwhoasked.objects.*;
+import net.questfor.thepersonwhoasked.objects.OBJHeart;
+import net.questfor.thepersonwhoasked.objects.OBJ_IRON_SWORD;
+import net.questfor.thepersonwhoasked.objects.OBJ_MANA_CRYSTAL;
+import net.questfor.thepersonwhoasked.objects.OBJ_SHIELD_WOOD;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -137,9 +142,7 @@ public class UI {
                 GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
                 GlobalSaveManager globalSaveManager = new GlobalSaveManager();
                 globalSaveManager.loadplayerworlddata();
-                for(int i = 0; i < GlobalGameThreadConfigs.entitylist.size(); i++){
-                    GlobalGameThreadConfigs.entitylist.get(i).getImageInstance();
-                }
+                MainGame.playmusic(0);
             }
         }
         //--------------//
@@ -152,8 +155,8 @@ public class UI {
             if (KeyHandler.enterpressed) {
                 KeyHandler.enterpressed = false;
                 GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
-                gp.player.worldy = MainGame.tilesize * 21;
-                gp.player.worldx = MainGame.tilesize * 23;
+                gp.player.worldy = MainGame.tilesize * 10;
+                gp.player.worldx = MainGame.tilesize * 9;
                 GlobalGameThreadConfigs.isinTital = true;
                 gp.MultiRender.setObjectRenderer();
                 gp.MultiRender.setMonsterRenderers();
@@ -164,6 +167,8 @@ public class UI {
                 gp.player.currentshield = new OBJ_SHIELD_WOOD(gp);
                 gp.player.inventory.add(gp.player.currentshield);
                 gp.player.inventory.add(gp.player.currentweapon);
+                gp.player.health = gp.player.maxhealth;
+                MainGame.playmusic(0);
             }
         }
     }
@@ -389,8 +394,8 @@ public class UI {
         final int slotYstart = frameY + 20;
         int slotX = slotXstart;
         int slotY = slotYstart;
-        for (int i = 0; i < gp.obj[gp.player.objindex].inventory.size(); i++) {
-            g2.drawImage(gp.obj[gp.player.objindex].inventory.get(i).down1, slotX, slotY, null);
+        for (int i = 0; i < GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size(); i++) {
+            g2.drawImage(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(i).down1, slotX, slotY, null);
             slotX += gp.tilesize;
             if (i == 4 || i == 9 || i == 14) {
                 slotX = slotXstart;
@@ -412,9 +417,9 @@ public class UI {
             int textx = (dframeX + 20);
             int texty = dframeY + gp.tilesize;
             int itemIndex = getItemIndex();
-            if (itemIndex < gp.obj[gp.player.objindex].inventory.size()) {
+            if (itemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size()) {
                 drawSubWindow(dframeX, dframeY, dframewidth, dframeheight);
-                for (String line : gp.obj[gp.player.objindex].inventory.get(itemIndex).description.split("\n")) {
+                for (String line : GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex).description.split("\n")) {
                     g2.drawString(line, textx, texty);
                     texty += 32;
                 }
@@ -480,17 +485,17 @@ public class UI {
             if (!slotstate) {
                 if (ItemIndex < gp.player.inventory.size()) {
 
-                    if (gp.obj[gp.player.objindex].inventory.size() != gp.obj[gp.player.objindex].inventorysize) {
+                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size() != GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventorysize) {
                         LivingEntity SelectedItem = gp.player.inventory.get(ItemIndex);
                         gp.player.inventory.remove(SelectedItem);
-                        gp.obj[gp.player.objindex].inventory.add(SelectedItem);
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.add(SelectedItem);
                     }
                 }
             } else {
-                if (ItemIndex < gp.obj[gp.player.objindex].inventory.size()) {
+                if (ItemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size()) {
                     if (gp.player.inventory.size() != gp.player.inventorysize) {
-                        LivingEntity SelectedItem = gp.obj[gp.player.objindex].inventory.get(ItemIndex);
-                        gp.obj[gp.player.objindex].inventory.remove(SelectedItem);
+                        LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(ItemIndex);
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.remove(SelectedItem);
                         gp.player.inventory.add(SelectedItem);
                     }
                 }
@@ -506,10 +511,13 @@ public class UI {
         for (int i = 0; i < messages.size(); i++) {
             if (messages.get(i) != null) {
                 if(!KeyHandler.checkFPS){
-                g2.setColor(Color.BLACK);
-                g2.drawString(messages.get(i), Messagex + 2, Messagey);
-                g2.setColor(Color.white);
-                g2.drawString(messages.get(i), Messagex, Messagey);
+                    for(String line: messages.get(i).split("\n")){
+                        g2.setColor(Color.BLACK);
+                        g2.drawString(line, Messagex + 2, Messagey);
+                        g2.setColor(Color.white);
+                        g2.drawString(line, Messagex, Messagey);
+                        Messagey+= 40;
+                    }
                 int ID = messageID.get(i) + 1;
                 messageID.set(i, ID);
                 Messagey += 50;
@@ -610,5 +618,12 @@ public class UI {
             x += 35;
         }
     }
+    //public static void drawTIP(String tip){
+       // g2.setFont(g2.getFont().deriveFont(30f));
+        //int x = getXforCenterText(tip);
+        //int y = gp.tilesize*3;
+        //g2.setColor(Color.red);
+        //g2.drawString(tip, x, y);
+    //}
     //2022 words long -------------------//
      public static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Adventure";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}public static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}

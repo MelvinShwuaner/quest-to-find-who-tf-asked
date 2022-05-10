@@ -1,19 +1,18 @@
 package net.questfor.thepersonwhoasked.objects;
 
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
-import net.questfor.thepersonwhoasked.Maingam.UI;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
 
-public class OBJ_COIN_BRONZE extends LivingEntity {
-    public OBJ_COIN_BRONZE(MainGame gpp) {
+public class OBJ_BRICK_WALL extends LivingEntity {
+    public OBJ_BRICK_WALL(MainGame gpp) {
         super(gpp);
-        Type = Type_Current;
-        EntityType = 3;
-        name = "Bronze coin";
+        name = "BRIC WALL";
         getImageInstance();
+        defenceValue = 4;
         Value = 1;
+        description = "a "+name+" that is created for \nwalls, made in the forges of \namogus town";
         hitbox = new Rectangle();
         hitbox.x = 0;
         hitbox.y = 16;
@@ -21,15 +20,11 @@ public class OBJ_COIN_BRONZE extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
-    }
-    public void Use(LivingEntity sourceentity){
-        gp.playsound(1);
-        gp.player.bobux += Value;
-        UI.addMessages("bronze coin picked up! value now "+gp.player.bobux);
+        EntityType = 3;
     }
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/coin_bronze", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("TileEntity/brickwallbroken", gp.tilesize, gp.tilesize);
     }
 }

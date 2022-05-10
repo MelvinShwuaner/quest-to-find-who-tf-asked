@@ -1,5 +1,7 @@
 package net.questfor.thepersonwhoasked.Maingam;
+
 import net.questfor.thepersonwhoasked.entities.Player;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
@@ -37,7 +39,7 @@ public class KeyHandler implements KeyListener {
             //MANAGES KEY BINDINGS WHEN YOU PRESS THEM//
             int code = e.getKeyCode();
             if(code == KeyEvent.VK_R){
-                gp.tilemanager.loadmap(GlobalGameThreadConfigs.worldID);
+               mine = true;
             }
             if(GlobalGameThreadConfigs.isinTital) {
                 if (code == KeyEvent.VK_UP) {
@@ -54,13 +56,14 @@ public class KeyHandler implements KeyListener {
                 }
                 if (code == OPEN) {
                     if (UI.commandnum == 0) {
-                        MainGame.player.worldx = MainGame.tilesize * 10;
+                        MainGame.player.worldx = MainGame.tilesize * 12;
                         MainGame.player.worldy = MainGame.tilesize * 9;
                         GlobalGameThreadConfigs.isinTital = false;
 
                     }
                     if(UI.commandnum == 1){
-                        //coming soon in later update
+                        GlobalGameThreadConfigs.isinTital = false;
+                        GlobalSaveManager.loadplayerworlddata();
                     }
                     if(UI.commandnum == 2){
                         System.exit(0);
@@ -299,6 +302,9 @@ public class KeyHandler implements KeyListener {
             int code = e.getKeyCode();
             if(code == primepowerc){
                 primepowera = false;
+            }
+            if(code == KeyEvent.VK_R){
+                mine = false;
             }
             if (code == UP) {
                 upPressed = false;

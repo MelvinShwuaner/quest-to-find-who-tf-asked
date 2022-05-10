@@ -15,6 +15,9 @@ public class Old_Man extends LivingEntity {
         getImageInstance();
         setDialogues();
         EntityType = 1;
+        maxhealth = 15;
+        defence = 3;
+        health = maxhealth;
 
     }
     public void getImageInstance() {
@@ -28,7 +31,8 @@ public class Old_Man extends LivingEntity {
         left2 = BufferedRenderer("NPCS/old man/oldman_left_2", gp.tilesize, gp.tilesize);
     }
     public void setAction() {
-        actionLock++;
+        if (!Hostile){
+            actionLock++;
         if (actionLock == 120) {
             Random random = new Random();
             int I = random.nextInt(100) + 1;
@@ -41,9 +45,65 @@ public class Old_Man extends LivingEntity {
             if (I > 50 && I <= 75) {
                 direction = "left";
             }
-            if (I > 75 && I <= 100) {
+            if (I > 75) {
                 direction = "right";
             }
+            actionLock = 0;
+        }
+    }else if(goingup){
+            goup();
+        }else{
+            Scared();
+        }
+    }
+
+    public void goup() {
+        actionLock++;
+        Random random = new Random();
+        int I = random.nextInt(100) + 1;
+        if (actionLock > 30) {
+            if(I > 25) {
+                if (worldy <= 588 && speed > 0) {
+
+                    dialogues[0] = "Take a wish. will you?";
+                    dialogues[2] = ""; dialogues[3] = "";
+                    speed = 0;
+                }
+                direction = "up";
+            }
+            if(I < 25){
+                if (worldx < 1107) {
+                    direction = "right";
+                } else {
+                    direction = "left";
+                }
+            }
+
+            actionLock = 0;
+        }
+
+    }
+
+    public void Scared() {
+        actionLock++;
+        Random random = new Random();
+        int I = random.nextInt(100) + 1;
+        if (actionLock > 30) {
+            if(I > 50) {
+                if (worldy < 1932) {
+                    direction = "down";
+                } else {
+                    direction = "up";
+                }
+            }
+            if(I < 50){
+                if (worldx < 1107) {
+                    direction = "right";
+                } else {
+                    direction = "left";
+                }
+            }
+
             actionLock = 0;
         }
     }

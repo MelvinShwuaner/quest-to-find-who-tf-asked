@@ -10,22 +10,20 @@ import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_ROCK;
 
 import java.awt.*;
 import java.util.Random;
-
 public class green_slime extends LivingEntity {
     public green_slime(MainGame gpp) {
         super(gpp);
         EntityType = 2;
         name = "Green Slime";
         speed = 2;
-        maxhealth = 12;
-        TrueAttackDamage = 7;
+        maxhealth = 10;
+        TrueAttackDamage = 5;
         defence = 1;
         health = maxhealth;
         hitbox = new Rectangle(3, 18, 42, 30);
         hitbox.height = 30;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
-
         XP = 7;
         level = 5;
         projectile = new OBJ_ROCK(gpp);

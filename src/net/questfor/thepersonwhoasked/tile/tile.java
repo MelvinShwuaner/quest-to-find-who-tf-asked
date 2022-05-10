@@ -6,4 +6,6 @@ public class tile {
         //DEFAULT VALUES ALL TILES AND BLOCKS IN WORLD USE
     public BufferedImage image;
     public boolean collision = false;
+    public boolean canjumpover = false;
+    public int worldz;
 }

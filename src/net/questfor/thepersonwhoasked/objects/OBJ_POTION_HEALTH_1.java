@@ -1,6 +1,5 @@
 package net.questfor.thepersonwhoasked.objects;
 
-import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 

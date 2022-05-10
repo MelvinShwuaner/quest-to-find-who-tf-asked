@@ -1,20 +1,21 @@
 package net.questfor.thepersonwhoasked.entities;
-
 import net.questfor.thepersonwhoasked.Maingam.*;
-
-import java.io.Serializable;
-import java.util.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Random;
 //is the parent class for all entities including player
-public class LivingEntity implements Serializable {
+public class LivingEntity extends Data {
     //WORLD//
     public MainGame gp;
     public double worldx;
     public double worldy;
+    public boolean goingup;
     public double worldz = 0;
     public double speed;
+    public int zcount;
+    public boolean hascolided = false;
     //HEALTH//
     public int maxhealth;
     public int health;
@@ -24,8 +25,8 @@ public class LivingEntity implements Serializable {
     public int regenerationcooldown = 0;
     //RENDERER//
     public transient BufferedImage image, image2, image3;
-    public transient  BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public BufferedImage attackup1, attackup2, attackdown1, attackdown2,
+    public transient  BufferedImage up1, up2, down1, down2, down3, left1, left2, right1, right2;
+    public transient BufferedImage attackup1, attackup2, attackdown1, attackdown2, attackdown3,
             attackleft1, attackleft2, attackright1, attackright2;
     //MOVEMENT AND ANIMATION//
     public String direction = "down";
@@ -34,6 +35,7 @@ public class LivingEntity implements Serializable {
     int animationLength = 0;
     //HITBOX//
     public Rectangle hitbox;
+    public int i = 0;
     public Rectangle attackHitbox = new Rectangle(0, 0, 0, 0);
     public int hitboxdefaultx, hitboxdefaulty;
     public boolean collision = false;
@@ -77,6 +79,7 @@ public class LivingEntity implements Serializable {
     public int inventorysize = 20;
     public String description = "";
     public int Type = 0;
+    public int frames = 2;
     public int Type_sword = 1, Type_constumable = 2, Type_tool = 3, Type_object = 4, Type_armor = 5, Type_shield = 6, Type_projectile = 7, Type_Current = 8, Type_axe = 9;
     public int SLOTTYPE; // 1 for mainhand, 2 for lefthand, 3 for helmet, 4 for chestplate, 5 for leggings, 6 for boots
     public int UseCost;
@@ -101,18 +104,22 @@ public class LivingEntity implements Serializable {
         }
     }
     public void update(){
-        if(up1 == null && image == null){
-            getImageInstance();
-        }
+        updateimage();
+
         Regenerate();
         /*AI for Monsters And NPCS*/
         setAction();
         hitboxe = false;
         gp.hregister.checkTile(this);
         gp.hregister.checkObject(this, false);
-        gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
+        int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
+        if(EntityType == 2 && npcindex != 999){
+            AttackNPC(TrueAttackDamage, npcindex);
+        }
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
+        int TileentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
+        destroyTentity(TileentityI);
         boolean ContactPLayer = gp.hregister.PlayerColide(this);
         if(EntityType == 2 && ContactPLayer){
             AttackPLayer(TrueAttackDamage);
@@ -160,23 +167,47 @@ public class LivingEntity implements Serializable {
                 hitTime = 0;
             }
         }
+        if(health <= 0){
+            dying = true;
+        }
     }
+
+    public void updateimage() {
+        if(up1 == null && image == null && down1 == null){
+            getImageInstance();
+        }
+
+    }
+
+    private void AttackNPC(int trueAttackDamage, int npcindex) {
+        if(!GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible){
+            int damage = trueAttackDamage - GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].defence;
+            if(damage < 0){
+                damage = 0;
+            }
+            GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].health-= damage;
+            UI.addMessages("Help me im being hurt!");
+            GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible = true;
+            gp.playsound(5);
+        }
+    }
+
     public void HandleItems(){}
     public void DropItems(LivingEntity droppedItem){
-        for(int i = 0; i < gp.obj.length; i++){
-            if(gp.obj[i] == null) {
-                gp.obj[i] = droppedItem;
+        for(int i = 0; i < GlobalGameThreadConfigs.obj[1].length; i++){
+            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][i] == null) {
+                GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = droppedItem;
                 int I = new Random().nextInt(100) + 1;
                 if (I > 50){
-                    gp.obj[i].worldx = worldx + gp.tilesize/2;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx = worldx + gp.tilesize/2;
             } else {
-                    gp.obj[i].worldx = worldx - gp.tilesize/2;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx = worldx - gp.tilesize/2;
                 }
                 I = new Random().nextInt(100) + 1;
                 if(I > 50){
-                    gp.obj[i].worldy = worldy + gp.tilesize/2;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy = worldy + gp.tilesize/2;
                 }else {
-                    gp.obj[i].worldy = worldy - gp.tilesize/2;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy = worldy - gp.tilesize/2;
                 }
                 break;
             }
@@ -254,13 +285,14 @@ public class LivingEntity implements Serializable {
                     g2.fillRect((int) (screenX - 1), (int) screenY - 16, gp.tilesize + 2, 12);
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect((int) screenX, (int) screenY - 15, (int) HPValue, 10);
-                    HostileTime++;
-                    if (HostileTime > 600) {
-                        HostileTime = 0;
-                        Hostile = false;
-                    }
-
                 }
+                if (Hostile){
+                HostileTime++;
+                if (HostileTime > 2400) {
+                    HostileTime = 0;
+                    Hostile = false;
+                }
+            }
                 if(EntityType != 4){
                 if (invincible) {
                     for (int y = 0; y < image.getHeight(); y++) {
@@ -354,5 +386,22 @@ public class LivingEntity implements Serializable {
         GlobalGameThreadConfigs.particleList.add(p2);
         GlobalGameThreadConfigs.particleList.add(p3);
         GlobalGameThreadConfigs.particleList.add(p4);
+    }
+
+    public void destroyTentity(int tileentityI) {
+        if (tileentityI != 999 && GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].distructuble&& !GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].invincible) {
+            if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].name.equals("Brick wall")) {
+                if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].ItemRequirements(this)) {
+                    GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].health-= TrueAttackDamage;
+                    GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].playSE();
+                    GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].invincible = true;
+                    ParticlePropertyManager(GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI], GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI]);
+                    if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].health <= 0) {
+                        GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI] = GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].getDestroyedForm();
+                        GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].HandleItems();
+                    }
+                }
+            }
+        }
     }
 }

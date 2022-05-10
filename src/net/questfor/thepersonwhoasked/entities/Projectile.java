@@ -18,11 +18,14 @@ public class Projectile extends LivingEntity{
         this.direction = direction;
     }
     public void update(){
+        if(up1 == null){
+            getImageInstance();
+        }
         if(SourceEntity == gp.player){
             int monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
             if(monsterindex != 999){
                 gp.player.attackEntity(monsterindex, AttackValue);
-                ParticlePropertyManager(SourceEntity.projectile, GlobalGameThreadConfigs.Monsters[monsterindex]);
+                ParticlePropertyManager(SourceEntity.projectile, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][monsterindex]);
                 alive = false;
             }
         }if(SourceEntity != gp.player){

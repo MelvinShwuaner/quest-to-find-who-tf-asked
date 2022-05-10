@@ -32,4 +32,5 @@ public class IT_Tree_Trunk extends TileEntity {
     public void getImageInstance() {
         down1 = BufferedRenderer("TileEntity/trunk", gp.tilesize, gp.tilesize);
     }
+    public TileEntity getDestroyedForm(){return new IT_Tree_Trunk(gp, (int) (worldx/gp.tilesize), (int) worldy/gp.tilesize);}
 }

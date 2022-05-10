@@ -3,8 +3,6 @@ package net.questfor.thepersonwhoasked.entities;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Random;
 
 public class Particle extends LivingEntity {
     public LivingEntity SourceEntity;
@@ -43,5 +41,9 @@ public class Particle extends LivingEntity {
        if(health < 0){
            alive = false;
        }
+       if(down1 == null){
+           getImageInstance();
+       }
     }
+
 }

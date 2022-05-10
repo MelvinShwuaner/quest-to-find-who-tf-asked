@@ -1,16 +1,14 @@
 package net.questfor.thepersonwhoasked.entities;
-
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
-import net.questfor.thepersonwhoasked.tile_entites.TileEntity;
-
+import net.questfor.thepersonwhoasked.tile_entites.IT_Brickwall;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 //basic player
 public class Player extends LivingEntity {
-    KeyHandler keyHandler;
+    transient KeyHandler keyHandler;
     public int screenX;
     public int screenY;
     public int jumpstate = 0;
@@ -22,6 +20,10 @@ public class Player extends LivingEntity {
 
     public static int objindex;
     public static boolean hasweapon = true;
+    public int i = 0;
+    public int d = 0;
+    boolean hasfound = false;
+    int counter = 0;
     public Player(KeyHandler keyHandler, MainGame gpp) {
         super(gpp);
         this.keyHandler = keyHandler;
@@ -46,11 +48,11 @@ public class Player extends LivingEntity {
             //DEFAULT VALUES
             Ammo = 10;
             inventorysize = 20;
-            worldx = MainGame.tilesize * 10;
-            worldy = MainGame.tilesize * 9;
+            worldx = MainGame.tilesize * 12;
+            worldy = MainGame.tilesize * 13;
             speed = 4;
             direction = "right";
-            worldz = 1;
+            worldz = 0;
             maxhealth = 10;
             health = maxhealth;
             invincible = false;
@@ -69,17 +71,16 @@ public class Player extends LivingEntity {
             projectile = new OBJ_FireBall(gp);
             MaxMana = 4;
             Mana = MaxMana;
-
         } catch (Exception e) {
             crash.main(e);
         }
     }
 
-    private int getDefenceValues() {
+    public int getDefenceValues() {
         return defence = dexterity * currentshield.defenceValue;
     }
 
-    private int getAttackValues() {
+    public int getAttackValues() {
         if (currentweapon != null) {
             attackHitbox = currentweapon.attackHitbox;
             return TrueAttackDamage = strength * currentweapon.AttackValue;
@@ -91,83 +92,132 @@ public class Player extends LivingEntity {
 
     //IMAGES
     public void getImageInstance() {
-        up1 = BufferedRenderer("player/boy_up_1", gp.tilesize, gp.tilesize);
-        up2 = BufferedRenderer("player/boy_up_2", gp.tilesize, gp.tilesize);
-        down1 = BufferedRenderer("player/boy_down_1", gp.tilesize, gp.tilesize);
-        down2 = BufferedRenderer("player/boy_down_2", gp.tilesize, gp.tilesize);
-        right1 = BufferedRenderer("player/boy_right_1", gp.tilesize, gp.tilesize);
-        right2 = BufferedRenderer("player/boy_right_2", gp.tilesize, gp.tilesize);
-        left1 = BufferedRenderer("player/boy_left_1", gp.tilesize, gp.tilesize);
-        left2 = BufferedRenderer("player/boy_left_2", gp.tilesize, gp.tilesize);
+        up1 = BufferedRenderer("player/boy_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
+        up2 = BufferedRenderer("player/boy_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
+        down1 = BufferedRenderer("player/boy_down_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
+        down2 = BufferedRenderer("player/boy_down_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
+        right1 = BufferedRenderer("player/boy_right_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
+        right2 = BufferedRenderer("player/boy_right_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
+        left1 = BufferedRenderer("player/boy_left_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
+        left2 = BufferedRenderer("player/boy_left_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
     }
 
     public void getAttackInstance() {
         if (hasweapon) {
             if (currentweapon.name.equals("Iron sword")) {
-                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", gp.tilesize, gp.tilesize * 2);
-                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", gp.tilesize, gp.tilesize * 2);
-                attackdown1 = BufferedRenderer("player/Attack/boy_attack_down_1", gp.tilesize, gp.tilesize * 2);
-                attackdown2 = BufferedRenderer("player/Attack/boy_attack_down_2", gp.tilesize, gp.tilesize * 2);
-                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", gp.tilesize * 2, gp.tilesize);
-                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", gp.tilesize * 2, gp.tilesize);
-                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", gp.tilesize * 2, gp.tilesize);
-                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", gp.tilesize * 2, gp.tilesize);
+                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown1 = BufferedRenderer("player/Attack/boy_attack_down_1",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown2 = BufferedRenderer("player/Attack/boy_attack_down_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+            }
+            if(currentweapon.name.equals("Iron shovel")){
+                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown1 = BufferedRenderer("player/Attack/shoveldown1",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown2 = BufferedRenderer("player/Attack/shoveldown2",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown3 = BufferedRenderer("player/Attack/shoveldown3",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
             }
             if (currentweapon.name.equals("WoodCutter's axe")) {
-                attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", gp.tilesize, gp.tilesize * 2);
-                attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", gp.tilesize, gp.tilesize * 2);
-                attackdown1 = BufferedRenderer("player/Attack/boy_axe_down_1", gp.tilesize, gp.tilesize * 2);
-                attackdown2 = BufferedRenderer("player/Attack/boy_axe_down_2", gp.tilesize, gp.tilesize * 2);
-                attackright1 = BufferedRenderer("player/Attack/boy_axe_right_1", gp.tilesize * 2, gp.tilesize);
-                attackright2 = BufferedRenderer("player/Attack/boy_axe_right_2", gp.tilesize * 2, gp.tilesize);
-                attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", gp.tilesize * 2, gp.tilesize);
-                attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", gp.tilesize * 2, gp.tilesize);
+                attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown1 = BufferedRenderer("player/Attack/boy_axe_down_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown2 = BufferedRenderer("player/Attack/boy_axe_down_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackright1 = BufferedRenderer("player/Attack/boy_axe_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackright2 = BufferedRenderer("player/Attack/boy_axe_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
             }
         }else{
-            attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", gp.tilesize, gp.tilesize * 2);
-            attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", gp.tilesize, gp.tilesize * 2);
-            attackdown1 = BufferedRenderer("player/Attack/boy_axe_down_1", gp.tilesize, gp.tilesize * 2);
-            attackdown2 = BufferedRenderer("player/Attack/boy_axe_down_2", gp.tilesize, gp.tilesize * 2);
-            attackright1 = BufferedRenderer("player/Attack/boy_axe_right_1", gp.tilesize * 2, gp.tilesize);
-            attackright2 = BufferedRenderer("player/Attack/boy_axe_right_2", gp.tilesize * 2, gp.tilesize);
-            attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", gp.tilesize * 2, gp.tilesize);
-            attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", gp.tilesize * 2, gp.tilesize);
+            attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+            attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+            attackdown1 = BufferedRenderer("player/Attack/boy_axe_down_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+            attackdown2 = BufferedRenderer("player/Attack/boy_axe_down_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+            attackright1 = BufferedRenderer("player/Attack/boy_axe_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+            attackright2 = BufferedRenderer("player/Attack/boy_axe_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+            attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+            attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
         }
     }
 
     public void update() {
-        for(int i = 0; i < inventory.size(); i++){
-            if (inventory.get(i).down1 == null){
-                inventory.get(i).getImageInstance();
-            }
-        }
         try {
-            if(currentweapon == null){
+            if(up1 == null || attackup2 == null){
+                getImageInstance();
+                getAttackInstance();
+            }
+            if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Tentity) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.worldzobjectreturn(this) || MainGame.hregister.returntileworldz(this)) {
+                if (zcount > 51){
+                    if (!isup) {
+                        worldz--;
+                        getImageInstance();
+                    }
+                }
+            }
+            if(hitboxe){
+                zcount = 0;
+            }
+            zcount++;
+            for(int i = 0; i < inventory.size(); i++){
+                if (inventory.get(i).down1 == null){
+                    inventory.get(i).getImageInstance();
+                }
+            }
+            if (currentweapon == null) {
                 hasweapon = false;
-            }else{
+            } else {
                 hasweapon = true;
             }
             //PLAYER ATTACK//
             if (KeyHandler.use) {
                 KeyHandler.use = false;
-                if (UI.transitionfinushed || GlobalGameThreadConfigs.CharacterStats){
+                hasfound = false;
+                if (UI.transitionfinushed || GlobalGameThreadConfigs.CharacterStats) {
                     convertItem(7);
-                }else {
-                    if (hasweapon){
+                } else {
+                    if (hasweapon) {
                         if (currentweapon.Type == Type_constumable) {
                             convertItem(8);
                         }
                     }
                 }
+                if (currentshield.name.equals("BRIC WALL")) {
+                    while (!hasfound) {
+                        if (i < 100) {
+                                if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] == null) {
+                                    switch (direction) {
+                                        case "up" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) worldx / gp.tilesize, (int) ((worldy - 72) / gp.tilesize));
+                                        case "down" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) worldx / gp.tilesize, (int) ((worldy + 72) / gp.tilesize));
+                                        case "right" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) (worldx + 72) / gp.tilesize, (int) (worldy) / gp.tilesize);
+                                        case "left" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) (worldx - 72) / gp.tilesize, (int) (worldy) / gp.tilesize);
+                                    }
+                                    inventory.remove(currentshield);
+                                    i = 0;
+                                    hasfound = true;
+                                }
+                            i++;
+
+                        } else {
+                            i = 0;
+                        }
+                    }
+                }
             }
-            if(KeyHandler.primepowera && projectile.alive == false && primepowercool == 30 && projectile.haveresource(this)){
+            if (KeyHandler.primepowera && projectile.alive == false && primepowercool == 30 && projectile.haveresource(this)) {
                 projectile.Set((int) worldx, (int) worldy, direction, true, this);
                 projectile.RemoveResource(this);
                 GlobalGameThreadConfigs.projectilelist.add(projectile);
                 primepowercool = 0;
                 gp.playsound(10);
             }
-            if(primepowercool < 30){
+            if (primepowercool < 30) {
                 primepowercool++;
             }
             //MOVEMENT
@@ -227,13 +277,29 @@ public class Player extends LivingEntity {
             hitboxe = false;
             MainGame.hregister.checkTile(this);
 
-                //OBJECT COLLISIONS
-                objindex = MainGame.hregister.checkObject(this, true);
-                pickupObject(objindex);
+            //OBJECT COLLISIONS
+            objindex = MainGame.hregister.checkObject(this, true);
+            pickupObject(objindex);
 
-                //ENTITY COLLISIONS
-                int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
-                interactNPC(npcindex);
+            //ENTITY COLLISIONS
+            int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
+            interactNPC(npcindex);
+            if (npcindex != 999){
+                if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].dialogues[0].equals("Take a wish. will you?")) {
+                    speed = 0;
+                    screenY++;
+                    counter++;
+                    if(counter == 30){
+                        UI.addMessages("Thank you for Alpha testing My Game");
+                    }
+                    if(counter == 180){
+                        UI.addMessages("Hope you enjoy the rest of your day, if you encountered bugs please \n go to https://discord.gg/tRva2AM2Gk and message @bruhkid2345");
+                    }
+                    if(counter == 360){
+                        UI.addMessages("Bye :D !!!!");
+                    }
+                }
+        }
                 int Monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
                 attacked(Monsterindex);
                 int TentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
@@ -289,7 +355,7 @@ public class Player extends LivingEntity {
                     spritecounter = 0;
                 }
             }
-            if (worldz == 1) {
+            if (worldz >= 1) {
                 speed = 2;
             } else {
                 speed = 4;
@@ -297,7 +363,7 @@ public class Player extends LivingEntity {
             if(health <= 0){
                 GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.GameOverState;
                 gp.stopmusic();
-                UI.commandnum = 0;
+                UI.commandnum = -1;
                 gp.playsound(12);
             }
         } catch (Exception e) {
@@ -310,7 +376,7 @@ public class Player extends LivingEntity {
         if (spritecounter <= 10) {
             spritenumber = 1;
         }
-        if (spritecounter > 10 && spritecounter <= 25) {
+        if (spritecounter > 10) {
             spritenumber = 2;
             int currentworldx = (int) worldx;
             int currentworldy = (int) worldy;
@@ -340,46 +406,58 @@ public class Player extends LivingEntity {
             hitbox.width = hitboxWidth;
             hitbox.height = hitboxHeight;
         }
-        if (spritecounter > 25) {
-            spritenumber = 1;
-            spritecounter = 0;
-            attacking = false;
-            hasattacked = true;
+        if (currentweapon.frames == 2) {
+            if (spritecounter >= 25) {
+                attacking = false;
+                hasattacked = true;
+                spritecounter = 0;
+            }
+        } else {
+            if (spritecounter > 25 && spritecounter < 35) {
+                spritenumber = 3;
+            }
+            if (spritecounter >= 35) {
+                attacking = false;
+                hasattacked = true;
+                spritecounter = 0;
+            }
         }
     }
 
     public void destroyTentity(int tileentityI) {
-        if(tileentityI != 999 && GlobalGameThreadConfigs.Tentity[tileentityI].distructuble && GlobalGameThreadConfigs.Tentity[tileentityI].ItemRequirements(this) && !GlobalGameThreadConfigs.Tentity[tileentityI].invincible) {
-            GlobalGameThreadConfigs.Tentity[tileentityI].health--;
-            GlobalGameThreadConfigs.Tentity[tileentityI].playSE();
-            GlobalGameThreadConfigs.Tentity[tileentityI].invincible = true;
-            ParticlePropertyManager(GlobalGameThreadConfigs.Tentity[tileentityI], GlobalGameThreadConfigs.Tentity[tileentityI]);
-            if (GlobalGameThreadConfigs.Tentity[tileentityI].health < 0){
-                GlobalGameThreadConfigs.Tentity[tileentityI] = GlobalGameThreadConfigs.Tentity[tileentityI].getDestroyedForm();
-                GlobalGameThreadConfigs.Tentity[tileentityI].HandleItems();
+        if (tileentityI != 999 && GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].distructuble && GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].ItemRequirements(this) && !GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].invincible) {
+            if (!GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].name.equals("Brick wall")){
+                GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].health--;
+            GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].playSE();
+            GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].invincible = true;
+            ParticlePropertyManager(GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI], GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI]);
+            if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].health <= 0) {
+                GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI] = GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].getDestroyedForm();
+                GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].HandleItems();
+            }
         }
-        }
+    }
     }
 
     public void attackEntity(int attackindex, int dmg) {
         if (attackindex != 999) {
-            if (GlobalGameThreadConfigs.Monsters[attackindex].invincible == false) {
+            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible == false) {
                 gp.playsound(6);
-                int damage = dmg - GlobalGameThreadConfigs.Monsters[attackindex].defence;
+                int damage = dmg - GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].defence;
                 if (damage < 0) {
                     damage = 0;
                 }
-                GlobalGameThreadConfigs.Monsters[attackindex].health -= damage;
-                ParticleAttackManager( this, GlobalGameThreadConfigs.Monsters[attackindex]);
-                GlobalGameThreadConfigs.Monsters[attackindex].Hostile = true;
-                GlobalGameThreadConfigs.Monsters[attackindex].HostileTime = 0;
-                GlobalGameThreadConfigs.Monsters[attackindex].invincible = true;
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health -= damage;
+                ParticleAttackManager( this, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex]);
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].Hostile = true;
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].HostileTime = 0;
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible = true;
             }
-            if (GlobalGameThreadConfigs.Monsters[attackindex].dying == false) {
-                if (GlobalGameThreadConfigs.Monsters[attackindex].health < 0) {
-                    GlobalGameThreadConfigs.Monsters[attackindex].dying = true;
-                    UI.addMessages("Killed " + GlobalGameThreadConfigs.Monsters[attackindex].name);
-                    XP += GlobalGameThreadConfigs.Monsters[attackindex].XP;
+            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying == false) {
+                if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health < 0) {
+                    GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying = true;
+                    UI.addMessages("Killed " + GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].name);
+                    XP += GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].XP;
                     levelUpAchiver();
                 }
             }
@@ -402,11 +480,11 @@ public class Player extends LivingEntity {
     public void attacked(int monsterindex) {
         /*collision between player and monsters*/
         if (monsterindex != 999) {
-            int damage = GlobalGameThreadConfigs.Monsters[monsterindex].TrueAttackDamage - defence;
+            int damage = GlobalGameThreadConfigs.Monsters[MainGame.currentmap][monsterindex].TrueAttackDamage - defence;
             if (damage < 0) {
                 damage = 0;
             }
-            if (invincible == false && GlobalGameThreadConfigs.Monsters[monsterindex].dying == false) {
+            if (invincible == false && GlobalGameThreadConfigs.Monsters[MainGame.currentmap][monsterindex].dying == false) {
                 health -= damage;
                 UI.addMessages("You have been hit! health is now to " + gp.player.health);
                 gp.playsound(5);
@@ -419,17 +497,17 @@ public class Player extends LivingEntity {
         try {
 
             if (i != 999) {
-                if (gp.obj[i].EntityType == 3) {
-                    if (gp.obj[i].Type == 8) {
-                        gp.obj[i].Use(this);
-                        gp.obj[i] = null;
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].EntityType == 3) {
+                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].Type == 8) {
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][i].Use(this);
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = null;
                     }
-                    if (gp.obj[i] != null) {
+                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] != null) {
                         String text;
                         if (inventory.size() != inventorysize) {
-                            inventory.add(gp.obj[i]);
-                            text = "Picked up " + gp.obj[i].name;
-                            gp.obj[i] = null;
+                            inventory.add(GlobalGameThreadConfigs.obj[MainGame.currentmap][i]);
+                            text = "Picked up " + GlobalGameThreadConfigs.obj[MainGame.currentmap][i].name;
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = null;
                             gp.playsound(1);
                         } else {
                             text = "Your inventory is full!";
@@ -438,7 +516,7 @@ public class Player extends LivingEntity {
                         UI.addMessages(text);
                     }
                 } else {
-                    switch (gp.obj[i].name) {
+                    switch (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].name) {
                         case "chest" -> {
                             if (KeyHandler.enterpressed) {
                                 if (!GlobalGameThreadConfigs.inchest) {
@@ -454,12 +532,12 @@ public class Player extends LivingEntity {
                         case "door" -> {
                             if (KeyHandler.enterpressed){
                                 KeyHandler.enterpressed = false;
-                                gp.obj[i] = new OBJdooropen(gp, (int) gp.obj[i].worldx, (int) gp.obj[i].worldy);
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdooropen(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy);
                         }
                     }
                     case "door open" -> {
                             if(KeyHandler.enterpressed){
-                                gp.obj[i] = new OBJdoor(gp, (int) gp.obj[i].worldx/gp.tilesize, (int) gp.obj[i].worldy/gp.tilesize);
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdoor(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx/gp.tilesize, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy/gp.tilesize);
                             }
                     }
                     }
@@ -476,6 +554,8 @@ public class Player extends LivingEntity {
     public void GetItems() {
         inventory.add(currentweapon);
         inventory.add(currentshield);
+        inventory.add(new OBJ_BRICK_WALL(gp));
+        inventory.add(new OBJ_IRON_SHOVEL(gp));
 
     }
 
@@ -484,18 +564,33 @@ public class Player extends LivingEntity {
             if (i != 999) {
                 if (KeyHandler.enterpressed) {
                     GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
-                    if (GlobalGameThreadConfigs.NPCS[i].dialogues[GlobalGameThreadConfigs.NPCS[i].dialogueIndex] != null){
-                        GlobalGameThreadConfigs.NPCS[i].speak();
+                    if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogues[GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogueIndex] != null){
+                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].speak();
+                        if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogues[0].equals("Take a wish. will you?")){
+                            speed = 0;
+                            screenY++;
+                        }
                 }else{
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
                     }
             }
-            } else {
-                if (KeyHandler.attack == true) {
-                    attacking = true;
-                    gp.playsound(7);
-                    KeyHandler.attack = false;
+            } if (KeyHandler.attack == true) {
+                attacking = true;
+                if(currentweapon.name.equals("Iron shovel")){
+                    //int x; //to be used later 
+                    double y = worldy;
+                    switch (direction){
+                        case "down" -> y+=96;
+                    }
+                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (worldx/gp.tilesize)][(int) (y/gp.tilesize)]){
+                        case 39 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) (worldx/gp.tilesize)][(int) (y/gp.tilesize)] = 2;
+                        case 10 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) (worldx/gp.tilesize)][(int) (y/gp.tilesize)] = 39;
+                        case 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) (worldx/gp.tilesize)][(int) (y/gp.tilesize)] = 39;
+                    }
+                    KeyHandler.mine = false;
                 }
+                gp.playsound(7);
+                KeyHandler.attack = false;
             }
         } catch (Exception e) {
             crash.main(e);
@@ -536,12 +631,14 @@ public class Player extends LivingEntity {
             int tempscreenx = screenX;
             int tempscreeny = screenY;
             //Try Reading this line. I will wait ;D
-            if(GlobalGameThreadConfigs.isinTital == false){if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed){switch (direction) {case "up": if (attacking == false){if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}}else{tempscreeny = screenY - gp.tilesize; if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}} break; case "down": if(attacking == false){if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}}break; case "right": if(attacking == false){if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}}break; case "left": if(attacking == false){if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;}}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}} break;}}else{switch (direction){case "right" -> {if(attacking == false){image = right1;}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}} }case "left" -> {if(attacking == false){image = left1;}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}}}case "up" -> {if(attacking == false){image = up1;}else{tempscreeny = screenY - gp.tilesize;if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}}} case "down" -> {if(attacking == false){image = down1;}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}}}}}}else{switch (direction) {case "up": if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}break; case "down": if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}break; case "right": if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}break; case "left": if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;} break;}}
+            if(GlobalGameThreadConfigs.isinTital == false){if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed){switch (direction) {case "up": if (attacking == false){if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}}else{tempscreeny = screenY - gp.tilesize; if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}} break; case "down": if(attacking == false){if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}break; case "right": if(attacking == false){if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}}break; case "left": if(attacking == false){if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;}}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}} break;}}else{switch (direction){case "right" -> {if(attacking == false){image = right1;}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}} }case "left" -> {if(attacking == false){image = left1;}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}}}case "up" -> {if(attacking == false){image = up1;}else{tempscreeny = screenY - gp.tilesize;if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}}} case "down" -> {if(attacking == false){image = down1;}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}}}}}else{switch (direction) {case "up": if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}break; case "down": if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}break; case "right": if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}break; case "left": if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;} break;}}
             if(KeyHandler.jump == true){
                 jumpaction++;
                 if(jumpaction < 25){
                     if(isup == true) {
-                        worldz = 1;
+                        if(jumpaction == 1){
+                            worldz++;
+                        }
                         jumpstate++;
                         image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
                     }
@@ -552,6 +649,8 @@ public class Player extends LivingEntity {
                     if(jumpstate < 0) {
                         jumpaction = 0;
                         KeyHandler.jump = false;
+                        getAttackInstance();
+                        getImageInstance();
                     }
 
                 }

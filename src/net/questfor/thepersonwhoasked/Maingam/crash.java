@@ -23,7 +23,7 @@ public class crash {
             CrashWriter.newLine();
             CrashWriter.write(String.valueOf(e.getCause()));
             CrashWriter.close();
-            JOptionPane.showMessageDialog(null, "An unexpected error has occured! save your data as your game might not function after leaving this msg \n please go to https://discord.gg/GA8tJwSNYm and message @bruhkid2345 your error message, check the error report!");
+            JOptionPane.showMessageDialog(null, "An unexpected error has occured! save your data as your game might not function after leaving this msg \n please go to https://discord.gg/tRva2AM2Gk and message @bruhkid2345 your error message, check the error report!");
         } catch (IOException ex) {
             main(ex);
         }

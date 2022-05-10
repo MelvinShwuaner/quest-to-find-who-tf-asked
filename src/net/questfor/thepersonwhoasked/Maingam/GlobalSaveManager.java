@@ -1,7 +1,9 @@
 package net.questfor.thepersonwhoasked.Maingam;
+
 import java.io.*;
+
 import static net.questfor.thepersonwhoasked.Maingam.UI.gp;
-public class GlobalSaveManager implements Serializable {
+public class GlobalSaveManager {
     public static void saveconfigs() {
         try {
             String filepath = "configs.amogusdababymilkfilestoragethingyidk";
@@ -56,26 +58,17 @@ public class GlobalSaveManager implements Serializable {
     }
     public  void saveplayerworlddata(){
         try {
-            String filepath = "data.amogusdababymilkfilestoragethingyidk";
+            String filepath = "worlddata.amogusdababymilkfilestoragethingyidk";
             FileOutputStream fos = new FileOutputStream(filepath);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            GlobalDataStorage gd = new GlobalDataStorage();
-            gd.health = gp.player.health;
-            gd.inventory = MainGame.player.inventory;
-            gd.level = gp.player.level;
-            gd.x = (int) gp.player.worldx;
-            gd.y = (int) gp.player.worldy;
-            gd.currentshield = MainGame.player.currentshield;
-            gd.currentweapon = MainGame.player.currentweapon;
-            oos.writeObject(gd);
-            oos.close();
-            filepath = "world.amogusdababymilkfilestoragethingyidk";
-            fos = new FileOutputStream(filepath);
-            oos = new ObjectOutputStream(fos);
             WorldDataStorage worldDataStorage = new WorldDataStorage();
             worldDataStorage.Monsters = GlobalGameThreadConfigs.Monsters;
             worldDataStorage.NPCS = GlobalGameThreadConfigs.NPCS;
             worldDataStorage.TileEntitys = GlobalGameThreadConfigs.Tentity;
+            worldDataStorage.obj = GlobalGameThreadConfigs.obj;
+            worldDataStorage.raidcount = EventHandler.raidcounter;
+            worldDataStorage.Player = gp.player;
+            worldDataStorage.mapdata = gp.tilemanager.mapRendererID;
             oos.writeObject(worldDataStorage);
             oos.close();
         }catch (Exception e){
@@ -84,7 +77,7 @@ public class GlobalSaveManager implements Serializable {
     }
     public static void loadplayerworlddata(){
         try {
-            String filepath = "world.amogusdababymilkfilestoragethingyidk";
+            String filepath = "worlddata.amogusdababymilkfilestoragethingyidk";
             FileInputStream fis = new FileInputStream(filepath);
             ObjectInputStream ois = new ObjectInputStream(fis);
             WorldDataStorage worldDataStorage = (WorldDataStorage) ois.readObject();
@@ -92,20 +85,23 @@ public class GlobalSaveManager implements Serializable {
             GlobalGameThreadConfigs.NPCS = worldDataStorage.NPCS;
             GlobalGameThreadConfigs.Monsters = worldDataStorage.Monsters;
             GlobalGameThreadConfigs.Tentity = worldDataStorage.TileEntitys;
-             filepath = "data.amogusdababymilkfilestoragethingyidk";
-             fis = new FileInputStream(filepath);
-             ois = new ObjectInputStream(fis);
-             GlobalDataStorage globalDataStorage = (GlobalDataStorage) ois.readObject();
-             ois.close();
-             gp.player.inventory = globalDataStorage.inventory;
-             gp.player.health = globalDataStorage.health;
-             gp.player.worldx = globalDataStorage.x;
-             gp.player.worldy = globalDataStorage.y;
-             gp.player.currentshield = globalDataStorage.currentshield;
-             gp.player.currentweapon = globalDataStorage.currentweapon;
+            EventHandler.raidcounter = worldDataStorage.raidcount;
+            GlobalGameThreadConfigs.obj = worldDataStorage.obj;
+            gp.tilemanager.mapRendererID = worldDataStorage.mapdata;
+            gp.player = worldDataStorage.Player;
+            for(int a = 0; a < GlobalGameThreadConfigs.obj.length; a++){
+            for (int i = 0; i < GlobalGameThreadConfigs.obj[a].length; i++) {
+                if (GlobalGameThreadConfigs.obj[a][i] != null) {
+                    for (int d = 0; d < GlobalGameThreadConfigs.obj[a][i].inventory.size(); d++) {
+                        if (GlobalGameThreadConfigs.obj[a][i].inventory.get(d) != null) {
+                            GlobalGameThreadConfigs.obj[a][i].inventory.get(d).updateimage();
+                        }
+                    }
+                }
+            }
+        }
         } catch (Exception e){
                 crash.main(e);
             }
-
     }
 }

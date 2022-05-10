@@ -1,14 +1,12 @@
 package net.questfor.thepersonwhoasked.Maingam
-
 import net.questfor.thepersonwhoasked.Main
-import net.questfor.thepersonwhoasked.MultiRenderer
-import net.questfor.thepersonwhoasked.entities.LivingEntity
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs.obj
+import net.questfor.thepersonwhoasked.GlobalProperties
 import net.questfor.thepersonwhoasked.entities.Player
 import net.questfor.thepersonwhoasked.tile.tilemanager
 import java.awt.Color
 import java.awt.Dimension
 import javax.swing.JPanel
-
 class MainGame : JPanel(), Runnable {
     /*
     is the secondary most important class in hierarchy, this has all the functions,
@@ -51,9 +49,9 @@ class MainGame : JPanel(), Runnable {
             nextframe += (CurrentFrame - LastFrame) / drawinterval
             ticks += CurrentFrame - LastFrame
             LastFrame = CurrentFrame
+            displayScreen()
+            drawtoscreen()
             if (nextframe >= 1) {
-                converttofullscreen()
-                drawtoscreen()
                 updateticks()
                 nextframe--
                 drawcound++
@@ -73,26 +71,32 @@ class MainGame : JPanel(), Runnable {
             /**PLAYER**/
             player.update()
             /**NPCS**/
-            for (i in GlobalGameThreadConfigs.NPCS.indices) {
-                if (GlobalGameThreadConfigs.NPCS[i] != null) {
-                    GlobalGameThreadConfigs.NPCS[i].update()
+            for (i in GlobalGameThreadConfigs.NPCS[1].indices) {
+                if (GlobalGameThreadConfigs.NPCS[currentmap][i] != null) {
+                    GlobalGameThreadConfigs.NPCS[currentmap][i].update()
                 }
             }
             /**MOBS**/
-            for(i in GlobalGameThreadConfigs.Monsters.indices){
-                if(GlobalGameThreadConfigs.Monsters[i] != null){
-                    if(!GlobalGameThreadConfigs.Monsters[i].dying) {
-                        GlobalGameThreadConfigs.Monsters[i].update()
+            for(i in GlobalGameThreadConfigs.Monsters[1].indices){
+                if(GlobalGameThreadConfigs.Monsters[currentmap][i] != null){
+                    if(!GlobalGameThreadConfigs.Monsters[currentmap][i].dying) {
+                        GlobalGameThreadConfigs.Monsters[currentmap][i].update()
                     }
-                    if(!GlobalGameThreadConfigs.Monsters[i].alive){
-                        GlobalGameThreadConfigs.Monsters[i].HandleItems()
-                        GlobalGameThreadConfigs.Monsters[i] = null
+                    if(!GlobalGameThreadConfigs.Monsters[currentmap][i].alive){
+                        GlobalGameThreadConfigs.Monsters[currentmap][i].HandleItems()
+                        GlobalGameThreadConfigs.Monsters[currentmap][i] = null
                     }}
             }
             /**TILE ENTITIES**/
-            for(i in GlobalGameThreadConfigs.Tentity.indices){
-                if(GlobalGameThreadConfigs.Tentity[i] != null){
-                    GlobalGameThreadConfigs.Tentity[i].update()
+            for(i in GlobalGameThreadConfigs.Tentity[1].indices){
+                if(GlobalGameThreadConfigs.Tentity[currentmap][i] != null){
+                    GlobalGameThreadConfigs.Tentity[currentmap][i].update()
+                }
+            }
+            /**OBJECTS**/
+            for(i in obj[1].indices){
+                if(obj[currentmap][i] != null){
+                    obj[currentmap][i]?.updateimage()
                 }
             }
         }
@@ -101,7 +105,7 @@ class MainGame : JPanel(), Runnable {
             stopmusic()
         }
     }
-    fun converttofullscreen(){
+    fun displayScreen(){
         var drawStart: Long = 0
 
         /*display FPS*/
@@ -113,19 +117,19 @@ class MainGame : JPanel(), Runnable {
 
         /*DISPLAYS ENTITYS AND OBJECTS*/
         GlobalGameThreadConfigs.entitylist.add(player)
-        for(i in GlobalGameThreadConfigs.NPCS.indices){
-            if(GlobalGameThreadConfigs.NPCS[i] != null){
-                GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.NPCS[i])
+        for(i in GlobalGameThreadConfigs.NPCS[1].indices){
+            if(GlobalGameThreadConfigs.NPCS[currentmap][i] != null){
+                GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.NPCS[currentmap][i])
             }
         }
-        for(i in obj.indices){
-            if(obj[i] != null){
-                GlobalGameThreadConfigs.entitylist.add(obj[i])
+        for(i in obj[1].indices){
+            if(obj[currentmap][i] != null){
+                GlobalGameThreadConfigs.entitylist.add(obj[currentmap][i])
             }
         }
-        for(i in GlobalGameThreadConfigs.Monsters.indices){
-            if(GlobalGameThreadConfigs.Monsters[i] != null){
-                GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.Monsters[i])
+        for(i in GlobalGameThreadConfigs.Monsters[1].indices){
+            if(GlobalGameThreadConfigs.Monsters[currentmap][i] != null){
+                GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.Monsters[currentmap][i])
             }
         }
         for (i in GlobalGameThreadConfigs.projectilelist.indices) {
@@ -139,9 +143,9 @@ class MainGame : JPanel(), Runnable {
             }
         }
         /**TILE ENTITY RENDERING**/
-        for(i in GlobalGameThreadConfigs.Tentity.indices){
-            if(GlobalGameThreadConfigs.Tentity[i] != null){
-                GlobalGameThreadConfigs.Tentity[i].draw(GlobalGameThreadConfigs.g2)
+        for(i in GlobalGameThreadConfigs.Tentity[1].indices){
+            if(GlobalGameThreadConfigs.Tentity[currentmap][i] != null){
+                GlobalGameThreadConfigs.Tentity[currentmap][i].draw(GlobalGameThreadConfigs.g2)
             }
         }
         /*SORT ENTITYS IN POSITIONS*/
@@ -182,6 +186,10 @@ class MainGame : JPanel(), Runnable {
         var tilesize = originalTileSize * scale
         var maxscreencol = 20
         var maxscreenrow = 12
+         @JvmField
+         var maxmap = 100
+         @JvmField
+         var currentmap = 0
 
          @JvmField
         var screenwidth = tilesize * maxscreencol
@@ -196,7 +204,7 @@ class MainGame : JPanel(), Runnable {
          //HITBOXES, RENDERING, AND SOUND
         var hregister = hitboxregister(MainGame())
          @JvmField
-         var MultiRender = MultiRenderer()
+         var MultiRender = GlobalProperties()
          @JvmField
          var music = SoundHandler()
          @JvmField
@@ -209,9 +217,6 @@ class MainGame : JPanel(), Runnable {
         @JvmField
         //PLAYER//
         var player = Player(keyM, MainGame())
-         @JvmField
-         //OBJECT//
-        var obj = arrayOfNulls<LivingEntity>(30)
          @JvmField
          //WORLD RENDERER//
         var tilemanager = tilemanager()

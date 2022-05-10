@@ -1,8 +1,7 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
-import java.io.Serializable;
 
-public class ConfigStorer extends Data implements Serializable {
+public class ConfigStorer extends Data {
     boolean isfullscreen;
     int musicvolume;
     int soundvolume;

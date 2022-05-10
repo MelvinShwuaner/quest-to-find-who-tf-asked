@@ -4,29 +4,30 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
-public class IT_tree extends TileEntity{
-    public IT_tree(MainGame gpp, int col, int row) {
+
+public class IT_Brickwall extends TileEntity{
+    public IT_Brickwall(MainGame gpp, int col, int row) {
         super(gpp, col, row);
-        name = "Dry tree";
         this.worldx = gp.tilesize * col;
         this.worldy = gp.tilesize*row;
+        name = "Brick wall";
 
         distructuble = true;
-        health = 2;
+        health = 13;
     }
     public boolean ItemRequirements(LivingEntity SourceEntity){
-        boolean iscorrectItem = SourceEntity.currentweapon.Type == Type_axe;
+        boolean iscorrectItem = !SourceEntity.invincible && SourceEntity.name.equals("Green Slime");
         return iscorrectItem;
     }
     public void playSE(){gp.playsound(11);}
-    public TileEntity getDestroyedForm(){return new IT_Tree_Trunk(gp, (int) (worldx/gp.tilesize), (int) worldy/gp.tilesize);}
-    public Color getparticleColor(){return new Color(0x41321E);}
+    public TileEntity getDestroyedForm(){return new IT_brickwallbroken(gp, (int) (worldx/gp.tilesize), (int) worldy/gp.tilesize);}
+    public Color getparticleColor(){return new Color(0x9D533B);}
     public int getparticleSize(){return 6;}
     public int getparticlespeed(){return 1;}
     public int getparticleMaxHealth(){return 20;}
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("TileEntity/drytree", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("TileEntity/brickwall", gp.tilesize, gp.tilesize);
     }
 }
