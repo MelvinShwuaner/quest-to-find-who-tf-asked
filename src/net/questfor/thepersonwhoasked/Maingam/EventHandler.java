@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
+import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.entities.Mobs.green_slime;
 public class EventHandler {
     static MainGame gp;
@@ -7,7 +8,7 @@ public class EventHandler {
     //Handles all events and uses them, uses the values from eventManager to function
     int PreviousEventX, PreviousEventY;
     boolean canTriggerEvent = true;
-
+    public int tempmap, tempcol, temprow;
     public static int raidcounter = 0;
     public int i;
 
@@ -82,9 +83,7 @@ public class EventHandler {
             if (hit(0,23, 12, "up")) {
                 healpit(GlobalGameThreadConfigs.dialogueState);
             }
-            if (hit(0,11, 10, "left")) {
-                teleport(GlobalGameThreadConfigs.dialogueState);
-            }
+
             if(hit(0, 10, 40, "any")){
                 swapworld(1, 12, 12, true);
 
@@ -92,8 +91,21 @@ public class EventHandler {
             if(hit(1, 12, 13, "any")){
                 swapworld(0, 10, 40, false);
             }
+            if(hit(1,12,9,"up")){
+                speak(GlobalGameThreadConfigs.NPCS[1][0]);
+            }
         }
     }
+
+    public void speak(LivingEntity entity) {
+        if(KeyHandler.enterpressed){
+            KeyHandler.enterpressed = false;
+            GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
+            gp.player.attacking = false;
+            entity.speak();
+        }
+    }
+
     //EXPERIMENTAL
     public static void swarmpit(int col, int row) {
         int i = 0;
@@ -153,33 +165,16 @@ public class EventHandler {
             }
             raidcounter++;
     }
-    public void teleport(int GameState) {
-        //TELEPORT EVENT
-            if(gp.player.health != gp.player.maxhealth) {
-                GlobalGameThreadConfigs.GameState = GameState;
-                UI.currentDialogue = "this is a secret portal, press enter to go in. \n it takes you to the backrooms....";
-                if(KeyHandler.enterpressed){
-                    gp.player.worldy = MainGame.tilesize * 21;
-                    gp.player.worldx = MainGame.tilesize * 23;
-                    GlobalGameThreadConfigs.worldID = 1;
-                    KeyHandler.enterpressed = false;
-                    MainGame.tilemanager.loadmap(GlobalGameThreadConfigs.worldID, 1, 0);
-                }
-
-        }
-    }
     public void swapworld(int newmap, int col, int row, boolean requireskey){
         if(requireskey){
             if(KeyHandler.enterpressed){
                 KeyHandler.enterpressed = false;
-                MainGame.currentmap = newmap;
-                gp.player.worldx = gp.tilesize*col;
-                gp.player.worldy = gp.tilesize*row;
-                PreviousEventX = (int) gp.player.worldx;
-                PreviousEventY = (int) gp.player.worldy;
+                GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.transitionstate;
+                tempmap = newmap;
+                tempcol = col;
+                temprow = row;
                 canTriggerEvent = false;
                 gp.playsound(13);
-                gp.tilemanager.loadmap(1, 2, 1);
             }
         }else{
             MainGame.currentmap = newmap;

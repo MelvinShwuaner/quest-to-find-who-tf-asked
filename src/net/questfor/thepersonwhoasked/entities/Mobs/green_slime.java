@@ -13,7 +13,7 @@ import java.util.Random;
 public class green_slime extends LivingEntity {
     public green_slime(MainGame gpp) {
         super(gpp);
-        EntityType = 2;
+        EntityType = 1;
         name = "Green Slime";
         speed = 2;
         maxhealth = 10;
@@ -69,29 +69,33 @@ public class green_slime extends LivingEntity {
         actionLock++;
         Random random = new Random();
         int I = random.nextInt(100) + 1;
-        if (actionLock > 30) {
-            if(I > 50) {
-                if (worldy < MainGame.player.worldy) {
-                    direction = "down";
-                } else {
-                    direction = "up";
+        if(target != null) {
+            if (actionLock > 30) {
+                if (I > 50) {
+                    if (worldy < target.worldy) {
+                        direction = "down";
+                    } else {
+                        direction = "up";
+                    }
                 }
-            }
-            if(I < 50){
-                if (worldx < MainGame.player.worldx) {
-                    direction = "right";
-                } else {
-                    direction = "left";
+                if (I < 50) {
+                    if (worldx < target.worldx) {
+                        direction = "right";
+                    } else {
+                        direction = "left";
+                    }
                 }
-            }
 
-            actionLock = 0;
-        }
-        int i = new Random().nextInt(100)+1;
-        if(i > 99 && projectile.alive == false && primepowercool == 30){
-            projectile.Set((int) worldx, (int) worldy, direction, true, this);
-            GlobalGameThreadConfigs.projectilelist.add(projectile);
-            primepowercool = 0;
+                actionLock = 0;
+            }
+            int i = new Random().nextInt(100) + 1;
+            if (i > 99 && projectile.alive == false && primepowercool == 30) {
+                projectile.Set((int) worldx, (int) worldy, direction, true, this);
+                GlobalGameThreadConfigs.projectilelist.add(projectile);
+                primepowercool = 0;
+            }
+        }else{
+            Hostile = false;
         }
     }
     public void HandleItems(){

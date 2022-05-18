@@ -26,6 +26,7 @@ public class OBJ_IRON_SWORD extends LivingEntity {
         EntityType = 3;
         Type = Type_sword;
         getImageInstance();
+
     }
 
     @Override

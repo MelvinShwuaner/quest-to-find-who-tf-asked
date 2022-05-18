@@ -33,7 +33,12 @@ public class GeneralHandler {
         Collections.sort(GlobalGameThreadConfigs.entitylist, new Comparator<LivingEntity>() {
             @Override
             public int compare(LivingEntity e1, LivingEntity e2) {
-                int result = Integer.compare((int) e1.worldy, (int) e2.worldy);
+                int result;
+                if (e1.worldz == e2.worldz) {
+                    result = Integer.compare((int) e1.worldy, (int) e2.worldy);
+                }else{
+                    result = Integer.compare((int) e1.worldz, (int) e2.worldz);
+                }
                 return result;
             }
         });

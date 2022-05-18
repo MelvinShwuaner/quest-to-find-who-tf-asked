@@ -2,6 +2,7 @@ package net.questfor.thepersonwhoasked.entities;
 
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
+import net.questfor.thepersonwhoasked.Maingam.UI;
 
 public class Projectile extends LivingEntity{
     LivingEntity SourceEntity;
@@ -21,18 +22,17 @@ public class Projectile extends LivingEntity{
         if(up1 == null){
             getImageInstance();
         }
-        if(SourceEntity == gp.player){
+        if(SourceEntity == gp.player || SourceEntity.name.equals("Helper")){
             int monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
             if(monsterindex != 999){
-                gp.player.attackEntity(monsterindex, AttackValue);
+                attackEntity(monsterindex, AttackValue);
                 ParticlePropertyManager(SourceEntity.projectile, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][monsterindex]);
                 alive = false;
             }
-        }if(SourceEntity != gp.player){
+        }if(SourceEntity != gp.player && !SourceEntity.name.equals("Helper")){
             boolean contactPlayer = gp.hregister.PlayerColide(this);
             if(!gp.player.invincible && contactPlayer){
                 ParticlePropertyManager(SourceEntity.projectile, gp.player);
-
                 AttackPLayer(AttackValue);
                 alive = false;
             }
@@ -87,6 +87,30 @@ public class Projectile extends LivingEntity{
                     image = left2;
                 }
                 break;
+        }
+    }
+    public void attackEntity(int attackindex, int dmg) {
+        if (attackindex != 999) {
+            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible == false) {
+                gp.playsound(6);
+                int damage = dmg - GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].defence;
+                if (damage < 0) {
+                    damage = 0;
+                }
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health -= damage;
+                ParticleAttackManager( this, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex]);
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].makemeHostile(SourceEntity);
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].HostileTime = 0;
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible = true;
+            }
+            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying == false) {
+                if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health < 0) {
+                    GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying = true;
+                    UI.addMessages("Killed " + GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].name);
+                    XP += GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].XP;
+                    levelUpAchiver();
+                }
+            }
         }
     }
     public boolean haveresource(LivingEntity sourceEntity){boolean haveresource = false;return haveresource;}

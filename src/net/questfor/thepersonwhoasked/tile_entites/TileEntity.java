@@ -4,7 +4,7 @@ import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
 
-public class TileEntity extends LivingEntity {
+public abstract class TileEntity extends LivingEntity {
     public boolean distructuble = false;
     public TileEntity(MainGame gpp, int col, int row) {
         super(gpp);
@@ -36,4 +36,8 @@ public class TileEntity extends LivingEntity {
         }
     }
     public void HandleItems(){}
+
+    public void getImageInstance(String Image) {
+        down1 = BufferedRenderer("TileEntity/"+image, gp.tilesize, gp.tilesize);
+    }
 }

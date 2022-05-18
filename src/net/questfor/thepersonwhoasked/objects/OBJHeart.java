@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.Random;
 
 public class OBJHeart extends LivingEntity {
+    int I;
 
     public OBJHeart(MainGame gp) {
         super(gp);
@@ -22,7 +23,10 @@ public class OBJHeart extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         Random random = new Random();
-        int I = random.nextInt(125);
+        I = random.nextInt(125);
+    }
+
+    public void set() {
         if (I < 25) {
             down1 = image;
         } else if (I > 25 && I < 75) {
@@ -38,7 +42,6 @@ public class OBJHeart extends LivingEntity {
         } else if (down1 == image3) {
             Value = -1;
         }
-
     }
 
     @Override
@@ -52,17 +55,25 @@ public class OBJHeart extends LivingEntity {
         if (target.health > target.maxhealth) {
             target.health = target.maxhealth;
         }
-        if (down1 != image3){
-            UI.addMessages("you have gained " + Value+"HP" + " your health is now " + gp.player.health);
-    }else{
-            UI.addMessages("you have lost " + 1+"HP" + " your health is now " + gp.player.health);
+        if (down1 != image3) {
+            UI.addMessages("you have gained " + Value + "HP" + " your health is now " + gp.player.health);
+        } else {
+            UI.addMessages("you have lost " + 1 + "HP" + " your health is now " + gp.player.health);
         }
-}
+    }
 
     @Override
     public void getImageInstance() {
         image = BufferedRenderer("objects/heart_full", gp.tilesize, gp.tilesize);
         image2 = BufferedRenderer("objects/heart_half", gp.tilesize, gp.tilesize);
         image3 = BufferedRenderer("objects/heart_blank", gp.tilesize, gp.tilesize);
+    }
+
+    @Override
+    public void updateimage() {
+        super.updateimage();
+        if (up1 == null && image == null && down1 == null) {
+            set();
+        }
     }
 }

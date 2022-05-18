@@ -13,6 +13,7 @@ public class LivingEntity extends Data {
     public double worldy;
     public boolean goingup;
     public double worldz = 0;
+    public double previousworldz = 0;
     public double speed;
     public int zcount;
     public boolean hascolided = false;
@@ -43,6 +44,13 @@ public class LivingEntity extends Data {
     //AI//
     public int actionLock = 0;
     public boolean Hostile = false;
+    public boolean frozen = false;
+    public boolean hasdonetask = false;
+    public double taskx = 0, tasky = 0;
+    public LivingEntity target;
+    public double distancex = 0, distancey = 0;
+    public double previoustaskx = 1, previoustasky = 1;
+    public int tasktimer = 0;
     public int HostileTime = 0;
     //ATTACK//
     public boolean invincible = false;
@@ -90,7 +98,13 @@ public class LivingEntity extends Data {
     }
     public void setAction(){}
     public void getImageInstance(){}
+
+    public void getAttackInstance(){}
     public void Angry(){}
+    public void makemeHostile(LivingEntity Target){
+        Hostile = true;
+        target = Target;
+    }
     public void speak(){
         //dialogue functions
 
@@ -103,17 +117,21 @@ public class LivingEntity extends Data {
             case "left" -> {direction = "right"; }
         }
     }
-    public void update(){
+    public void update() {
         updateimage();
+        if (health > 0){
+            Regenerate();
+    }else{
+            dying = true;
+        }
 
-        Regenerate();
         /*AI for Monsters And NPCS*/
         setAction();
         hitboxe = false;
         gp.hregister.checkTile(this);
         gp.hregister.checkObject(this, false);
         int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
-        if(EntityType == 2 && npcindex != 999){
+        if(EntityType == 1 && npcindex != 999){
             AttackNPC(TrueAttackDamage, npcindex);
         }
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
@@ -121,7 +139,7 @@ public class LivingEntity extends Data {
         int TileentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
         destroyTentity(TileentityI);
         boolean ContactPLayer = gp.hregister.PlayerColide(this);
-        if(EntityType == 2 && ContactPLayer){
+        if(EntityType == 1 && ContactPLayer){
             AttackPLayer(TrueAttackDamage);
         }
         if(primepowercool < 30){
@@ -176,17 +194,20 @@ public class LivingEntity extends Data {
         if(up1 == null && image == null && down1 == null){
             getImageInstance();
         }
-
     }
+    public void set(){}
 
     private void AttackNPC(int trueAttackDamage, int npcindex) {
         if(!GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible){
             int damage = trueAttackDamage - GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].defence;
-            if(damage < 0){
+            if(damage <= 0){
                 damage = 0;
             }
             GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].health-= damage;
-            UI.addMessages("Help me im being hurt!");
+            if(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Old man")){
+            UI.addMessages("Help me im being hurt!");}else if(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Helper")){
+                GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].Hostile = true;
+            }
             GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible = true;
             gp.playsound(5);
         }
@@ -278,7 +299,7 @@ public class LivingEntity extends Data {
                         break;
                 }
                 //HP BAR
-                if (EntityType == 2 && Hostile) {
+                if ((EntityType == 2 || EntityType == 1) && Hostile) {
                     double onescale = gp.tilesize / maxhealth;
                     double HPValue = onescale * health;
                     g2.setColor(new Color(35, 35, 35));
@@ -295,6 +316,8 @@ public class LivingEntity extends Data {
             }
                 if(EntityType != 4){
                 if (invincible) {
+
+
                     for (int y = 0; y < image.getHeight(); y++) {
                         for (int x = 0; x < image.getWidth(); x++) {
                             int p = image.getRGB(x, y);
@@ -334,7 +357,7 @@ public class LivingEntity extends Data {
         }
     }
     //DIE ANIMATION
-    private void DieAnimation(Graphics2D g2d) {
+    protected void DieAnimation(Graphics2D g2d) {
         animationLength++;
         int startframe = 5;
         if(animationLength <= startframe){g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0f));}
@@ -363,6 +386,45 @@ public class LivingEntity extends Data {
 
     /**PARTICLES**/
     public Color getparticleColor(){return null;}
+    public void attackEntity(int attackindex, int dmg) {
+        if (attackindex != 999) {
+            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible == false) {
+                gp.playsound(6);
+                int damage = dmg - GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].defence;
+                if (damage < 0) {
+                    damage = 0;
+                }
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health -= damage;
+                ParticleAttackManager( this, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex]);
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].makemeHostile(this);
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].HostileTime = 0;
+                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible = true;
+            }
+            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying == false) {
+                if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health < 0) {
+                    GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying = true;
+                    UI.addMessages("Killed " + GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].name);
+                    XP += GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].XP;
+                    levelUpAchiver();
+                }
+            }
+        }
+    }
+    public void levelUpAchiver() {
+        if (XP >= MaxXP) {
+            level++;
+            MaxXP = MaxXP * 2;
+            maxhealth += 2;
+            strength++;
+            dexterity++;
+            TrueAttackDamage = getAttackValues();
+            defence = getDefenceValues();
+            gp.playsound(8);
+        }
+    }
+    public int getAttackValues(){return 0;}
+    public int getDefenceValues(){return 0;}
+
     public int getparticleSize(){return 0;}
     public int getparticlespeed(){return 0;}
     public int getparticleMaxHealth(){return 0;}
@@ -404,4 +466,5 @@ public class LivingEntity extends Data {
             }
         }
     }
+    public void open(){}
 }

@@ -6,8 +6,8 @@ import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
 import java.util.Random;
-
 public class OBJ_MANA_CRYSTAL extends LivingEntity {
+    int I;
     public OBJ_MANA_CRYSTAL(MainGame gpp) {
         super(gpp);
         Type = Type_Current;
@@ -22,15 +22,16 @@ public class OBJ_MANA_CRYSTAL extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
-        int I = random.nextInt(100) + 1;
-        if (I > 50) {
-            down1 = image;
-            Value = 1;
-        } else{
-           down1 = image2;
-            Value = -1;
+         I = random.nextInt(100) + 1;
+}
+public void set(){
+    if (I > 50) {
+        down1 = image;
+        Value = 1;
+    } else{
+        down1 = image2;
+        Value = -1;
     }
-
 }
     public void Use(LivingEntity target){
         if (down1 != image2) {
@@ -56,5 +57,13 @@ public class OBJ_MANA_CRYSTAL extends LivingEntity {
     public void getImageInstance() {
         image = BufferedRenderer("objects/manacrystal_full", gp.tilesize, gp.tilesize);
         image2 = BufferedRenderer("objects/manacrystal_blank", gp.tilesize, gp.tilesize);
+    }
+
+    @Override
+    public void updateimage() {
+        super.updateimage();
+        if (up1 == null && image == null && down1 == null) {
+            set();
+        }
     }
 }

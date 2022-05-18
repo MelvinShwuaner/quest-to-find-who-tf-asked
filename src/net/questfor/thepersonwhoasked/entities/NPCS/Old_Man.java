@@ -14,12 +14,13 @@ public class Old_Man extends LivingEntity {
         hitbox = new Rectangle(0, 0, 46, 46);
         getImageInstance();
         setDialogues();
-        EntityType = 1;
+        EntityType = 2;
         maxhealth = 15;
         defence = 3;
         health = maxhealth;
-
+        name = "Old man";
     }
+
     public void getImageInstance() {
         up1 = BufferedRenderer("NPCS/old man/oldman_up_1", gp.tilesize, gp.tilesize);
         up2 = BufferedRenderer("NPCS/old man/oldman_up_2", gp.tilesize, gp.tilesize);
@@ -30,32 +31,36 @@ public class Old_Man extends LivingEntity {
         left1 = BufferedRenderer("NPCS/old man/oldman_left_1", gp.tilesize, gp.tilesize);
         left2 = BufferedRenderer("NPCS/old man/oldman_left_2", gp.tilesize, gp.tilesize);
     }
+
     public void setAction() {
-        if (!Hostile){
-            actionLock++;
-        if (actionLock == 120) {
-            Random random = new Random();
-            int I = random.nextInt(100) + 1;
-            if (I <= 25) {
-                direction = "up";
+        if (!frozen){
+            if (!Hostile) {
+                actionLock++;
+                if (actionLock == 120) {
+                    Random random = new Random();
+                    int I = random.nextInt(100) + 1;
+                    if (I <= 25) {
+                        direction = "up";
+                    }
+                    if (I > 25 && I <= 50) {
+                        direction = "down";
+                    }
+                    if (I > 50 && I <= 75) {
+                        direction = "left";
+                    }
+                    if (I > 75) {
+                        direction = "right";
+                    }
+                    actionLock = 0;
+                }
+            } else if (goingup) {
+                goup();
+            } else {
+                Scared();
             }
-            if (I > 25 && I <= 50) {
-                direction = "down";
-            }
-            if (I > 50 && I <= 75) {
-                direction = "left";
-            }
-            if (I > 75) {
-                direction = "right";
-            }
-            actionLock = 0;
-        }
-    }else if(goingup){
-            goup();
-        }else{
-            Scared();
-        }
     }
+
+}
 
     public void goup() {
         actionLock++;

@@ -3,6 +3,8 @@ package net.questfor.thepersonwhoasked;
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.Mobs.green_slime;
+import net.questfor.thepersonwhoasked.entities.NPCS.Helper;
+import net.questfor.thepersonwhoasked.entities.NPCS.Mysterious_trader;
 import net.questfor.thepersonwhoasked.entities.NPCS.Old_Man;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.tile_entites.IT_tree;
@@ -12,7 +14,7 @@ import java.awt.image.BufferedImage;
 
 public class GlobalProperties {
     /*SETS THE LOCATION OF ENTITIES ON THERE WORLD*/
-    static MainGame gp;
+   public static MainGame gp;
 
     public void Render(MainGame gpp) {
         this.gp = gpp;
@@ -32,7 +34,6 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
         GlobalGameThreadConfigs.obj[mapID][0].worldz = 0;
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
-
             GlobalGameThreadConfigs.obj[mapID][1] = new OBJ_COIN_BRONZE(gp);
             GlobalGameThreadConfigs.obj[mapID][2] = new OBJkey(gp);
             GlobalGameThreadConfigs.obj[mapID][2].worldx = gp.tilesize * 25;
@@ -43,36 +44,16 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.obj[mapID][4] = new OBJ_IRON_AXE(gp);
             GlobalGameThreadConfigs.obj[mapID][4].worldx = gp.tilesize * 17;
             GlobalGameThreadConfigs.obj[mapID][4].worldy = gp.tilesize * 20;
-            GlobalGameThreadConfigs.obj[mapID][5] = new OBJ_IRON_SWORD(gp);
-            GlobalGameThreadConfigs.obj[mapID][5].worldx = gp.tilesize * 32;
-            GlobalGameThreadConfigs.obj[mapID][5].worldy = gp.tilesize * 21;
-            GlobalGameThreadConfigs.obj[mapID][i] = new OBJ_IRON_SWORD(gp);
-            GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 35;
-            GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 23;
-            i++;
-            GlobalGameThreadConfigs.obj[mapID][i] = new OBJ_IRON_SWORD(gp);
-            GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 30;
-            GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 23;
             i++;
             GlobalGameThreadConfigs.obj[mapID][i] = new OBJ_MANA_CRYSTAL(gp);
             GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 24;
             GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 23;
-            i++;
-            GlobalGameThreadConfigs.obj[mapID][i] = new OBJ_IRON_AXE(gp);
-            GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 25;
-            GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 23;
-            i++;
-            GlobalGameThreadConfigs.obj[mapID][i] = new OBJ_COIN_BRONZE(gp);
-            GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 26;
-            GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 23;
+        GlobalGameThreadConfigs.obj[mapID][i].set();
             i++;
             GlobalGameThreadConfigs.obj[mapID][i] = new OBJHeart(gp);
             GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 24;
             GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 21;
-            i++;
-            GlobalGameThreadConfigs.obj[mapID][i] = new OBJ_SHIELD_DIAMOND(gp);
-            GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 24;
-            GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 22;
+        GlobalGameThreadConfigs.obj[mapID][i].set();
             i++;
             GlobalGameThreadConfigs.obj[mapID][i] = new chest(gp);
             GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 21;
@@ -100,12 +81,9 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.obj[mapID][1].worldx = gp.tilesize * 11;
         GlobalGameThreadConfigs.obj[mapID][1].worldy = gp.tilesize * 8;
         GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJkey(gp));
-        GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJ_POTION_HEALTH_1(gp));
         GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJ_IRON_AXE(gp));
-        GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJ_POTION_HEALTH_1(gp));
         GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJ_BRICK_WALL(gp));
         GlobalGameThreadConfigs.obj[mapID][1].worldz = 0;
-        GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJ_POTION_HEALTH_1(gp));
 
     }
 
@@ -117,7 +95,7 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.NPCS[mapID][0].worldx = gp.tilesize * 21;
         GlobalGameThreadConfigs.NPCS[mapID][0].worldy = gp.tilesize * 21;
         GlobalGameThreadConfigs.NPCS[mapID][0].worldz = 0;
-        GlobalGameThreadConfigs.NPCS[mapID][1] = new Old_Man(gp);
+        GlobalGameThreadConfigs.NPCS[mapID][1] = new Helper(gp);
         GlobalGameThreadConfigs.NPCS[mapID][1].worldx = gp.tilesize * 22;
         GlobalGameThreadConfigs.NPCS[mapID][1].worldy = gp.tilesize * 22;
         GlobalGameThreadConfigs.NPCS[mapID][1].worldz = 0;
@@ -133,11 +111,20 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[1] = "Hello. its a nice day \n outside isnt it?";
         GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[2] = "You should go to the main square,\n were all going to be there";
         GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[3] = "OK bye!";
-        mapID = 1;
-            GlobalGameThreadConfigs.NPCS[mapID][0] = new Old_Man(gp);
-            GlobalGameThreadConfigs.NPCS[mapID][0].worldx = gp.tilesize * 11;
-            GlobalGameThreadConfigs.NPCS[mapID][0].worldy = gp.tilesize * 9;
+        GlobalGameThreadConfigs.NPCS[mapID][3].direction = "right";
+        GlobalGameThreadConfigs.NPCS[mapID][3].frozen = true; mapID = 1;
+            GlobalGameThreadConfigs.NPCS[mapID][0] = new Mysterious_trader(gp);
+            GlobalGameThreadConfigs.NPCS[mapID][0].worldx = gp.tilesize * 12;
+            GlobalGameThreadConfigs.NPCS[mapID][0].worldy = gp.tilesize * 7;
+            GlobalGameThreadConfigs.NPCS[mapID][0].speed = 0;
+            GlobalGameThreadConfigs.NPCS[mapID][0].frozen = true;
             GlobalGameThreadConfigs.NPCS[mapID][0].worldz = 0;
+        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_POTION_HEALTH_1(gp));
+        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_IRON_SHOVEL(gp));
+        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_IRON_AXE(gp));
+        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_SHIELD_DIAMOND(gp));
+        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
+
 
 
 }

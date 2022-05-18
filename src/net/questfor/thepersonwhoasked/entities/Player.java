@@ -3,6 +3,8 @@ import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
 import net.questfor.thepersonwhoasked.tile_entites.IT_Brickwall;
+import net.questfor.thepersonwhoasked.tile_entites.IT_tree;
+import net.questfor.thepersonwhoasked.tile_entites.hole;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
@@ -16,11 +18,9 @@ public class Player extends LivingEntity {
     public static boolean isup = false;
     public boolean attacking = false;
     public boolean hasattacked = false;
-    public boolean isattacking = false;
-
     public static int objindex;
     public static boolean hasweapon = true;
-    public int i = 0;
+    public int i = 0, ii = 0;
     public int d = 0;
     boolean hasfound = false;
     int counter = 0;
@@ -47,6 +47,7 @@ public class Player extends LivingEntity {
         try {
             //DEFAULT VALUES
             Ammo = 10;
+            name = "Player";
             inventorysize = 20;
             worldx = MainGame.tilesize * 12;
             worldy = MainGame.tilesize * 13;
@@ -92,14 +93,14 @@ public class Player extends LivingEntity {
 
     //IMAGES
     public void getImageInstance() {
-        up1 = BufferedRenderer("player/boy_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
-        up2 = BufferedRenderer("player/boy_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
-        down1 = BufferedRenderer("player/boy_down_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
-        down2 = BufferedRenderer("player/boy_down_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
-        right1 = BufferedRenderer("player/boy_right_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
-        right2 = BufferedRenderer("player/boy_right_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
-        left1 = BufferedRenderer("player/boy_left_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
-        left2 = BufferedRenderer("player/boy_left_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz));
+        up1 = BufferedRenderer("player/boy_up_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        up2 = BufferedRenderer("player/boy_up_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        down1 = BufferedRenderer("player/boy_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        down2 = BufferedRenderer("player/boy_down_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        right1 = BufferedRenderer("player/boy_right_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        right2 = BufferedRenderer("player/boy_right_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        left1 = BufferedRenderer("player/boy_left_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        left2 = BufferedRenderer("player/boy_left_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
     }
 
     public void getAttackInstance() {
@@ -146,27 +147,39 @@ public class Player extends LivingEntity {
             attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
         }
     }
+    public void updatehitbox() {
+        if (up1 != null) {
+            if (worldz < 0){
+                hitbox.width = up1.getWidth() - 16;
+            hitbox.height = up1.getHeight() - 16;
+        }
+        }
+    }
 
     public void update() {
         try {
-            if(up1 == null || attackup2 == null){
+
+            if (up1 == null || attackup2 == null) {
                 getImageInstance();
                 getAttackInstance();
             }
             if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Tentity) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.worldzobjectreturn(this) || MainGame.hregister.returntileworldz(this)) {
-                if (zcount > 51){
+                if (zcount > 51) {
                     if (!isup) {
+                        previousworldz = worldz;
                         worldz--;
                         getImageInstance();
+                        updatehitbox();
+                        getAttackInstance();
                     }
                 }
             }
-            if(hitboxe){
+            if (hitboxe) {
                 zcount = 0;
             }
             zcount++;
-            for(int i = 0; i < inventory.size(); i++){
-                if (inventory.get(i).down1 == null){
+            for (int i = 0; i < inventory.size(); i++) {
+                if (inventory.get(i).down1 == null) {
                     inventory.get(i).getImageInstance();
                 }
             }
@@ -191,17 +204,17 @@ public class Player extends LivingEntity {
                 if (currentshield.name.equals("BRIC WALL")) {
                     while (!hasfound) {
                         if (i < 100) {
-                                if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] == null) {
-                                    switch (direction) {
-                                        case "up" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) worldx / gp.tilesize, (int) ((worldy - 72) / gp.tilesize));
-                                        case "down" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) worldx / gp.tilesize, (int) ((worldy + 72) / gp.tilesize));
-                                        case "right" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) (worldx + 72) / gp.tilesize, (int) (worldy) / gp.tilesize);
-                                        case "left" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) (worldx - 72) / gp.tilesize, (int) (worldy) / gp.tilesize);
-                                    }
-                                    inventory.remove(currentshield);
-                                    i = 0;
-                                    hasfound = true;
+                            if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] == null) {
+                                switch (direction) {
+                                    case "up" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round( worldx / gp.tilesize), (int) Math.round((worldy-50) / gp.tilesize));
+                                    case "down" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round(worldx / gp.tilesize), (int) Math.round((worldy + 50) / gp.tilesize));
+                                    case "right" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round((worldx + 50) / gp.tilesize), (int) Math.round(worldy / gp.tilesize));
+                                    case "left" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round((worldx-50) / gp.tilesize), (int) Math.round(worldy / gp.tilesize));
                                 }
+                                inventory.remove(currentshield);
+                                i = 0;
+                                hasfound = true;
+                            }
                             i++;
 
                         } else {
@@ -237,7 +250,6 @@ public class Player extends LivingEntity {
                         direction = "left";
                     }
                 }
-                isattacking = false;
                 if (attacking == true) {
                     Attack();
                 } else if
@@ -284,21 +296,24 @@ public class Player extends LivingEntity {
             //ENTITY COLLISIONS
             int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
             interactNPC(npcindex);
-            if (npcindex != 999){
-                if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].dialogues[0].equals("Take a wish. will you?")) {
-                    speed = 0;
-                    screenY++;
-                    counter++;
-                    if(counter == 30){
-                        UI.addMessages("Thank you for Alpha testing My Game");
+            if (npcindex != 999) {
+                if ((GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].dialogues[0] != null)){
+                    if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].dialogues[0].equals("Take a wish. will you?")) {
+                        speed = 0;
+                        screenY++;
+                        counter++;
+                        if (counter == 30) {
+                            UI.addMessages("Thank you for Alpha testing My Game");
+                        }
+                        if (counter == 180) {
+                            UI.addMessages("Hope you enjoy the rest of your day, if you encountered bugs please \n go to https://discord.gg/tRva2AM2Gk and message @bruhkid2345");
+                        }
+                        if (counter == 360) {
+                            UI.addMessages("Bye :D !!!!");
+                        }
                     }
-                    if(counter == 180){
-                        UI.addMessages("Hope you enjoy the rest of your day, if you encountered bugs please \n go to https://discord.gg/tRva2AM2Gk and message @bruhkid2345");
-                    }
-                    if(counter == 360){
-                        UI.addMessages("Bye :D !!!!");
-                    }
-                }
+            }
+
         }
                 int Monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
                 attacked(Monsterindex);
@@ -369,6 +384,7 @@ public class Player extends LivingEntity {
         } catch (Exception e) {
             crash.main(e);
         }
+
     }
 
     public void Attack() {
@@ -440,41 +456,11 @@ public class Player extends LivingEntity {
     }
 
     public void attackEntity(int attackindex, int dmg) {
-        if (attackindex != 999) {
-            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible == false) {
-                gp.playsound(6);
-                int damage = dmg - GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].defence;
-                if (damage < 0) {
-                    damage = 0;
-                }
-                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health -= damage;
-                ParticleAttackManager( this, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex]);
-                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].Hostile = true;
-                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].HostileTime = 0;
-                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible = true;
-            }
-            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying == false) {
-                if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health < 0) {
-                    GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying = true;
-                    UI.addMessages("Killed " + GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].name);
-                    XP += GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].XP;
-                    levelUpAchiver();
-                }
-            }
-        }
+        super.attackEntity(attackindex, dmg);
     }
     public void levelUpAchiver() {
-        if (XP >= MaxXP) {
-            level++;
-            MaxXP = MaxXP * 2;
-            maxhealth += 2;
-            strength++;
-            dexterity++;
-            TrueAttackDamage = getAttackValues();
-            defence = getDefenceValues();
-            UI.addMessages("You have unlocked a new level! your now level " + level);
-            gp.playsound(8);
-        }
+       super.levelUpAchiver();
+        UI.addMessages("You have unlocked a new level! your now level " + level);
     }
 
     public void attacked(int monsterindex) {
@@ -508,7 +494,12 @@ public class Player extends LivingEntity {
                             inventory.add(GlobalGameThreadConfigs.obj[MainGame.currentmap][i]);
                             text = "Picked up " + GlobalGameThreadConfigs.obj[MainGame.currentmap][i].name;
                             GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = null;
-                            gp.playsound(1);
+                            if (gp != null){
+                                gp.playsound(1);
+                        }else{
+                                gp = new MainGame();
+                                gp.playsound(1);
+                            }
                         } else {
                             text = "Your inventory is full!";
                         }
@@ -529,14 +520,21 @@ public class Player extends LivingEntity {
                                 }
                             }
                         }
+                        case "furnace" -> {
+                            if (KeyHandler.enterpressed) {
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][i].open();
+                            }
+                        }
                         case "door" -> {
                             if (KeyHandler.enterpressed){
                                 KeyHandler.enterpressed = false;
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdooropen(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy);
+                                gp.playsound(3);
                         }
                     }
                     case "door open" -> {
                             if(KeyHandler.enterpressed){
+                                gp.playsound(3);
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdoor(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx/gp.tilesize, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy/gp.tilesize);
                             }
                     }
@@ -554,7 +552,6 @@ public class Player extends LivingEntity {
     public void GetItems() {
         inventory.add(currentweapon);
         inventory.add(currentshield);
-        inventory.add(new OBJ_BRICK_WALL(gp));
         inventory.add(new OBJ_IRON_SHOVEL(gp));
 
     }
@@ -564,30 +561,39 @@ public class Player extends LivingEntity {
             if (i != 999) {
                 if (KeyHandler.enterpressed) {
                     GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
-                    if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogues[GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogueIndex] != null){
+                    if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogues[GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogueIndex] != null) {
                         GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].speak();
-                        if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogues[0].equals("Take a wish. will you?")){
+                        if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogues[0].equals("Take a wish. will you?")) {
                             speed = 0;
                             screenY++;
                         }
-                }else{
+                    } else {
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
                     }
+                }
             }
-            } if (KeyHandler.attack == true) {
+            if (KeyHandler.attack == true) {
+                double y = worldy;
+                double x = worldx;
+                switch (direction) {
+                    case "down" -> y += 50;
+                    case "up" -> y -= 50;
+                    case "left" -> x -= 50;
+                    case "right" -> x += 50;
+                }
                 attacking = true;
-                if(currentweapon.name.equals("Iron shovel")){
-                    //int x; //to be used later 
-                    double y = worldy;
-                    switch (direction){
-                        case "down" -> y+=96;
+                if (currentweapon.name.equals("Iron shovel")) {
+                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)]) {
+                        case 39 -> {
+                            gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 0;
+                        }
+                        case 10 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 39;
+                        case 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 39;
                     }
-                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (worldx/gp.tilesize)][(int) (y/gp.tilesize)]){
-                        case 39 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) (worldx/gp.tilesize)][(int) (y/gp.tilesize)] = 2;
-                        case 10 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) (worldx/gp.tilesize)][(int) (y/gp.tilesize)] = 39;
-                        case 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) (worldx/gp.tilesize)][(int) (y/gp.tilesize)] = 39;
+                } else if (currentweapon.name.equals("WoodCutter's axe")) {
+                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (x / gp.tilesize)][(int) (y / gp.tilesize)]) {
+                        case 41 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 10;}
                     }
-                    KeyHandler.mine = false;
                 }
                 gp.playsound(7);
                 KeyHandler.attack = false;
@@ -603,11 +609,9 @@ public class Player extends LivingEntity {
             LivingEntity SelectedItem = inventory.get(itemIndex);
             if (code == 1){
                 currentweapon = SelectedItem;
-                TrueAttackDamage = getAttackValues();
                 getAttackInstance();
             }else if (code == 2) {
                 currentshield = SelectedItem;
-                defence = getDefenceValues();
             }
             if(code == 7) {
                 if (health < maxhealth) {
@@ -620,8 +624,9 @@ public class Player extends LivingEntity {
                 currentweapon.Use(this);
                 inventory.remove(currentweapon);
                 currentweapon = null;
-                TrueAttackDamage = getAttackValues();
             }
+            TrueAttackDamage = getAttackValues();
+            defence = getDefenceValues();
     }
 
 }
@@ -636,21 +641,28 @@ public class Player extends LivingEntity {
                 jumpaction++;
                 if(jumpaction < 25){
                     if(isup == true) {
-                        if(jumpaction == 1){
-                            worldz++;
-                        }
-                        jumpstate++;
-                        image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                        if (!gp.hregister.checkWALL(this)) {
+                        if (jumpaction <= 8) {
+                                worldz++;
+                            }
+                            jumpstate++;
+                                image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                            }
                     }
                 }else{
                     isup = false;
                     jumpstate--;
-                    image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                    try {
+                        image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                    }catch (Exception e){
+                       System.out.println("Catched null pointer exeption");
+                    }
                     if(jumpstate < 0) {
                         jumpaction = 0;
                         KeyHandler.jump = false;
                         getAttackInstance();
                         getImageInstance();
+                        updatehitbox();
                     }
 
                 }
@@ -671,9 +683,8 @@ public class Player extends LivingEntity {
                 if(invincible == false){getImageInstance(); getAttackInstance();isred = 1;}
             }
             g2.drawImage(image, tempscreenx, tempscreeny, null);
-            //g2.setColor(new Color(255, 232, 0, 220));
-            //GlobalGameThreadConfigs.g2.fillRect(tempscreenx-24, tempscreeny-24, gp.tilesize*2, gp.tilesize*2);
-
+            if(KeyHandler.checkFPS)
+              g2.drawRect((int) (hitbox.x), (int) (hitbox.y), hitbox.width, hitbox.height);
         }catch(Exception e){
             e.printStackTrace();
         }

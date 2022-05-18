@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
+import com.sun.jdi.InconsistentDebugInfoException;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 //MANAGES HITBOX'S AND COLLISIONS
 public class hitboxregister {
@@ -10,6 +11,8 @@ public class hitboxregister {
     }
 
     public void checkTile(LivingEntity entity) {
+        int knockback = 1;
+        boolean hasfinushed = false;
         //checks collision between entity and world
         try {
             int entityleftworldx = (int) (entity.worldx + entity.hitbox.x);
@@ -30,7 +33,7 @@ public class hitboxregister {
                     tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow];
                     if (MainGame.tilemanager.tile[tileNUM1].collision || MainGame.tilemanager.tile[tileNUM2].collision) {
                         if (MainGame.tilemanager.tile[tileNUM1].canjumpover || MainGame.tilemanager.tile[tileNUM2].canjumpover) {
-                            if (entity.worldz <= MainGame.tilemanager.tile[tileNUM1].worldz || entity.worldz <= MainGame.tilemanager.tile[tileNUM2].worldz) {
+                            if ((entity.worldz >= MainGame.tilemanager.tile[tileNUM1].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM1].worldz)|| (entity.worldz >= MainGame.tilemanager.tile[tileNUM2].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM2].worldz)) {
                                 entity.hitboxe = true;
                             }
                         } else {
@@ -40,7 +43,7 @@ public class hitboxregister {
                     } else if (!entity.hitboxe) {
                         entity.hascolided = false;
                     }
-                    if(MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz || MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz){
+                    if((MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz && tileNUM1 != 40) || (MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz && tileNUM2 != 40)){
                         entity.hitboxe = true;
                     }
                     break;
@@ -51,7 +54,7 @@ public class hitboxregister {
                     tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow];
                     if (MainGame.tilemanager.tile[tileNUM1].collision || MainGame.tilemanager.tile[tileNUM2].collision) {
                         if (MainGame.tilemanager.tile[tileNUM1].canjumpover || MainGame.tilemanager.tile[tileNUM2].canjumpover) {
-                            if (entity.worldz <= MainGame.tilemanager.tile[tileNUM1].worldz || entity.worldz <= MainGame.tilemanager.tile[tileNUM2].worldz) {
+                            if ((entity.worldz >= MainGame.tilemanager.tile[tileNUM1].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM1].worldz)|| (entity.worldz >= MainGame.tilemanager.tile[tileNUM2].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM2].worldz)) {
                                 entity.hitboxe = true;
                             }
                         } else {
@@ -61,7 +64,7 @@ public class hitboxregister {
                     } else if (!entity.hitboxe) {
                         entity.hascolided = false;
                     }
-                    if(MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz || MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz){
+                    if((MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz && tileNUM1 != 40) || (MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz && tileNUM2 != 40)){
                         entity.hitboxe = true;
                     }
                     break;
@@ -72,7 +75,7 @@ public class hitboxregister {
                     tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow];
                     if (MainGame.tilemanager.tile[tileNUM1].collision || MainGame.tilemanager.tile[tileNUM2].collision) {
                         if (MainGame.tilemanager.tile[tileNUM1].canjumpover || MainGame.tilemanager.tile[tileNUM2].canjumpover) {
-                            if (entity.worldz <= MainGame.tilemanager.tile[tileNUM1].worldz || entity.worldz <= MainGame.tilemanager.tile[tileNUM2].worldz) {
+                            if ((entity.worldz >= MainGame.tilemanager.tile[tileNUM1].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM1].worldz)|| (entity.worldz >= MainGame.tilemanager.tile[tileNUM2].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM2].worldz)) {
                                 entity.hitboxe = true;
                             }
                         } else {
@@ -82,7 +85,7 @@ public class hitboxregister {
                     } else if (!entity.hitboxe) {
                         entity.hascolided = false;
                     }
-                    if(MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz || MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz){
+                    if((MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz && tileNUM1 != 40) || (MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz && tileNUM2 != 40)){
                         entity.hitboxe = true;
                     }
                     break;
@@ -93,7 +96,7 @@ public class hitboxregister {
                     tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow];
                     if (MainGame.tilemanager.tile[tileNUM1].collision || MainGame.tilemanager.tile[tileNUM2].collision) {
                         if (MainGame.tilemanager.tile[tileNUM1].canjumpover || MainGame.tilemanager.tile[tileNUM2].canjumpover) {
-                            if (entity.worldz <= MainGame.tilemanager.tile[tileNUM1].worldz || entity.worldz <= MainGame.tilemanager.tile[tileNUM2].worldz) {
+                            if ((entity.worldz >= MainGame.tilemanager.tile[tileNUM1].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM1].worldz)|| (entity.worldz >= MainGame.tilemanager.tile[tileNUM2].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM2].worldz)) {
                                 entity.hitboxe = true;
                             }
                         } else {
@@ -103,13 +106,37 @@ public class hitboxregister {
                     } else if (!entity.hitboxe) {
                         entity.hascolided = false;
                     }
-                    if(MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz || MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz){
+                    if((MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz && tileNUM1 != 40) || (MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz && tileNUM2 != 40)){
                         entity.hitboxe = true;
                     }
                     break;
             }
         } catch (Exception e) {
-            crash.main(e);
+            if (knockback <= 2){
+                switch (entity.direction) {
+                    case "up" -> entity.worldy = entity.worldy + knockback;
+                    case "down" -> entity.worldy = entity.worldy - knockback;
+                    case "right" -> entity.worldx = entity.worldx - knockback;
+                    case "left" -> entity.worldx = entity.worldx + knockback;
+                }
+        }
+            while (!hasfinushed){
+                knockback++;
+                if(knockback > 2){
+                    if(!entity.hitboxe){
+                        switch (entity.direction) {
+                            case "up" -> entity.worldy = entity.worldy + knockback;
+                            case "down" -> entity.worldy = entity.worldy - knockback;
+                            case "right" -> entity.worldx = entity.worldx - knockback;
+                            case "left" -> entity.worldx = entity.worldx + knockback;
+                        }
+                    }
+                }
+                if(knockback >= 7){
+                    hasfinushed = true;
+                }
+            }
+
         }
     }
 
@@ -318,60 +345,49 @@ public class hitboxregister {
     public boolean returntileworldz(LivingEntity entity) {
         //checks collision between entity and world
         boolean index = false;
+        boolean hasfinushed = false;
+        int knockback = 1;
 try {
-    int entityleftworldx = (int) (entity.worldx + entity.hitbox.x);
-    int entityrightworldx = (int) (entity.worldx + entity.hitbox.x + entity.hitbox.width);
-    int entitytopworldy = (int) (entity.worldy + entity.hitbox.y);
-    int entitybottomworldy = (int) (entity.worldy + entity.hitbox.y + entity.hitbox.height);
-    int entityleftcol = entityleftworldx / MainGame.tilesize;
-    int entityrightcol = entityrightworldx / MainGame.tilesize;
-    int entitytoprow = entitytopworldy / MainGame.tilesize;
-    int entitybottomrow = entitybottomworldy / MainGame.tilesize;
-    int var10000;
-    int tileNUM1, tileNUM2;
-
-    switch (entity.direction) {
-        case "up":
-            var10000 = (int) (entitytopworldy - entity.speed);
-            entitytoprow = var10000 / MainGame.tilesize;
-            tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow];
-            tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow];
-            if (entity.worldz > MainGame.tilemanager.tile[tileNUM1].worldz +1  || entity.worldz > MainGame.tilemanager.tile[tileNUM2].worldz +1) {
-                index = true;
-            }
-            break;
-        case "down":
-            var10000 = (int) (entitybottomworldy + entity.speed);
-            entitybottomrow = var10000 / MainGame.tilesize;
-            tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow];
-            tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow];
-            if (entity.worldz > MainGame.tilemanager.tile[tileNUM1].worldz + 1 || entity.worldz > MainGame.tilemanager.tile[tileNUM2].worldz + 1) {
-                index = true;
-            }
-            break;
-        case "left":
-            var10000 = (int) (entityleftworldx - entity.speed);
-            entityleftcol = var10000 / MainGame.tilesize;
-            tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow];
-            tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow];
-            if (entity.worldz > MainGame.tilemanager.tile[tileNUM1].worldz + 1 || entity.worldz > MainGame.tilemanager.tile[tileNUM2].worldz + 1) {
-                index = true;
-            }
-            break;
-        case "right":
-            var10000 = (int) (entityrightworldx + entity.speed);
-            entityrightcol = var10000 / MainGame.tilesize;
-            tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow];
-            tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow];
-            if (entity.worldz > MainGame.tilemanager.tile[tileNUM1].worldz + 1 || entity.worldz > MainGame.tilemanager.tile[tileNUM2].worldz + 1) {
-                index = true;
-            }
-            break;
+    int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)];
+    if (entity.worldz > MainGame.tilemanager.tile[TileNum1].worldz +1){
+        index = true;
     }
-}catch (Exception e){
-    crash.main(e);
-}
+}catch (Exception e) {
 
+    if (knockback <= 2){
+        switch (entity.direction) {
+            case "up" -> entity.worldy = entity.worldy + knockback;
+            case "down" -> entity.worldy = entity.worldy - knockback;
+            case "right" -> entity.worldx = entity.worldx - knockback;
+            case "left" -> entity.worldx = entity.worldx + knockback;
+        }
+    }
+    while (!hasfinushed){
+        knockback++;
+        if(knockback > 2){
+            if(!entity.hitboxe){
+                switch (entity.direction) {
+                    case "up" -> entity.worldy = entity.worldy + knockback;
+                    case "down" -> entity.worldy = entity.worldy - knockback;
+                    case "right" -> entity.worldx = entity.worldx - knockback;
+                    case "left" -> entity.worldx = entity.worldx + knockback;
+                }
+            }
+        }
+        if(knockback >= 7){
+            hasfinushed = true;
+        }
+    }
+
+}
+        return index;
+    }
+    public boolean checkWALL(LivingEntity entity){
+        boolean index = false;
+        int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)];
+        if(TileNum1 == 40 && entity.worldz < MainGame.tilemanager.tile[TileNum1].worldz-16){
+            index = true;
+        }
         return index;
     }
 }

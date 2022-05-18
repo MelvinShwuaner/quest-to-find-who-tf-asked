@@ -18,13 +18,14 @@ public class GlobalGameThreadConfigs {
     public  static int dialogueState = 3;
     public  static int optionsstate = 4;
     public static int GameOverState = 5;
+    public static int transitionstate = 6;
+    public static int tradestate = 7;
     public static boolean inchest = false;
 
-    public static LivingEntity Monsters[][] = new LivingEntity[MainGame.maxmap][20];
-    public static LivingEntity NPCS[][] = new LivingEntity[MainGame.maxmap][10];
-    public static TileEntity Tentity[][] = new TileEntity[MainGame.maxmap][100];
-    public static LivingEntity obj[][] = new LivingEntity[MainGame.maxmap][30];
-    public static int worldID = 3;
+    public static LivingEntity[][] Monsters = new LivingEntity[MainGame.maxmap][20];
+    public static LivingEntity[][] NPCS = new LivingEntity[MainGame.maxmap][10];
+    public static TileEntity[][] Tentity = new TileEntity[MainGame.maxmap][100];
+    public static LivingEntity[][] obj = new LivingEntity[MainGame.maxmap][30];
     public static ArrayList<LivingEntity> entitylist = new ArrayList<>();
     public static ArrayList<LivingEntity> particleList = new ArrayList<>();
     public static ArrayList<LivingEntity> projectilelist = new ArrayList<>();

@@ -1,7 +1,5 @@
 package net.questfor.thepersonwhoasked.Maingam;
-
 import net.questfor.thepersonwhoasked.entities.Player;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
@@ -17,7 +15,7 @@ public class KeyHandler implements KeyListener {
     //movement keys
     public static boolean upPressed, downPressed, rightPressed, leftPressed;
     //general keys
-    public static boolean pickup, attack, mine, build, jump, moveitem, moving;
+    public static boolean pickup, attack, jump, moveitem, moving;
     public static boolean use = false;
     //advanced keys
     public static boolean enterpressed;
@@ -38,9 +36,7 @@ public class KeyHandler implements KeyListener {
         try {
             //MANAGES KEY BINDINGS WHEN YOU PRESS THEM//
             int code = e.getKeyCode();
-            if(code == KeyEvent.VK_R){
-               mine = true;
-            }
+
             if(GlobalGameThreadConfigs.isinTital) {
                 if (code == KeyEvent.VK_UP) {
                     UI.commandnum--;
@@ -56,8 +52,8 @@ public class KeyHandler implements KeyListener {
                 }
                 if (code == OPEN) {
                     if (UI.commandnum == 0) {
-                        MainGame.player.worldx = MainGame.tilesize * 12;
-                        MainGame.player.worldy = MainGame.tilesize * 9;
+                        gp.setupOBJ();
+                        gp.player = new Player(gp.keyM, gp);
                         GlobalGameThreadConfigs.isinTital = false;
 
                     }
@@ -289,12 +285,103 @@ public class KeyHandler implements KeyListener {
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
                     }
                 }
+                if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.tradestate) {
+                    tradestate(code);
+                }
             }
         }catch(Exception er){
             crash.main(er);
         }
     }
 
+    public void tradestate(int code) {
+        if (code == KeyEvent.VK_ESCAPE) {
+            UI.commandnum = 0;
+            switch (UI.tradestate) {
+                case 0:
+                    GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                    break;
+                case 1, 2:
+                    UI.tradestate = 0;
+                    break;
+            }
+        }
+        if (UI.tradestate == 0) {
+            if (code == KeyEvent.VK_UP) {
+                UI.commandnum--;
+                if (UI.commandnum < 0) {
+                    UI.commandnum = 3;
+                }
+                gp.playsound(9);
+            }
+            if (code == KeyEvent.VK_DOWN) {
+                UI.commandnum++;
+                if (UI.commandnum > 2) {
+                    UI.commandnum = 0;
+                }
+                gp.playsound(9);
+            }
+
+        } else if (UI.tradestate == 1) {
+                if (code == KeyEvent.VK_UP) {
+                    if (UI.npcslotrow != 0) {
+                        UI.npcslotrow--;
+                    }
+                    gp.playsound(9);
+                }
+                if (code == KeyEvent.VK_DOWN) {
+                    if (UI.npcslotrow != 3) {
+                        UI.npcslotrow++;
+                    }
+                    gp.playsound(9);
+                }
+                if (code == KeyEvent.VK_RIGHT) {
+                    if (UI.npcslotcol != 4) {
+                        UI.npcslotcol++;
+                    } else {
+                        UI.npcslotcol = 0;
+                    }
+                    gp.playsound(9);
+                }
+                if (code == KeyEvent.VK_LEFT) {
+                    if (UI.npcslotcol != 0) {
+                        UI.npcslotcol--;
+                    } else {
+                        UI.npcslotcol = 4;
+                    }
+                    gp.playsound(9);
+                }
+            }else{
+            if (code == KeyEvent.VK_UP) {
+                if (UI.slotRow != 0) {
+                    UI.slotRow--;
+                }
+                gp.playsound(9);
+            }
+            if (code == KeyEvent.VK_DOWN) {
+                if (UI.slotRow != 3) {
+                    UI.slotRow++;
+                }
+                gp.playsound(9);
+            }
+            if (code == KeyEvent.VK_RIGHT) {
+                if (UI.SlotCol != 4) {
+                    UI.SlotCol++;
+                } else {
+                    UI.SlotCol = 0;
+                }
+                gp.playsound(9);
+            }
+            if (code == KeyEvent.VK_LEFT) {
+                if (UI.SlotCol != 0) {
+                    UI.SlotCol--;
+                } else {
+                    UI.SlotCol = 4;
+                }
+                gp.playsound(9);
+            }
+        }
+    }
     @Override
     public void keyReleased(KeyEvent e) {
         //MANAGES KEY BINDINGS WHEN YOU RELEASE THEM//
@@ -302,9 +389,6 @@ public class KeyHandler implements KeyListener {
             int code = e.getKeyCode();
             if(code == primepowerc){
                 primepowera = false;
-            }
-            if(code == KeyEvent.VK_R){
-                mine = false;
             }
             if (code == UP) {
                 upPressed = false;

@@ -1,8 +1,11 @@
 package net.questfor.thepersonwhoasked;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
+import net.questfor.thepersonwhoasked.Maingam.GlobalSaveManager;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.Maingam.crash;
 
 import javax.swing.*;
+import java.io.*;
 /*
 just like its name, all classes and functions are built around this class.
 it creates a new window to store all data inside
@@ -11,8 +14,22 @@ it creates a new window to store all data inside
 public abstract class Main{
     public static MainGame mainGame = new MainGame();
     public static JFrame window;
+    public static PrintStream old = System.out;
+    public static ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    public static PrintStream ps = new PrintStream(baos);
+    public static BufferedWriter concole;
+
+    static {
+        try {
+            concole = new BufferedWriter(new FileWriter("latestcrashreport.txt"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ImageIcon urmom = new ImageIcon(Main.class.getClassLoader().getResource("shipgame/logo.png"));
     public static void main(String[] args) {
+        //System.setOut(ps);
         createnewwindow();
     }
     public static void createnewwindow(){
@@ -35,6 +52,11 @@ public abstract class Main{
             window.setVisible(true);
             MainGame.setupOBJ();
             mainGame.startgamethread();
+            mainGame.MultiRender.setScreenRenderer();
+            GlobalSaveManager.loadconfigs();
+            mainGame.playmusic(0);
+            GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+            System.out.println("Successfully created new window");
         }catch(Exception e){
             crash.main(e);
         }
