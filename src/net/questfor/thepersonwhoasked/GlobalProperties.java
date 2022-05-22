@@ -75,6 +75,10 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 23;
             i++;
             GlobalGameThreadConfigs.obj[mapID][i] = new OBJdoor(gp, 12, 12);
+            i++;
+        GlobalGameThreadConfigs.obj[mapID][i] = new furnace(gp);
+        GlobalGameThreadConfigs.obj[mapID][i].worldx = 13*gp.tilesize;
+        GlobalGameThreadConfigs.obj[mapID][i].worldy = 8*gp.tilesize;
             mapID = 1;
             GlobalGameThreadConfigs.obj[mapID][0] = new OBJdoor(gp, 12, 13);
         GlobalGameThreadConfigs.obj[mapID][1] = new chest(gp);
@@ -120,10 +124,12 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.NPCS[mapID][0].frozen = true;
             GlobalGameThreadConfigs.NPCS[mapID][0].worldz = 0;
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_POTION_HEALTH_1(gp));
+        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.get(0).stacksize = 4;
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_IRON_SHOVEL(gp));
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_IRON_AXE(gp));
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_SHIELD_DIAMOND(gp));
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
+        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.get(4).stacksize = 30;
 
 
 

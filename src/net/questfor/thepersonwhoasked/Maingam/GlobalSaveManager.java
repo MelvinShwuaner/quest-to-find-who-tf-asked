@@ -8,8 +8,7 @@ public class GlobalSaveManager {
         try {
             String filepath = "configs.amogusdababymilkfilestoragethingyidk";
             FileOutputStream fos = new FileOutputStream(filepath);
-            BufferedOutputStream bos = new BufferedOutputStream(fos);
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
             ConfigStorer configStorer = new ConfigStorer();
             configStorer.downkey = KeyHandler.DOWN;
             configStorer.upkey = KeyHandler.UP;
@@ -35,8 +34,7 @@ public class GlobalSaveManager {
         try {
             String filepath = "configs.amogusdababymilkfilestoragethingyidk";
             FileInputStream fis = new FileInputStream(filepath);
-            BufferedInputStream bis = new BufferedInputStream(fis);
-            ObjectInputStream ois = new ObjectInputStream(bis);
+            ObjectInputStream ois = new ObjectInputStream(fis);
             ConfigStorer configStorer = (ConfigStorer) ois.readObject();
             ois.close();
             KeyHandler.OPEN = configStorer.openkey;
@@ -100,6 +98,17 @@ public class GlobalSaveManager {
                 }
             }
         }
+            for(int a = 0; a < GlobalGameThreadConfigs.NPCS.length; a++){
+                for (int i = 0; i < GlobalGameThreadConfigs.NPCS[a].length; i++) {
+                    if (GlobalGameThreadConfigs.NPCS[a][i] != null) {
+                        for (int d = 0; d < GlobalGameThreadConfigs.NPCS[a][i].inventory.size(); d++) {
+                            if (GlobalGameThreadConfigs.NPCS[a][i].inventory.get(d) != null) {
+                                GlobalGameThreadConfigs.NPCS[a][i].inventory.get(d).updateimage();
+                            }
+                        }
+                    }
+                }
+            }
         } catch (Exception e){
                 crash.main(e);
             }

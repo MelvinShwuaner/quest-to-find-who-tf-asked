@@ -23,6 +23,7 @@ public class OBJ_IRON_AXE extends LivingEntity {
         Type = Type_axe;
         description = "Any WoodCutter would adore a sturdy \n rusty iron axe?";
         getImageInstance();
+        fuel = true;
     }
 
     @Override

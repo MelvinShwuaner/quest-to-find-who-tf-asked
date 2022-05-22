@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class GlobalGameThreadConfigs {
+public class GlobalGameThreadConfigs extends Data {
     //sets default configs that configure the main game
     public static Thread gameThread = null;
     public static int GameState;
@@ -20,6 +20,7 @@ public class GlobalGameThreadConfigs {
     public static int GameOverState = 5;
     public static int transitionstate = 6;
     public static int tradestate = 7;
+    public static int UIstate = 8;
     public static boolean inchest = false;
 
     public static LivingEntity[][] Monsters = new LivingEntity[MainGame.maxmap][20];

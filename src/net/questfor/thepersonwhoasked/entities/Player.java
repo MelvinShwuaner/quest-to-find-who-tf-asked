@@ -3,14 +3,12 @@ import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
 import net.questfor.thepersonwhoasked.tile_entites.IT_Brickwall;
-import net.questfor.thepersonwhoasked.tile_entites.IT_tree;
-import net.questfor.thepersonwhoasked.tile_entites.hole;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 //basic player
 public class Player extends LivingEntity {
-    transient KeyHandler keyHandler;
+     KeyHandler keyHandler;
     public int screenX;
     public int screenY;
     public int jumpstate = 0;
@@ -64,7 +62,7 @@ public class Player extends LivingEntity {
             dexterity = 1;
             XP = 0;
             MaxXP = 4;
-            bobux = 0;
+            bobux = 50;
             currentweapon = new OBJ_IRON_SWORD(gp);
             currentshield = new OBJ_SHIELD_WOOD(gp);
             defence = getDefenceValues();
@@ -78,7 +76,11 @@ public class Player extends LivingEntity {
     }
 
     public int getDefenceValues() {
-        return defence = dexterity * currentshield.defenceValue;
+        if(currentshield != null) {
+            return defence = dexterity * currentshield.defenceValue;
+        }else{
+            return defence = (int) (dexterity * 1.5);
+        }
     }
 
     public int getAttackValues() {
@@ -158,7 +160,6 @@ public class Player extends LivingEntity {
 
     public void update() {
         try {
-
             if (up1 == null || attackup2 == null) {
                 getImageInstance();
                 getAttackInstance();
@@ -201,27 +202,31 @@ public class Player extends LivingEntity {
                         }
                     }
                 }
-                if (currentshield.name.equals("BRIC WALL")) {
-                    while (!hasfound) {
-                        if (i < 100) {
-                            if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] == null) {
-                                switch (direction) {
-                                    case "up" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round( worldx / gp.tilesize), (int) Math.round((worldy-50) / gp.tilesize));
-                                    case "down" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round(worldx / gp.tilesize), (int) Math.round((worldy + 50) / gp.tilesize));
-                                    case "right" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round((worldx + 50) / gp.tilesize), (int) Math.round(worldy / gp.tilesize));
-                                    case "left" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round((worldx-50) / gp.tilesize), (int) Math.round(worldy / gp.tilesize));
+                if (currentshield != null){
+                    if (currentshield.name.equals("BRIC WALL")) {
+                        while (!hasfound) {
+                            if (i < 100) {
+                                if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] == null) {
+                                    switch (direction) {
+                                        case "up" ->
+                                                GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round(worldx / gp.tilesize), (int) Math.round((worldy - 50) / gp.tilesize));
+                                        case "down" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round(worldx / gp.tilesize), (int) Math.round((worldy + 50) / gp.tilesize));
+                                        case "right" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round((worldx + 50) / gp.tilesize), (int) Math.round(worldy / gp.tilesize));
+                                        case "left" ->
+                                                GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round((worldx - 50) / gp.tilesize), (int) Math.round(worldy / gp.tilesize));
+                                    }
+                                    inventory.remove(currentshield);
+                                    i = 0;
+                                    hasfound = true;
                                 }
-                                inventory.remove(currentshield);
-                                i = 0;
-                                hasfound = true;
-                            }
-                            i++;
+                                i++;
 
-                        } else {
-                            i = 0;
+                            } else {
+                                i = 0;
+                            }
                         }
                     }
-                }
+            }
             }
             if (KeyHandler.primepowera && projectile.alive == false && primepowercool == 30 && projectile.haveresource(this)) {
                 projectile.Set((int) worldx, (int) worldy, direction, true, this);
@@ -517,6 +522,13 @@ public class Player extends LivingEntity {
                                 } else {
                                     GlobalGameThreadConfigs.inchest = false;
                                     GlobalGameThreadConfigs.CharacterStats = false;
+                                    UI.slotstate = false;
+                                    if(UI.merger != null){
+                                        UI.merger.first = false;
+                                    }
+                                    if(UI.mergerr != null){
+                                        UI.mergerr = null;
+                                    }
                                 }
                             }
                         }

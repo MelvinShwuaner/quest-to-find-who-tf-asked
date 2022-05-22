@@ -21,6 +21,17 @@ public class furnace extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
+        maxstacksize = 16;
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        maxcool = 100;
     }
 
     @Override
@@ -28,7 +39,9 @@ public class furnace extends LivingEntity {
         down1 = BufferedRenderer("objects/chest", gp.tilesize, gp.tilesize);
     }
     public void open(){
-        GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.tradestate;
+        GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.UIstate;
         UI.npc = this;
+        UI.currentUI = "Furnace";
+
     }
 }

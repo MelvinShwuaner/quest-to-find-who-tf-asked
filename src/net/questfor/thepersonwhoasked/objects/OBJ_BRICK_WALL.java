@@ -21,6 +21,9 @@ public class OBJ_BRICK_WALL extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
+        maxstacksize = 64;
+        fuel = true;
+        health = 10;
     }
 
     @Override

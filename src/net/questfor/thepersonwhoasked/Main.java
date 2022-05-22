@@ -14,7 +14,6 @@ it creates a new window to store all data inside
 public abstract class Main{
     public static MainGame mainGame = new MainGame();
     public static JFrame window;
-    public static PrintStream old = System.out;
     public static ByteArrayOutputStream baos = new ByteArrayOutputStream();
     public static PrintStream ps = new PrintStream(baos);
     public static BufferedWriter concole;

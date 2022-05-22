@@ -19,6 +19,7 @@ public class chest extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
+        maxstacksize = 16;
     }
 
     @Override

@@ -82,15 +82,19 @@ public class LivingEntity extends Data {
     public int TrueAttackDamage;
     /**OBJECT DATA**/
     public int AttackValue = 1;
+    public int stacksize = 1;
+    public int maxstacksize = 1;
     public int defenceValue = 1;
     public int Value = 1;
+    public boolean first, secound;
     public int inventorysize = 20;
     public String description = "";
     public int Type = 0;
     public int frames = 2;
     public int Type_sword = 1, Type_constumable = 2, Type_tool = 3, Type_object = 4, Type_armor = 5, Type_shield = 6, Type_projectile = 7, Type_Current = 8, Type_axe = 9;
-    public int SLOTTYPE; // 1 for mainhand, 2 for lefthand, 3 for helmet, 4 for chestplate, 5 for leggings, 6 for boots
     public int UseCost;
+    //SMELTING
+    public boolean fuel; public boolean smeltable; public LivingEntity Outcome; public boolean smelting = false; public int cool = 0; public int maxcool = 50; public int colspeed = 1; public int hasfinushedcol = 0;
 
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
@@ -98,6 +102,14 @@ public class LivingEntity extends Data {
     }
     public void setAction(){}
     public void getImageInstance(){}
+    public void increasecool(){
+        cool += colspeed;
+        if(cool == maxcool){
+            hasfinushedcol = 1;
+            System.out.println("deez nuts");
+        }
+
+    }
 
     public void getAttackInstance(){}
     public void Angry(){}
@@ -124,7 +136,6 @@ public class LivingEntity extends Data {
     }else{
             dying = true;
         }
-
         /*AI for Monsters And NPCS*/
         setAction();
         hitboxe = false;

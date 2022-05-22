@@ -18,6 +18,9 @@ public class OBJkey extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
+        maxstacksize = 32;
+        smeltable = true;
+        Outcome = new OBJ_POTION_HEALTH_1(gp);
     }
 
     @Override

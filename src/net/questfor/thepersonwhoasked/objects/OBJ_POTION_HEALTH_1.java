@@ -21,6 +21,7 @@ public class OBJ_POTION_HEALTH_1 extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
+        maxstacksize = 16;
     }
     public void Use(LivingEntity sourceentity){
             sourceentity.health += Value;
