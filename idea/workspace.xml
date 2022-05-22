@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="lbozo:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0de4ee6d-37c9-4a19-bc18-96bb3c760cc3" name="Changes" comment="first version of my game&#10;-has a npc, a title screen, and some bad gameplay" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin File" />
+        <option value="Kotlin Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <branch-grouping />
+    <option name="RECENT_GIT_ROOT_PATH" value="$USER_HOME$/Documents" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.base/java/lang/NullPointerException.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.base/java/lang/Runnable.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.desktop/javax/imageio/ImageIO.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$USER_HOME$/.jdks/openjdk-17.0.2/lib/src.zip!/java.desktop/javax/swing/plaf/basic/BasicButtonListener.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/Maingam/MainGame.kt" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/Maingam/hitboxregister.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/SHIP/class92873_02.java" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/entities/Player.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/tile/Tilemanager.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="27qBIScck2wWJJzh4j79o6MCyTW" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;openjdk-17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/bayan/Downloads/applications/questforthe&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\entities\NPCS\Mysterious Trader" />
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\entities\NPCS" />
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\entities\objects" />
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\tiles" />
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\maps" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\entities\TileEntity" />
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\entities\player\Attack" />
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\entities\objects" />
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\entities\Monsters\greenslime\tier1" />
+      <recent name="C:\Users\bayan\Downloads\applications\questforthe\res\Sound" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="net.questfor.thepersonwhoasked.tile" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="net.questfor.thepersonwhoasked.objects" />
+      <recent name="net.questfor.thepersonwhoasked.tile_entites" />
+      <recent name="net.questfor.thepersonwhoasked.entities.TITLEentities" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="net.questfor.thepersonwhoasked.Main" />
+      <module name="lbozo" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="lbozo.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/lbozo_jar/lbozo.jar" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="QuestForThe" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="QuestForThe" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JAR Application.lbozo.jar" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0de4ee6d-37c9-4a19-bc18-96bb3c760cc3" name="Changes" comment="" />
+      <created>1650037669430</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1650037669430</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first version of my game&#10;-has a npc, a title screen, and some bad gameplay" />
+    <option name="LAST_COMMIT_MESSAGE" value="first version of my game&#10;-has a npc, a title screen, and some bad gameplay" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ArrayIndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/entities/NPCS/Old_Man.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/Maingam/UI.java</url>
+          <line>95</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/Maingam/UI.java</url>
+          <line>436</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/entities/Player.java</url>
+          <line>576</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/entities/Player.java</url>
+          <line>377</line>
+          <properties class="net.questfor.thepersonwhoasked.entities.Player">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/entities/Player.java</url>
+          <line>361</line>
+          <properties class="net.questfor.thepersonwhoasked.entities.Player">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/Maingam/UI.java</url>
+          <line>49</line>
+          <properties class="net.questfor.thepersonwhoasked.Maingam.UI">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/entities/Player.java</url>
+          <line>89</line>
+          <properties class="net.questfor.thepersonwhoasked.entities.Player">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/entities/Player.java</url>
+          <line>70</line>
+          <properties class="net.questfor.thepersonwhoasked.entities.Player">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/entities/LivingEntity.java</url>
+          <line>246</line>
+          <properties class="net.questfor.thepersonwhoasked.entities.LivingEntity">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="kotlin-field">
+          <url>file://$PROJECT_DIR$/src/net/questfor/thepersonwhoasked/Maingam/MainGame.kt</url>
+          <line>184</line>
+          <properties myFieldName="tilesize" myClassName="net.questfor.thepersonwhoasked.Maingam.MainGame.Companion" />
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/QuestForThe$Main.ic" NAME="Main Coverage Results" MODIFIED="1651795418965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+</project>
