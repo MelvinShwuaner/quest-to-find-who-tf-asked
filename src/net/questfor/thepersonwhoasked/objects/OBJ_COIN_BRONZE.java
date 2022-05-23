@@ -32,4 +32,6 @@ public class OBJ_COIN_BRONZE extends LivingEntity {
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/coin_bronze", gp.tilesize, gp.tilesize);
     }
+    @Override
+    public void update() {}
 }

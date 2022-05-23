@@ -1,5 +1,7 @@
 package net.questfor.thepersonwhoasked.Maingam;
 import net.questfor.thepersonwhoasked.entities.Player;
+
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 public class KeyHandler extends Data implements KeyListener {
@@ -60,6 +62,7 @@ public class KeyHandler extends Data implements KeyListener {
                     }
                     if(UI.commandnum == 1){
                         GlobalGameThreadConfigs.isinTital = false;
+                        GlobalGameThreadConfigs.filepath = JOptionPane.showInputDialog(null, "what is the name of the save file to load?  if you exit this window it will set the save file name to null");
                         GlobalSaveManager.loadplayerworlddata();
                     }
                     if(UI.commandnum == 2){

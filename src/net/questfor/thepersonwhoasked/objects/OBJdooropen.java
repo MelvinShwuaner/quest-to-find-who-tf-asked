@@ -22,7 +22,8 @@ public class OBJdooropen extends LivingEntity {
         worldy =y;
         worldx = x;
     }
-
+    @Override
+    public void update() {}
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/dooropen", gp.tilesize, gp.tilesize);

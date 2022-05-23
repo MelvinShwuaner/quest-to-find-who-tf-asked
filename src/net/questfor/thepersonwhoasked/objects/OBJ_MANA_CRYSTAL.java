@@ -66,4 +66,6 @@ public void set(){
             set();
         }
     }
+    @Override
+    public void update() {}
 }

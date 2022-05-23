@@ -25,6 +25,8 @@ public class OBJ_IRON_AXE extends LivingEntity {
         getImageInstance();
         fuel = true;
     }
+    @Override
+    public void update() {}
 
     @Override
     public void getImageInstance() {

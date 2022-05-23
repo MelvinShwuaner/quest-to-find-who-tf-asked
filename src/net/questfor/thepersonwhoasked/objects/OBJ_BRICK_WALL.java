@@ -30,4 +30,7 @@ public class OBJ_BRICK_WALL extends LivingEntity {
     public void getImageInstance() {
         down1 = BufferedRenderer("TileEntity/brickwallbroken", gp.tilesize, gp.tilesize);
     }
+
+    @Override
+    public void update() {}
 }

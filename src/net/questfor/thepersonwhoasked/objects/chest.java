@@ -26,4 +26,6 @@ public class chest extends LivingEntity {
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/chest", gp.tilesize, gp.tilesize);
     }
+    @Override
+    public void update() {}
 }

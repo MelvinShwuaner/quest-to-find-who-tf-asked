@@ -25,7 +25,8 @@ public class OBJHeart extends LivingEntity {
         Random random = new Random();
         I = random.nextInt(125);
     }
-
+    @Override
+    public void update() {}
     public void set() {
         if (I < 25) {
             down1 = image;

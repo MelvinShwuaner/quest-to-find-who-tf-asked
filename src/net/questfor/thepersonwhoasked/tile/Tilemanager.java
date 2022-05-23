@@ -16,7 +16,7 @@ public class Tilemanager {
     public int worldcol, worldrow;
     public tile[] tile;
     public int[][][] mapRendererID;
-    public static InputStream is;
+    public  InputStream is;
     public BufferedImage earthright1, earthleft1, earthup1, earthdown1, earth;
 
     public Tilemanager()  {
@@ -197,7 +197,7 @@ public class Tilemanager {
                     }else{
                         Ydistance = (float) ((gp.player.worldy / gp.tilesize) - row);
                     }
-                    if (Ydistance < 10 && Xdistance < 5){
+                    if (Ydistance < 5 && Xdistance < 5){
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Xdistance/5));
                 }
                 }

@@ -79,6 +79,9 @@ public class GlobalProperties {
             i++;
         GlobalGameThreadConfigs.obj[mapID][i] = new crafting_table(gp);
         GlobalGameThreadConfigs.obj[mapID][i].worldx = 13*gp.tilesize;
+        GlobalGameThreadConfigs.obj[mapID][i].worldy = 8*gp.tilesize; i++;
+        GlobalGameThreadConfigs.obj[mapID][i] = new furnace(gp);
+        GlobalGameThreadConfigs.obj[mapID][i].worldx = 12*gp.tilesize;
         GlobalGameThreadConfigs.obj[mapID][i].worldy = 8*gp.tilesize;
             mapID = 1;
             GlobalGameThreadConfigs.obj[mapID][0] = new OBJdoor(gp, 12, 13);

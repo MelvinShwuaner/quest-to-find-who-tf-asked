@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
+import javax.swing.*;
 import java.io.*;
 
 import static net.questfor.thepersonwhoasked.Maingam.UI.gp;
@@ -56,7 +57,7 @@ public class GlobalSaveManager {
     }
     public  void saveplayerworlddata(){
         try {
-            String filepath = "worlddata.amogusdababymilkfilestoragethingyidk";
+            String filepath = "Saves/"+GlobalGameThreadConfigs.filepath+".amogusdababymilkfilestoragethingyidk";
             FileOutputStream fos = new FileOutputStream(filepath);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             WorldDataStorage worldDataStorage = new WorldDataStorage();
@@ -75,42 +76,48 @@ public class GlobalSaveManager {
     }
     public static void loadplayerworlddata(){
         try {
-            String filepath = "worlddata.amogusdababymilkfilestoragethingyidk";
+            String filepath = "Saves/"+GlobalGameThreadConfigs.filepath+".amogusdababymilkfilestoragethingyidk";
             FileInputStream fis = new FileInputStream(filepath);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            WorldDataStorage worldDataStorage = (WorldDataStorage) ois.readObject();
-            ois.close();
-            GlobalGameThreadConfigs.NPCS = worldDataStorage.NPCS;
-            GlobalGameThreadConfigs.Monsters = worldDataStorage.Monsters;
-            GlobalGameThreadConfigs.Tentity = worldDataStorage.TileEntitys;
-            EventHandler.raidcounter = worldDataStorage.raidcount;
-            GlobalGameThreadConfigs.obj = worldDataStorage.obj;
-            gp.tilemanager.mapRendererID = worldDataStorage.mapdata;
-            gp.player = worldDataStorage.Player;
-            for(int a = 0; a < GlobalGameThreadConfigs.obj.length; a++){
-            for (int i = 0; i < GlobalGameThreadConfigs.obj[a].length; i++) {
-                if (GlobalGameThreadConfigs.obj[a][i] != null) {
-                    for (int d = 0; d < GlobalGameThreadConfigs.obj[a][i].inventory.size(); d++) {
-                        if (GlobalGameThreadConfigs.obj[a][i].inventory.get(d) != null) {
-                            GlobalGameThreadConfigs.obj[a][i].inventory.get(d).updateimage();
-                        }
-                    }
-                }
-            }
-        }
-            for(int a = 0; a < GlobalGameThreadConfigs.NPCS.length; a++){
-                for (int i = 0; i < GlobalGameThreadConfigs.NPCS[a].length; i++) {
-                    if (GlobalGameThreadConfigs.NPCS[a][i] != null) {
-                        for (int d = 0; d < GlobalGameThreadConfigs.NPCS[a][i].inventory.size(); d++) {
-                            if (GlobalGameThreadConfigs.NPCS[a][i].inventory.get(d) != null) {
-                                GlobalGameThreadConfigs.NPCS[a][i].inventory.get(d).updateimage();
+            try {
+                WorldDataStorage worldDataStorage = (WorldDataStorage) ois.readObject();
+                ois.close();
+                GlobalGameThreadConfigs.NPCS = worldDataStorage.NPCS;
+                GlobalGameThreadConfigs.Monsters = worldDataStorage.Monsters;
+                GlobalGameThreadConfigs.Tentity = worldDataStorage.TileEntitys;
+                EventHandler.raidcounter = worldDataStorage.raidcount;
+                GlobalGameThreadConfigs.obj = worldDataStorage.obj;
+                gp.tilemanager.mapRendererID = worldDataStorage.mapdata;
+                gp.player = worldDataStorage.Player;
+                for (int a = 0; a < GlobalGameThreadConfigs.obj.length; a++) {
+                    for (int i = 0; i < GlobalGameThreadConfigs.obj[a].length; i++) {
+                        if (GlobalGameThreadConfigs.obj[a][i] != null) {
+                            for (int d = 0; d < GlobalGameThreadConfigs.obj[a][i].inventory.size(); d++) {
+                                if (GlobalGameThreadConfigs.obj[a][i].inventory.get(d) != null) {
+                                    GlobalGameThreadConfigs.obj[a][i].inventory.get(d).updateimage();
+                                }
                             }
                         }
                     }
                 }
+                for (int a = 0; a < GlobalGameThreadConfigs.NPCS.length; a++) {
+                    for (int i = 0; i < GlobalGameThreadConfigs.NPCS[a].length; i++) {
+                        if (GlobalGameThreadConfigs.NPCS[a][i] != null) {
+                            for (int d = 0; d < GlobalGameThreadConfigs.NPCS[a][i].inventory.size(); d++) {
+                                if (GlobalGameThreadConfigs.NPCS[a][i].inventory.get(d) != null) {
+                                    GlobalGameThreadConfigs.NPCS[a][i].inventory.get(d).updateimage();
+                                }
+                            }
+                        }
+                    }
+                }
+            }catch(InvalidClassException s){
+                JOptionPane.showMessageDialog(null, "This Save file is corrupted!");
+
             }
-        } catch (Exception e){
-                crash.main(e);
-            }
+        } catch (IOException | ClassNotFoundException e){
+            GlobalGameThreadConfigs.filepath = null;
+            JOptionPane.showMessageDialog(null, "This Save file could not be found! did you make a typo?");
+        }
     }
 }

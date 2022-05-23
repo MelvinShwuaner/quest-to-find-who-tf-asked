@@ -25,7 +25,8 @@ public class OBJ_IRON_SHOVEL extends LivingEntity {
         description = "A good shovel to dig up tunnels through \nbad times.";
         getImageInstance();
     }
-
+    @Override
+    public void update() {}
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/shovel", gp.tilesize, gp.tilesize);

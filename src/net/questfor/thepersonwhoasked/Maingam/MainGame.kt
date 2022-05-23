@@ -103,16 +103,17 @@ class MainGame : JPanel(), Runnable {
                     GlobalGameThreadConfigs.Tentity[currentmap][i].update()
                 }
             }
-            /**OBJECTS**/
-            for(i in obj[1].indices){
-                if(obj[currentmap][i] != null){
-                    obj[currentmap][i]?.updateimage()
-                }
-            }
         }
         //PAUSE STATE RENDERING//
         if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.pauseState) {
             stopmusic()
+        }
+        /**OBJECTS**/
+        for(i in obj[1].indices){
+            if(obj[currentmap][i] != null){
+                obj[currentmap][i]?.updateimage()
+                obj[currentmap][i]?.update()
+            }
         }
     }
     fun displayScreen() {
@@ -195,12 +196,9 @@ class MainGame : JPanel(), Runnable {
         g.drawImage(GlobalGameThreadConfigs.tempscreen, 0, 0, screenwidth2, screenheight2, null)
         g.dispose()
     }
-    fun drawground(x: Int, y: Int, g2d: Graphics2D, img: BufferedImage?) {
-        g2d.drawImage(img, x, y, null)
-    }
 
 
-     companion object {
+    companion object {
          //SETS ADVANCED AND CONFIG VALUES//
          //TILES
         @JvmField

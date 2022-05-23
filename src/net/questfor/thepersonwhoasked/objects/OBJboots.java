@@ -9,4 +9,6 @@ public class OBJboots extends LivingEntity {
         EntityType = 3;
         description = "fast boots that are usefull when escaping the undead";
     }
+    @Override
+    public void update() {}
 }

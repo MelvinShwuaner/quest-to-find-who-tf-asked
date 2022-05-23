@@ -35,12 +35,13 @@ public class crafting_table extends LivingEntity {
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/chest", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/crafting_table", gp.tilesize, gp.tilesize);
     }
     public void open(){
         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.UIstate;
         UI.npc = this;
         UI.currentUI = "crafting";
-
     }
+    @Override
+    public void update() {}
 }

@@ -22,7 +22,8 @@ public class OBJ_SHIELD_WOOD extends LivingEntity {
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
     }
-
+    @Override
+    public void update() {}
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/shield_wood", gp.tilesize, gp.tilesize);

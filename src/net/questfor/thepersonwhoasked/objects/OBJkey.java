@@ -22,7 +22,8 @@ public class OBJkey extends LivingEntity {
         smeltable = true;
         Outcome = new OBJ_POTION_HEALTH_1(gp);
     }
-
+    @Override
+    public void update() {}
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/key", gp.tilesize, gp.tilesize);
