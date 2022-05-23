@@ -95,7 +95,8 @@ public class LivingEntity extends Data {
     public int UseCost;
     //SMELTING
     public boolean fuel; public boolean smeltable; public LivingEntity Outcome; public boolean smelting = false; public int cool = 0; public int maxcool = 50; public int colspeed = 1; public int hasfinushedcol = 0;
-
+    //RECIPE
+    public boolean[] slot =  new boolean[9];
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
         this.gp = gpp;
@@ -106,7 +107,6 @@ public class LivingEntity extends Data {
         cool += colspeed;
         if(cool == maxcool){
             hasfinushedcol = 1;
-            System.out.println("deez nuts");
         }
 
     }

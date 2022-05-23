@@ -532,7 +532,7 @@ public class Player extends LivingEntity {
                                 }
                             }
                         }
-                        case "furnace" -> {
+                        case "furnace", "crafting table" -> {
                             if (KeyHandler.enterpressed) {
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][i].open();
                             }

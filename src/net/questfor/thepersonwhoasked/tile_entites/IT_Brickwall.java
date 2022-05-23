@@ -20,7 +20,7 @@ public class IT_Brickwall extends TileEntity{
         return iscorrectItem;
     }
     public void playSE(){gp.playsound(11);}
-    public TileEntity getDestroyedForm(){return new IT_brickwallbroken(gp, (int) (worldx/gp.tilesize), (int) worldy/gp.tilesize);}
+    public TileEntity getDestroyedForm(){return new IT_brickwallbroken(gp, (int) Math.round(worldx/gp.tilesize), (int) Math.round(worldy/gp.tilesize));}
     public Color getparticleColor(){return new Color(0x9D533B);}
     public int getparticleSize(){return 6;}
     public int getparticlespeed(){return 1;}

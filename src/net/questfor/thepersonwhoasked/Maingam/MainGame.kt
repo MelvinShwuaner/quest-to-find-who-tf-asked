@@ -256,7 +256,7 @@ class MainGame : JPanel(), Runnable {
             MultiRender.setNPCrenderers()
             MultiRender.setMonsterRenderers()
             MultiRender.setTileEntityRenderers()
-
+             MultiRender.SetRecipes()
              System.out.println("Set all NBT data successfully")
         }
          @JvmStatic

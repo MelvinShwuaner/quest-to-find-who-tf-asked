@@ -2,6 +2,7 @@ package net.questfor.thepersonwhoasked;
 
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
+import net.questfor.thepersonwhoasked.Maingam.Recipe;
 import net.questfor.thepersonwhoasked.entities.Mobs.green_slime;
 import net.questfor.thepersonwhoasked.entities.NPCS.Helper;
 import net.questfor.thepersonwhoasked.entities.NPCS.Mysterious_trader;
@@ -76,7 +77,7 @@ public class GlobalProperties {
             i++;
             GlobalGameThreadConfigs.obj[mapID][i] = new OBJdoor(gp, 12, 12);
             i++;
-        GlobalGameThreadConfigs.obj[mapID][i] = new furnace(gp);
+        GlobalGameThreadConfigs.obj[mapID][i] = new crafting_table(gp);
         GlobalGameThreadConfigs.obj[mapID][i].worldx = 13*gp.tilesize;
         GlobalGameThreadConfigs.obj[mapID][i].worldy = 8*gp.tilesize;
             mapID = 1;
@@ -190,6 +191,18 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.Tentity[mapID][i] = new IT_tree(gp, 11, 41);i++;
         GlobalGameThreadConfigs.Tentity[mapID][i] = new IT_tree(gp, 10, 41);i++;
         GlobalGameThreadConfigs.Tentity[mapID][i] = new IT_tree(gp, 10, 40);i++;
+    }
+    public void SetRecipes(){
+        GlobalGameThreadConfigs.Recipes[0] = new Recipe();
+        GlobalGameThreadConfigs.Recipes[0].Recipe[0] = new OBJ_POTION_HEALTH_1(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[1] = new OBJ_BRICK_WALL(gp);
+        GlobalGameThreadConfigs.Recipes[0].Type = 1;
+        GlobalGameThreadConfigs.Recipes[0].Result = new crafting_table(gp);
+        GlobalGameThreadConfigs.Recipes[1] = new Recipe();
+        GlobalGameThreadConfigs.Recipes[1].Recipe[0] = new OBJkey(gp);
+        GlobalGameThreadConfigs.Recipes[1].Recipe[1] = new OBJ_BRICK_WALL(gp);
+        GlobalGameThreadConfigs.Recipes[1].Type = 1;
+        GlobalGameThreadConfigs.Recipes[1].Result = new furnace(gp);
     }
 
     public void setScreenRenderer() {

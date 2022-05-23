@@ -134,6 +134,7 @@ public class UI {
     public static void drawUI() {
         switch (currentUI){
             case "Furnace" -> DIsplayFurnace();
+            case "crafting" -> DisplayTable();
         }
         int x = gp.tilesize * 2;
         int y = gp.tilesize * 9;
@@ -141,6 +142,75 @@ public class UI {
         int height = gp.tilesize * 2;
         drawSubWindow(x, y, width, height);
         g2.drawString("[ESC] back", x + 24, y + 60);
+    }
+    public static void DisplayTable() {
+        displayUI(npc, false);
+        if(code != 999){
+            int ItemIndex = getItemIndex();
+            if (ItemIndex < gp.player.inventory.size()) {
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code) == null){
+                    LivingEntity SelectedItem = gp.player.inventory.get(ItemIndex);
+                SelectedItem.stacksize -= stackamount;
+                if (SelectedItem.stacksize <= 0) {
+                    gp.player.inventory.remove(SelectedItem);
+                }
+                LivingEntity newentity = createnewobject(SelectedItem);
+                newentity.stacksize = stackamount;
+                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(code, newentity);
+            }
+            }else{
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code) != null) {
+                    LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code);
+                    SelectedItem.stacksize -= stackamount;
+                    if (SelectedItem.stacksize <= 0) {
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(code, null);
+                    }
+                    LivingEntity newentity = createnewobject(SelectedItem);
+                    newentity.stacksize = stackamount;
+                    gp.player.inventory.add(newentity);
+                }
+            }
+            code = 999;
+        }
+        if(KeyHandler.enterpressed){
+            for(int i = 0; i < GlobalGameThreadConfigs.Recipes.length; i++) {
+                if (GlobalGameThreadConfigs.Recipes[i] != null) {
+                    for (int d = 0; d < 9; d++){
+                        if (GlobalGameThreadConfigs.Recipes[i].Recipe[d] != null) {
+                            if((GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(d) != null)){
+                            if (Objects.equals(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(d).name, GlobalGameThreadConfigs.Recipes[i].Recipe[d].name)) {
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[d] = true;
+                            }
+                            }
+                        }else {
+                            if ((GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(d) == null)) {
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[d] = true;
+                            }
+                        }
+                        if(d == 8){
+                            boolean cancraft = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[0] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[1] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[2] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[3] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[4] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[5] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[6] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[7] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[8];
+                            if(cancraft) {
+                                LivingEntity SelectedItem = createnewobject(GlobalGameThreadConfigs.Recipes[i].Result);
+                                gp.player.inventory.add(SelectedItem);
+                                for (int a = 0; a < 9; a++){
+                                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(a) != null) {
+                                        GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(a).stacksize--;
+                                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(a).stacksize <= 0) {
+                                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(a, null);
+                                        }
+                                    }
+                                }
+                                i = GlobalGameThreadConfigs.Recipes.length;
+                            }
+                            for(int c = 0; c < 9; c++) {
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[c] = false;
+                            }
+                        }
+                }
+            }
+            }
+            KeyHandler.enterpressed = false;
+        }
     }
 
     public static void DIsplayFurnace() {
@@ -232,7 +302,7 @@ public class UI {
                     }
                 }
             }
-
+            gp.player.gp.playsound(10);
             GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].hasfinushedcol =2;
             GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].smelting = false;
         }
@@ -1358,6 +1428,7 @@ public class UI {
             case "door open" -> newentity = new OBJdooropen(gp, 0, 0);
             case "heart"-> newentity = new OBJHeart(gp);
             case "key"-> newentity = new OBJkey(gp);
+            case "crafting table" -> newentity = new crafting_table(gp);
         }
         newentity.inventory = old.inventory;
         return newentity;
