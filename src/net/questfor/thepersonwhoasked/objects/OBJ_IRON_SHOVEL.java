@@ -20,7 +20,8 @@ public class OBJ_IRON_SHOVEL extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
-        Type = Type_axe;
+        Type = Type_shovel;
+        Value = 3;
         frames = 3;
         description = "A good shovel to dig up tunnels through \nbad times.";
         getImageInstance();

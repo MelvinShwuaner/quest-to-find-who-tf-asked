@@ -11,9 +11,9 @@ public class OBJdoor extends LivingEntity {
         collision = true;
         hitbox = new Rectangle();
         hitbox.x = 0;
-        hitbox.y = 16;
+        hitbox.y = 0;
         hitbox.width = 48;
-        hitbox.height = 32;
+        hitbox.height = 48;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 4;
@@ -21,6 +21,8 @@ public class OBJdoor extends LivingEntity {
         getImageInstance();
         this.worldx = x * gp.tilesize;
         this.worldy = y * gp.tilesize;
+        worldz = 3;
+        NBTDATA = true;
     }
     @Override
     public void update() {}

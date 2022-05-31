@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Objects;
-public class UI {
+public class UI  {
 
     //basic values
     static MainGame gp;
@@ -232,7 +232,7 @@ public class UI {
                             newentity.stacksize = stackamount;
                             GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(code, newentity);
                         }
-                    } else if (code == 7) {
+                    } else if (code == 6) {
                         if (SelectedItem.fuel) {
                             SelectedItem.stacksize -= stackamount;
                             if (SelectedItem.stacksize <= 0) {
@@ -276,14 +276,15 @@ public class UI {
     }
         if (KeyHandler.enterpressed) {
             KeyHandler.enterpressed = false;
-            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(0) != null && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(7) != null)
+            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(0) != null && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(6) != null)
               GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].smelting = true;
             if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].hasfinushedcol == 2) {
-                LivingEntity SelectedItem = createnewobject(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(6));
-                SelectedItem.stacksize = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(6).stacksize;
-                gp.player.inventory.add(SelectedItem);
-                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(6, null);
-
+                if(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(5) != null) {
+                    LivingEntity SelectedItem = createnewobject(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(5));
+                    SelectedItem.stacksize = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(5).stacksize;
+                    gp.player.inventory.add(SelectedItem);
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(5, null);
+                }
             }
         }
     }
@@ -468,8 +469,10 @@ public class UI {
             g2.drawString(">", x - 40, y);
             if (KeyHandler.enterpressed) {
                 KeyHandler.enterpressed = false;
-                GlobalSaveManager globalSaveManager = new GlobalSaveManager();
-                globalSaveManager.loadplayerworlddata();
+                if(GlobalGameThreadConfigs.filepath == null){
+                    GlobalGameThreadConfigs.filepath = JOptionPane.showInputDialog(null, "what is the name of the save file to load?  if you exit this window it will set the save file name to null");
+                }
+                GlobalSaveManager.loadplayerworlddata();
                 MainGame.playmusic(0);
                 GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
             }
@@ -1237,32 +1240,29 @@ public class UI {
             for (int i = 0; i < entity.inventory.size(); i++) {
                 if(entity.inventory.get(i) != null) {
                     switch (i) {
-                        case 0 -> slotx = slotxstart;
                         case 1 -> slotx = slotxstart + gp.tilesize;
                         case 2 -> slotx = slotxstart + (gp.tilesize * 2);
-                        case 3 -> slotx = slotxstart + (gp.tilesize * 3);
-                        case 4 -> {
+                        case 3 -> {
                             slotx = slotxstart;
-                            sloty = slotystart + gp.tilesize;
+                            sloty = slotystart+gp.tilesize;}
+                        case 4 -> {
+                            slotx = slotxstart + (gp.tilesize);
+                            sloty = slotystart+gp.tilesize;
                         }
                         case 5 -> {
-                            slotx = slotxstart + (gp.tilesize * 2);
-                            sloty = slotystart + gp.tilesize;
+                            slotx = slotxstart + (gp.tilesize*2);
+                            sloty = slotystart + (gp.tilesize);
                         }
                         case 6 -> {
-                            slotx = slotxstart + (gp.tilesize * 3);
-                            sloty = slotystart + gp.tilesize;
+                            slotx = slotxstart;
+                            sloty = slotystart  + (gp.tilesize * 2);
                         }
                         case 7 -> {
-                            slotx = slotxstart;
+                            slotx = slotxstart + gp.tilesize;
                             sloty = (slotystart + gp.tilesize * 2);
                         }
                         case 8 -> {
-                            slotx = slotxstart + (gp.tilesize * 2);
-                            sloty = (slotystart + gp.tilesize * 2);
-                        }
-                        case 9 -> {
-                            slotx = slotxstart + (gp.tilesize * 3);
+                            slotx = slotxstart + (gp.tilesize*2);
                             sloty = (slotystart + gp.tilesize * 2);
                         }
                     }
@@ -1423,7 +1423,7 @@ public class UI {
         LivingEntity newentity = new LivingEntity(gp);
         switch (old.name){
             case "chest" -> newentity = new chest(gp);
-            case "furnace" -> newentity = new furnace(gp);
+            case "furnace" -> newentity = new furnace(gp, 0, 0);
             case "BRIC WALL" -> newentity = new OBJ_BRICK_WALL(gp);
             case "Bronze coin" -> newentity = new OBJ_COIN_BRONZE(gp);
             case "WoodCutter's axe"-> newentity = new OBJ_IRON_AXE(gp);
@@ -1438,7 +1438,10 @@ public class UI {
             case "door open" -> newentity = new OBJdooropen(gp, 0, 0);
             case "heart"-> newentity = new OBJHeart(gp);
             case "key"-> newentity = new OBJkey(gp);
-            case "crafting table" -> newentity = new crafting_table(gp);
+            case "crafting table" -> newentity = new crafting_table(gp, 0, 0);
+            case "Brick" -> newentity = new Brick(gp);
+            case "Clay" -> newentity = new Clay(gp);
+            case "Basic Coal" -> newentity = new OBJ_coal(gp);
         }
         newentity.inventory = old.inventory;
         return newentity;
@@ -1505,7 +1508,7 @@ public class UI {
                 g2.drawString("weapon: " + "none", textX, textY);
                 textY += lineHeight;
             }
-            if(gp.player.currentweapon != null) {
+            if(gp.player.currentshield != null) {
                 g2.drawString("shield: " + gp.player.currentshield.name, textX, textY);
             }else{
                 g2.drawString("shield: " + "none", textX, textY);
@@ -1579,4 +1582,4 @@ public class UI {
 
     }
     //2047 bytes long -------------------//
-     public static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Adventure";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}public static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));if(currentDialogue != null)for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}
+     public static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Quest To Find Who Asked";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}public static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));if(currentDialogue != null)for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}

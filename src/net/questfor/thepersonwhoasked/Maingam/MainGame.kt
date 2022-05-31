@@ -6,8 +6,6 @@ import net.questfor.thepersonwhoasked.entities.Player
 import net.questfor.thepersonwhoasked.tile.Tilemanager
 import java.awt.Color
 import java.awt.Dimension
-import java.awt.Graphics2D
-import java.awt.image.BufferedImage
 import javax.swing.JPanel
 
 class MainGame : JPanel(), Runnable {
@@ -21,7 +19,7 @@ class MainGame : JPanel(), Runnable {
 
     @JvmField
     //sets default values for the game panel
-    var FPS = 59.0
+    var FPS = 60.0
     var drawcound: Long = 0
     var realFPS: Int = 0
     init {
@@ -125,8 +123,6 @@ class MainGame : JPanel(), Runnable {
                 drawStart = System.nanoTime()
             }
             tilemanager.drawground(GlobalGameThreadConfigs.g2)
-            if(player.worldz >= 16){ tilemanager.drawwalls(GlobalGameThreadConfigs.g2)}
-
             /*DISPLAYS ENTITYS AND OBJECTS*/
             GlobalGameThreadConfigs.entitylist.add(player)
             for (i in GlobalGameThreadConfigs.NPCS[1].indices) {
@@ -162,8 +158,6 @@ class MainGame : JPanel(), Runnable {
             }
             /*SORT ENTITYS IN POSITIONS*/
             GeneralHandler.main(GlobalGameThreadConfigs.g2)
-            if(player.worldz < 16){ tilemanager.drawwalls(GlobalGameThreadConfigs.g2)}
-
             /*HANDLES FPS AND DRAW TIME FUNC*/
             if (KeyHandler.checkFPS && GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
                 var drawEND: Long = System.nanoTime()
@@ -241,6 +235,7 @@ class MainGame : JPanel(), Runnable {
         var tilemanager = Tilemanager()
         const val maxworldcol = 50
         const val maxworldrow = 50
+        const val maxworldlayer = 7;
          @JvmStatic
          var screenwidth2 = screenwidth
          @JvmStatic

@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.entities;
 import net.questfor.thepersonwhoasked.Maingam.*;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -7,15 +8,14 @@ import java.util.ArrayList;
 import java.util.Random;
 //is the parent class for all entities including player
 public class LivingEntity extends Data {
+    static final long serialVersionUID = -6942014L;
     //WORLD//
     public MainGame gp;
-    public double worldx;
-    public double worldy;
+    public  double worldx;
+    public  double worldy;
     public boolean goingup;
-    public double worldz = 0;
-    public double previousworldz = 0;
+    public  double worldz = 2;
     public double speed;
-    public int zcount;
     public boolean hascolided = false;
     //HEALTH//
     public int maxhealth;
@@ -45,12 +45,10 @@ public class LivingEntity extends Data {
     public int actionLock = 0;
     public boolean Hostile = false;
     public boolean frozen = false;
-    public boolean hasdonetask = false;
     public double taskx = 0, tasky = 0;
     public LivingEntity target;
     public double distancex = 0, distancey = 0;
     public double previoustaskx = 1, previoustasky = 1;
-    public int tasktimer = 0;
     public int HostileTime = 0;
     //ATTACK//
     public boolean invincible = false;
@@ -91,12 +89,13 @@ public class LivingEntity extends Data {
     public String description = "";
     public int Type = 0;
     public int frames = 2;
-    public int Type_sword = 1, Type_constumable = 2, Type_tool = 3, Type_object = 4, Type_armor = 5, Type_shield = 6, Type_projectile = 7, Type_Current = 8, Type_axe = 9;
+    public int Type_sword = 1, Type_constumable = 2, Type_pickaxe = 3, Type_armor = 4, Type_projectile = 5, Type_Current = 6, Type_axe = 7, Type_shovel = 8;
     public int UseCost;
     //SMELTING
     public boolean fuel; public boolean smeltable; public LivingEntity Outcome; public boolean smelting = false; public int cool = 0; public int maxcool = 50; public int colspeed = 1; public int hasfinushedcol = 0;
     //RECIPE
     public boolean[] slot =  new boolean[9];
+    public boolean NBTDATA = false;
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
         this.gp = gpp;
@@ -149,6 +148,7 @@ public class LivingEntity extends Data {
         gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
         int TileentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
         destroyTentity(TileentityI);
+        DestroyOBJ(gp.hregister.EntityColide(this, GlobalGameThreadConfigs.obj));
         boolean ContactPLayer = gp.hregister.PlayerColide(this);
         if(EntityType == 1 && ContactPLayer){
             AttackPLayer(TrueAttackDamage);
@@ -477,5 +477,27 @@ public class LivingEntity extends Data {
             }
         }
     }
+    public void DestroyOBJ(int tileentityI) {
+        if (tileentityI != 999 && !GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].invincible) {
+            if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].name.equals("Brick wall")) {
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].ItemRequirements(this)) {
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].health-= TrueAttackDamage;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].playSE();
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].invincible = true;
+                    ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI], GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI]);
+                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].health <= 0) {
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI] = GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].getDestroyedForm();
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].HandleItems();
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean ItemRequirements(LivingEntity SourceEntity){return false;}
+    public void playSE(){}
+    public LivingEntity getDestroyedForm(){return null;}
+
+
     public void open(){}
 }

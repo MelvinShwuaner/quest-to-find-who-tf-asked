@@ -2,6 +2,7 @@ package net.questfor.thepersonwhoasked.objects;
 
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
+import net.questfor.thepersonwhoasked.entities.Player;
 
 import java.awt.*;
 
@@ -21,11 +22,11 @@ public class OBJ_POTION_HEALTH_1 extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
-        maxstacksize = 16;
+
     }
     public void Use(LivingEntity sourceentity){
             sourceentity.health += Value;
-            gp.playsound(2);
+            Player.playsound(2);
             if(sourceentity.health > sourceentity.maxhealth){
                 sourceentity.health = sourceentity.maxhealth;
             }

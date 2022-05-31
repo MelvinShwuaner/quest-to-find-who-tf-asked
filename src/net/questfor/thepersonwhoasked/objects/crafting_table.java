@@ -7,7 +7,7 @@ import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import java.awt.*;
 
 public class crafting_table extends LivingEntity {
-    public crafting_table(MainGame gp){
+    public crafting_table(MainGame gp, int col, int row){
         super(gp);
         name = "crafting table";
         getImageInstance();
@@ -16,9 +16,9 @@ public class crafting_table extends LivingEntity {
         description = "is used to craft all sorts of items";
         hitbox = new Rectangle();
         hitbox.x = 0;
-        hitbox.y = 16;
+        hitbox.y = 0;
         hitbox.width = 48;
-        hitbox.height = 32;
+        hitbox.height = 48;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         maxstacksize = 16;
@@ -31,6 +31,9 @@ public class crafting_table extends LivingEntity {
         inventory.add(null);
         inventory.add(null);
         inventory.add(null);
+        worldz = 3;
+        worldx = col*gp.tilesize;
+        worldy = row*gp.tilesize;
     }
 
     @Override

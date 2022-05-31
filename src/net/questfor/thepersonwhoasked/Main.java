@@ -11,8 +11,8 @@ just like its name, all classes and functions are built around this class.
 it creates a new window to store all data inside
 */
 
-public abstract class Main{
-    public static MainGame mainGame = new MainGame();
+public  class Main{
+
     public static JFrame window;
     public static ByteArrayOutputStream baos = new ByteArrayOutputStream();
     public static PrintStream ps = new PrintStream(baos);
@@ -37,7 +37,7 @@ public abstract class Main{
             window.setResizable(false);
             window.setTitle("the quest to find out who asked");
             window.setIconImage(urmom.getImage());
-
+            MainGame mainGame = new MainGame();
 
             //THE MOST IMPORTANT LINE IN THIS ENTIRE GAME //
 

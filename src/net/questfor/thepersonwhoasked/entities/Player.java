@@ -2,10 +2,13 @@ package net.questfor.thepersonwhoasked.entities;
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
-import net.questfor.thepersonwhoasked.tile_entites.IT_Brickwall;
+import net.questfor.thepersonwhoasked.objects.Brickwall;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+
+import static net.questfor.thepersonwhoasked.Maingam.MainGame.sound;
+
 //basic player
 public class Player extends LivingEntity {
      KeyHandler keyHandler;
@@ -13,11 +16,11 @@ public class Player extends LivingEntity {
     public int screenY;
     public int jumpstate = 0;
     public int jumpaction = 0;
-    public static boolean isup = false;
+    public  boolean isup = false;
     public boolean attacking = false;
     public boolean hasattacked = false;
-    public static int objindex;
-    public static boolean hasweapon = true;
+    public int objindex;
+    public  boolean hasweapon = true;
     public int i = 0, ii = 0;
     public int d = 0;
     boolean hasfound = false;
@@ -25,10 +28,6 @@ public class Player extends LivingEntity {
     public Player(KeyHandler keyHandler, MainGame gpp) {
         super(gpp);
         this.keyHandler = keyHandler;
-        setdefaultvalues();
-        getImageInstance();
-        getAttackInstance();
-        GetItems();
         screenX = MainGame.screenwidth / 2 - (MainGame.tilesize / 2);
         screenY = MainGame.screenheight / 2 - (MainGame.tilesize / 2);
         hitbox = new Rectangle();
@@ -39,42 +38,36 @@ public class Player extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 0;
+        Ammo = 10;
+        name = "Player";
+        inventorysize = 20;
+        worldx = gp.tilesize * 12;
+        worldy = gp.tilesize * 14;
+        speed = 4;
+        direction = "right";
+        worldz = 4;
+        maxhealth = 10;
+        health = maxhealth;
+        invincible = false;
+        attackHitbox.width = 36;
+        attackHitbox.height = 36;
+        level = 1;
+        strength = 1;
+        dexterity = 91;
+        XP = 0;
+        MaxXP = 4;
+        bobux = 50;
+        currentweapon = new OBJ_IRON_SHOVEL(gp);
+        currentshield = new OBJ_SHIELD_WOOD(gp);
+        defence = getDefenceValues();
+        TrueAttackDamage = getAttackValues();
+        projectile = new OBJ_FireBall(gp);
+        MaxMana = 4;
+        Mana = MaxMana;
+        GetItems();
+        getAttackInstance();
+        getImageInstance();
     }
-
-    public void setdefaultvalues() {
-        try {
-            //DEFAULT VALUES
-            Ammo = 10;
-            name = "Player";
-            inventorysize = 20;
-            worldx = MainGame.tilesize * 12;
-            worldy = MainGame.tilesize * 13;
-            speed = 4;
-            direction = "right";
-            worldz = 0;
-            maxhealth = 10;
-            health = maxhealth;
-            invincible = false;
-            attackHitbox.width = 36;
-            attackHitbox.height = 36;
-            level = 1;
-            strength = 1;
-            dexterity = 1;
-            XP = 0;
-            MaxXP = 4;
-            bobux = 50;
-            currentweapon = new OBJ_IRON_SWORD(gp);
-            currentshield = new OBJ_SHIELD_WOOD(gp);
-            defence = getDefenceValues();
-            TrueAttackDamage = getAttackValues();
-            projectile = new OBJ_FireBall(gp);
-            MaxMana = 4;
-            Mana = MaxMana;
-        } catch (Exception e) {
-            crash.main(e);
-        }
-    }
-
     public int getDefenceValues() {
         if(currentshield != null) {
             return defence = dexterity * currentshield.defenceValue;
@@ -128,6 +121,17 @@ public class Player extends LivingEntity {
                 attackdown2 = BufferedRenderer("player/Attack/shoveldown2",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
                 attackdown3 = BufferedRenderer("player/Attack/shoveldown3",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
             }
+            if(currentweapon.name.equals("Iron pickaxe")){
+                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown1 = BufferedRenderer("player/Attack/shoveldown1",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown2 = BufferedRenderer("player/Attack/shoveldown2",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackdown3 = BufferedRenderer("player/Attack/shoveldown3",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+            }
             if (currentweapon.name.equals("WoodCutter's axe")) {
                 attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
                 attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
@@ -165,20 +169,13 @@ public class Player extends LivingEntity {
                 getAttackInstance();
             }
             if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Tentity) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.worldzobjectreturn(this) || MainGame.hregister.returntileworldz(this)) {
-                if (zcount > 51) {
                     if (!isup) {
-                        previousworldz = worldz;
                         worldz--;
                         getImageInstance();
                         updatehitbox();
                         getAttackInstance();
                     }
-                }
             }
-            if (hitboxe) {
-                zcount = 0;
-            }
-            zcount++;
             for (int i = 0; i < inventory.size(); i++) {
                 if (inventory.get(i).down1 == null) {
                     inventory.get(i).getImageInstance();
@@ -203,28 +200,53 @@ public class Player extends LivingEntity {
                     }
                 }
                 if (currentshield != null){
-                    if (currentshield.name.equals("BRIC WALL")) {
-                        while (!hasfound) {
-                            if (i < 100) {
-                                if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] == null) {
-                                    switch (direction) {
-                                        case "up" ->
-                                                GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round(worldx / gp.tilesize), (int) Math.round((worldy - 50) / gp.tilesize));
-                                        case "down" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round(worldx / gp.tilesize), (int) Math.round((worldy + 50) / gp.tilesize));
-                                        case "right" -> GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round((worldx + 50) / gp.tilesize), (int) Math.round(worldy / gp.tilesize));
-                                        case "left" ->
-                                                GlobalGameThreadConfigs.Tentity[MainGame.currentmap][i] = new IT_Brickwall(gp, (int) Math.round((worldx - 50) / gp.tilesize), (int) Math.round(worldy / gp.tilesize));
+                    if (currentshield.EntityType == 4) {
+                        if(currentshield.NBTDATA){
+                            while (!hasfound) {
+                                if (i < 100) {
+                                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] == null) {
+                                        double y = worldy;
+                                        double x = worldx;
+                                        double z = worldz+1;
+                                        boolean canplace;
+                                        canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), GlobalGameThreadConfigs.NPCS) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), GlobalGameThreadConfigs.Tentity) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) worldz);
+                                        if(!KeyHandler.CROUCH) {
+                                            switch (direction) {
+                                                case "down" -> y += 50;
+                                                case "up" -> y -= 50;
+                                                case "left" -> x -= 50;
+                                                case "right" -> x += 50;
+                                            }
+                                        }else{
+                                            if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(x/gp.tilesize)][(int) Math.round(y/gp.tilesize)][(int) (z-1)] == 46){
+                                                z--;
+                                            }else{
+                                                canplace = false;
+                                            }
+                                        }
+                                        if (canplace) {
+                                            switch ((currentshield.name)) {
+                                                case "BRIC WALL" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new Brickwall(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)); GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z; }
+                                                case "crafting table" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new crafting_table(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)); GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}
+                                                case "furnace" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new furnace(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize));GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}
+                                                case "Stone" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new Stone(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize));GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}
+                                            }
+                                            currentshield.stacksize--;
+                                            if (currentshield.stacksize <= 0) {
+                                                inventory.remove(currentshield);
+                                                currentshield = null;
+                                            }
+                                        }
+                                        i = 0;
+                                        hasfound = true;
                                     }
-                                    inventory.remove(currentshield);
-                                    i = 0;
-                                    hasfound = true;
-                                }
-                                i++;
+                                    i++;
 
-                            } else {
-                                i = 0;
+                                } else {
+                                    i = 0;
+                                }
                             }
-                        }
+}
                     }
             }
             }
@@ -295,7 +317,7 @@ public class Player extends LivingEntity {
             MainGame.hregister.checkTile(this);
 
             //OBJECT COLLISIONS
-            objindex = MainGame.hregister.checkObject(this, true);
+            objindex = MainGame.hregister.EntityColide(this, GlobalGameThreadConfigs.obj);
             pickupObject(objindex);
 
             //ENTITY COLLISIONS
@@ -311,7 +333,7 @@ public class Player extends LivingEntity {
                             UI.addMessages("Thank you for Alpha testing My Game");
                         }
                         if (counter == 180) {
-                            UI.addMessages("Hope you enjoy the rest of your day, if you encountered bugs please \n go to https://discord.gg/tRva2AM2Gk and message @bruhkid2345");
+                            UI.addMessages("Hope you enjoy the rest of your day, if you encountered bugs please \n go to https:discord.gg/tRva2AM2Gk and message @bruhkid2345");
                         }
                         if (counter == 360) {
                             UI.addMessages("Bye :D !!!!");
@@ -422,6 +444,7 @@ public class Player extends LivingEntity {
             attackEntity(attackindex, TrueAttackDamage);
             int TileentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
             destroyTentity(TileentityI);
+            DestroyOBJ(gp.hregister.EntityColide(this, GlobalGameThreadConfigs.obj));
             worldx = currentworldx;
             worldy = currentworldy;
             hitbox.width = hitboxWidth;
@@ -447,7 +470,6 @@ public class Player extends LivingEntity {
 
     public void destroyTentity(int tileentityI) {
         if (tileentityI != 999 && GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].distructuble && GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].ItemRequirements(this) && !GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].invincible) {
-            if (!GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].name.equals("Brick wall")){
                 GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].health--;
             GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].playSE();
             GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].invincible = true;
@@ -456,9 +478,22 @@ public class Player extends LivingEntity {
                 GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI] = GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].getDestroyedForm();
                 GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].HandleItems();
             }
-        }
+
     }
     }
+    public void DestroyOBJ(int tileentityI) {
+        if (tileentityI != 999 && !GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].invincible) {
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].ItemRequirements(this)) {
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].health-= TrueAttackDamage;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].playSE();
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].invincible = true;
+                    ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI], GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI]);
+                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].health <= 0) {
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI] = GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].getDestroyedForm();
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].HandleItems();
+                    }
+                }
+            }}
 
     public void attackEntity(int attackindex, int dmg) {
         super.attackEntity(attackindex, dmg);
@@ -489,7 +524,7 @@ public class Player extends LivingEntity {
 
             if (i != 999) {
                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].EntityType == 3) {
-                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].Type == 8) {
+                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].Type == Type_Current) {
                         GlobalGameThreadConfigs.obj[MainGame.currentmap][i].Use(this);
                         GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = null;
                     }
@@ -564,8 +599,7 @@ public class Player extends LivingEntity {
     public void GetItems() {
         inventory.add(currentweapon);
         inventory.add(currentshield);
-        inventory.add(new OBJ_IRON_SHOVEL(gp));
-
+        inventory.add(new OBJ_BRICK_WALL(gp));
     }
 
     public void interactNPC(int i) {
@@ -587,27 +621,41 @@ public class Player extends LivingEntity {
             if (KeyHandler.attack == true) {
                 double y = worldy;
                 double x = worldx;
+                double z = worldz;
                 switch (direction) {
                     case "down" -> y += 50;
                     case "up" -> y -= 50;
                     case "left" -> x -= 50;
                     case "right" -> x += 50;
                 }
+                if(z < 3){
+                    z++;
+                }if(KeyHandler.CROUCH){
+                    z--;
+                }
                 attacking = true;
-                if (currentweapon.name.equals("Iron shovel")) {
-                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)]) {
-                        case 39 -> {
-                            gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 0;
+                if (currentweapon.Type == Type_shovel) {
+                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z]) {
+                        case 39 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+                        case 45 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+                            for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
+                                if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
+                                    GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new Clay(gp);
+                                    GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx = x;
+                                    GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy = y;
+                                    ii = GlobalGameThreadConfigs.obj[1].length;
+                                }
+                            }
                         }
-                        case 10 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 39;
-                        case 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 39;
+                        case 10, 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 39;
                     }
-                } else if (currentweapon.name.equals("WoodCutter's axe")) {
-                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (x / gp.tilesize)][(int) (y / gp.tilesize)]) {
-                        case 41 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 10;}
+                } else if (currentweapon.Type == Type_axe) {
+                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (x / gp.tilesize)][(int) (y / gp.tilesize)][(int) worldz]) {
+                        //case 41 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 10;}
                     }
                 }
-                gp.playsound(7);
+                playsound(7);
+
                 KeyHandler.attack = false;
             }
         } catch (Exception e) {
@@ -649,12 +697,12 @@ public class Player extends LivingEntity {
             int tempscreeny = screenY;
             //Try Reading this line. I will wait ;D
             if(GlobalGameThreadConfigs.isinTital == false){if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed){switch (direction) {case "up": if (attacking == false){if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}}else{tempscreeny = screenY - gp.tilesize; if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}} break; case "down": if(attacking == false){if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}break; case "right": if(attacking == false){if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}}break; case "left": if(attacking == false){if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;}}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}} break;}}else{switch (direction){case "right" -> {if(attacking == false){image = right1;}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}} }case "left" -> {if(attacking == false){image = left1;}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}}}case "up" -> {if(attacking == false){image = up1;}else{tempscreeny = screenY - gp.tilesize;if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}}} case "down" -> {if(attacking == false){image = down1;}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}}}}}else{switch (direction) {case "up": if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}break; case "down": if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}break; case "right": if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}break; case "left": if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;} break;}}
-            if(KeyHandler.jump == true){
+            if(KeyHandler.jump){
                 jumpaction++;
                 if(jumpaction < 25){
-                    if(isup == true) {
+                    if(isup) {
                         if (!gp.hregister.checkWALL(this)) {
-                        if (jumpaction <= 8) {
+                        if (jumpaction == 1) {
                                 worldz++;
                             }
                             jumpstate++;
@@ -701,6 +749,11 @@ public class Player extends LivingEntity {
             e.printStackTrace();
         }
     }
+    public static void playsound(int i) {
+        //PLAYS SOUND EFFECTS
+        sound.setFile(i);
+        sound.play();
+    }
     public BufferedImage scaleimage(BufferedImage original, int width, int height){
         BufferedImage scaledImage = new BufferedImage(width, height, original.getType());
         Graphics2D g2 = scaledImage.createGraphics();
@@ -708,5 +761,4 @@ public class Player extends LivingEntity {
         g2.dispose();
         return scaledImage;
     }
-
 }

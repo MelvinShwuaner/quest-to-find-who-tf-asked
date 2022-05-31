@@ -33,7 +33,6 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
-        GlobalGameThreadConfigs.obj[mapID][0].worldz = 0;
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
             GlobalGameThreadConfigs.obj[mapID][1] = new OBJ_COIN_BRONZE(gp);
             GlobalGameThreadConfigs.obj[mapID][2] = new OBJkey(gp);
@@ -54,7 +53,7 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.obj[mapID][i] = new OBJHeart(gp);
             GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 24;
             GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 21;
-        GlobalGameThreadConfigs.obj[mapID][i].set();
+           GlobalGameThreadConfigs.obj[mapID][i].set();
             i++;
             GlobalGameThreadConfigs.obj[mapID][i] = new chest(gp);
             GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 21;
@@ -77,21 +76,16 @@ public class GlobalProperties {
             i++;
             GlobalGameThreadConfigs.obj[mapID][i] = new OBJdoor(gp, 12, 12);
             i++;
-        GlobalGameThreadConfigs.obj[mapID][i] = new crafting_table(gp);
-        GlobalGameThreadConfigs.obj[mapID][i].worldx = 13*gp.tilesize;
-        GlobalGameThreadConfigs.obj[mapID][i].worldy = 8*gp.tilesize; i++;
-        GlobalGameThreadConfigs.obj[mapID][i] = new furnace(gp);
-        GlobalGameThreadConfigs.obj[mapID][i].worldx = 12*gp.tilesize;
-        GlobalGameThreadConfigs.obj[mapID][i].worldy = 8*gp.tilesize;
+        GlobalGameThreadConfigs.obj[mapID][i] = new crafting_table(gp, 13, 8);i++;
+        GlobalGameThreadConfigs.obj[mapID][i] = new furnace(gp, 12, 8);
             mapID = 1;
-            GlobalGameThreadConfigs.obj[mapID][0] = new OBJdoor(gp, 12, 13);
+            GlobalGameThreadConfigs.obj[mapID][0] = new Brickwall(gp, 12, 13);
         GlobalGameThreadConfigs.obj[mapID][1] = new chest(gp);
         GlobalGameThreadConfigs.obj[mapID][1].worldx = gp.tilesize * 11;
         GlobalGameThreadConfigs.obj[mapID][1].worldy = gp.tilesize * 8;
         GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJkey(gp));
         GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJ_IRON_AXE(gp));
         GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJ_BRICK_WALL(gp));
-        GlobalGameThreadConfigs.obj[mapID][1].worldz = 0;
 
     }
 
@@ -102,19 +96,15 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.NPCS[mapID][0] = new Old_Man(gp);
         GlobalGameThreadConfigs.NPCS[mapID][0].worldx = gp.tilesize * 21;
         GlobalGameThreadConfigs.NPCS[mapID][0].worldy = gp.tilesize * 21;
-        GlobalGameThreadConfigs.NPCS[mapID][0].worldz = 0;
         GlobalGameThreadConfigs.NPCS[mapID][1] = new Helper(gp);
         GlobalGameThreadConfigs.NPCS[mapID][1].worldx = gp.tilesize * 22;
         GlobalGameThreadConfigs.NPCS[mapID][1].worldy = gp.tilesize * 22;
-        GlobalGameThreadConfigs.NPCS[mapID][1].worldz = 0;
         GlobalGameThreadConfigs.NPCS[mapID][2] = new Old_Man(gp);
         GlobalGameThreadConfigs.NPCS[mapID][2].worldx = gp.tilesize * 23;
         GlobalGameThreadConfigs.NPCS[mapID][2].worldy = gp.tilesize * 23;
-        GlobalGameThreadConfigs.NPCS[mapID][2].worldz = 0;
         GlobalGameThreadConfigs.NPCS[mapID][3] = new Old_Man(gp);
         GlobalGameThreadConfigs.NPCS[mapID][3].worldx = gp.tilesize * 11;
         GlobalGameThreadConfigs.NPCS[mapID][3].worldy = gp.tilesize * 9;
-        GlobalGameThreadConfigs.NPCS[mapID][3].worldz = 0;
         GlobalGameThreadConfigs.NPCS[mapID][3].speed = 0;
         GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[1] = "Hello. its a nice day \n outside isnt it?";
         GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[2] = "You should go to the main square,\n were all going to be there";
@@ -126,24 +116,19 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.NPCS[mapID][0].worldy = gp.tilesize * 7;
             GlobalGameThreadConfigs.NPCS[mapID][0].speed = 0;
             GlobalGameThreadConfigs.NPCS[mapID][0].frozen = true;
-            GlobalGameThreadConfigs.NPCS[mapID][0].worldz = 0;
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_POTION_HEALTH_1(gp));
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.get(0).stacksize = 4;
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_IRON_SHOVEL(gp));
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_IRON_AXE(gp));
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_SHIELD_DIAMOND(gp));
-        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
+        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_coal(gp));
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.get(4).stacksize = 30;
-
-
-
 }
     public  void setMonsterRenderers(){
         int mapID = 0;
         GlobalGameThreadConfigs.Monsters[mapID][0] = new green_slime(gp);
         GlobalGameThreadConfigs.Monsters[mapID][0].worldx = gp.tilesize*23;
         GlobalGameThreadConfigs.Monsters[mapID][0].worldy = gp.tilesize*36;
-        GlobalGameThreadConfigs.Monsters[mapID][0].worldz = 0;
         GlobalGameThreadConfigs.Monsters[mapID][1] = new green_slime(gp);
         GlobalGameThreadConfigs.Monsters[mapID][1].worldx = gp.tilesize*21;
         GlobalGameThreadConfigs.Monsters[mapID][1].worldy = gp.tilesize*36;
@@ -197,15 +182,22 @@ public class GlobalProperties {
     }
     public void SetRecipes(){
         GlobalGameThreadConfigs.Recipes[0] = new Recipe();
-        GlobalGameThreadConfigs.Recipes[0].Recipe[0] = new OBJ_POTION_HEALTH_1(gp);
-        GlobalGameThreadConfigs.Recipes[0].Recipe[1] = new OBJ_BRICK_WALL(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[0] = new Brick(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[1] = new Brick(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[2] = new Brick(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[3] = new Brick(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[4] = new Brick(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[5] = new Brick(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[6] = new Brick(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[7] = new Brick(gp);
+        GlobalGameThreadConfigs.Recipes[0].Recipe[8] = new Brick(gp); //pls ignore the bad textures, im trash at pixel art (i will get better soon at it)
         GlobalGameThreadConfigs.Recipes[0].Type = 1;
-        GlobalGameThreadConfigs.Recipes[0].Result = new crafting_table(gp);
+        GlobalGameThreadConfigs.Recipes[0].Result = new OBJ_BRICK_WALL(gp);
         GlobalGameThreadConfigs.Recipes[1] = new Recipe();
         GlobalGameThreadConfigs.Recipes[1].Recipe[0] = new OBJkey(gp);
         GlobalGameThreadConfigs.Recipes[1].Recipe[1] = new OBJ_BRICK_WALL(gp);
         GlobalGameThreadConfigs.Recipes[1].Type = 1;
-        GlobalGameThreadConfigs.Recipes[1].Result = new furnace(gp);
+        GlobalGameThreadConfigs.Recipes[1].Result = new furnace(gp, 0, 0);
     }
 
     public void setScreenRenderer() {

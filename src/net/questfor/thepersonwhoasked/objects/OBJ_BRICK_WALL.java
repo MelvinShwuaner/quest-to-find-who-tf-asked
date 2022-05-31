@@ -20,15 +20,16 @@ public class OBJ_BRICK_WALL extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
-        EntityType = 3;
+        EntityType = 4;
         maxstacksize = 64;
         fuel = true;
         health = 10;
+        NBTDATA = true;
     }
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("TileEntity/brickwallbroken", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("TileEntity/brickwall", gp.tilesize, gp.tilesize);
     }
 
     @Override

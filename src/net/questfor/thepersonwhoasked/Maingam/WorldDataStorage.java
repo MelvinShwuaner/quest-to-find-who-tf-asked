@@ -10,6 +10,6 @@ public class WorldDataStorage extends Data {
     LivingEntity obj[][];
     int raidcount;
     net.questfor.thepersonwhoasked.entities.Player Player;
-    int mapdata[][][];
-    String FileName;
+    int mapdata[][][][];
+    int currentmap;
 }

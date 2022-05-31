@@ -68,6 +68,7 @@ public class GlobalSaveManager {
             worldDataStorage.raidcount = EventHandler.raidcounter;
             worldDataStorage.Player = gp.player;
             worldDataStorage.mapdata = gp.tilemanager.mapRendererID;
+            worldDataStorage.currentmap = MainGame.currentmap;
             oos.writeObject(worldDataStorage);
             oos.close();
         }catch (Exception e){
@@ -89,6 +90,7 @@ public class GlobalSaveManager {
                 GlobalGameThreadConfigs.obj = worldDataStorage.obj;
                 gp.tilemanager.mapRendererID = worldDataStorage.mapdata;
                 gp.player = worldDataStorage.Player;
+                MainGame.currentmap = worldDataStorage.currentmap;
                 for (int a = 0; a < GlobalGameThreadConfigs.obj.length; a++) {
                     for (int i = 0; i < GlobalGameThreadConfigs.obj[a].length; i++) {
                         if (GlobalGameThreadConfigs.obj[a][i] != null) {
@@ -112,8 +114,7 @@ public class GlobalSaveManager {
                     }
                 }
             }catch(InvalidClassException s){
-                JOptionPane.showMessageDialog(null, "This Save file is corrupted!");
-
+                crash.main(s);
             }
         } catch (IOException | ClassNotFoundException e){
             GlobalGameThreadConfigs.filepath = null;

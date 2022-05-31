@@ -21,6 +21,7 @@ public class OBJdooropen extends LivingEntity {
         getImageInstance();
         worldy =y;
         worldx = x;
+        worldz = 1;
     }
     @Override
     public void update() {}

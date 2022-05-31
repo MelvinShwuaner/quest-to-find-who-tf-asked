@@ -24,91 +24,61 @@ public class hitboxregister {
             int entitytoprow = entitytopworldy / MainGame.tilesize;
             int entitybottomrow = entitybottomworldy / MainGame.tilesize;
             int var10000;
-            int tileNUM1, tileNUM2;
+            int worldz1 = (int) entity.worldz, worldz2 = (int) (entity.worldz+1), worldz3 = (int) (entity.worldz+2);
+            int tileNUM1, tileNUM2, tileNUM3, tileNUM4, tileNUM5, tileNUM6;
             switch (entity.direction) {
                 case "up":
                     var10000 = (int) (entitytopworldy - entity.speed);
                     entitytoprow = var10000 / MainGame.tilesize;
-                    tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow];
-                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow];
-                    if (MainGame.tilemanager.tile[tileNUM1].collision || MainGame.tilemanager.tile[tileNUM2].collision) {
-                        if (MainGame.tilemanager.tile[tileNUM1].canjumpover || MainGame.tilemanager.tile[tileNUM2].canjumpover) {
-                            if ((entity.worldz >= MainGame.tilemanager.tile[tileNUM1].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM1].worldz)|| (entity.worldz >= MainGame.tilemanager.tile[tileNUM2].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM2].worldz)) {
-                                entity.hitboxe = true;
-                            }
-                        } else {
-                            entity.hitboxe = true;
-                        }
-                        entity.hascolided = true;
-                    } else if (!entity.hitboxe) {
-                        entity.hascolided = false;
-                    }
-                    if((MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz && tileNUM1 != 40) || (MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz && tileNUM2 != 40)){
+                    tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz1];
+                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz2];
+                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz1];
+                    tileNUM4 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz2];
+                    tileNUM5 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz3];
+                    tileNUM6= MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz3];
+                    if(((tileNUM1 != 46 && tileNUM2 != 46 )|| (tileNUM3 != 46 && tileNUM4 != 46)) || (tileNUM5 != 46 && tileNUM6 != 46)){
                         entity.hitboxe = true;
                     }
                     break;
                 case "down":
                     var10000 = (int) (entitybottomworldy + entity.speed);
                     entitybottomrow = var10000 / MainGame.tilesize;
-                    tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow];
-                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow];
-                    if (MainGame.tilemanager.tile[tileNUM1].collision || MainGame.tilemanager.tile[tileNUM2].collision) {
-                        if (MainGame.tilemanager.tile[tileNUM1].canjumpover || MainGame.tilemanager.tile[tileNUM2].canjumpover) {
-                            if ((entity.worldz >= MainGame.tilemanager.tile[tileNUM1].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM1].worldz)|| (entity.worldz >= MainGame.tilemanager.tile[tileNUM2].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM2].worldz)) {
-                                entity.hitboxe = true;
-                            }
-                        } else {
-                            entity.hitboxe = true;
-                        }
-                        entity.hascolided = true;
-                    } else if (!entity.hitboxe) {
-                        entity.hascolided = false;
-                    }
-                    if((MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz && tileNUM1 != 40) || (MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz && tileNUM2 != 40)){
+                    tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz1];
+                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz2];
+                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz1];
+                    tileNUM4 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz2];
+                    tileNUM5 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz3];
+                    tileNUM6 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz3];
+                    if(((tileNUM1 != 46 && tileNUM2 != 46 )|| (tileNUM3 != 46 && tileNUM4 != 46)) || (tileNUM5 != 46 && tileNUM6 != 46)){
                         entity.hitboxe = true;
                     }
                     break;
                 case "left":
                     var10000 = (int) (entityleftworldx - entity.speed);
                     entityleftcol = var10000 / MainGame.tilesize;
-                    tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow];
-                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow];
-                    if (MainGame.tilemanager.tile[tileNUM1].collision || MainGame.tilemanager.tile[tileNUM2].collision) {
-                        if (MainGame.tilemanager.tile[tileNUM1].canjumpover || MainGame.tilemanager.tile[tileNUM2].canjumpover) {
-                            if ((entity.worldz >= MainGame.tilemanager.tile[tileNUM1].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM1].worldz)|| (entity.worldz >= MainGame.tilemanager.tile[tileNUM2].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM2].worldz)) {
-                                entity.hitboxe = true;
-                            }
-                        } else {
-                            entity.hitboxe = true;
-                        }
-                        entity.hascolided = true;
-                    } else if (!entity.hitboxe) {
-                        entity.hascolided = false;
-                    }
-                    if((MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz && tileNUM1 != 40) || (MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz && tileNUM2 != 40)){
+                    tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz1];
+                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz2];
+                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz1];
+                    tileNUM4 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz2];
+                    tileNUM5 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz3];
+                    tileNUM6 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz3];
+                    if(((tileNUM1 != 46 && tileNUM2 != 46 )|| (tileNUM3 != 46 && tileNUM4 != 46)) || (tileNUM5 != 46 && tileNUM6 != 46)){
                         entity.hitboxe = true;
                     }
                     break;
                 case "right":
                     var10000 = (int) (entityrightworldx + entity.speed);
                     entityrightcol = var10000 / MainGame.tilesize;
-                    tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow];
-                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow];
-                    if (MainGame.tilemanager.tile[tileNUM1].collision || MainGame.tilemanager.tile[tileNUM2].collision) {
-                        if (MainGame.tilemanager.tile[tileNUM1].canjumpover || MainGame.tilemanager.tile[tileNUM2].canjumpover) {
-                            if ((entity.worldz >= MainGame.tilemanager.tile[tileNUM1].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM1].worldz)|| (entity.worldz >= MainGame.tilemanager.tile[tileNUM2].worldz-16 && entity.worldz < MainGame.tilemanager.tile[tileNUM2].worldz)) {
-                                entity.hitboxe = true;
-                            }
-                        } else {
-                            entity.hitboxe = true;
-                        }
-                        entity.hascolided = true;
-                    } else if (!entity.hitboxe) {
-                        entity.hascolided = false;
-                    }
-                    if((MainGame.tilemanager.tile[tileNUM1].worldz >= entity.worldz && tileNUM1 != 40) || (MainGame.tilemanager.tile[tileNUM2].worldz >= entity.worldz && tileNUM2 != 40)){
+                    tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz1];
+                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz2];
+                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz1];
+                    tileNUM4 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz2];
+                    tileNUM5 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz3];
+                    tileNUM6 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz3];
+                    if(((tileNUM1 != 46 && tileNUM2 != 46 )|| (tileNUM3 != 46 && tileNUM4 != 46)) || (tileNUM5 != 46 && tileNUM6 != 46)){
                         entity.hitboxe = true;
                     }
+
                     break;
             }
         } catch (Exception e) {
@@ -140,93 +110,99 @@ public class hitboxregister {
         }
     }
 
+
     public int checkObject(LivingEntity entity, boolean player) {
         //checks collision between objects and entities
         int index = 999;
-
-        for (int i = 0; i < GlobalGameThreadConfigs.obj[1].length; i++) {
-            if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] != null && GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox != null) {
-
-                entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
-                entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
-                GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.x = (int) (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx + GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.x);
-                GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.y = (int) (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy + GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.y);
-                switch (entity.direction) {
-                    case "up":
-                        entity.hitbox.y -= entity.speed;
-                        break;
-                    case "down":
-                        entity.hitbox.y += entity.speed;
-                        break;
-                    case "left":
-                        entity.hitbox.x -= entity.speed;
-                        break;
-                    case "right":
-                        entity.hitbox.x += entity.speed;
-                        break;
-                }
-                if (entity.hitbox.intersects(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox)) {
-                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].collision) {
-                        if (entity.worldz == GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz) {
-                            entity.hitboxe = true;
+        try {
+            for (int i = 0; i < GlobalGameThreadConfigs.obj[1].length; i++) {
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] != null && GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox != null) {
+                    if(entity !=  GlobalGameThreadConfigs.obj[MainGame.currentmap][i]){
+                    entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
+                    entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.x = (int) (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx + GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.x);
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.y = (int) (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy + GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.y);
+                    switch (entity.direction) {
+                        case "up":
+                            entity.hitbox.y -= entity.speed;
+                            break;
+                        case "down":
+                            entity.hitbox.y += entity.speed;
+                            break;
+                        case "left":
+                            entity.hitbox.x -= entity.speed;
+                            break;
+                        case "right":
+                            entity.hitbox.x += entity.speed;
+                            break;
+                    }
+                    if (entity.hitbox.intersects(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox)) {
+                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].collision) {
+                            if (entity.worldz >= GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz-16 && entity.worldz < GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz) {
+                                entity.hitboxe = true;
+                            }
+                            entity.hascolided = true;
                         }
-                        entity.hascolided = true;
-                    }
-                    if (player) {
-                        index = i;
-                    }
+                        if (player) {
+                            index = i;
+                        }
 
-                }
-                entity.hitbox.x = entity.hitboxdefaultx;
-                entity.hitbox.y = entity.hitboxdefaulty;
-                GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.x = GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitboxdefaultx;
-                GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.y = GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitboxdefaulty;
+                    }
+                    entity.hitbox.x = entity.hitboxdefaultx;
+                    entity.hitbox.y = entity.hitboxdefaulty;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.x = GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitboxdefaultx;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox.y = GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitboxdefaulty;
+                }}
             }
+
+        }catch (Exception e){
+            crash.main(e);
         }
-
-
         return index;
     }
 
     public int EntityColide(LivingEntity entity, LivingEntity[][] target) {
         //checks collision between a entity and another entity
         int index = 999;
-        for (int i = 0; i < target[1].length; i++) {
-            if (target[MainGame.currentmap][i] != null) {
-                entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
-                entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
-                target[MainGame.currentmap][i].hitbox.x = (int) (target[MainGame.currentmap][i].worldx + target[MainGame.currentmap][i].hitbox.x);
-                target[MainGame.currentmap][i].hitbox.y = (int) (target[MainGame.currentmap][i].worldy + target[MainGame.currentmap][i].hitbox.y);
-                switch (entity.direction) {
-                    case "up":
-                        entity.hitbox.y -= entity.speed;
-                        break;
-                    case "down":
-                        entity.hitbox.y += entity.speed;
-                        break;
-                    case "left":
-                        entity.hitbox.x -= entity.speed;
-                        break;
-                    case "right":
-                        entity.hitbox.x += entity.speed;
-                        break;
-                }
-                if (entity.hitbox.intersects(target[MainGame.currentmap][i].hitbox)) {
-                    if (entity.worldz == target[MainGame.currentmap][i].worldz) {
-                        if (target[MainGame.currentmap][i] != entity) {
-                            entity.hitboxe = true;
-                            index = i;
-                        }
+        try {
+            for (int i = 0; i < target[1].length; i++) {
+                if (target[MainGame.currentmap][i] != null) {
+                    entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
+                    entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
+                    target[MainGame.currentmap][i].hitbox.x = (int) (target[MainGame.currentmap][i].worldx + target[MainGame.currentmap][i].hitbox.x);
+                    target[MainGame.currentmap][i].hitbox.y = (int) (target[MainGame.currentmap][i].worldy + target[MainGame.currentmap][i].hitbox.y);
+                    switch (entity.direction) {
+                        case "up":
+                            entity.hitbox.y -= entity.speed;
+                            break;
+                        case "down":
+                            entity.hitbox.y += entity.speed;
+                            break;
+                        case "left":
+                            entity.hitbox.x -= entity.speed;
+                            break;
+                        case "right":
+                            entity.hitbox.x += entity.speed;
+                            break;
                     }
-                    entity.hascolided = true;
+                    if (entity.hitbox.intersects(target[MainGame.currentmap][i].hitbox)) {
+                        if (entity.worldz >= target[MainGame.currentmap][i].worldz-16 && entity.worldz <= target[MainGame.currentmap][i].worldz) {
+                            if (target[MainGame.currentmap][i] != entity) {
+                                entity.hitboxe = true;
+                                index = i;
+                            }
+                        }
+                        entity.hascolided = true;
+                    }
+                    entity.hitbox.x = entity.hitboxdefaultx;
+                    entity.hitbox.y = entity.hitboxdefaulty;
+                    target[MainGame.currentmap][i].hitbox.x = target[MainGame.currentmap][i].hitboxdefaultx;
+                    target[MainGame.currentmap][i].hitbox.y = target[MainGame.currentmap][i].hitboxdefaulty;
                 }
-                entity.hitbox.x = entity.hitboxdefaultx;
-                entity.hitbox.y = entity.hitboxdefaulty;
-                target[MainGame.currentmap][i].hitbox.x = target[MainGame.currentmap][i].hitboxdefaultx;
-                target[MainGame.currentmap][i].hitbox.y = target[MainGame.currentmap][i].hitboxdefaulty;
             }
+        }catch (Exception e){
+            crash.main(e);
         }
-
         return index;
     }
 
@@ -342,15 +318,81 @@ public class hitboxregister {
 
         return index;
     }
+    public boolean checkEntity(LivingEntity entity, LivingEntity[][] target) {
+        //checks collision between a entity and another entity
+        boolean index = false;
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[MainGame.currentmap][i] != null) {
+                if (entity != target[MainGame.currentmap][i]) {
+                    entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
+                    entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
+                    target[MainGame.currentmap][i].hitbox.x = (int) (target[MainGame.currentmap][i].worldx + target[MainGame.currentmap][i].hitbox.x);
+                    target[MainGame.currentmap][i].hitbox.y = (int) (target[MainGame.currentmap][i].worldy + target[MainGame.currentmap][i].hitbox.y);
+                    switch (entity.direction) {
+                        case "up":
+                            entity.hitbox.y -= entity.speed;
+                            break;
+                        case "down":
+                            entity.hitbox.y += entity.speed;
+                            break;
+                        case "left":
+                            entity.hitbox.x -= entity.speed;
+                            break;
+                        case "right":
+                            entity.hitbox.x += entity.speed;
+                            break;
+                    }
+                    if (entity.hitbox.intersects(target[MainGame.currentmap][i].hitbox)) {
+                        if (target[MainGame.currentmap][i] != entity) {
+                            index = true;
+                        }
+                    }
+                    entity.hitbox.x = entity.hitboxdefaultx;
+                    entity.hitbox.y = entity.hitboxdefaulty;
+                    target[MainGame.currentmap][i].hitbox.x = target[MainGame.currentmap][i].hitboxdefaultx;
+                    target[MainGame.currentmap][i].hitbox.y = target[MainGame.currentmap][i].hitboxdefaulty;
+                }
+            }
+        }
+        return index;
+    }
+    public boolean checkEntityWorld(double x, double y, LivingEntity[][] target) {
+        //checks collision between a entity and another entity
+        boolean index = true;
+        int targetx, targety;
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[MainGame.currentmap][i] != null) {
+                targetx = (int) Math.round(target[MainGame.currentmap][i].worldx/gp.tilesize);
+                targety = (int) Math.round(target[MainGame.currentmap][i].worldy/gp.tilesize);
+                if(targetx == x && targety == y){
+                    index = false;
+                }
+        }
+    }
+        return index;}
+    public boolean checktileworld(int x, int y, int z) {
+        //checks collision between entity and world
+        boolean index = true;
+        if(MainGame.tilemanager.mapRendererID[MainGame.currentmap][x][y][z] == 40){
+                index = false;
+            }
+        return index;
+    }
+
+
     public boolean returntileworldz(LivingEntity entity) {
         //checks collision between entity and world
         boolean index = false;
         boolean hasfinushed = false;
         int knockback = 1;
+        boolean shouldtrigger = !checkEntity(gp.player, GlobalGameThreadConfigs.Tentity) && !checkEntity(gp.player, GlobalGameThreadConfigs.Monsters) && !checkEntity(gp.player, GlobalGameThreadConfigs.obj) && !checkEntity(gp.player, GlobalGameThreadConfigs.NPCS);
+
 try {
-    int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)];
-    if (entity.worldz > MainGame.tilemanager.tile[TileNum1].worldz +1){
-        index = true;
+    int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)][(int) (entity.worldz)];
+    if (TileNum1 == 46){
+        if(shouldtrigger)
+            if(entity.worldz > 0)
+              index = true;
     }
 }catch (Exception e) {
 
@@ -384,7 +426,7 @@ try {
     }
     public boolean checkWALL(LivingEntity entity){
         boolean index = false;
-        int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)];
+        int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)][(int) entity.worldz];
         if(TileNum1 == 40 && entity.worldz < MainGame.tilemanager.tile[TileNum1].worldz-16){
             index = true;
         }

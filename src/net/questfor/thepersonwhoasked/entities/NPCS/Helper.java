@@ -21,7 +21,7 @@ public class Helper extends LivingEntity {
         speed = 3;
         maxhealth = 20;
         TrueAttackDamage = 5;
-        defence = 1;
+        defence = 10;
         health = maxhealth;
         hitbox = new Rectangle(3, 18, 42, 30);
         hitbox.height = 30;
@@ -30,6 +30,7 @@ public class Helper extends LivingEntity {
         XP = 7;
         level = 5;
         projectile = new OBJ_FireBall(gpp);
+
     }
 
     public void getImageInstance() {
@@ -56,9 +57,6 @@ public class Helper extends LivingEntity {
     }
 
     public void setAction() {
-        if (up1 == null) {
-            getImageInstance();
-        }
         if (!frozen) {
             if (!Hostile) {
                 actionLock++;
@@ -80,7 +78,6 @@ public class Helper extends LivingEntity {
                     actionLock = 0;
                 }
             } else {
-                if (!hasdonetask) {
                     for (int i = 0; i < GlobalGameThreadConfigs.Monsters[1].length; i++) {
                         if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] != null) {
                             if (distancex < previoustaskx) {
@@ -105,19 +102,11 @@ public class Helper extends LivingEntity {
 
                         }
                         if (i == GlobalGameThreadConfigs.Monsters[1].length - 1) {
-                            hasdonetask = true;
                             break;
                         }
                     }
-                    if (distancex < 96 && distancey < 96 && !hasattacked) {
-                        attacking = true;
-                    } else {
-                        attacking = false;
-                    }
-                }
-                if (hasdonetask) {
+                      attacking = distancex < 96 && distancey < 96 && !hasattacked;
                     Angry();
-                }
             }
         }
     }
@@ -125,9 +114,9 @@ public class Helper extends LivingEntity {
     @Override
     public void update() {
         super.update();
-        if (gp.player.health <= 5) {
-            Hostile = true;
-        }
+        //if (gp.player.health < gp.player.maxhealth) {
+            //Hostile = true;
+        //}
         if (attacking) {
             Attack();
         } else if
@@ -139,7 +128,6 @@ public class Helper extends LivingEntity {
 
     public void Angry() {
         actionLock++;
-        tasktimer++;
         Random random = new Random();
         int I = random.nextInt(100) + 1;
         if (actionLock > 30) {
@@ -167,12 +155,11 @@ public class Helper extends LivingEntity {
             GlobalGameThreadConfigs.projectilelist.add(projectile);
             primepowercool = 0;
         }
-        if (tasktimer > 150) {
-            hasdonetask = false;
+
             previoustasky = 10000;
             previoustaskx = 10000;
-            tasktimer = 0;
-        }
+
+
     }
 
     public void HandleItems() {
@@ -218,7 +205,6 @@ public class Helper extends LivingEntity {
             if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying == false) {
                 if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health < 0) {
                     GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying = true;
-                    hasdonetask = false;
                     previoustasky = 10000;
                     previoustaskx = 10000;
                     XP += GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].XP;
@@ -302,6 +288,10 @@ public class Helper extends LivingEntity {
                             }
                         }
                         break;
+                }
+                if (image == null) {
+                    getImageInstance();
+                    getAttackInstance();
                 }
                 if (invincible && image != null) {
                     for (int y = 0; y < image.getHeight(); y++) {

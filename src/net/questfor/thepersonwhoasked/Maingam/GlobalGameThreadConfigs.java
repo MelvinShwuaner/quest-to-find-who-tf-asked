@@ -28,7 +28,7 @@ public class GlobalGameThreadConfigs extends Data {
     public static Recipe[] Recipes = new Recipe[20];
     public static String filepath;
     public static TileEntity[][] Tentity = new TileEntity[MainGame.maxmap][100];
-    public static LivingEntity[][] obj = new LivingEntity[MainGame.maxmap][30];
+    public static LivingEntity[][] obj = new LivingEntity[MainGame.maxmap][100];
     public static ArrayList<LivingEntity> entitylist = new ArrayList<>();
     public static ArrayList<LivingEntity> particleList = new ArrayList<>();
     public static ArrayList<LivingEntity> projectilelist = new ArrayList<>();

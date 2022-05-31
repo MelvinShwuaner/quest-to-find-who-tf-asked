@@ -21,9 +21,9 @@ public class OBJ_IRON_AXE extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         Type = Type_axe;
+        Value = 3;
         description = "Any WoodCutter would adore a sturdy \n rusty iron axe?";
         getImageInstance();
-        fuel = true;
     }
     @Override
     public void update() {}

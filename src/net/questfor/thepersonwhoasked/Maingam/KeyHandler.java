@@ -102,13 +102,13 @@ public class KeyHandler extends Data implements KeyListener {
                     if (code == FPSC) {
                         if (!checkFPS) {
                             checkFPS = true;
-                        } else if (checkFPS) {
+                        } else {
                             checkFPS = false;
                         }
                     }
                     if (code == KeyEvent.VK_SPACE) {
                         if (!jump) {
-                            Player.isup = true;
+                            MainGame.player.isup = true;
                             jump = true;
                         }
                     }
@@ -398,7 +398,7 @@ public class KeyHandler extends Data implements KeyListener {
                     UI.code = 0;
                 }
                 if(code == KeyEvent.VK_2){
-                    UI.code = 7;
+                    UI.code = 6;
                 }
             }
     }

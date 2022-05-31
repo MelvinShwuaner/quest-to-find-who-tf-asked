@@ -14,12 +14,14 @@ public class chest extends LivingEntity {
         description = "basic 16*16 chest. can store 10 items";
         hitbox = new Rectangle();
         hitbox.x = 0;
-        hitbox.y = 16;
+        hitbox.y = 0;
         hitbox.width = 48;
-        hitbox.height = 32;
+        hitbox.height = 48;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         maxstacksize = 16;
+        worldz = 3;
+        NBTDATA =true;
     }
 
     @Override

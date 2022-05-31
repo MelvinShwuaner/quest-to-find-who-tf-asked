@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.Objects;
 
 public class furnace extends LivingEntity {
-    public furnace(MainGame gp){
+    public furnace(MainGame gp, int col, int row){
         super(gp);
         name = "furnace";
         getImageInstance();
@@ -17,9 +17,9 @@ public class furnace extends LivingEntity {
         description = "a slow rusty furnace, is really hot!";
         hitbox = new Rectangle();
         hitbox.x = 0;
-        hitbox.y = 16;
+        hitbox.y = 0;
         hitbox.width = 48;
-        hitbox.height = 32;
+        hitbox.height = 48;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         maxstacksize = 16;
@@ -33,6 +33,10 @@ public class furnace extends LivingEntity {
         inventory.add(null);
         inventory.add(null);
         maxcool = 100;
+        worldz = 3;
+        worldx = col*gp.tilesize;
+        worldy = row*gp.tilesize;
+        NBTDATA = true;
     }
 
     @Override
@@ -52,43 +56,47 @@ public class furnace extends LivingEntity {
             spritenumber = 2;
         }
         if (hasfinushedcol == 1) {
-            if (inventory.get(6) == null) {
+            if (inventory.get(5) == null) {
                 if (inventory.get(0) != null) {
-                    if (inventory.get(7) != null) {
-                        inventory.get(7).stacksize--;
-                        if (inventory.get(7).stacksize <= 0) {
-                            inventory.set(7, null);
+                    if (inventory.get(6) != null) {
+                        inventory.get(6).stacksize--;
+                        if (inventory.get(6).stacksize <= 0) {
+                            inventory.set(6, null);
+                            smelting = false;
+                            spritenumber = 1;
+
                         }
                         LivingEntity Source = inventory.get(0).Outcome;
-                        inventory.set(6, Source);
+                        inventory.set(5, Source);
                         cool = 0;
-                        hasfinushedcol = 0;
+                        hasfinushedcol = 2;
                     }
 
                     inventory.get(0).stacksize--;
                     if (inventory.get(0).stacksize <= 0) {
                         inventory.set(0, null);
-                        hasfinushedcol =2;
                         smelting = false;
                         spritenumber = 1;
+
                     }
                 }
             }else{
                 if (inventory.get(0) != null) {
-                    if (inventory.get(7) != null) {
+                    if (inventory.get(6) != null) {
                         LivingEntity Source = inventory.get(0).Outcome;
-                        if (Objects.equals(inventory.get(6).name, Source.name)){
-                            inventory.get(6).stacksize++;
+                        if (Objects.equals(inventory.get(5).name, Source.name)){
+                            inventory.get(5).stacksize++;
                             cool = 0;
-                            hasfinushedcol = 0;
-                            inventory.get(7).stacksize--;
-                            if (inventory.get(7).stacksize <= 0) {
-                                inventory.set(7, null);
+                            hasfinushedcol = 2;
+                            inventory.get(6).stacksize--;
+                            if (inventory.get(6).stacksize <= 0) {
+                                inventory.set(6, null);
+                                smelting = false;
+                                spritenumber = 1;
                             }
                             inventory.get(0).stacksize--;
                             if (inventory.get(0).stacksize <= 0) {
                                 inventory.set(0, null);
-                                hasfinushedcol =2;
                                 smelting = false;
                                 spritenumber = 1;
                             }
