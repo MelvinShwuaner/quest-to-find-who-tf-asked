@@ -25,7 +25,7 @@ public class Stone extends LivingEntity {
         getImageInstance();
         this.worldx = x * gp.tilesize;
         this.worldy = y * gp.tilesize;
-        worldz = 3;
+        worldz = 4;
     }
 
     @Override

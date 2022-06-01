@@ -41,11 +41,11 @@ public class Player extends LivingEntity {
         Ammo = 10;
         name = "Player";
         inventorysize = 20;
-        worldx = gp.tilesize * 12;
+        worldx = gp.tilesize * 20;
         worldy = gp.tilesize * 14;
         speed = 4;
         direction = "right";
-        worldz = 4;
+        worldz = 3;
         maxhealth = 10;
         health = maxhealth;
         invincible = false;
@@ -53,7 +53,7 @@ public class Player extends LivingEntity {
         attackHitbox.height = 36;
         level = 1;
         strength = 1;
-        dexterity = 91;
+        dexterity = 1;
         XP = 0;
         MaxXP = 4;
         bobux = 50;
@@ -353,7 +353,7 @@ public class Player extends LivingEntity {
                 if (!hitboxe) {
                     if (keyHandler.upPressed || keyHandler.downPressed) {
                         if (keyHandler.rightPressed || keyHandler.leftPressed) {
-                            speed -= 1;
+                            speed = 3;
                         }
                     }
                     if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed) {
@@ -396,11 +396,6 @@ public class Player extends LivingEntity {
                     }
                     spritecounter = 0;
                 }
-            }
-            if (worldz >= 1) {
-                speed = 2;
-            } else {
-                speed = 4;
             }
             if(health <= 0){
                 GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.GameOverState;
@@ -628,7 +623,7 @@ public class Player extends LivingEntity {
                     case "left" -> x -= 50;
                     case "right" -> x += 50;
                 }
-                if(z < 3){
+                if(z < 4){
                     z++;
                 }if(KeyHandler.CROUCH){
                     z--;

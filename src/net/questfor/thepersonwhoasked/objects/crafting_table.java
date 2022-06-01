@@ -31,7 +31,7 @@ public class crafting_table extends LivingEntity {
         inventory.add(null);
         inventory.add(null);
         inventory.add(null);
-        worldz = 3;
+        worldz = 4;
         worldx = col*gp.tilesize;
         worldy = row*gp.tilesize;
     }

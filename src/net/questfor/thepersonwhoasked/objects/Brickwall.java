@@ -21,7 +21,7 @@ public class Brickwall extends LivingEntity{
         hitboxdefaulty = hitbox.y;
         health = 13;
         EntityType = 4;
-        worldz = 3;
+        worldz = 4;
         collision = true;
     }
     public boolean ItemRequirements(LivingEntity SourceEntity){

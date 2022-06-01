@@ -15,7 +15,7 @@ public class brickwallbroken extends LivingEntity {
         hitbox = new Rectangle(28, 0, 20, 48);
         collision = true;
         health = 10;
-        worldz = 3;
+        worldz = 4;
     }
     @Override
     public boolean ItemRequirements(LivingEntity SourceEntity){

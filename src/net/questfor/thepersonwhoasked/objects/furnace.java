@@ -33,7 +33,7 @@ public class furnace extends LivingEntity {
         inventory.add(null);
         inventory.add(null);
         maxcool = 100;
-        worldz = 3;
+        worldz = 4;
         worldx = col*gp.tilesize;
         worldy = row*gp.tilesize;
         NBTDATA = true;

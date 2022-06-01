@@ -1,20 +1,25 @@
 package net.questfor.thepersonwhoasked.entities;
 import net.questfor.thepersonwhoasked.Maingam.*;
+import net.questfor.thepersonwhoasked.entities.AI.Path;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
+
+import static net.questfor.thepersonwhoasked.GlobalProperties.gp;
+
 //is the parent class for all entities including player
 public class LivingEntity extends Data {
     static final long serialVersionUID = -6942014L;
     //WORLD//
     public MainGame gp;
+    public transient Path path;
     public  double worldx;
     public  double worldy;
     public boolean goingup;
-    public  double worldz = 2;
+    public  double worldz = 3;
     public double speed;
     public boolean hascolided = false;
     //HEALTH//
@@ -29,6 +34,7 @@ public class LivingEntity extends Data {
     public transient  BufferedImage up1, up2, down1, down2, down3, left1, left2, right1, right2;
     public transient BufferedImage attackup1, attackup2, attackdown1, attackdown2, attackdown3,
             attackleft1, attackleft2, attackright1, attackright2;
+    boolean drawingpath = true;
     //MOVEMENT AND ANIMATION//
     public String direction = "down";
     public int spritecounter = 0;
@@ -46,6 +52,8 @@ public class LivingEntity extends Data {
     public boolean Hostile = false;
     public boolean frozen = false;
     public double taskx = 0, tasky = 0;
+    public boolean forgiveondeath = true;
+    public boolean onpath = false;
     public LivingEntity target;
     public double distancex = 0, distancey = 0;
     public double previoustaskx = 1, previoustasky = 1;
@@ -99,6 +107,7 @@ public class LivingEntity extends Data {
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
         this.gp = gpp;
+        path = new Path();
     }
     public void setAction(){}
     public void getImageInstance(){}
@@ -137,22 +146,7 @@ public class LivingEntity extends Data {
         }
         /*AI for Monsters And NPCS*/
         setAction();
-        hitboxe = false;
-        gp.hregister.checkTile(this);
-        gp.hregister.checkObject(this, false);
-        int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
-        if(EntityType == 1 && npcindex != 999){
-            AttackNPC(TrueAttackDamage, npcindex);
-        }
-        gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
-        gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
-        int TileentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
-        destroyTentity(TileentityI);
-        DestroyOBJ(gp.hregister.EntityColide(this, GlobalGameThreadConfigs.obj));
-        boolean ContactPLayer = gp.hregister.PlayerColide(this);
-        if(EntityType == 1 && ContactPLayer){
-            AttackPLayer(TrueAttackDamage);
-        }
+        checkCollision();
         if(primepowercool < 30){
             primepowercool++;
         }
@@ -270,6 +264,9 @@ public class LivingEntity extends Data {
         }
     }
     public void draw(Graphics2D g2){
+        if(path == null){
+            path = new Path();
+        }
         //RENDERER
         try {
             double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);
@@ -318,17 +315,25 @@ public class LivingEntity extends Data {
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect((int) screenX, (int) screenY - 15, (int) HPValue, 10);
                 }
-                if (Hostile){
-                HostileTime++;
-                if (HostileTime > 2400) {
-                    HostileTime = 0;
-                    Hostile = false;
+                if (Hostile) {
+                    HostileTime++;
+                    if (HostileTime > 2400) {
+                        HostileTime = 0;
+                        Hostile = false;
+                    }
+                }
+                if (drawingpath){
+                    g2.setColor(Color.red);
+                for (int i = 0; i < path.pathlist.size(); i++) {
+                    int worldx = path.pathlist.get(i).col * gp.tilesize;
+                    int worldy = path.pathlist.get(i).row * gp.tilesize;
+                    double screenx = (worldx - MainGame.player.worldx + MainGame.player.screenX);
+                    double screeny = worldy - MainGame.player.worldy + MainGame.player.screenY;
+                    g2.fillRect((int) screenx, (int) screeny, gp.tilesize, gp.tilesize);
                 }
             }
                 if(EntityType != 4){
                 if (invincible) {
-
-
                     for (int y = 0; y < image.getHeight(); y++) {
                         for (int x = 0; x < image.getWidth(); x++) {
                             int p = image.getRGB(x, y);
@@ -431,6 +436,7 @@ public class LivingEntity extends Data {
             TrueAttackDamage = getAttackValues();
             defence = getDefenceValues();
             gp.playsound(8);
+
         }
     }
     public int getAttackValues(){return 0;}
@@ -497,7 +503,99 @@ public class LivingEntity extends Data {
     public boolean ItemRequirements(LivingEntity SourceEntity){return false;}
     public void playSE(){}
     public LivingEntity getDestroyedForm(){return null;}
-
-
     public void open(){}
+    public void searchPath(double taskX, double taskY){
+        if(path == null){
+            path = new Path();
+        }
+        int startcol = (int) ((worldx+hitbox.x)/gp.tilesize);
+        int startrow = (int) ((worldy+hitbox.y)/gp.tilesize);
+        path.setNodes(startcol, startrow, (int) taskX, (int) taskY, (int) worldz, this);
+        if(path.search()){
+            int nextx = path.pathlist.get(0).col*gp.tilesize;
+            int nexty = path.pathlist.get(0).row*gp.tilesize;
+            int enleftx = (int) (worldx+hitbox.x);
+            int enrightx = (int) (worldx+hitbox.x+hitbox.width);
+            int enupy = (int) (worldy+hitbox.y);
+            int endowny = (int) (worldy+hitbox.y+hitbox.height);
+            if(enupy > nexty && enleftx >= nextx && enrightx < nextx +gp.tilesize){
+                direction = "up";
+            }else if(enupy < nexty && enleftx >= nextx && enrightx < nextx +gp.tilesize){
+                direction = "down";
+            } else if(enupy >= nexty && endowny < nexty + gp.tilesize){
+                if(enleftx > nextx){
+                    direction = "left";
+                }else{
+                    direction = "right";
+                }
+            }else if(enupy > nexty && enleftx > nextx){
+                direction = "up";
+                checkCollision();
+                if(hitboxe){
+                    direction = "left";
+                }
+            }else if(enupy > nexty && enleftx < nextx){
+                direction = "up";
+                checkCollision();
+                if(hitboxe){
+                    direction = "right";
+                }
+            }else if(enupy < nexty && enleftx > nextx){
+                direction = "down";
+                checkCollision();
+                if(hitboxe){
+                    direction = "left";
+                }
+            }else if(enupy < nexty && enleftx < nextx){
+                direction = "down";
+                checkCollision();
+                if(hitboxe){
+                    direction = "right";
+                }
+            }
+            int nextcol = path.pathlist.get(0).col;
+            int nextrow = path.pathlist.get(0).row;
+            if(nextcol == taskX && nextrow == taskY) {
+                if (forgiveondeath){
+                    onpath = false;
+                    Hostile = false;
+            }
+            }
+        }else{
+            actionLock++;
+            Random random = new Random();
+            int I = random.nextInt(100)+1;
+            if (actionLock > 30) {
+                    if (I > 50){
+                        if (worldy < Math.round(taskY*gp.tilesize)) {
+                            direction = "down";
+                        } else {
+                            direction = "up";
+                        }
+                }else{
+                        if (worldx < Math.round(taskX*gp.tilesize)) {
+                            direction = "right";
+                        } else {
+                            direction = "left";
+                        }}
+                    actionLock = 0;
+
+        }}}
+    public void checkCollision(){
+        hitboxe = false;
+        gp.hregister.checkTile(this);
+        int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
+        if(EntityType == 1 && npcindex != 999){
+            AttackNPC(TrueAttackDamage, npcindex);
+        }
+        gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
+        gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
+        int TileentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
+        destroyTentity(TileentityI);
+        DestroyOBJ(gp.hregister.EntityColide(this, GlobalGameThreadConfigs.obj));
+        boolean ContactPLayer = gp.hregister.PlayerColide(this);
+        if(EntityType == 1 && ContactPLayer){
+            AttackPLayer(TrueAttackDamage);
+        }
+    }
 }

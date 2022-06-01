@@ -20,7 +20,7 @@ public class chest extends LivingEntity {
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         maxstacksize = 16;
-        worldz = 3;
+        worldz = 4;
         NBTDATA =true;
     }
 

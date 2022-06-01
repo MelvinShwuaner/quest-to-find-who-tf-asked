@@ -106,7 +106,6 @@ public class hitboxregister {
                     hasfinushed = true;
                 }
             }
-
         }
     }
 
@@ -137,11 +136,10 @@ public class hitboxregister {
                             break;
                     }
                     if (entity.hitbox.intersects(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox)) {
-                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].collision) {
-                            if (entity.worldz >= GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz-16 && entity.worldz < GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz) {
+                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].collision && GlobalGameThreadConfigs.obj[MainGame.currentmap][i].EntityType == 4) {
+                            if (entity.worldz == GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz) {
                                 entity.hitboxe = true;
                             }
-                            entity.hascolided = true;
                         }
                         if (player) {
                             index = i;

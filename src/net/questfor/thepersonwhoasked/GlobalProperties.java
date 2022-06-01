@@ -17,7 +17,7 @@ public class GlobalProperties {
     /*SETS THE LOCATION OF ENTITIES ON THERE WORLD*/
    public static MainGame gp;
 
-    public void Render(MainGame gpp) {
+    public  GlobalProperties(MainGame gpp) {
         this.gp = gpp;
     }
 

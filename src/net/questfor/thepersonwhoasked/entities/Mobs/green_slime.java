@@ -1,6 +1,4 @@
 package net.questfor.thepersonwhoasked.entities.Mobs;
-
-import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.objects.OBJHeart;
@@ -27,6 +25,7 @@ public class green_slime extends LivingEntity {
         XP = 7;
         level = 5;
         projectile = new OBJ_ROCK(gpp);
+        forgiveondeath = false;
     }
     public void getImageInstance() {
         up1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", gp.tilesize, gp.tilesize);
@@ -66,35 +65,12 @@ public class green_slime extends LivingEntity {
         }
     }
     public void Angry() {
-        actionLock++;
-        Random random = new Random();
-        int I = random.nextInt(100) + 1;
-        if(target != null) {
-            if (actionLock > 30) {
-                if (I > 50) {
-                    if (worldy < target.worldy) {
-                        direction = "down";
-                    } else {
-                        direction = "up";
-                    }
-                }
-                if (I < 50) {
-                    if (worldx < target.worldx) {
-                        direction = "right";
-                    } else {
-                        direction = "left";
-                    }
-                }
 
-                actionLock = 0;
-            }
-            int i = new Random().nextInt(100) + 1;
-            if (i > 99 && projectile.alive == false && primepowercool == 30) {
-                projectile.Set((int) worldx, (int) worldy, direction, true, this);
-                GlobalGameThreadConfigs.projectilelist.add(projectile);
-                primepowercool = 0;
-            }
-        }else{
+        if(target != null) {
+            taskx = Math.round(target.worldx/gp.tilesize);
+            tasky = Math.round(target.worldy/gp.tilesize);
+            searchPath(taskx, tasky);
+                    }else{
             Hostile = false;
         }
     }

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.Random;
 
 public class Old_Man extends LivingEntity {
+    boolean player;
     public Old_Man(MainGame gpp) {
         super(gpp);
         direction = "down";
@@ -18,6 +19,7 @@ public class Old_Man extends LivingEntity {
         maxhealth = 15;
         defence = 3;
         health = maxhealth;
+        forgiveondeath = false;
         name = "Old man";
     }
 
@@ -34,24 +36,36 @@ public class Old_Man extends LivingEntity {
 
     public void setAction() {
         if (!frozen){
-            if (!Hostile) {
-                actionLock++;
-                if (actionLock == 120) {
-                    Random random = new Random();
-                    int I = random.nextInt(100) + 1;
-                    if (I <= 25) {
-                        direction = "up";
+                if(onpath){
+                    if(goingup){
+                        taskx = Math.round(1107/gp.tilesize);
+                        tasky = Math.round(588/gp.tilesize);
+                        goup();
+                    }else if(!Hostile){
+                        Scared();
+                    }else{
+                    taskx = Math.round(target.worldx/gp.tilesize);
+                    tasky = Math.round(target.worldy/gp.tilesize);
+                    searchPath(taskx, tasky);
+                }}else {
+                    actionLock++;
+                    if (actionLock == 120) {
+                        Random random = new Random();
+                        int I = random.nextInt(100) + 1;
+                        if (I <= 25) {
+                            direction = "up";
+                        }
+                        if (I > 25 && I <= 50) {
+                            direction = "down";
+                        }
+                        if (I > 50 && I <= 75) {
+                            direction = "left";
+                        }
+                        if (I > 75) {
+                            direction = "right";
+                        }
+                        actionLock = 0;
                     }
-                    if (I > 25 && I <= 50) {
-                        direction = "down";
-                    }
-                    if (I > 50 && I <= 75) {
-                        direction = "left";
-                    }
-                    if (I > 75) {
-                        direction = "right";
-                    }
-                    actionLock = 0;
                 }
             } else if (goingup) {
                 goup();
@@ -60,33 +74,14 @@ public class Old_Man extends LivingEntity {
             }
     }
 
-}
 
     public void goup() {
-        actionLock++;
-        Random random = new Random();
-        int I = random.nextInt(100) + 1;
-        if (actionLock > 30) {
-            if(I > 25) {
-                if (worldy <= 588 && speed > 0) {
-
+        searchPath(taskx, tasky);
+                if (speed > 0) {
                     dialogues[0] = "Take a wish. will you?";
                     dialogues[2] = ""; dialogues[3] = "";
                     speed = 0;
                 }
-                direction = "up";
-            }
-            if(I < 25){
-                if (worldx < 1107) {
-                    direction = "right";
-                } else {
-                    direction = "left";
-                }
-            }
-
-            actionLock = 0;
-        }
-
     }
 
     public void Scared() {
@@ -122,5 +117,8 @@ public class Old_Man extends LivingEntity {
     }
     public void speak(){
         super.speak();
+        onpath = true;
+        Hostile = true;
+        target = gp.player;
         }
     }

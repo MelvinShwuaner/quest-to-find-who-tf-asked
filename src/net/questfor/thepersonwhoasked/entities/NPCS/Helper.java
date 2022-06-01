@@ -21,7 +21,7 @@ public class Helper extends LivingEntity {
         speed = 3;
         maxhealth = 20;
         TrueAttackDamage = 5;
-        defence = 10;
+        defence = 1;
         health = maxhealth;
         hitbox = new Rectangle(3, 18, 42, 30);
         hitbox.height = 30;
@@ -88,6 +88,7 @@ public class Helper extends LivingEntity {
                                 }
                                 taskx = GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx;
                                 previoustaskx = distancex;
+
                             }
                             if (distancey < previoustasky) {
                                 if (worldy > GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy) {
@@ -97,6 +98,7 @@ public class Helper extends LivingEntity {
                                 }
                                 previoustasky = distancey;
                                 tasky = GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy;
+
                             }
 
 
@@ -127,39 +129,15 @@ public class Helper extends LivingEntity {
     }
 
     public void Angry() {
-        actionLock++;
-        Random random = new Random();
-        int I = random.nextInt(100) + 1;
-        if (actionLock > 30) {
-            if (I > 50) {
-                if (worldy < tasky) {
-                    direction = "down";
-                } else {
-                    direction = "up";
-
-                }
-            }
-            if (I < 50) {
-                if (worldx < taskx) {
-                    direction = "right";
-                } else {
-                    direction = "left";
-                }
-            }
-
-            actionLock = 0;
-        }
+        searchPath(Math.round(taskx/gp.tilesize), Math.round(tasky/gp.tilesize));
         int i = new Random().nextInt(100) + 1;
         if (i > 70 && projectile.alive == false && primepowercool == 30) {
             projectile.Set((int) worldx, (int) worldy, direction, true, this);
             GlobalGameThreadConfigs.projectilelist.add(projectile);
             primepowercool = 0;
         }
-
             previoustasky = 10000;
             previoustaskx = 10000;
-
-
     }
 
     public void HandleItems() {

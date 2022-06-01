@@ -2,6 +2,7 @@ package net.questfor.thepersonwhoasked.Maingam
 import net.questfor.thepersonwhoasked.GlobalProperties
 import net.questfor.thepersonwhoasked.Main
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs.obj
+import net.questfor.thepersonwhoasked.entities.AI.Path
 import net.questfor.thepersonwhoasked.entities.Player
 import net.questfor.thepersonwhoasked.tile.Tilemanager
 import java.awt.Color
@@ -200,7 +201,7 @@ class MainGame : JPanel(), Runnable {
         var maxscreencol = 20
         var maxscreenrow = 12
          @JvmField
-         var maxmap = 100
+         var maxmap = 2
          @JvmField
          var currentmap = 0
 
@@ -217,7 +218,7 @@ class MainGame : JPanel(), Runnable {
          //HITBOXES, RENDERING, AND SOUND
         var hregister = hitboxregister(MainGame())
          @JvmField
-         var MultiRender = GlobalProperties()
+         var MultiRender = GlobalProperties(MainGame())
          @JvmField
          var music = SoundHandler()
          @JvmField
@@ -230,12 +231,13 @@ class MainGame : JPanel(), Runnable {
         @JvmField
         //PLAYER//
         var player = Player(keyM, MainGame())
-         @JvmField
+        @JvmField
+
          //WORLD RENDERER//
         var tilemanager = Tilemanager()
         const val maxworldcol = 50
         const val maxworldrow = 50
-        const val maxworldlayer = 7;
+        const val maxworldlayer = 8
          @JvmStatic
          var screenwidth2 = screenwidth
          @JvmStatic
@@ -244,7 +246,6 @@ class MainGame : JPanel(), Runnable {
          var FullscreenON = false
          @JvmStatic
         fun setupOBJ() {
-            MultiRender.Render(MainGame())
             MultiRender.setObjectRenderer()
             MultiRender.setNPCrenderers()
             MultiRender.setMonsterRenderers()

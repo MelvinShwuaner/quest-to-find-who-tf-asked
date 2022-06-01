@@ -21,7 +21,7 @@ public class OBJdoor extends LivingEntity {
         getImageInstance();
         this.worldx = x * gp.tilesize;
         this.worldy = y * gp.tilesize;
-        worldz = 3;
+        worldz = 4;
         NBTDATA = true;
     }
     @Override

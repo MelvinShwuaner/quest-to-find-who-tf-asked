@@ -6,5 +6,5 @@ public class tile {
     public boolean collision = false;
     public boolean canjumpover = false;
     public int worldz;
-
+    public boolean fluid = false;
 }
