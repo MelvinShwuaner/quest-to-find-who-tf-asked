@@ -28,7 +28,7 @@ public  class Main{
 
     public static ImageIcon urmom = new ImageIcon(Main.class.getClassLoader().getResource("shipgame/logo.png"));
     public static void main(String[] args) {
-        //System.setOut(ps);
+        System.setOut(ps);
         createnewwindow();
     }
     public static void createnewwindow(){
@@ -48,14 +48,14 @@ public  class Main{
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             window.pack();
             window.setLocationRelativeTo(null);
-            window.setVisible(true);
+            mainGame.MultiRender.setScreenRenderer();
+            GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
             MainGame.setupOBJ();
             mainGame.startgamethread();
-            mainGame.MultiRender.setScreenRenderer();
             GlobalSaveManager.loadconfigs();
             mainGame.playmusic(0);
-            GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
             System.out.println("Successfully created new window");
+            window.setVisible(true);
         }catch(Exception e){
             crash.main(e);
         }

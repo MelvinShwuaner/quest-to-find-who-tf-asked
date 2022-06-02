@@ -16,7 +16,6 @@ public class Player extends LivingEntity {
     public int screenY;
     public int jumpstate = 0;
     public int jumpaction = 0;
-    public  boolean isup = false;
     public boolean attacking = false;
     public boolean hasattacked = false;
     public int objindex;
@@ -41,11 +40,11 @@ public class Player extends LivingEntity {
         Ammo = 10;
         name = "Player";
         inventorysize = 20;
-        worldx = gp.tilesize * 20;
+        worldx = gp.tilesize * 12;
         worldy = gp.tilesize * 14;
         speed = 4;
         direction = "right";
-        worldz = 3;
+        worldz = 4;
         maxhealth = 10;
         health = maxhealth;
         invincible = false;
@@ -152,6 +151,7 @@ public class Player extends LivingEntity {
             attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
             attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
         }
+
     }
     public void updatehitbox() {
         if (up1 != null) {
@@ -617,21 +617,20 @@ public class Player extends LivingEntity {
                 double y = worldy;
                 double x = worldx;
                 double z = worldz;
+                if(!KeyHandler.CROUCH){
                 switch (direction) {
                     case "down" -> y += 50;
                     case "up" -> y -= 50;
                     case "left" -> x -= 50;
                     case "right" -> x += 50;
-                }
-                if(z < 4){
-                    z++;
-                }if(KeyHandler.CROUCH){
+                }}
+                if(KeyHandler.CROUCH){
                     z--;
                 }
                 attacking = true;
                 if (currentweapon.Type == Type_shovel) {
                     switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z]) {
-                        case 39 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+                        case 39,0 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
                         case 45 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
                             for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
                                 if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
@@ -696,13 +695,16 @@ public class Player extends LivingEntity {
                 jumpaction++;
                 if(jumpaction < 25){
                     if(isup) {
-                        if (!gp.hregister.checkWALL(this)) {
+                        if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this)) {
                         if (jumpaction == 1) {
                                 worldz++;
                             }
                             jumpstate++;
+                            try {
                                 image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
-                            }
+                            }catch (Exception e){
+                                System.out.println("Catched null pointer exeption");
+                            }                            }
                     }
                 }else{
                     isup = false;
@@ -723,23 +725,29 @@ public class Player extends LivingEntity {
                 }
             }
             if(invincible){
-                for(int y = 0; y < image.getHeight(); y++){
-                    for(int x = 0; x < image.getWidth(); x++){
-                        int p = image.getRGB(x, y);
-                        int a = (p >> 24) & 0xff;
-                        int r = (p >> 16) & 0xff;
-                        p = (a << 24) | (r << 16) | (0 << 8) | 0;
-                        image.setRGB(x, y, p);
-                        isred = 2;
+                try {
+                    for (int y = 0; y < image.getHeight(); y++) {
+                        for (int x = 0; x < image.getWidth(); x++) {
+                            int p = image.getRGB(x, y);
+                            int a = (p >> 24) & 0xff;
+                            int r = (p >> 16) & 0xff;
+                            p = (a << 24) | (r << 16) | (0 << 8) | 0;
+                            image.setRGB(x, y, p);
+                            isred = 2;
+                        }
                     }
+                }catch (Exception d){
+                    System.out.println("Catched null pointer exeption");
                 }
             }
+
             if(isred == 2){
                 if(invincible == false){getImageInstance(); getAttackInstance();isred = 1;}
             }
             g2.drawImage(image, tempscreenx, tempscreeny, null);
+            drawwalls(g2, this);
             if(KeyHandler.checkFPS)
-              g2.drawRect((int) (hitbox.x), (int) (hitbox.y), hitbox.width, hitbox.height);
+              g2.drawRect((int) (tempscreenx+hitbox.x), (int) (tempscreeny+hitbox.y), hitbox.width, hitbox.height);
         }catch(Exception e){
             e.printStackTrace();
         }

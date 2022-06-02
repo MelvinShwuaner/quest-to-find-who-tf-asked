@@ -16,6 +16,7 @@ public abstract class TileEntity extends LivingEntity {
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
+        worldz = 4;
     }
     public boolean ItemRequirements(LivingEntity SourceEntity){return false;}
     public void playSE(){}

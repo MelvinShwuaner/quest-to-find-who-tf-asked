@@ -2,6 +2,9 @@ package net.questfor.thepersonwhoasked.Maingam;
 
 import com.sun.jdi.InconsistentDebugInfoException;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
+
+import java.util.Random;
+
 //MANAGES HITBOX'S AND COLLISIONS
 public class hitboxregister {
     static MainGame gp;
@@ -31,12 +34,12 @@ public class hitboxregister {
                     var10000 = (int) (entitytopworldy - entity.speed);
                     entitytoprow = var10000 / MainGame.tilesize;
                     tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz1];
-                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz2];
-                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz1];
+                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz2];
+                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz1];
                     tileNUM4 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz2];
                     tileNUM5 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz3];
                     tileNUM6= MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz3];
-                    if(((tileNUM1 != 46 && tileNUM2 != 46 )|| (tileNUM3 != 46 && tileNUM4 != 46)) || (tileNUM5 != 46 && tileNUM6 != 46)){
+                    if(((tileNUM1 != 46 || tileNUM2 != 46 )|| (tileNUM3 != 46 || tileNUM4 != 46)) || (tileNUM5 != 46 || tileNUM6 != 46)){
                         entity.hitboxe = true;
                     }
                     break;
@@ -44,12 +47,12 @@ public class hitboxregister {
                     var10000 = (int) (entitybottomworldy + entity.speed);
                     entitybottomrow = var10000 / MainGame.tilesize;
                     tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz1];
-                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz2];
-                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz1];
+                    tileNUM3= MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz2];
+                    tileNUM2= MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz1];
                     tileNUM4 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz2];
                     tileNUM5 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz3];
                     tileNUM6 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz3];
-                    if(((tileNUM1 != 46 && tileNUM2 != 46 )|| (tileNUM3 != 46 && tileNUM4 != 46)) || (tileNUM5 != 46 && tileNUM6 != 46)){
+                    if(((tileNUM1 != 46 || tileNUM2 != 46 )|| (tileNUM3 != 46 || tileNUM4 != 46)) || (tileNUM5 != 46 || tileNUM6 != 46)){
                         entity.hitboxe = true;
                     }
                     break;
@@ -57,12 +60,12 @@ public class hitboxregister {
                     var10000 = (int) (entityleftworldx - entity.speed);
                     entityleftcol = var10000 / MainGame.tilesize;
                     tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz1];
-                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz2];
-                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz1];
+                    tileNUM3= MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz2];
+                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz1];
                     tileNUM4 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz2];
                     tileNUM5 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz3];
                     tileNUM6 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz3];
-                    if(((tileNUM1 != 46 && tileNUM2 != 46 )|| (tileNUM3 != 46 && tileNUM4 != 46)) || (tileNUM5 != 46 && tileNUM6 != 46)){
+                    if(((tileNUM1 != 46 || tileNUM2 != 46 )|| (tileNUM3 != 46 || tileNUM4 != 46)) || (tileNUM5 != 46 || tileNUM6 != 46)){
                         entity.hitboxe = true;
                     }
                     break;
@@ -70,43 +73,23 @@ public class hitboxregister {
                     var10000 = (int) (entityrightworldx + entity.speed);
                     entityrightcol = var10000 / MainGame.tilesize;
                     tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz1];
-                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz2];
-                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz1];
+                    tileNUM3 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz2];
+                    tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz1];
                     tileNUM4 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz2];
                     tileNUM5 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz3];
                     tileNUM6 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz3];
-                    if(((tileNUM1 != 46 && tileNUM2 != 46 )|| (tileNUM3 != 46 && tileNUM4 != 46)) || (tileNUM5 != 46 && tileNUM6 != 46)){
+                    if(((tileNUM1 != 46 || tileNUM2 != 46 )|| (tileNUM3 != 46 || tileNUM4 != 46)) || (tileNUM5 != 46 || tileNUM6 != 46)){
                         entity.hitboxe = true;
                     }
 
                     break;
             }
         } catch (Exception e) {
-            if (knockback <= 2){
-                switch (entity.direction) {
-                    case "up" -> entity.worldy = entity.worldy + knockback;
-                    case "down" -> entity.worldy = entity.worldy - knockback;
-                    case "right" -> entity.worldx = entity.worldx - knockback;
-                    case "left" -> entity.worldx = entity.worldx + knockback;
-                }
-        }
-            while (!hasfinushed){
-                knockback++;
-                if(knockback > 2){
-                    if(!entity.hitboxe){
-                        switch (entity.direction) {
-                            case "up" -> entity.worldy = entity.worldy + knockback;
-                            case "down" -> entity.worldy = entity.worldy - knockback;
-                            case "right" -> entity.worldx = entity.worldx - knockback;
-                            case "left" -> entity.worldx = entity.worldx + knockback;
-                        }
-                    }
-                }
-                if(knockback >= 7){
-                    hasfinushed = true;
-                }
-            }
-        }
+            Random random = new Random();
+            int I = random.nextInt(50);
+            entity.worldx = I*gp.tilesize;
+            entity.worldy = I*gp.tilesize;
+            entity.worldz = 7;}
     }
 
 
@@ -263,9 +246,10 @@ public class hitboxregister {
                 }
                 if (entity.hitbox.intersects(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].hitbox)) {
                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].collision) {
-                        if (entity.worldz > GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz+1) {
+                        if(GlobalGameThreadConfigs.obj[MainGame.currentmap][i] != entity)
+                          if (entity.worldz > GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz+1) {
                             worldz = true;
-                        }
+                          }
                     }
 
                 }
@@ -368,6 +352,23 @@ public class hitboxregister {
         }
     }
         return index;}
+    public boolean checkentitywall(double x, double y, double z, LivingEntity[][] target, LivingEntity entity) {
+        //checks collision between a entity and another entity
+        boolean index = true;
+        int targetx = 0, targety, targetz;
+        for (int i = 0; i < target[1].length; i++) {
+            if (target[MainGame.currentmap][i] != null) {
+                if(target[MainGame.currentmap][i] != entity)
+                targetx = (int) Math.round(target[MainGame.currentmap][i].worldx/gp.tilesize);
+                targety = (int) Math.round(target[MainGame.currentmap][i].worldy/gp.tilesize);
+                targetz = (int) (target[MainGame.currentmap][i].worldz);
+                if(targetx == x && targety == y){
+                    if(targetz > z){
+                    index = false;
+                }}
+            }
+        }
+        return index;}
     public boolean checktileworld(int x, int y, int z) {
         //checks collision between entity and world
         boolean index = true;
@@ -386,7 +387,7 @@ public class hitboxregister {
         boolean shouldtrigger = !checkEntity(gp.player, GlobalGameThreadConfigs.Tentity) && !checkEntity(gp.player, GlobalGameThreadConfigs.Monsters) && !checkEntity(gp.player, GlobalGameThreadConfigs.obj) && !checkEntity(gp.player, GlobalGameThreadConfigs.NPCS);
 
 try {
-    int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)][(int) (entity.worldz)];
+    int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)][(int) (entity.worldz-1)];
     if (TileNum1 == 46){
         if(shouldtrigger)
             if(entity.worldz > 0)
@@ -394,39 +395,20 @@ try {
     }
 }catch (Exception e) {
 
-    if (knockback <= 2){
-        switch (entity.direction) {
-            case "up" -> entity.worldy = entity.worldy + knockback;
-            case "down" -> entity.worldy = entity.worldy - knockback;
-            case "right" -> entity.worldx = entity.worldx - knockback;
-            case "left" -> entity.worldx = entity.worldx + knockback;
-        }
-    }
-    while (!hasfinushed){
-        knockback++;
-        if(knockback > 2){
-            if(!entity.hitboxe){
-                switch (entity.direction) {
-                    case "up" -> entity.worldy = entity.worldy + knockback;
-                    case "down" -> entity.worldy = entity.worldy - knockback;
-                    case "right" -> entity.worldx = entity.worldx - knockback;
-                    case "left" -> entity.worldx = entity.worldx + knockback;
-                }
-            }
-        }
-        if(knockback >= 7){
-            hasfinushed = true;
-        }
-    }
+    Random random = new Random();
+    int I = random.nextInt(50);
+    entity.worldx = I*gp.tilesize;
+    entity.worldy = I*gp.tilesize;
+    entity.worldz = 7;
 
 }
         return index;
     }
     public boolean checkWALL(LivingEntity entity){
-        boolean index = false;
-        int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)][(int) entity.worldz];
-        if(TileNum1 == 40 && entity.worldz < MainGame.tilemanager.tile[TileNum1].worldz-16){
-            index = true;
+        boolean index = true;
+        int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)][(int) entity.worldz+1];
+        if(TileNum1 != 46){
+            index = false;
         }
         return index;
     }

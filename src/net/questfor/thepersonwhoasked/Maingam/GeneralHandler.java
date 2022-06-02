@@ -6,6 +6,8 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.Comparator;
 
+import static net.questfor.thepersonwhoasked.Maingam.hitboxregister.gp;
+
 public class GeneralHandler {
     public static void main(Graphics2D g2) {
         //is the lead Renderer to handle all the different entites and objects.

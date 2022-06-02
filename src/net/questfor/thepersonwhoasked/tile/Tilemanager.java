@@ -3,6 +3,7 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.Maingam.UtilityTool;
 import net.questfor.thepersonwhoasked.Maingam.crash;
 import net.questfor.thepersonwhoasked.Map;
+import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,7 +18,6 @@ public class Tilemanager {
     public int[][][][] mapRendererID;
     public  String is;
     public BufferedImage earthright1, earthleft1, earthup1, earthdown1, earth;
-    boolean drawpath = true;
 
     public Tilemanager()  {
         tile = new tile[999];
@@ -136,7 +136,7 @@ public class Tilemanager {
                         && worldY + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
                         (worldY - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
                     if (tileID != 46){
-                        if(mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 46){
+                        if(mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 46 || mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 41){
                         g2.drawImage(tile[tileID].image, (int) screenX, (int) screenY, null);
                         update(worldcol, worldrow, worldlayer, screenX, screenY, g2);
                 }

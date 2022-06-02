@@ -1,11 +1,14 @@
 package net.questfor.thepersonwhoasked.entities.NPCS;
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
+import net.questfor.thepersonwhoasked.entities.AI.Path;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.objects.OBJHeart;
 import net.questfor.thepersonwhoasked.objects.OBJ_COIN_BRONZE;
 import net.questfor.thepersonwhoasked.objects.OBJ_MANA_CRYSTAL;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
+import net.questfor.thepersonwhoasked.tile.Tilemanager;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
@@ -194,6 +197,9 @@ public class Helper extends LivingEntity {
     @Override
     public void draw(Graphics2D g2) {
         try {
+            if(path == null) {
+                path = new Path();
+            }
             BufferedImage image = null;
             double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);
             double screenY = worldy - MainGame.player.worldy + MainGame.player.screenY;
@@ -271,6 +277,36 @@ public class Helper extends LivingEntity {
                     getImageInstance();
                     getAttackInstance();
                 }
+                if(jumping){
+                    jumpaction++;
+                    if(jumpaction < 25){
+                        if(isup) {
+                            if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this)) {
+                                if (jumpaction == 1) {
+                                    worldz++;
+                                }
+                                jumpstate++;
+                                image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                            }
+                        }
+                    }else{
+                        isup = false;
+                        jumpstate--;
+                        try {
+                            image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                        }catch (Exception e){
+                            System.out.println("Catched null pointer exeption");
+                        }
+                        if(jumpstate < 0) {
+                            jumpaction = 0;
+                            jumping = false;
+                            getAttackInstance();
+                            getImageInstance();
+                            updatehitbox();
+                        }
+
+                    }
+                }
                 if (invincible && image != null) {
                     for (int y = 0; y < image.getHeight(); y++) {
                         for (int x = 0; x < image.getWidth(); x++) {
@@ -302,6 +338,7 @@ public class Helper extends LivingEntity {
                     g2.fillRect((int) screenX, (int) screenY - 15, (int) HPValue, 10);
                 }
                 g2.drawImage(image, (int) tempscreenx, (int) (tempscreeny), null);
+                drawwalls(g2, this);
             }
         } catch (Exception e) {
             e.printStackTrace();

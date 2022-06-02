@@ -1,6 +1,7 @@
 package net.questfor.thepersonwhoasked.entities;
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.entities.AI.Path;
+import net.questfor.thepersonwhoasked.tile.Tilemanager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -8,7 +9,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static net.questfor.thepersonwhoasked.GlobalProperties.gp;
 
 //is the parent class for all entities including player
 public class LivingEntity extends Data {
@@ -19,7 +19,7 @@ public class LivingEntity extends Data {
     public  double worldx;
     public  double worldy;
     public boolean goingup;
-    public  double worldz = 3;
+    public  double worldz = 4;
     public double speed;
     public boolean hascolided = false;
     //HEALTH//
@@ -34,7 +34,7 @@ public class LivingEntity extends Data {
     public transient  BufferedImage up1, up2, down1, down2, down3, left1, left2, right1, right2;
     public transient BufferedImage attackup1, attackup2, attackdown1, attackdown2, attackdown3,
             attackleft1, attackleft2, attackright1, attackright2;
-    boolean drawingpath = true;
+    boolean drawingpath = false;
     //MOVEMENT AND ANIMATION//
     public String direction = "down";
     public int spritecounter = 0;
@@ -43,12 +43,15 @@ public class LivingEntity extends Data {
     //HITBOX//
     public Rectangle hitbox;
     public int i = 0;
+    public int jumpstate = 0;
+    public int jumpaction = 0;
     public Rectangle attackHitbox = new Rectangle(0, 0, 0, 0);
     public int hitboxdefaultx, hitboxdefaulty;
     public boolean collision = false;
     public boolean hitboxe = false;
     //AI//
     public int actionLock = 0;
+    public  boolean isup = false;
     public boolean Hostile = false;
     public boolean frozen = false;
     public double taskx = 0, tasky = 0;
@@ -104,6 +107,8 @@ public class LivingEntity extends Data {
     //RECIPE
     public boolean[] slot =  new boolean[9];
     public boolean NBTDATA = false;
+    public boolean jumping = false;
+
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
         this.gp = gpp;
@@ -118,6 +123,15 @@ public class LivingEntity extends Data {
         }
 
     }
+    public void updatehitbox() {
+        if (up1 != null) {
+            if (worldz < 0){
+                hitbox.width = up1.getWidth() - 16;
+                hitbox.height = up1.getHeight() - 16;
+            }
+        }
+    }
+
 
     public void getAttackInstance(){}
     public void Angry(){}
@@ -144,9 +158,24 @@ public class LivingEntity extends Data {
     }else{
             dying = true;
         }
+
+        if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Tentity) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.worldzobjectreturn(this) || MainGame.hregister.returntileworldz(this)) {
+            if (!isup) {
+                worldz--;
+                getImageInstance();
+                updatehitbox();
+                getAttackInstance();
+            }
+        }
         /*AI for Monsters And NPCS*/
         setAction();
         checkCollision();
+        if(hitboxe){
+            if(!jumping) {
+                jumping = true;
+                isup = true;
+            }
+        }
         if(primepowercool < 30){
             primepowercool++;
         }
@@ -202,7 +231,7 @@ public class LivingEntity extends Data {
     }
     public void set(){}
 
-    private void AttackNPC(int trueAttackDamage, int npcindex) {
+    public void AttackNPC(int trueAttackDamage, int npcindex) {
         if(!GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible){
             int damage = trueAttackDamage - GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].defence;
             if(damage <= 0){
@@ -267,6 +296,7 @@ public class LivingEntity extends Data {
         if(path == null){
             path = new Path();
         }
+
         //RENDERER
         try {
             double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);
@@ -305,6 +335,36 @@ public class LivingEntity extends Data {
                             image = left2;
                         }
                         break;
+                }
+                if(jumping){
+                    jumpaction++;
+                    if(jumpaction < 25){
+                        if(isup) {
+                            if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this)) {
+                                if (jumpaction == 1) {
+                                    worldz++;
+                                }
+                                jumpstate++;
+                                image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                            }
+                        }
+                    }else{
+                        isup = false;
+                        jumpstate--;
+                        try {
+                            image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                        }catch (Exception e){
+                            System.out.println("Catched null pointer exeption");
+                        }
+                        if(jumpstate < 0) {
+                            jumpaction = 0;
+                            jumping = false;
+                            getAttackInstance();
+                            getImageInstance();
+                            updatehitbox();
+                        }
+
+                    }
                 }
                 //HP BAR
                 if ((EntityType == 2 || EntityType == 1) && Hostile) {
@@ -366,6 +426,7 @@ public class LivingEntity extends Data {
                 }
             }
                 g2.drawImage(image, (int) screenX, (int) screenY, null);
+                drawwalls(g2, this);
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
             }
         }catch (Exception e){
@@ -596,6 +657,35 @@ public class LivingEntity extends Data {
         boolean ContactPLayer = gp.hregister.PlayerColide(this);
         if(EntityType == 1 && ContactPLayer){
             AttackPLayer(TrueAttackDamage);
+        }
+    }
+    public BufferedImage scaleimage(BufferedImage original, int width, int height){
+        BufferedImage scaledImage = new BufferedImage(width, height, original.getType());
+        Graphics2D g2 = scaledImage.createGraphics();
+        g2.drawImage(original, 0, 0, width, height, null);
+        g2.dispose();
+        return scaledImage;
+    }
+    public void drawwalls(Graphics2D g2, LivingEntity entity) {
+        int worldcol = (int) (entity.worldx/MainGame.tilesize);
+        int worldrow = (int) (entity.worldy / MainGame.tilesize);
+        int worldlayer = 0;
+        while (worldlayer < MainGame.maxworldlayer) {
+            int tileID = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer];
+            int worldX = worldcol * MainGame.tilesize;
+            int worldY = worldrow * MainGame.tilesize;
+            double screenX = (worldX - MainGame.player.worldx + MainGame.player.screenX);
+            double screenY = worldY - MainGame.player.worldy + MainGame.player.screenY;
+            if (tileID != 46) {
+                if (gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer + 1] == 46) {
+                    if (worldlayer >= entity.worldz) {
+                        g2.drawImage(gp.tilemanager.tile[tileID].image, (int) screenX, (int) screenY, null);
+
+                    }
+                }
+
+            }
+            worldlayer++;
         }
     }
 }

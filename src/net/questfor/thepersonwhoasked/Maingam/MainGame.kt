@@ -2,7 +2,6 @@ package net.questfor.thepersonwhoasked.Maingam
 import net.questfor.thepersonwhoasked.GlobalProperties
 import net.questfor.thepersonwhoasked.Main
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs.obj
-import net.questfor.thepersonwhoasked.entities.AI.Path
 import net.questfor.thepersonwhoasked.entities.Player
 import net.questfor.thepersonwhoasked.tile.Tilemanager
 import java.awt.Color
@@ -126,6 +125,11 @@ class MainGame : JPanel(), Runnable {
             tilemanager.drawground(GlobalGameThreadConfigs.g2)
             /*DISPLAYS ENTITYS AND OBJECTS*/
             GlobalGameThreadConfigs.entitylist.add(player)
+            for (i in GlobalGameThreadConfigs.Tentity[1].indices) {
+                if (GlobalGameThreadConfigs.Tentity[currentmap][i] != null) {
+                    GlobalGameThreadConfigs.Tentity[currentmap][i].draw(GlobalGameThreadConfigs.g2)
+                }
+            }
             for (i in GlobalGameThreadConfigs.NPCS[1].indices) {
                 if (GlobalGameThreadConfigs.NPCS[currentmap][i] != null) {
                     GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.NPCS[currentmap][i])
@@ -152,11 +156,7 @@ class MainGame : JPanel(), Runnable {
                 }
             }
             /**TILE ENTITY RENDERING**/
-            for (i in GlobalGameThreadConfigs.Tentity[1].indices) {
-                if (GlobalGameThreadConfigs.Tentity[currentmap][i] != null) {
-                    GlobalGameThreadConfigs.Tentity[currentmap][i].draw(GlobalGameThreadConfigs.g2)
-                }
-            }
+
             /*SORT ENTITYS IN POSITIONS*/
             GeneralHandler.main(GlobalGameThreadConfigs.g2)
             /*HANDLES FPS AND DRAW TIME FUNC*/
@@ -182,8 +182,7 @@ class MainGame : JPanel(), Runnable {
             }
             //UIS//
             UI.draw(GlobalGameThreadConfigs.g2)
-            //GlobalGameThreadConfigs.g2.color = Color(0, 0, 0, 220)
-            //GlobalGameThreadConfigs.g2.fillRect(0, 0, screenwidth, screenheight)
+
         }
     }
     fun drawtoscreen() {
