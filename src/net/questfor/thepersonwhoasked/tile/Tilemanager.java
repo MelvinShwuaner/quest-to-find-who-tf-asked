@@ -1,14 +1,16 @@
 package net.questfor.thepersonwhoasked.tile;
+
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.Maingam.UtilityTool;
 import net.questfor.thepersonwhoasked.Maingam.crash;
 import net.questfor.thepersonwhoasked.Map;
-import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 import static net.questfor.thepersonwhoasked.GlobalProperties.gp;
 
@@ -21,14 +23,17 @@ public class Tilemanager {
 
     public Tilemanager()  {
         tile = new tile[999];
-        mapRendererID = new int[MainGame.maxmap][MainGame.maxworldcol][MainGame.maxworldrow][MainGame.maxworldlayer];
         try {
             getTileImage();
-            loadmap(0);
             //loadmap(4,  1);
         }catch(Exception e){
             crash.main(e);
         }
+    }
+    public void set(){
+        mapRendererID = new int[MainGame.maxmap][MainGame.maxworldcol][MainGame.maxworldrow][MainGame.maxworldlayer];
+        loadmap(0);
+
     }
     public void getTileImage() {
         setexternaltextures();
@@ -78,7 +83,11 @@ public class Tilemanager {
         tileproperties(43,"floor01", true);
         tileproperties(44,"table01", true);
         tileproperties(45,"clayblock", true);
+        //AIR
         tileproperties(46,"air", true);
+        //OCUPIED BLOCK
+        tileproperties(47, "air", true);
+        tileproperties(48, "brickwall", true);
     }
 
     public void setexternaltextures() {
@@ -136,11 +145,17 @@ public class Tilemanager {
                         && worldY + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
                         (worldY - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
                     if (tileID != 46){
-                        if(mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 46 || mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 41){
+                        boolean shouldrender;
+                        if(worldlayer+1 < MainGame.maxworldlayer) {
+                            shouldrender = mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 46 || mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 41 || mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 47;
+                            }else{
+                            shouldrender = true;
+                        }
+                        if(shouldrender){
+                            update(worldcol, worldrow, worldlayer, screenX, screenY, g2);
                         g2.drawImage(tile[tileID].image, (int) screenX, (int) screenY, null);
-                        update(worldcol, worldrow, worldlayer, screenX, screenY, g2);
-                }
-                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));}
+                            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+                }}
                 }
                 worldcol++;
                 if (worldcol == MainGame.maxworldcol) {
@@ -173,25 +188,25 @@ public class Tilemanager {
                     if (mapRendererID[MainGame.currentmap][col][row][layer] == 0)
                         g2.drawImage(earthdown1, (int) (x), (int) (y), null);
                 }
-            }else  if(mapRendererID[MainGame.currentmap][col][row][layer] == 40){
-                if(gp.player.worldz < 0) {
-                    float Xdistance;
-                    float Ydistance;
-                    if (col > gp.player.worldx / gp.tilesize) {
-                        Xdistance = (float) (col - (gp.player.worldx / gp.tilesize));
-                    }else{
-                        Xdistance = (float) ((gp.player.worldx / gp.tilesize) - col);
-                    }
-                    if (row > gp.player.worldy / gp.tilesize) {
-                        Ydistance = (float) (row - (gp.player.worldy / gp.tilesize));
-                    }else{
-                        Ydistance = (float) ((gp.player.worldy / gp.tilesize) - row);
-                    }
-                    if (Ydistance < 5 && Xdistance < 5){
-                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, Xdistance/5));
+            }
+            if(layer > gp.player.worldz){
+                float Xdistance;
+                float Ydistance;
+                if (col > gp.player.worldx / gp.tilesize) {
+                    Xdistance = (float) (col - (gp.player.worldx / gp.tilesize));
+                }else{
+                    Xdistance = (float) ((gp.player.worldx / gp.tilesize) - col);
                 }
+                if (row > gp.player.worldy / gp.tilesize) {
+                    Ydistance = (float) (row - (gp.player.worldy / gp.tilesize));
+                }else{
+                    Ydistance = (float) ((gp.player.worldy / gp.tilesize) - row);
+                }
+                if (Ydistance < 2 && Xdistance < 2){
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
                 }
             }
+
 
     }catch (Exception e){
             //System.out.println("error: index out of bounds of length 50: -1");

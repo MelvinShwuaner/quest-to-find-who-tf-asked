@@ -1,4 +1,5 @@
 package net.questfor.thepersonwhoasked.entities.NPCS;
+
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.AI.Path;
@@ -7,7 +8,6 @@ import net.questfor.thepersonwhoasked.objects.OBJHeart;
 import net.questfor.thepersonwhoasked.objects.OBJ_COIN_BRONZE;
 import net.questfor.thepersonwhoasked.objects.OBJ_MANA_CRYSTAL;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
-import net.questfor.thepersonwhoasked.tile.Tilemanager;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,7 +21,8 @@ public class Helper extends LivingEntity {
         super(gpp);
         EntityType = 2;
         name = "Helper";
-        speed = 3;
+        defaultspeed = 3;
+        speed = defaultspeed;
         maxhealth = 20;
         TrueAttackDamage = 5;
         defence = 1;
@@ -60,7 +61,7 @@ public class Helper extends LivingEntity {
     }
 
     public void setAction() {
-        if (!frozen) {
+
             if (!Hostile) {
                 actionLock++;
                 if (actionLock == 120) {
@@ -114,7 +115,7 @@ public class Helper extends LivingEntity {
                     Angry();
             }
         }
-    }
+
 
     @Override
     public void update() {
@@ -133,10 +134,15 @@ public class Helper extends LivingEntity {
 
     public void Angry() {
         searchPath(Math.round(taskx/gp.tilesize), Math.round(tasky/gp.tilesize));
-        int i = new Random().nextInt(100) + 1;
-        if (i > 70 && projectile.alive == false && primepowercool == 30) {
-            projectile.Set((int) worldx, (int) worldy, direction, true, this);
-            GlobalGameThreadConfigs.projectilelist.add(projectile);
+        int id = new Random().nextInt(100) + 1;
+        if (id > 70 && projectile.alive == false && primepowercool == 30) {
+            projectile.Set((int) worldx, (int) worldy, (int) worldz, direction, true, this);
+            for(int i = 0; i<GlobalGameThreadConfigs.projectilelist[1].length; i++){
+                if(GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i] == null){
+                    GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i] = projectile;
+                    break;
+                }
+            }
             primepowercool = 0;
         }
             previoustasky = 10000;
@@ -205,107 +211,115 @@ public class Helper extends LivingEntity {
             double screenY = worldy - MainGame.player.worldy + MainGame.player.screenY;
             double tempscreenx = screenX;
             double tempscreeny = screenY;
+            switch (direction) {
+                case "up":
+                    if (!attacking) {
+                        if (spritenumber == 1) {
+                            image = up1;
+                        } else if (spritenumber == 2) {
+                            image = up2;
+                        }
+                    } else {
+                        tempscreeny = screenY - gp.tilesize;
+                        if (spritenumber == 1) {
+                            image = attackup1;
+                        } else if (spritenumber == 2) {
+                            image = attackup2;
+                        }
+                    }
+                    break;
+                case "down":
+                    if (!attacking) {
+                        if (spritenumber == 1) {
+                            image = down1;
+                        } else if (spritenumber == 2) {
+                            image = down2;
+                        }
+                    } else {
+                        if (spritenumber == 1) {
+                            image = attackdown1;
+                        } else if (spritenumber == 2) {
+                            image = attackdown2;
+                        }
+                    }
+                    break;
+                case "right":
+                    if (!attacking) {
+                        if (spritenumber == 1) {
+                            image = right1;
+                        } else if (spritenumber == 2) {
+                            image = right2;
+                        }
+                    } else {
+                        if (spritenumber == 1) {
+                            image = attackright1;
+                        } else if (spritenumber == 2) {
+                            image = attackright2;
+                        }
+                    }
+                    break;
+                case "left":
+                    if (!attacking) {
+                        if (spritenumber == 1) {
+                            image = left1;
+                        } else if (spritenumber == 2) {
+                            image = left2;
+                        }
+                    } else {
+                        tempscreenx = screenX - gp.tilesize;
+                        if (spritenumber == 1) {
+                            image = attackleft1;
+                        } else if (spritenumber == 2) {
+                            image = attackleft2;
+                        }
+                    }
+                    break;
+            }
+            if(jumping){
+                jumpaction++;
+                if(jumpaction < 25){
+                    if(isup) {
+                        if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
+                            if (jumpaction == 1) {
+                                worldz++;
+                            }
+                            jumpstate++;
+                            if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                                    (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                                    && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                                    (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                                image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                            }
+                        }}
+                }else{
+                    isup = false;
+                    jumpstate--;
+                    try {
+                        if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                                (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                                && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                                (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                            image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                        }}catch (Exception e){
+                        System.out.println("Catched null pointer exeption");
+                    }
+                    if(jumpstate < 0) {
+                        jumpaction = 0;
+                        jumping = false;
+                        getAttackInstance();
+                        getImageInstance();
+                        updatehitbox();
+                    }
+
+                }
+            }
             if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
                     (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
                     && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
                     (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
-                switch (direction) {
-                    case "up":
-                        if (!attacking) {
-                            if (spritenumber == 1) {
-                                image = up1;
-                            } else if (spritenumber == 2) {
-                                image = up2;
-                            }
-                        } else {
-                            tempscreeny = screenY - gp.tilesize;
-                            if (spritenumber == 1) {
-                                image = attackup1;
-                            } else if (spritenumber == 2) {
-                                image = attackup2;
-                            }
-                        }
-                        break;
-                    case "down":
-                        if (!attacking) {
-                            if (spritenumber == 1) {
-                                image = down1;
-                            } else if (spritenumber == 2) {
-                                image = down2;
-                            }
-                        } else {
-                            if (spritenumber == 1) {
-                                image = attackdown1;
-                            } else if (spritenumber == 2) {
-                                image = attackdown2;
-                            }
-                        }
-                        break;
-                    case "right":
-                        if (!attacking) {
-                            if (spritenumber == 1) {
-                                image = right1;
-                            } else if (spritenumber == 2) {
-                                image = right2;
-                            }
-                        } else {
-                            if (spritenumber == 1) {
-                                image = attackright1;
-                            } else if (spritenumber == 2) {
-                                image = attackright2;
-                            }
-                        }
-                        break;
-                    case "left":
-                        if (!attacking) {
-                            if (spritenumber == 1) {
-                                image = left1;
-                            } else if (spritenumber == 2) {
-                                image = left2;
-                            }
-                        } else {
-                            tempscreenx = screenX - gp.tilesize;
-                            if (spritenumber == 1) {
-                                image = attackleft1;
-                            } else if (spritenumber == 2) {
-                                image = attackleft2;
-                            }
-                        }
-                        break;
-                }
                 if (image == null) {
                     getImageInstance();
                     getAttackInstance();
-                }
-                if(jumping){
-                    jumpaction++;
-                    if(jumpaction < 25){
-                        if(isup) {
-                            if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this)) {
-                                if (jumpaction == 1) {
-                                    worldz++;
-                                }
-                                jumpstate++;
-                                image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
-                            }
-                        }
-                    }else{
-                        isup = false;
-                        jumpstate--;
-                        try {
-                            image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
-                        }catch (Exception e){
-                            System.out.println("Catched null pointer exeption");
-                        }
-                        if(jumpstate < 0) {
-                            jumpaction = 0;
-                            jumping = false;
-                            getAttackInstance();
-                            getImageInstance();
-                            updatehitbox();
-                        }
-
-                    }
                 }
                 if (invincible && image != null) {
                     for (int y = 0; y < image.getHeight(); y++) {

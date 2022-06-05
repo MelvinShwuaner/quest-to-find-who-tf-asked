@@ -1,7 +1,8 @@
 package net.questfor.thepersonwhoasked.Maingam;
+
 import net.questfor.thepersonwhoasked.Main;
+
 import javax.swing.*;
-import java.io.IOException;
 import java.util.Arrays;
 
 import static net.questfor.thepersonwhoasked.Main.concole;

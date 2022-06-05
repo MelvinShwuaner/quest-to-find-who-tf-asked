@@ -55,10 +55,8 @@ public class KeyHandler extends Data implements KeyListener {
                 }
                 if (code == OPEN) {
                     if (UI.commandnum == 0) {
-                        System.out.println("df;kjhuhggggggggggggggggggggggggggggggggggggggtfjfchhfh\ngddddddddddddddddddddddddx\ngfdf;kjhuhggggggggggggggggggggggggggggggggggggggtfjfchhfh\ngddddddddddddddddddddddddx\ngfdf;kjhuhggggggggggggggggggggggggggggggggggggggtfjfchhfh\ngddddddddddddddddddddddddx\ngfdf;kjhuhggggggggggggggggggggggggggggggggggggggtfjfchhfh\ngddddddddddddddddddddddddx\ngf" +
-                                "");
-                        gp.setupOBJ();
-                        gp.player = new Player(gp.keyM, gp);
+                        MainGame.setupOBJ();
+                        MainGame.player = new Player(gp.keyM, gp);
                         GlobalGameThreadConfigs.isinTital = false;
 
                     }

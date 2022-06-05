@@ -1,12 +1,14 @@
 package net.questfor.thepersonwhoasked.entities;
+
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
-import net.questfor.thepersonwhoasked.objects.Brickwall;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import static net.questfor.thepersonwhoasked.Maingam.MainGame.currentmap;
 import static net.questfor.thepersonwhoasked.Maingam.MainGame.sound;
 
 //basic player
@@ -18,7 +20,6 @@ public class Player extends LivingEntity {
     public int jumpaction = 0;
     public boolean attacking = false;
     public boolean hasattacked = false;
-    public int objindex;
     public  boolean hasweapon = true;
     public int i = 0, ii = 0;
     public int d = 0;
@@ -42,7 +43,8 @@ public class Player extends LivingEntity {
         inventorysize = 20;
         worldx = gp.tilesize * 12;
         worldy = gp.tilesize * 14;
-        speed = 4;
+        defaultspeed = 4;
+        speed = defaultspeed;
         direction = "right";
         worldz = 4;
         maxhealth = 10;
@@ -110,12 +112,15 @@ public class Player extends LivingEntity {
                 attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
             }
             if(currentweapon.name.equals("Iron shovel")){
-                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
-                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
-                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackright1 = BufferedRenderer("player/Attack/boy_attack_shovel_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));;
+                attackright2 = BufferedRenderer("player/Attack/boy_attack_shovel_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));;
+                attackright3 = BufferedRenderer("player/Attack/boy_attack_shovel_right_3", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_attack_shovel_left_0", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_attack_shovel_left_1", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackleft3 = BufferedRenderer("player/Attack/boy_attack_shovel_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackup1 = BufferedRenderer("player/Attack/boy_attack_shovel_up_0", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_attack_shovel_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackup3 = BufferedRenderer("player/Attack/boy_attack_shovel_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
                 attackdown1 = BufferedRenderer("player/Attack/shoveldown1",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
                 attackdown2 = BufferedRenderer("player/Attack/shoveldown2",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
                 attackdown3 = BufferedRenderer("player/Attack/shoveldown3",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
@@ -168,14 +173,6 @@ public class Player extends LivingEntity {
                 getImageInstance();
                 getAttackInstance();
             }
-            if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Tentity) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.worldzobjectreturn(this) || MainGame.hregister.returntileworldz(this)) {
-                    if (!isup) {
-                        worldz--;
-                        getImageInstance();
-                        updatehitbox();
-                        getAttackInstance();
-                    }
-            }
             for (int i = 0; i < inventory.size(); i++) {
                 if (inventory.get(i).down1 == null) {
                     inventory.get(i).getImageInstance();
@@ -201,32 +198,38 @@ public class Player extends LivingEntity {
                 }
                 if (currentshield != null){
                     if (currentshield.EntityType == 4) {
-                        if(currentshield.NBTDATA){
+                        if(currentshield.NBTDATA) {
                             while (!hasfound) {
                                 if (i < 100) {
                                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] == null) {
                                         double y = worldy;
                                         double x = worldx;
-                                        double z = worldz+1;
+                                        double z = worldz;
                                         boolean canplace;
-                                        canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), GlobalGameThreadConfigs.NPCS) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), GlobalGameThreadConfigs.Tentity) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) worldz);
-                                        if(!KeyHandler.CROUCH) {
+                                        if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
                                             switch (direction) {
                                                 case "down" -> y += 50;
                                                 case "up" -> y -= 50;
                                                 case "left" -> x -= 50;
                                                 case "right" -> x += 50;
                                             }
-                                        }else{
-                                            if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(x/gp.tilesize)][(int) Math.round(y/gp.tilesize)][(int) (z-1)] == 46){
+                                        }else if(KeyHandler.CROUCH){
                                                 z--;
-                                            }else{
-                                                canplace = false;
-                                            }
+                                        }else if(KeyHandler.sprint){
+                                                z++;
                                         }
-                                        if (canplace) {
+                                        canplace = (gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Tentity) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z));
+                                    if(!canplace && (KeyHandler.sprint || KeyHandler.CROUCH)){
+                                            switch (direction) {
+                                                case "down" -> y += 50;
+                                                case "up" -> y -= 50;
+                                                case "left" -> x -= 50;
+                                                case "right" -> x += 50;
+                                            }
+                                            canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Tentity) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z);
+                                        }
+                                        if (canplace && (!gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z-1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z+1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)+1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)-1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)+1, (int) Math.round(y / gp.tilesize), (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)-1, (int) Math.round(y / gp.tilesize), (int) z))) {
                                             switch ((currentshield.name)) {
-                                                case "BRIC WALL" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new Brickwall(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)); GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z; }
                                                 case "crafting table" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new crafting_table(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)); GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}
                                                 case "furnace" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new furnace(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize));GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}
                                                 case "Stone" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new Stone(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize));GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}
@@ -246,14 +249,86 @@ public class Player extends LivingEntity {
                                     i = 0;
                                 }
                             }
-}
+}else{
+                            double y = worldy;
+                            double x = worldx;
+                            double z = worldz;
+                            boolean canplace;
+                            if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
+                                switch (direction) {
+                                    case "down" -> y += 50;
+                                    case "up" -> y -= 50;
+                                    case "left" -> x -= 50;
+                                    case "right" -> x += 50;
+                                }
+                            }else if(KeyHandler.CROUCH){
+                                z--;
+                            }else if(KeyHandler.sprint){
+                                z++;
+                            }
+                            canplace = (gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Tentity) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z));
+                            if(!canplace && (KeyHandler.sprint || KeyHandler.CROUCH)) {
+                                switch (direction) {
+                                    case "down" -> y += 50;
+                                    case "up" -> y -= 50;
+                                    case "left" -> x -= 50;
+                                    case "right" -> x += 50;
+                                }
+                                canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.NPCS) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.Tentity) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z);
+                            }
+                                if (canplace && (!gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z-1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z+1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)+1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)-1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)+1, (int) Math.round(y / gp.tilesize), (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)-1, (int) Math.round(y / gp.tilesize), (int) z))) {
+                                    gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(x/gp.tilesize)][(int) Math.round(y/gp.tilesize)][(int) z] = currentshield.tile;
+                                    currentshield.stacksize--;
+                                    if (currentshield.stacksize <= 0) {
+                                        inventory.remove(currentshield);
+                                        currentshield = null;
+                                    }
+                                }
+
+                        }
                     }
             }
             }
+            if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Tentity) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.returntileworldz(this)) {
+                if (!isup) {
+                    worldz--;
+                    getImageInstance();
+                    updatehitbox();
+                    getAttackInstance();
+                }
+            }
+            if(frozen){
+                checkCollision();
+                if(hitboxe){
+                    knockbackcounter = 0;
+                    frozen = false;
+                    speed = defaultspeed;
+                }else{
+                    switch (frozendirection) {
+                        case "up" -> worldy = worldy - speed;
+                        case "down" -> worldy = worldy + speed;
+                        case "right" -> worldx = worldx + speed;
+                        case "left" -> worldx = worldx - speed;
+                    }
+                    knockbackcounter++;
+                    if(knockbackcounter == 2){
+                        speed--;
+                        knockbackcounter = 0;
+                    }
+                    if(speed == defaultspeed){
+                        frozen = false;
+                    }
+                }
+            }
             if (KeyHandler.primepowera && projectile.alive == false && primepowercool == 30 && projectile.haveresource(this)) {
-                projectile.Set((int) worldx, (int) worldy, direction, true, this);
+                projectile.Set((int) worldx, (int) worldy, (int) worldz, direction, true, this);
                 projectile.RemoveResource(this);
-                GlobalGameThreadConfigs.projectilelist.add(projectile);
+                for(int i = 0; i<GlobalGameThreadConfigs.projectilelist[1].length; i++){
+                    if(GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i] == null){
+                        GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i] = projectile;
+                        break;
+                    }
+                }
                 primepowercool = 0;
                 gp.playsound(10);
             }
@@ -317,7 +392,7 @@ public class Player extends LivingEntity {
             MainGame.hregister.checkTile(this);
 
             //OBJECT COLLISIONS
-            objindex = MainGame.hregister.EntityColide(this, GlobalGameThreadConfigs.obj);
+            objindex = MainGame.hregister.worldzobjectreturn(this, GlobalGameThreadConfigs.obj);
             pickupObject(objindex);
 
             //ENTITY COLLISIONS
@@ -351,27 +426,30 @@ public class Player extends LivingEntity {
 
             if (GlobalGameThreadConfigs.isinTital == false) {
                 if (!hitboxe) {
+                    if(!frozen){
                     if (keyHandler.upPressed || keyHandler.downPressed) {
                         if (keyHandler.rightPressed || keyHandler.leftPressed) {
                             speed = 3;
                         }
                     }
                     if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed) {
+                        if((!KeyHandler.rightPressed && !KeyHandler.leftPressed) || (!KeyHandler.leftPressed && KeyHandler.rightPressed)|| (KeyHandler.leftPressed && !KeyHandler.rightPressed)){
                         if (KeyHandler.upPressed) {
                             worldy = worldy - speed;
                         }
                         if (KeyHandler.downPressed) {
                             worldy = worldy + speed;
-                        }
+                        }}
                         if (KeyHandler.rightPressed) {
                             worldx = worldx + speed;
                         }
                         if (KeyHandler.leftPressed) {
                             worldx = worldx - speed;
                         }
-                    }
+                    }}
                 }
             } else if (GlobalGameThreadConfigs.isinTital && hitboxe == false) {
+                if(!frozen){
                 switch (this.direction) {
                     case "up":
                         worldy -= this.speed;
@@ -384,7 +462,7 @@ public class Player extends LivingEntity {
                         break;
                     case "right":
                         worldx += this.speed;
-                }
+                }}
             }
             if (attacking == false) {
                 spritecounter++;
@@ -422,24 +500,24 @@ public class Player extends LivingEntity {
             int hitboxWidth = hitbox.width;
             int hitboxHeight = hitbox.height;
             switch (direction) {
-                case "up" -> {
-                    worldy -= attackHitbox.height;
-                }
-                case "down" -> {
-                    worldy += attackHitbox.height;
-                }
-                case "left" -> {
-                    worldx -= attackHitbox.width;
-                }
-                case "right" -> {
-                    worldx += attackHitbox.width;
-                }
+                case "up" -> worldy -= attackHitbox.height;
+                case "down" -> worldy += attackHitbox.height;
+                case "left" -> worldx -= attackHitbox.width;
+                case "right" -> worldx += attackHitbox.width;
             }
             int attackindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
             attackEntity(attackindex, TrueAttackDamage);
             int TileentityI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Tentity);
             destroyTentity(TileentityI);
-            DestroyOBJ(gp.hregister.EntityColide(this, GlobalGameThreadConfigs.obj));
+            int projectileI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.projectilelist);
+            super.damageprojectile(projectileI);
+            double z = worldz;
+            if(KeyHandler.CROUCH){
+                z--;
+            }else if(KeyHandler.sprint){
+                z++;
+            }
+            DestroyOBJ(gp.hregister.EntityColidewithz(this, z, GlobalGameThreadConfigs.obj));
             worldx = currentworldx;
             worldy = currentworldy;
             hitbox.width = hitboxWidth;
@@ -484,9 +562,10 @@ public class Player extends LivingEntity {
                     GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].invincible = true;
                     ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI], GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI]);
                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].health <= 0) {
+                        MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].worldx / gp.tilesize)][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].worldy / gp.tilesize)][(int) GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].worldz] = 46;
                         GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI] = GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].getDestroyedForm();
                         GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].HandleItems();
-                    }
+                  }
                 }
             }}
 
@@ -594,7 +673,10 @@ public class Player extends LivingEntity {
     public void GetItems() {
         inventory.add(currentweapon);
         inventory.add(currentshield);
+        LivingEntity brick = new OBJ_BRICK_WALL(gp); brick.stacksize = 64;
         inventory.add(new OBJ_BRICK_WALL(gp));
+        inventory.add(new OBJ_IRON_PICKAXE(gp));
+        inventory.add(brick);
     }
 
     public void interactNPC(int i) {
@@ -617,17 +699,30 @@ public class Player extends LivingEntity {
                 double y = worldy;
                 double x = worldx;
                 double z = worldz;
-                if(!KeyHandler.CROUCH){
+                boolean canbreak;
+                if(!KeyHandler.CROUCH && !KeyHandler.sprint){
                 switch (direction) {
                     case "down" -> y += 50;
                     case "up" -> y -= 50;
                     case "left" -> x -= 50;
                     case "right" -> x += 50;
-                }}
+                }}else
                 if(KeyHandler.CROUCH){
                     z--;
+                }else if(KeyHandler.sprint){
+                    z++;
+                }
+                canbreak = gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z] != 46;
+                if(!canbreak && (KeyHandler.sprint || KeyHandler.CROUCH)){
+                    switch (direction) {
+                        case "down" -> y += 50;
+                        case "up" -> y -= 50;
+                        case "left" -> x -= 50;
+                        case "right" -> x += 50;
+                    }
                 }
                 attacking = true;
+                if(gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z] != 47){
                 if (currentweapon.Type == Type_shovel) {
                     switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z]) {
                         case 39,0 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
@@ -642,14 +737,28 @@ public class Player extends LivingEntity {
                             }
                         }
                         case 10, 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 39;
-                    }
-                } else if (currentweapon.Type == Type_axe) {
-                    switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (x / gp.tilesize)][(int) (y / gp.tilesize)][(int) worldz]) {
-                        //case 41 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round (x / gp.tilesize)][(int) Math.round(y / gp.tilesize)] = 10;}
+                    }}
+                }else{
+                    for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
+                        if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] != null){
+                           if(Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldx/gp.tilesize) == Math.round(x/gp.tilesize) && Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldy/gp.tilesize) == Math.round(y/gp.tilesize) && GlobalGameThreadConfigs.obj[currentmap][ii].worldz==z){
+                               if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].ItemRequirements(this)) {
+                                   if (!GlobalGameThreadConfigs.obj[currentmap][ii].invincible) {
+                               GlobalGameThreadConfigs.obj[currentmap][ii].health -= TrueAttackDamage;
+                               GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].playSE();
+                               GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].invincible = true;
+                               ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii], GlobalGameThreadConfigs.obj[MainGame.currentmap][ii]);
+                               if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].health <= 0) {
+                                   MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx / gp.tilesize)][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy / gp.tilesize)][(int) GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz] = 46;
+                                   GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].getDestroyedForm();
+                                   GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].HandleItems();
+                               }
+                                   ii = GlobalGameThreadConfigs.obj[1].length;}
+                           }
+                        }}
                     }
                 }
                 playsound(7);
-
                 KeyHandler.attack = false;
             }
         } catch (Exception e) {
@@ -690,12 +799,12 @@ public class Player extends LivingEntity {
             int tempscreenx = screenX;
             int tempscreeny = screenY;
             //Try Reading this line. I will wait ;D
-            if(GlobalGameThreadConfigs.isinTital == false){if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed){switch (direction) {case "up": if (attacking == false){if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}}else{tempscreeny = screenY - gp.tilesize; if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}} break; case "down": if(attacking == false){if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}break; case "right": if(attacking == false){if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}}break; case "left": if(attacking == false){if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;}}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}} break;}}else{switch (direction){case "right" -> {if(attacking == false){image = right1;}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}} }case "left" -> {if(attacking == false){image = left1;}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}}}case "up" -> {if(attacking == false){image = up1;}else{tempscreeny = screenY - gp.tilesize;if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}}} case "down" -> {if(attacking == false){image = down1;}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}}}}}else{switch (direction) {case "up": if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}break; case "down": if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}break; case "right": if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}break; case "left": if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;} break;}}
+            if(GlobalGameThreadConfigs.isinTital == false){if(keyHandler.upPressed || keyHandler.downPressed || keyHandler.rightPressed || keyHandler.leftPressed){switch (direction) {case "up": if (attacking == false){if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}}else{tempscreeny = screenY - gp.tilesize; if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}else if (spritenumber == 3){image = attackup3;}} break; case "down": if(attacking == false){if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}break; case "right": if(attacking == false){if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}else if (spritenumber == 3){image = attackright3;}}break; case "left": if(attacking == false){if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;}}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}else if (spritenumber == 3){image = attackleft3;}} break;}}else{switch (direction){case "right" -> {if(attacking == false){image = right1;}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}else if (spritenumber == 3){image = attackright3;}} }case "left" -> {if(attacking == false){image = left1;}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}else if (spritenumber == 3){image = attackleft3;}}}case "up" -> {if(attacking == false){image = up1;}else{tempscreeny = screenY - gp.tilesize;if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}else if (spritenumber == 3){image = attackup3;}}} case "down" -> {if(attacking == false){image = down1;}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}}}}}else{switch (direction) {case "up": if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}break; case "down": if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}break; case "right": if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}break; case "left": if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;} break;}}
             if(KeyHandler.jump){
                 jumpaction++;
                 if(jumpaction < 25){
                     if(isup) {
-                        if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this)) {
+                        if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
                         if (jumpaction == 1) {
                                 worldz++;
                             }
@@ -746,6 +855,8 @@ public class Player extends LivingEntity {
             }
             g2.drawImage(image, tempscreenx, tempscreeny, null);
             drawwalls(g2, this);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+
             if(KeyHandler.checkFPS)
               g2.drawRect((int) (tempscreenx+hitbox.x), (int) (tempscreeny+hitbox.y), hitbox.width, hitbox.height);
         }catch(Exception e){
@@ -764,4 +875,50 @@ public class Player extends LivingEntity {
         g2.dispose();
         return scaledImage;
     }
+    public void drawwalls(Graphics2D g2, LivingEntity entity) {
+        int worldcol = (int) (entity.worldx/MainGame.tilesize);
+        int worldrow = (int) (entity.worldy / MainGame.tilesize);
+        int worldlayer = 0;
+        while (worldlayer < MainGame.maxworldlayer) {
+            int tileID = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer];
+            int worldX = worldcol * MainGame.tilesize;
+            int worldY = worldrow * MainGame.tilesize;
+            double screenX = (worldX - MainGame.player.worldx + MainGame.player.screenX);
+            double screenY = worldY - MainGame.player.worldy + MainGame.player.screenY;
+            if (tileID != 46) {
+                boolean shouldrender;
+                if(worldlayer+1 < MainGame.maxworldlayer) {
+                    shouldrender = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 46 || gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 41;
+                }else{
+                    shouldrender = true;
+                }
+                if(shouldrender)  {
+                    if (worldlayer >= entity.worldz) {
+                        if(worldlayer > gp.player.worldz){
+                            float Xdistance;
+                            float Ydistance;
+                            if (worldcol > gp.player.worldx / gp.tilesize) {
+                                Xdistance = (float) (worldcol - (gp.player.worldx / gp.tilesize));
+                            }else{
+                                Xdistance = (float) ((gp.player.worldx / gp.tilesize) - worldcol);
+                            }
+                            if (worldrow > gp.player.worldy / gp.tilesize) {
+                                Ydistance = (float) (worldrow - (gp.player.worldy / gp.tilesize));
+                            }else{
+                                Ydistance = (float) ((gp.player.worldy / gp.tilesize) - worldrow);
+                            }
+                            if (Ydistance < 2 && Xdistance < 2){
+                                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                            }
+                        }
+                        g2.drawImage(gp.tilemanager.tile[tileID].image, (int) screenX, (int) screenY, null);
+                    }
+                }
+
+            }
+            worldlayer++;
+        }
+    }
+
+
 }

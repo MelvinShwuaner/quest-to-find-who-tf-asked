@@ -24,12 +24,13 @@ public class OBJ_BRICK_WALL extends LivingEntity {
         maxstacksize = 64;
         fuel = true;
         health = 10;
-        NBTDATA = true;
+        NBTDATA = false;
+        tile = 48;
     }
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("TileEntity/brickwall", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("TileEntity/brickwall", gp.tilesize-2, gp.tilesize-5);
     }
 
     @Override

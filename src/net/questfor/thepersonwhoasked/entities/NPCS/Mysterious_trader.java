@@ -12,7 +12,8 @@ public class Mysterious_trader extends LivingEntity {
     public Mysterious_trader(MainGame gpp) {
         super(gpp);
         direction = "down";
-        speed = 1;
+        defaultspeed = 1;
+        speed = defaultspeed;
         hitbox = new Rectangle(0, 0, 46, 46);
         getImageInstance();
         setDialogues();
@@ -35,7 +36,7 @@ public class Mysterious_trader extends LivingEntity {
     }
 
     public void setAction() {
-        if (!frozen){
+
                 actionLock++;
                 if (actionLock == 120) {
                     Random random = new Random();
@@ -55,7 +56,7 @@ public class Mysterious_trader extends LivingEntity {
                     actionLock = 0;
                 }
             }
-    }
+
 
 
 

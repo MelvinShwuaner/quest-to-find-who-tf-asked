@@ -77,10 +77,11 @@ class MainGame : JPanel(), Runnable {
             for (i in GlobalGameThreadConfigs.NPCS[1].indices) {
                 if (GlobalGameThreadConfigs.NPCS[currentmap][i] != null) {
                     GlobalGameThreadConfigs.NPCS[currentmap][i].update()
+                    if (GlobalGameThreadConfigs.NPCS[currentmap][i] != null) {
                     if(!GlobalGameThreadConfigs.NPCS[currentmap][i].alive) {
                         GlobalGameThreadConfigs.NPCS[currentmap][i].HandleItems()
                         GlobalGameThreadConfigs.NPCS[currentmap][i] = null
-                    }
+                    }}
                     }
 
             }
@@ -90,10 +91,11 @@ class MainGame : JPanel(), Runnable {
                     if(!GlobalGameThreadConfigs.Monsters[currentmap][i].dying) {
                         GlobalGameThreadConfigs.Monsters[currentmap][i].update()
                     }
+                    if(GlobalGameThreadConfigs.Monsters[currentmap][i] != null){
                     if(!GlobalGameThreadConfigs.Monsters[currentmap][i].alive){
                         GlobalGameThreadConfigs.Monsters[currentmap][i].HandleItems()
                         GlobalGameThreadConfigs.Monsters[currentmap][i] = null
-                    }}
+                    }}}
             }
             /**TILE ENTITIES**/
             for(i in GlobalGameThreadConfigs.Tentity[1].indices){
@@ -145,9 +147,9 @@ class MainGame : JPanel(), Runnable {
                     GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.Monsters[currentmap][i])
                 }
             }
-            for (i in GlobalGameThreadConfigs.projectilelist.indices) {
-                if (GlobalGameThreadConfigs.projectilelist[i] != null) {
-                    GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.projectilelist[i])
+            for (i in GlobalGameThreadConfigs.projectilelist[1].indices) {
+                if (GlobalGameThreadConfigs.projectilelist[currentmap][i] != null) {
+                    GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.projectilelist[currentmap][i])
                 }
             }
             for (i in GlobalGameThreadConfigs.particleList.indices) {
@@ -245,6 +247,7 @@ class MainGame : JPanel(), Runnable {
          var FullscreenON = false
          @JvmStatic
         fun setupOBJ() {
+             tilemanager.set()
             MultiRender.setObjectRenderer()
             MultiRender.setNPCrenderers()
             MultiRender.setMonsterRenderers()

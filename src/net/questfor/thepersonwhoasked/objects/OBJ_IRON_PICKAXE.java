@@ -23,13 +23,13 @@ public class OBJ_IRON_PICKAXE extends LivingEntity {
         hitboxdefaulty = hitbox.y;
         Type = Type_pickaxe;
         frames = 3;
-        description = "A good shovel to dig up tunnels through \nbad times.";
+        description = "A good pickaxe, thats it";
         getImageInstance();
     }
     @Override
     public void update() {}
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/shovel", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/iron_pickaxe", gp.tilesize, gp.tilesize);
     }
 }

@@ -29,5 +29,13 @@ public class chest extends LivingEntity {
         down1 = BufferedRenderer("objects/chest", gp.tilesize, gp.tilesize);
     }
     @Override
-    public void update() {}
+    public void update() {if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 46){
+        gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] = 47;
+    }
+    }
+
+    @Override
+    public boolean ItemRequirements(LivingEntity SourceEntity) {
+        return SourceEntity.currentweapon.Type == Type_axe;
+    }
 }

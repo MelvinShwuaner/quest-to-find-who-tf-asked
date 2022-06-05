@@ -25,7 +25,9 @@ public class OBJdoor extends LivingEntity {
         NBTDATA = true;
     }
     @Override
-    public void update() {}
+    public void update() {if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 46){
+        gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] = 47;
+    }}
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/door", gp.tilesize, gp.tilesize);

@@ -1,14 +1,13 @@
 package net.questfor.thepersonwhoasked.entities;
+
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.entities.AI.Path;
-import net.questfor.thepersonwhoasked.tile.Tilemanager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
-
 
 //is the parent class for all entities including player
 public class LivingEntity extends Data {
@@ -19,9 +18,11 @@ public class LivingEntity extends Data {
     public  double worldx;
     public  double worldy;
     public boolean goingup;
+    public int defaultspeed;
+    public int knockbackcounter = 0;
     public  double worldz = 4;
+    public boolean high = true;
     public double speed;
-    public boolean hascolided = false;
     //HEALTH//
     public int maxhealth;
     public int health;
@@ -29,14 +30,16 @@ public class LivingEntity extends Data {
     public boolean alive = true;
     public boolean dying = false;
     public int regenerationcooldown = 0;
+    public int tile;
     //RENDERER//
     public transient BufferedImage image, image2, image3;
     public transient  BufferedImage up1, up2, down1, down2, down3, left1, left2, right1, right2;
-    public transient BufferedImage attackup1, attackup2, attackdown1, attackdown2, attackdown3,
-            attackleft1, attackleft2, attackright1, attackright2;
+    public transient BufferedImage attackup1, attackup2, attackup3, attackdown1, attackdown2, attackdown3,
+            attackleft1, attackleft2, attackleft3, attackright1, attackright2, attackright3;
     boolean drawingpath = false;
     //MOVEMENT AND ANIMATION//
     public String direction = "down";
+    public String frozendirection = direction;
     public int spritecounter = 0;
     public int spritenumber = 1;
     int animationLength = 0;
@@ -51,6 +54,8 @@ public class LivingEntity extends Data {
     public boolean hitboxe = false;
     //AI//
     public int actionLock = 0;
+    public int objindex;
+
     public  boolean isup = false;
     public boolean Hostile = false;
     public boolean frozen = false;
@@ -145,10 +150,10 @@ public class LivingEntity extends Data {
         UI.currentDialogue = dialogues[dialogueIndex];
         dialogueIndex++;
         switch (gp.player.direction){
-            case "up" -> {direction = "down";}
-            case "down" -> {direction = "up"; }
-            case "right" -> {direction = "left"; }
-            case "left" -> {direction = "right"; }
+            case "up" -> direction = "down";
+            case "down" -> direction = "up";
+            case "right" -> direction = "left";
+            case "left" -> direction = "right";
         }
     }
     public void update() {
@@ -159,7 +164,7 @@ public class LivingEntity extends Data {
             dying = true;
         }
 
-        if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Tentity) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.worldzobjectreturn(this) || MainGame.hregister.returntileworldz(this)) {
+        if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Tentity) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.returntileworldz(this)) {
             if (!isup) {
                 worldz--;
                 getImageInstance();
@@ -168,6 +173,33 @@ public class LivingEntity extends Data {
             }
         }
         /*AI for Monsters And NPCS*/
+        if(frozen){
+            checkCollision();
+            if(hitboxe){
+                knockbackcounter = 0;
+                frozen = false;
+                speed = defaultspeed;
+            }else{
+                if(frozendirection == null){
+                    frozendirection = direction;
+                    frozen = false;
+                }
+                switch (frozendirection) {
+                    case "up" -> worldy = worldy - speed;
+                    case "down" -> worldy = worldy + speed;
+                    case "right" -> worldx = worldx + speed;
+                    case "left" -> worldx = worldx - speed;
+                }
+                knockbackcounter++;
+                if(knockbackcounter == 2){
+                    speed--;
+                    knockbackcounter = 0;
+                }
+                if(speed == defaultspeed){
+                    frozen = false;
+                }
+            }
+        }
         setAction();
         checkCollision();
         if(hitboxe){
@@ -186,7 +218,8 @@ public class LivingEntity extends Data {
             cantalk = 0;
             dialogueIndex = 0;
         }
-        if (!hitboxe) {
+        if (!hitboxe)
+            if(!frozen){{
             switch (direction){
                 case"up":
                     worldy = worldy - speed;
@@ -202,7 +235,7 @@ public class LivingEntity extends Data {
                     worldx = worldx - speed;
                     break;
             }
-        }
+        }}
         spritecounter++;
         if (spritecounter > 12) {
             if (spritenumber == 1) {
@@ -223,6 +256,11 @@ public class LivingEntity extends Data {
             dying = true;
         }
     }
+    public void setzposition(){
+        if(worldz > 4){
+            down1 = scaleimage(down1, (int) ((down1.getWidth()+worldz)-3), (int) ((down1.getHeight()+worldz)-3));
+        }
+    }
 
     public void updateimage() {
         if(up1 == null && image == null && down1 == null){
@@ -232,21 +270,26 @@ public class LivingEntity extends Data {
     public void set(){}
 
     public void AttackNPC(int trueAttackDamage, int npcindex) {
-        if(!GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible){
+        if (!GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible) {
             int damage = trueAttackDamage - GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].defence;
-            if(damage <= 0){
+            if (damage <= 0) {
                 damage = 0;
             }
-            GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].health-= damage;
-            if(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Old man")){
-            UI.addMessages("Help me im being hurt!");}else if(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Helper")){
+            GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].health -= damage;
+            if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Old man")) {
+                UI.addMessages("Help me im being hurt!");
+            } else if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Helper")) {
                 GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].Hostile = true;
             }
             GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible = true;
-            gp.playsound(5);
+            if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                    (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                    && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                    (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                gp.playsound(5);
+            }
         }
     }
-
     public void HandleItems(){}
     public void DropItems(LivingEntity droppedItem){
         for(int i = 0; i < GlobalGameThreadConfigs.obj[1].length; i++){
@@ -293,79 +336,91 @@ public class LivingEntity extends Data {
         }
     }
     public void draw(Graphics2D g2){
+        double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);
+        double screenY = worldy - MainGame.player.worldy + MainGame.player.screenY;
         if(path == null){
             path = new Path();
         }
+        BufferedImage image = null;
+        switch (direction) {
+            case "up":
+                if (spritenumber == 1) {
+                    image = up1;
+                } else if (spritenumber == 2) {
+                    image = up2;
+                }
+                break;
+            case "down":
+                if (spritenumber == 1) {
+                    image = down1;
+                } else if (spritenumber == 2) {
+                    image = down2;
+                }
+                break;
+            case "right":
+                if (spritenumber == 1) {
+                    image = right1;
+                } else if (spritenumber == 2) {
+                    image = right2;
+                }
+                break;
+            case "left":
+                if (spritenumber == 1) {
+                    image = left1;
+                } else if (spritenumber == 2) {
+                    image = left2;
+                }
+                break;
+        }
+        if(jumping){
+            jumpaction++;
+            if(jumpaction < 25){
+                if(isup) {
+                    if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
+                        if (jumpaction == 1) {
+                            worldz++;
+                        }
+                        jumpstate++;
+                        if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                                (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                                && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                                (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                            if(image != null){
+                            if(image.getWidth()+jumpstate > 0 && image.getHeight()+jumpstate > 0){
+                            image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                    }}}
+                }}
+            }else{
+                isup = false;
+                jumpstate--;
+                try {
+                    if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                            (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                            && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                            (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                        if(image != null){
+                            if(image.getWidth()+jumpstate > 0 && image.getHeight()+jumpstate > 0){
 
+                                image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                            }}                }}catch (Exception e){
+                    System.out.println("Catched null pointer exeption");
+                }
+                if(jumpstate < 0) {
+                    jumpaction = 0;
+                    jumping = false;
+                    getAttackInstance();
+                    getImageInstance();
+                    updatehitbox();
+                }
+
+            }
+        }
         //RENDERER
         try {
-            double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);
-            double screenY = worldy - MainGame.player.worldy + MainGame.player.screenY;
             if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
                     (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
                     && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
                     (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
-                BufferedImage image = null;
-                switch (direction) {
-                    case "up":
-                        if (spritenumber == 1) {
-                            image = up1;
-                        } else if (spritenumber == 2) {
-                            image = up2;
-                        }
-                        break;
-                    case "down":
-                        if (spritenumber == 1) {
-                            image = down1;
-                        } else if (spritenumber == 2) {
-                            image = down2;
-                        }
-                        break;
-                    case "right":
-                        if (spritenumber == 1) {
-                            image = right1;
-                        } else if (spritenumber == 2) {
-                            image = right2;
-                        }
-                        break;
-                    case "left":
-                        if (spritenumber == 1) {
-                            image = left1;
-                        } else if (spritenumber == 2) {
-                            image = left2;
-                        }
-                        break;
-                }
-                if(jumping){
-                    jumpaction++;
-                    if(jumpaction < 25){
-                        if(isup) {
-                            if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Tentity, this)) {
-                                if (jumpaction == 1) {
-                                    worldz++;
-                                }
-                                jumpstate++;
-                                image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
-                            }
-                        }
-                    }else{
-                        isup = false;
-                        jumpstate--;
-                        try {
-                            image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
-                        }catch (Exception e){
-                            System.out.println("Catched null pointer exeption");
-                        }
-                        if(jumpstate < 0) {
-                            jumpaction = 0;
-                            jumping = false;
-                            getAttackInstance();
-                            getImageInstance();
-                            updatehitbox();
-                        }
-
-                    }
-                }
                 //HP BAR
                 if ((EntityType == 2 || EntityType == 1) && Hostile) {
                     double onescale = gp.tilesize / maxhealth;
@@ -394,6 +449,7 @@ public class LivingEntity extends Data {
             }
                 if(EntityType != 4){
                 if (invincible) {
+                    if(image != null){
                     for (int y = 0; y < image.getHeight(); y++) {
                         for (int x = 0; x < image.getWidth(); x++) {
                             int p = image.getRGB(x, y);
@@ -403,7 +459,7 @@ public class LivingEntity extends Data {
                             image.setRGB(x, y, p);
                             isred = 2;
                         }
-                    }
+                    }}
                 }
                 if (isred == 2) {
                     if (invincible == false) {
@@ -425,6 +481,25 @@ public class LivingEntity extends Data {
                     }
                 }
             }
+                if(worldz > gp.player.worldz){
+                    float Xdistance;
+                    float Ydistance;
+                    int x = (int) Math.round(worldx/gp.tilesize);
+                    int y = (int) Math.round(worldy/gp.tilesize);
+                    if (x > gp.player.worldx / gp.tilesize) {
+                        Xdistance = (float) (x - (gp.player.worldx / gp.tilesize));
+                    }else{
+                        Xdistance = (float) ((gp.player.worldx / gp.tilesize) - x);
+                    }
+                    if (y > gp.player.worldy / gp.tilesize) {
+                        Ydistance = (float) (y - (gp.player.worldy / gp.tilesize));
+                    }else{
+                        Ydistance = (float) ((gp.player.worldy / gp.tilesize) - y);
+                    }
+                    if (Ydistance < 2 && Xdistance < 2){
+                        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+                    }
+                }
                 g2.drawImage(image, (int) screenX, (int) screenY, null);
                 drawwalls(g2, this);
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
@@ -466,7 +541,13 @@ public class LivingEntity extends Data {
     public void attackEntity(int attackindex, int dmg) {
         if (attackindex != 999) {
             if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible == false) {
-                gp.playsound(6);
+                if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                        (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                        && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                        (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                    gp.playsound(6);
+                }
+                dealKnockback(GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex]);
                 int damage = dmg - GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].defence;
                 if (damage < 0) {
                     damage = 0;
@@ -533,7 +614,11 @@ public class LivingEntity extends Data {
             if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].name.equals("Brick wall")) {
                 if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].ItemRequirements(this)) {
                     GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].health-= TrueAttackDamage;
-                    GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].playSE();
+                    if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                            (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                            && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                            (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                    GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].playSE();}
                     GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].invincible = true;
                     ParticlePropertyManager(GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI], GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI]);
                     if (GlobalGameThreadConfigs.Tentity[MainGame.currentmap][tileentityI].health <= 0) {
@@ -549,7 +634,11 @@ public class LivingEntity extends Data {
             if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].name.equals("Brick wall")) {
                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].ItemRequirements(this)) {
                     GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].health-= TrueAttackDamage;
-                    GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].playSE();
+                    if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                            (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                            && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                            (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].playSE();}
                     GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].invincible = true;
                     ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI], GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI]);
                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].health <= 0) {
@@ -677,8 +766,14 @@ public class LivingEntity extends Data {
             double screenX = (worldX - MainGame.player.worldx + MainGame.player.screenX);
             double screenY = worldY - MainGame.player.worldy + MainGame.player.screenY;
             if (tileID != 46) {
-                if (gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer + 1] == 46) {
-                    if (worldlayer >= entity.worldz) {
+                boolean shouldrender;
+                if(worldlayer+1 < MainGame.maxworldlayer) {
+                    shouldrender = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 46 || gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer+1] == 41;
+                }else {
+                    shouldrender = true;
+                }
+
+                if(shouldrender)   {                 if (worldlayer >= entity.worldz) {
                         g2.drawImage(gp.tilemanager.tile[tileID].image, (int) screenX, (int) screenY, null);
 
                     }
@@ -686,6 +781,19 @@ public class LivingEntity extends Data {
 
             }
             worldlayer++;
+        }
+    }
+    public void dealKnockback(LivingEntity entity){
+        entity.frozendirection = direction;
+        entity.speed = 10;
+        entity.frozen = true;
+    }
+
+    public void damageprojectile(int i) {
+        if(i != 999){
+            ParticlePropertyManager(GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i], GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i]);
+            GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i].alive = false;
+
         }
     }
 }

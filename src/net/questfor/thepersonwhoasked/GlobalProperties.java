@@ -3,12 +3,14 @@ package net.questfor.thepersonwhoasked;
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.Maingam.Recipe;
+import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.entities.Mobs.green_slime;
 import net.questfor.thepersonwhoasked.entities.NPCS.Helper;
 import net.questfor.thepersonwhoasked.entities.NPCS.Mysterious_trader;
 import net.questfor.thepersonwhoasked.entities.NPCS.Old_Man;
 import net.questfor.thepersonwhoasked.objects.*;
 import net.questfor.thepersonwhoasked.tile_entites.IT_tree;
+import net.questfor.thepersonwhoasked.tile_entites.TileEntity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -22,12 +24,14 @@ public class GlobalProperties {
     }
 
     public void setObjectRenderer() {
+        GlobalGameThreadConfigs.obj = new LivingEntity[MainGame.maxmap][100];
         /*RENDER OBJECTS*/
         int i = 6;
         int mapID = 0;
         GlobalGameThreadConfigs.obj[mapID][0] = new chest(gp);
         GlobalGameThreadConfigs.obj[mapID][0].worldx = gp.tilesize * 11;
         GlobalGameThreadConfigs.obj[mapID][0].worldy = gp.tilesize * 8;
+        gp.tilemanager.mapRendererID[mapID][11][8][(int) GlobalGameThreadConfigs.obj[mapID][0].worldz] = 47;
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJkey(gp));
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
         GlobalGameThreadConfigs.obj[mapID][0].inventory.add(new OBJ_BRICK_WALL(gp));
@@ -58,6 +62,7 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.obj[mapID][i] = new chest(gp);
             GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 21;
             GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 23;
+        gp.tilemanager.mapRendererID[mapID][21][23][(int) GlobalGameThreadConfigs.obj[mapID][i].worldz] = 47;
             GlobalGameThreadConfigs.obj[mapID][i].inventory.add(new OBJ_BRICK_WALL(gp));
             GlobalGameThreadConfigs.obj[mapID][i].inventory.add(new OBJ_BRICK_WALL(gp));
             GlobalGameThreadConfigs.obj[mapID][i].inventory.add(new OBJ_BRICK_WALL(gp));
@@ -75,12 +80,14 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 23;
             i++;
             GlobalGameThreadConfigs.obj[mapID][i] = new OBJdoor(gp, 12, 12);
+        gp.tilemanager.mapRendererID[mapID][12][12][(int) GlobalGameThreadConfigs.obj[mapID][i].worldz] = 47;
             i++;
-        GlobalGameThreadConfigs.obj[mapID][i] = new crafting_table(gp, 13, 8);i++;
+        GlobalGameThreadConfigs.obj[mapID][i] = new crafting_table(gp, 13, 8);gp.tilemanager.mapRendererID[mapID][13][8][(int) GlobalGameThreadConfigs.obj[mapID][i].worldz] = 47;i++;
         GlobalGameThreadConfigs.obj[mapID][i] = new furnace(gp, 12, 8);
+        gp.tilemanager.mapRendererID[mapID][12][8][(int) GlobalGameThreadConfigs.obj[mapID][i].worldz] = 47;
             mapID = 1;
-            GlobalGameThreadConfigs.obj[mapID][0] = new Brickwall(gp, 12, 13);
         GlobalGameThreadConfigs.obj[mapID][1] = new chest(gp);
+        gp.tilemanager.mapRendererID[mapID][11][8][(int) GlobalGameThreadConfigs.obj[mapID][1].worldz] = 47;
         GlobalGameThreadConfigs.obj[mapID][1].worldx = gp.tilesize * 11;
         GlobalGameThreadConfigs.obj[mapID][1].worldy = gp.tilesize * 8;
         GlobalGameThreadConfigs.obj[mapID][1].inventory.add(new OBJkey(gp));
@@ -91,8 +98,8 @@ public class GlobalProperties {
 
     /*render NPCS and MONSTERS*/
     public void setNPCrenderers() {
+        GlobalGameThreadConfigs.NPCS = new LivingEntity[MainGame.maxmap][10];
         int mapID = 0;
-
             GlobalGameThreadConfigs.NPCS[mapID][0] = new Old_Man(gp);
         GlobalGameThreadConfigs.NPCS[mapID][0].worldx = gp.tilesize * 21;
         GlobalGameThreadConfigs.NPCS[mapID][0].worldy = gp.tilesize * 21;
@@ -105,11 +112,11 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.NPCS[mapID][3] = new Old_Man(gp);
         GlobalGameThreadConfigs.NPCS[mapID][3].worldx = gp.tilesize * 11;
         GlobalGameThreadConfigs.NPCS[mapID][3].worldy = gp.tilesize * 9;
-        GlobalGameThreadConfigs.NPCS[mapID][3].speed = 0;
         GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[1] = "Hello. its a nice day \n outside isnt it?";
         GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[2] = "You should go to the main square,\n were all going to be there";
         GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[3] = "OK bye!";
         GlobalGameThreadConfigs.NPCS[mapID][3].direction = "right";
+        GlobalGameThreadConfigs.NPCS[mapID][3].speed = 0;
         GlobalGameThreadConfigs.NPCS[mapID][3].frozen = true; mapID = 1;
             GlobalGameThreadConfigs.NPCS[mapID][0] = new Mysterious_trader(gp);
             GlobalGameThreadConfigs.NPCS[mapID][0].worldx = gp.tilesize * 12;
@@ -125,6 +132,7 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.NPCS[mapID][0].inventory.get(4).stacksize = 30;
 }
     public  void setMonsterRenderers(){
+        GlobalGameThreadConfigs.Monsters = new LivingEntity[MainGame.maxmap][20];
         int mapID = 0;
         GlobalGameThreadConfigs.Monsters[mapID][0] = new green_slime(gp);
         GlobalGameThreadConfigs.Monsters[mapID][0].worldx = gp.tilesize*23;
@@ -146,6 +154,7 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.Monsters[mapID][5].worldy = gp.tilesize*35;
     }
     public void setTileEntityRenderers(){int i = 0; int mapID = 0;
+        GlobalGameThreadConfigs.Tentity = new TileEntity[MainGame.maxmap][100];
         GlobalGameThreadConfigs.Tentity[mapID][i] = new IT_tree(gp, 27, 12);i++;
         GlobalGameThreadConfigs.Tentity[mapID][i] = new IT_tree(gp, 28, 12);i++;
         GlobalGameThreadConfigs.Tentity[mapID][i] = new IT_tree(gp, 29, 12);i++;

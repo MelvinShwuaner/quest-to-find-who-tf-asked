@@ -10,9 +10,10 @@ public class Projectile extends LivingEntity{
         super(gpp);
 
     }
-    public void Set(int worldx, int worldy, String direction, boolean alive, LivingEntity sourceentity) {
+    public void Set(int worldx, int worldy, int worldz, String direction, boolean alive, LivingEntity sourceentity) {
         this.worldx = worldx;
         this.worldy = worldy;
+        this.worldz = worldz;
         this.alive = alive;
         this.SourceEntity = sourceentity;
         this.health = this.maxhealth;

@@ -51,6 +51,9 @@ public class furnace extends LivingEntity {
     }
     @Override
     public void update() {
+        if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 46){
+            gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] = 47;
+        }
         if(smelting){
             increasecool();
             spritenumber = 2;
@@ -80,11 +83,11 @@ public class furnace extends LivingEntity {
 
                     }
                 }
-            }else{
+            } else {
                 if (inventory.get(0) != null) {
                     if (inventory.get(6) != null) {
                         LivingEntity Source = inventory.get(0).Outcome;
-                        if (Objects.equals(inventory.get(5).name, Source.name)){
+                        if (Objects.equals(inventory.get(5).name, Source.name)) {
                             inventory.get(5).stacksize++;
                             cool = 0;
                             hasfinushedcol = 2;
@@ -100,11 +103,16 @@ public class furnace extends LivingEntity {
                                 smelting = false;
                                 spritenumber = 1;
                             }
-                    }
+                        }
                     }
                 }
             }
-            gp.player.gp.playsound(10);
+            if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
+                    (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
+                    && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
+                    (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                gp.player.gp.playsound(10);
+            }
         }
     }
 }

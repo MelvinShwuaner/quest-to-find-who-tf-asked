@@ -1442,6 +1442,7 @@ public class UI  {
             case "Brick" -> newentity = new Brick(gp);
             case "Clay" -> newentity = new Clay(gp);
             case "Basic Coal" -> newentity = new OBJ_coal(gp);
+            case "Iron pickaxe" -> newentity = new OBJ_IRON_PICKAXE(gp);
         }
         newentity.inventory = old.inventory;
         return newentity;

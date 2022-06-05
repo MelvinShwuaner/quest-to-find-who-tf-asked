@@ -52,7 +52,7 @@ public class EventHandler {
             canTriggerEvent = true;
         }
         if (!GlobalGameThreadConfigs.isinTital) {
-            if (i < GlobalGameThreadConfigs.Monsters[1].length && GlobalGameThreadConfigs.Monsters[0][i] == null) {
+            if (i < GlobalGameThreadConfigs.Monsters[1].length && GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] == null) {
                 i++;
             }
             if (i == 5){
@@ -113,37 +113,37 @@ public class EventHandler {
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = col * gp.tilesize;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = row * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].Hostile = true;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = col * gp.tilesize;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].Hostile = true;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * gp.tilesize;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = row * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].Hostile = true;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * gp.tilesize;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].Hostile = true;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 2) * gp.tilesize;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].Hostile = true;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * gp.tilesize;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 2) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].Hostile = true;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
             i++;
             if (raidcounter == 0) {
                 for (int amogus = 0; amogus < GlobalGameThreadConfigs.NPCS[1].length; amogus++) {
                     if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus] != null) {
-                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].Hostile = true;
+                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].onpath = true;
                     }
                 }
             }
@@ -153,7 +153,6 @@ public class EventHandler {
                 UI.addMessages("Talk to the NPC");
                 for (int amogus = 0; amogus < GlobalGameThreadConfigs.NPCS[1].length; amogus++) {
                     if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus] != null) {
-                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].Hostile = true;
                         GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].goingup = true;
                         GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].dialogues[1] = "Thank you for saving us! follow me";
                         GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].dialogues[2] = "Lets go to this special pond";

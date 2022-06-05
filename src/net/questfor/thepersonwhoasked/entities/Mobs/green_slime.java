@@ -1,4 +1,5 @@
 package net.questfor.thepersonwhoasked.entities.Mobs;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.objects.OBJHeart;
@@ -13,7 +14,8 @@ public class green_slime extends LivingEntity {
         super(gpp);
         EntityType = 1;
         name = "Green Slime";
-        speed = 2;
+        defaultspeed = 2;
+        speed = defaultspeed;
         maxhealth = 10;
         TrueAttackDamage = 5;
         defence = 1;
@@ -70,6 +72,18 @@ public class green_slime extends LivingEntity {
             taskx = Math.round(target.worldx/gp.tilesize);
             tasky = Math.round(target.worldy/gp.tilesize);
             searchPath(taskx, tasky);
+            int id = new Random().nextInt(100) + 1;
+
+            if (id > 70 && !projectile.alive && primepowercool == 30) {
+                projectile.Set((int) worldx, (int) worldy, (int) worldz, direction, true, this);
+                for(int i = 0; i< GlobalGameThreadConfigs.projectilelist[1].length; i++){
+                    if(GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i] == null){
+                        GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i] = projectile;
+                        break;
+                    }
+                }
+                primepowercool = 0;
+            }
                     }else{
             Hostile = false;
         }

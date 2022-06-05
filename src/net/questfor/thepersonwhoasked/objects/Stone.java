@@ -1,9 +1,7 @@
 package net.questfor.thepersonwhoasked.objects;
 
-import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
-import net.questfor.thepersonwhoasked.tile_entites.TileEntity;
 
 import java.awt.*;
 
@@ -53,7 +51,9 @@ public class Stone extends LivingEntity {
         return 20;
     }
 
-    public void update() {
+    public void update() {if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 46){
+        gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] = 47;
+    }
         if (down1 == null) {
             getImageInstance();
         }

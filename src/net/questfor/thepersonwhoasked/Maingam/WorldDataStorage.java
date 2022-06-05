@@ -1,6 +1,8 @@
 package net.questfor.thepersonwhoasked.Maingam;
-import net.questfor.thepersonwhoasked.entities.*;
-import net.questfor.thepersonwhoasked.tile_entites.*;
+
+import net.questfor.thepersonwhoasked.entities.LivingEntity;
+import net.questfor.thepersonwhoasked.entities.Player;
+import net.questfor.thepersonwhoasked.tile_entites.TileEntity;
 public class WorldDataStorage extends Data {
     LivingEntity NPCS[][];
     private static final long serialVersionUID = -694201445L;
@@ -9,7 +11,8 @@ public class WorldDataStorage extends Data {
     TileEntity TileEntitys[][];
     LivingEntity obj[][];
     int raidcount;
-    net.questfor.thepersonwhoasked.entities.Player Player;
+    Player player;
     int mapdata[][][][];
     int currentmap;
+
 }

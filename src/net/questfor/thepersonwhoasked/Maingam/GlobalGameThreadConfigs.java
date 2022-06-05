@@ -31,7 +31,8 @@ public class GlobalGameThreadConfigs extends Data {
     public static LivingEntity[][] obj = new LivingEntity[MainGame.maxmap][100];
     public static ArrayList<LivingEntity> entitylist = new ArrayList<>();
     public static ArrayList<LivingEntity> particleList = new ArrayList<>();
-    public static ArrayList<LivingEntity> projectilelist = new ArrayList<>();
+
+    public static LivingEntity[][] projectilelist = new LivingEntity[MainGame.maxmap][20];
     public static BufferedImage tempscreen;
 
     public static Graphics2D g2;

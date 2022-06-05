@@ -53,7 +53,11 @@ public class Path extends Data {
         resetNodes();
         startnode = nodes[startcol][startrow];
         currentnode = startnode;
-        goalnode = nodes[goalcol][goalrow];
+        try {
+            goalnode = nodes[goalcol][goalrow];
+        }catch (Exception e){
+            goalnode = nodes[30][30];
+        }
         openlist.add(currentnode);
         int col = 0;
         int row = 0;

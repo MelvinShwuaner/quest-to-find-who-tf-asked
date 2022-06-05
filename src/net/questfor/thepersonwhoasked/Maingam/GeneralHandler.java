@@ -6,21 +6,19 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.Comparator;
 
-import static net.questfor.thepersonwhoasked.Maingam.hitboxregister.gp;
-
 public class GeneralHandler {
     public static void main(Graphics2D g2) {
         //is the lead Renderer to handle all the different entites and objects.
-        for (int i = 0; i < GlobalGameThreadConfigs.projectilelist.size(); i++) {
-            if (GlobalGameThreadConfigs.projectilelist.get(i) != null) {
-                if (GlobalGameThreadConfigs.projectilelist.get(i).alive) {
-                    GlobalGameThreadConfigs.projectilelist.get(i).update();
+          for (int i = 0; i < GlobalGameThreadConfigs.projectilelist[1].length; i++) {
+            if (GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i] != null) {
+                if (GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i].alive) {
+                    GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i].update();
                 }
-                if (!GlobalGameThreadConfigs.projectilelist.get(i).alive) {
-                    GlobalGameThreadConfigs.projectilelist.remove(i);
+                if (!GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i].alive) {
+                    GlobalGameThreadConfigs.projectilelist[MainGame.currentmap][i] = null;
                 }
-            }
-        }
+            }}
+
         for (int i = 0; i < GlobalGameThreadConfigs.particleList.size(); i++) {
             if (GlobalGameThreadConfigs.particleList.get(i) != null) {
                 if (GlobalGameThreadConfigs.particleList.get(i).alive) {
@@ -44,7 +42,8 @@ public class GeneralHandler {
                 return result;
             }
         });
-        for(int i = 0; i < GlobalGameThreadConfigs.entitylist.size(); i++){
+        for(int i = 0; i < GlobalGameThreadConfigs.entitylist.size(); i++) {
+
             GlobalGameThreadConfigs.entitylist.get(i).draw(g2);
         }
         GlobalGameThreadConfigs.entitylist.clear();

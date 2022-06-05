@@ -66,7 +66,7 @@ public class GlobalSaveManager {
             worldDataStorage.TileEntitys = GlobalGameThreadConfigs.Tentity;
             worldDataStorage.obj = GlobalGameThreadConfigs.obj;
             worldDataStorage.raidcount = EventHandler.raidcounter;
-            worldDataStorage.Player = gp.player;
+            worldDataStorage.player = gp.player;
             worldDataStorage.mapdata = gp.tilemanager.mapRendererID;
             worldDataStorage.currentmap = MainGame.currentmap;
             oos.writeObject(worldDataStorage);
@@ -89,7 +89,7 @@ public class GlobalSaveManager {
                 EventHandler.raidcounter = worldDataStorage.raidcount;
                 GlobalGameThreadConfigs.obj = worldDataStorage.obj;
                 gp.tilemanager.mapRendererID = worldDataStorage.mapdata;
-                gp.player = worldDataStorage.Player;
+                gp.player = worldDataStorage.player;
                 MainGame.currentmap = worldDataStorage.currentmap;
                 for (int a = 0; a < GlobalGameThreadConfigs.obj.length; a++) {
                     for (int i = 0; i < GlobalGameThreadConfigs.obj[a].length; i++) {

@@ -11,7 +11,8 @@ public class Old_Man extends LivingEntity {
     public Old_Man(MainGame gpp) {
         super(gpp);
         direction = "down";
-        speed = 1;
+        defaultspeed = 1;
+        speed = defaultspeed;
         hitbox = new Rectangle(0, 0, 46, 46);
         getImageInstance();
         setDialogues();
@@ -35,14 +36,16 @@ public class Old_Man extends LivingEntity {
     }
 
     public void setAction() {
-        if (!frozen){
+
                 if(onpath){
                     if(goingup){
                         taskx = Math.round(1107/gp.tilesize);
                         tasky = Math.round(588/gp.tilesize);
                         goup();
                     }else if(!Hostile){
-                        Scared();
+                        tasky = Math.round(1932/gp.tilesize);
+                        taskx = Math.round(1107/gp.tilesize);
+                        searchPath(taskx, tasky);
                     }else{
                     taskx = Math.round(target.worldx/gp.tilesize);
                     tasky = Math.round(target.worldy/gp.tilesize);
@@ -67,46 +70,19 @@ public class Old_Man extends LivingEntity {
                         actionLock = 0;
                     }
                 }
-            } else if (goingup) {
-                goup();
-            } else {
-                Scared();
             }
-    }
 
 
     public void goup() {
         searchPath(taskx, tasky);
+        if(Math.round(worldx/gp.tilesize) == taskx && Math.round(worldy/gp.tilesize) == tasky){
                 if (speed > 0) {
                     dialogues[0] = "Take a wish. will you?";
                     dialogues[2] = ""; dialogues[3] = "";
                     speed = 0;
-                }
+                }}
     }
 
-    public void Scared() {
-        actionLock++;
-        Random random = new Random();
-        int I = random.nextInt(100) + 1;
-        if (actionLock > 30) {
-            if(I > 50) {
-                if (worldy < 1932) {
-                    direction = "down";
-                } else {
-                    direction = "up";
-                }
-            }
-            if(I < 50){
-                if (worldx < 1107) {
-                    direction = "right";
-                } else {
-                    direction = "left";
-                }
-            }
-
-            actionLock = 0;
-        }
-    }
 
     public void setDialogues(){
         dialogues[0] = "Hello!";

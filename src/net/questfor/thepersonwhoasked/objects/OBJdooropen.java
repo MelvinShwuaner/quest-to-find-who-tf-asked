@@ -21,10 +21,14 @@ public class OBJdooropen extends LivingEntity {
         getImageInstance();
         worldy =y;
         worldx = x;
-        worldz = 8;
+        worldz = 4;
     }
     @Override
-    public void update() {}
+    public void update() {
+        if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 47){
+            gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] = 46;
+        }
+    }
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/dooropen", gp.tilesize, gp.tilesize);
