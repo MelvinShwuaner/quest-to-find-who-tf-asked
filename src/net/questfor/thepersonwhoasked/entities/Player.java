@@ -208,10 +208,7 @@ public class Player extends LivingEntity {
             hasweapon = currentweapon != null;
             //PLAYER ATTACK//
             if (KeyHandler.use) {
-                if(GlobalGameThreadConfigs.Buildmode)
-                  BuildUse();
-                else
-                  Use();
+              Use();
             }
             if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.returntileworldz(this)) {
                 if (!isup) {
@@ -489,7 +486,6 @@ public class Player extends LivingEntity {
 
     public void pickupObject(int i) {
         try {
-
             if (i != 999) {
                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].EntityType == 3) {
                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].Type == Type_Current) {
@@ -515,48 +511,7 @@ public class Player extends LivingEntity {
                         UI.addMessages(text);
                     }
                 } else {
-                    switch (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].name) {
-                        case "chest" -> {
-                            if (KeyHandler.enterpressed) {
-                                if (!GlobalGameThreadConfigs.inchest) {
-                                    GlobalGameThreadConfigs.inchest = true;
-                                    GlobalGameThreadConfigs.CharacterStats = true;
-
-                                } else {
-                                    GlobalGameThreadConfigs.inchest = false;
-                                    GlobalGameThreadConfigs.CharacterStats = false;
-                                    UI.slotstate = false;
-                                    if(UI.merger != null){
-                                        UI.merger = null;
-                                        UI.merging = false;
-                                    }
-                                    if(UI.mergerr != null){
-                                        UI.merging = false;
-                                        UI.mergerr = null;
-                                    }
-                                }
-                            }
-                        }
-                        case "furnace", "crafting table" -> {
-                            if (KeyHandler.enterpressed) {
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][i].open();
-                            }
-                        }
-                        case "door" -> {
-                            if (KeyHandler.enterpressed){
-                                KeyHandler.enterpressed = false;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdooropen(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy);
-                                gp.playsound(3);
-                        }
-                    }
-                    case "door open" -> {
-                            if(KeyHandler.enterpressed){
-                                gp.playsound(3);
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdoor(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx/gp.tilesize, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy/gp.tilesize);
-                            }
-                    }
-                    }
-
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].open((int)GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx, (int)GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy, (int)GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz, i);
                 }
             } else {
                 GlobalGameThreadConfigs.inchest = false;
@@ -581,6 +536,7 @@ public class Player extends LivingEntity {
         inventory.add(new nulitem(gp, 52, "fire"));
         inventory.add(new nulitem(gp, 41, "tree"));
         inventory.add(new nulitem(gp, 13, "water"));
+        inventory.add(new crafting_table(gp, 0, 0, 0));
     }
 
     public void interactNPC(int i) {
@@ -728,47 +684,14 @@ public class Player extends LivingEntity {
             }
         }
         if (currentshield != null){
-            if (currentshield.EntityType == 3) {
-                if(currentshield.NBTDATA) {
+
                     while (!hasfound) {
                         if (i < 100) {
                             if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] == null) {
                                 double y = worldy;
                                 double x = worldx;
                                 double z = worldz;
-                                boolean canplace;
-                                if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
-                                    switch (direction) {
-                                        case "down" -> y += 50;
-                                        case "up" -> y -= 50;
-                                        case "left" -> x -= 50;
-                                        case "right" -> x += 50;
-                                    }
-                                }else if(KeyHandler.CROUCH){
-                                    z--;
-                                }else if(KeyHandler.sprint){
-                                    z++;
-                                }
-                                canplace = (gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z));
-                                if(!canplace && (KeyHandler.sprint || KeyHandler.CROUCH)){
-                                    switch (direction) {
-                                        case "down" -> y += 50;
-                                        case "up" -> y -= 50;
-                                        case "left" -> x -= 50;
-                                        case "right" -> x += 50;
-                                    }
-                                    canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z);
-                                }
-                                if (canplace && (!gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z-1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z+1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)+1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)-1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)+1, (int) Math.round(y / gp.tilesize), (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)-1, (int) Math.round(y / gp.tilesize), (int) z))) {
-                                    switch ((currentshield.name)) {
-                                        case "crafting table" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new crafting_table(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)); GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}
-                                        case "furnace" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new furnace(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize));GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}}
-                                    currentshield.stacksize--;
-                                    if (currentshield.stacksize <= 0) {
-                                        inventory.remove(currentshield);
-                                        currentshield = null;
-                                    }
-                                }
+                                currentshield.Place( x,  y,  z, i);
                                 i = 0;
                                 hasfound = true;
                             }
@@ -778,138 +701,9 @@ public class Player extends LivingEntity {
                             i = 0;
                         }
                     }
-                }else{
-                    double y = worldy;
-                    double x = worldx;
-                    double z = worldz;
-                    boolean canplace;
-                    if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
-                        switch (direction) {
-                            case "down" -> y += 50;
-                            case "up" -> y -= 50;
-                            case "left" -> x -= 50;
-                            case "right" -> x += 50;
-                        }
-                    }else if(KeyHandler.CROUCH){
-                        z--;
-                    }else if(KeyHandler.sprint){
-                        z++;
-                    }
-                    canplace = (gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z));
-                    if(!canplace && (KeyHandler.sprint || KeyHandler.CROUCH)) {
-                        switch (direction) {
-                            case "down" -> y += 50;
-                            case "up" -> y -= 50;
-                            case "left" -> x -= 50;
-                            case "right" -> x += 50;
-                        }
-                        canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z);
-                    }
-                    if (canplace && (!gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z-1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z+1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)+1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)-1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)+1, (int) Math.round(y / gp.tilesize), (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)-1, (int) Math.round(y / gp.tilesize), (int) z))) {
-                        gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(x/gp.tilesize)][(int) Math.round(y/gp.tilesize)][(int) z] = currentshield.tile;
-                        currentshield.stacksize--;
-                        if (currentshield.stacksize <= 0) {
-                            inventory.remove(currentshield);
-                            currentshield = null;
-                        }
-                    }
-                }
             }
-        }
     }
-    public void BuildUse()
-    {
-        KeyHandler.use = false;
-        hasfound = false;
-        if (UI.transitionfinushed || GlobalGameThreadConfigs.CharacterStats) {
-            convertItem(7);
-        } else {
-            if (hasweapon) {
-                if (currentweapon.Type == Type_constumable) {
-                    convertItem(8);
-                }
-            }
-        }
-        if (currentshield != null){
-            if (currentshield.EntityType == 3) {
-                if(currentshield.NBTDATA) {
-                    while (!hasfound) {
-                        if (i < 100) {
-                            if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] == null) {
-                                double y = worldy;
-                                double x = worldx;
-                                double z = worldz;
-                                boolean canplace;
-                                if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
-                                    switch (direction) {
-                                        case "down" -> y += 50;
-                                        case "up" -> y -= 50;
-                                        case "left" -> x -= 50;
-                                        case "right" -> x += 50;
-                                    }
-                                }else if(KeyHandler.CROUCH){
-                                    z--;
-                                }else if(KeyHandler.sprint){
-                                    z++;
-                                }
-                                canplace = (gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z));
-                                if(!canplace && (KeyHandler.sprint || KeyHandler.CROUCH)){
-                                    switch (direction) {
-                                        case "down" -> y += 50;
-                                        case "up" -> y -= 50;
-                                        case "left" -> x -= 50;
-                                        case "right" -> x += 50;
-                                    }
-                                    canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z);
-                                }
-                                if (canplace && (!gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z-1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z+1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)+1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)-1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)+1, (int) Math.round(y / gp.tilesize), (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)-1, (int) Math.round(y / gp.tilesize), (int) z))) {
-                                    switch ((currentshield.name)) {
-                                        case "crafting table" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new crafting_table(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)); GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}
-                                        case "furnace" -> {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new furnace(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize));GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz = z;}}
-                                }
-                                i = 0;
-                                hasfound = true;
-                            }
-                            i++;
 
-                        } else {
-                            i = 0;
-                        }
-                    }
-                }else{
-                    double y = worldy;
-                    double x = worldx;
-                    double z = worldz;
-                    boolean canplace;
-                    if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
-                        switch (direction) {
-                            case "down" -> y += 50;
-                            case "up" -> y -= 50;
-                            case "left" -> x -= 50;
-                            case "right" -> x += 50;
-                        }
-                    }else if(KeyHandler.CROUCH){
-                        z--;
-                    }else if(KeyHandler.sprint){
-                        z++;
-                    }
-                    canplace = (gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z));
-                    if(!canplace && (KeyHandler.sprint || KeyHandler.CROUCH)) {
-                        switch (direction) {
-                            case "down" -> y += 50;
-                            case "up" -> y -= 50;
-                            case "left" -> x -= 50;
-                            case "right" -> x += 50;
-                        }
-                        canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z, GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z);
-                    }
-                    if (canplace && (!gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z-1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z+1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)+1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)-1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)+1, (int) Math.round(y / gp.tilesize), (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)-1, (int) Math.round(y / gp.tilesize), (int) z))) {
-                        gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(x/gp.tilesize)][(int) Math.round(y/gp.tilesize)][(int) z] = currentshield.tile;
-                    }
-                }
-            }
-        }
-    }
     public void Destroy()
     {
         double y = worldy;

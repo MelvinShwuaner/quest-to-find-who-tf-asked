@@ -24,6 +24,10 @@ public class Clay extends LivingEntity {
     }
     @Override
     public void update() {}
+    public LivingEntity replicate() {
+        return new Clay(gp);
+    }
+
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/clay", gp.tilesize, gp.tilesize);

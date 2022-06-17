@@ -12,4 +12,7 @@ public class OBJboots extends LivingEntity {
     }
     @Override
     public void update() {}
+    public LivingEntity replicate() {
+        return new OBJboots(gp);
+    }
 }

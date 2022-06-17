@@ -173,21 +173,13 @@ public class hitboxregister {
                     target[MainGame.currentmap][i].hitbox.x = (int) (target[MainGame.currentmap][i].worldx + target[MainGame.currentmap][i].hitbox.x);
                     target[MainGame.currentmap][i].hitbox.y = (int) (target[MainGame.currentmap][i].worldy + target[MainGame.currentmap][i].hitbox.y);
                     switch (entity.direction) {
-                        case "up":
-                            entity.hitbox.y -= entity.speed;
-                            break;
-                        case "down":
-                            entity.hitbox.y += entity.speed;
-                            break;
-                        case "left":
-                            entity.hitbox.x -= entity.speed;
-                            break;
-                        case "right":
-                            entity.hitbox.x += entity.speed;
-                            break;
+                        case "up" -> entity.hitbox.y -= entity.speed;
+                        case "down" -> entity.hitbox.y += entity.speed;
+                        case "left" -> entity.hitbox.x -= entity.speed;
+                        case "right" -> entity.hitbox.x += entity.speed;
                     }
                     if (entity.hitbox.intersects(target[MainGame.currentmap][i].hitbox)) {
-                        if (entity.worldz == target[MainGame.currentmap][i].worldz || entity.worldz == target[MainGame.currentmap][i].worldz+1) {
+                        if (entity.worldz == target[MainGame.currentmap][i].worldz) {
                             if (target[MainGame.currentmap][i] != entity) {
                                 index = i;
                             }

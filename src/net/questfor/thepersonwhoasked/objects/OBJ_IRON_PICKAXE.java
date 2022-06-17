@@ -29,6 +29,10 @@ public class OBJ_IRON_PICKAXE extends LivingEntity {
     }
     @Override
     public void update() {}
+    public LivingEntity replicate() {
+        return new OBJ_IRON_PICKAXE(gp);
+    }
+
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/iron_pickaxe", gp.tilesize, gp.tilesize);

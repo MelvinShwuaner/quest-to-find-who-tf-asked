@@ -23,6 +23,10 @@ public class Brick extends LivingEntity {
     }
     @Override
     public void update() {}
+    public LivingEntity replicate() {
+        return new Brick(gp);
+    }
+
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/brick", gp.tilesize, gp.tilesize);

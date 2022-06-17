@@ -1,11 +1,13 @@
 package net.questfor.thepersonwhoasked.objects;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
+import net.questfor.thepersonwhoasked.Maingam.KeyHandler;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
 
 public class OBJdooropen extends LivingEntity {
-    public OBJdooropen(MainGame gp, int x, int y){
+    public OBJdooropen(MainGame gp, int x, int y, double z){
         super(gp);
         name = "door open";
         collision = true;
@@ -21,7 +23,7 @@ public class OBJdooropen extends LivingEntity {
         getImageInstance();
         worldy =y;
         worldx = x;
-        worldz = 4;
+        worldz = z;
         LightSource = false;
     }
     @Override
@@ -29,6 +31,18 @@ public class OBJdooropen extends LivingEntity {
         if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 47){
             gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] = 46;
         }
+    }
+
+    @Override
+    public void open(int x, int y, int z, int i) {
+        if(KeyHandler.enterpressed){
+            gp.playsound(3);
+            GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdoor(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx/gp.tilesize, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy/gp.tilesize, GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz);
+        }
+    }
+
+    public LivingEntity replicate() {
+        return new OBJdooropen(gp, 0, 0, 0);
     }
     @Override
     public void getImageInstance() {

@@ -30,6 +30,10 @@ public class OBJ_IRON_SHOVEL extends LivingEntity {
     @Override
     public void update() {}
     @Override
+    public LivingEntity replicate() {
+        return new OBJ_IRON_SHOVEL(gp);
+    }
+    @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/shovel", gp.tilesize, gp.tilesize);
     }

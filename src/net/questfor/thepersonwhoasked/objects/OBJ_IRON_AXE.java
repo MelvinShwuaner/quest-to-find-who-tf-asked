@@ -28,6 +28,10 @@ public class OBJ_IRON_AXE extends LivingEntity {
     }
     @Override
     public void update() {}
+    @Override
+    public LivingEntity replicate() {
+        return new OBJ_IRON_AXE(gp);
+    }
 
     @Override
     public void getImageInstance() {

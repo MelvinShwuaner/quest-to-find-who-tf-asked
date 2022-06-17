@@ -1477,30 +1477,7 @@ public class UI  {
         }
     }
     public static LivingEntity createnewobject(LivingEntity old){
-        LivingEntity newentity = new LivingEntity(gp);
-        switch (old.name){
-            case "chest" -> newentity = new chest(gp);
-            case "furnace" -> newentity = new furnace(gp, 0, 0);
-            case "BRIC WALL" -> newentity = new OBJ_BRICK_WALL(gp);
-            case "Bronze coin" -> newentity = new OBJ_COIN_BRONZE(gp);
-            case "WoodCutter's axe"-> newentity = new OBJ_IRON_AXE(gp);
-            case "Iron shovel"-> newentity = new OBJ_IRON_SHOVEL(gp);
-            case "Iron sword"-> newentity = new OBJ_IRON_SWORD(gp);
-            case "Mana Crystal"-> newentity = new OBJ_MANA_CRYSTAL(gp);
-            case "Red Potion" -> newentity = new OBJ_POTION_HEALTH_1(gp);
-            case "Diamond Shield"-> newentity = new OBJ_SHIELD_DIAMOND(gp);
-            case "Wooden Shield" -> newentity = new OBJ_SHIELD_WOOD(gp);
-            case "boots" -> newentity = new OBJboots(gp);
-            case "door" -> newentity = new OBJdoor(gp, 0, 0);
-            case "door open" -> newentity = new OBJdooropen(gp, 0, 0);
-            case "heart"-> newentity = new OBJHeart(gp);
-            case "key"-> newentity = new OBJkey(gp);
-            case "crafting table" -> newentity = new crafting_table(gp, 0, 0);
-            case "Brick" -> newentity = new Brick(gp);
-            case "Clay" -> newentity = new Clay(gp);
-            case "Basic Coal" -> newentity = new OBJ_coal(gp);
-            case "Iron pickaxe" -> newentity = new OBJ_IRON_PICKAXE(gp);
-        }
+        LivingEntity newentity =  old.replicate();
         newentity.inventory = old.inventory;
         return newentity;
     }

@@ -34,6 +34,10 @@ public class OBJ_POTION_HEALTH_1 extends LivingEntity {
     @Override
     public void update() {}
     @Override
+    public LivingEntity replicate() {
+        return new OBJ_POTION_HEALTH_1(gp);
+    }
+    @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/potion_red", gp.tilesize, gp.tilesize);
     }

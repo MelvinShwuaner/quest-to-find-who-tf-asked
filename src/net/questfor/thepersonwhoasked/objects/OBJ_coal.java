@@ -34,4 +34,8 @@ public class OBJ_coal extends LivingEntity {
 
     @Override
     public void update() {}
+    public LivingEntity replicate() {
+        return new OBJ_coal(gp);
+    }
+
 }

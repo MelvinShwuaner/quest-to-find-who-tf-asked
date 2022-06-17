@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.objects;
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
+import net.questfor.thepersonwhoasked.Maingam.KeyHandler;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.Maingam.UI;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
@@ -8,7 +9,7 @@ import java.awt.*;
 import java.util.Objects;
 
 public class furnace extends LivingEntity {
-    public furnace(MainGame gp, int col, int row){
+    public furnace(MainGame gp, int col, int row, double layer){
         super(gp);
         name = "furnace";
         LightSource = false;
@@ -34,10 +35,10 @@ public class furnace extends LivingEntity {
         inventory.add(null);
         inventory.add(null);
         maxcool = 100;
-        worldz = 5;
+
         worldx = col*gp.tilesize;
         worldy = row*gp.tilesize;
-        NBTDATA = true;
+        worldz = layer;
     }
 
     @Override
@@ -45,11 +46,12 @@ public class furnace extends LivingEntity {
         down1 = BufferedRenderer("objects/furnace", gp.tilesize, gp.tilesize);
         down2 = BufferedRenderer("objects/furnace_on", gp.tilesize, gp.tilesize);
     }
-    public void open(){
+    public void open(int x, int y, int z, int i){
+        if(KeyHandler.enterpressed){
         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.UIstate;
         UI.npc = this;
         UI.currentUI = "Furnace";
-    }
+    }}
     @Override
     public void update() {
         if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 46){
@@ -121,5 +123,45 @@ public class furnace extends LivingEntity {
     @Override
     public boolean ItemRequirements(LivingEntity SourceEntity) {
         return true;
+    }
+    @Override
+    public LivingEntity replicate() {
+        return new furnace(gp, 0, 0, 0);
+    }
+    @Override
+    public void Place(double x, double y, double z, int i){
+        boolean canplace;
+        if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
+            switch (direction) {
+                case "down" -> y += 50;
+                case "up" -> y -= 50;
+                case "left" -> x -= 50;
+                case "right" -> x += 50;
+            }
+        }else if(KeyHandler.CROUCH){
+            z--;
+        }else if(KeyHandler.sprint){
+            z++;
+        }
+        canplace = (gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z));
+        if(!canplace && (KeyHandler.sprint || KeyHandler.CROUCH)){
+            switch (direction) {
+                case "down" -> y += 50;
+                case "up" -> y -= 50;
+                case "left" -> x -= 50;
+                case "right" -> x += 50;
+            }
+            canplace = gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / gp.tilesize), Math.round(y / gp.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z);
+        }
+        if (canplace && (!gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z-1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), (int) z+1) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)+1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize)-1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)+1, (int) Math.round(y / gp.tilesize), (int) z) || !gp.hregister.checktileworld((int) Math.round(x / gp.tilesize)-1, (int) Math.round(y / gp.tilesize), (int) z))) {
+            GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new furnace(gp, (int) Math.round(x / gp.tilesize), (int) Math.round(y / gp.tilesize), z);
+            if(!GlobalGameThreadConfigs.Buildmode){
+            gp.player.currentshield.stacksize--;
+            if (gp.player.currentshield.stacksize <= 0) {
+                gp.player.inventory.remove(gp.player.currentshield);
+                gp.player.currentshield = null;
+            }
+        }
+        }
     }
 }

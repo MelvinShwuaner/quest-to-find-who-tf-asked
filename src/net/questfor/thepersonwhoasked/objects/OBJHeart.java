@@ -78,4 +78,9 @@ public class OBJHeart extends LivingEntity {
             set();
         }
     }
+    public LivingEntity replicate() {
+        return new OBJHeart(gp);
+    }
+
+
 }

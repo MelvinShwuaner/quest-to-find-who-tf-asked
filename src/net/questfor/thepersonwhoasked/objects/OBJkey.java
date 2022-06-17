@@ -22,6 +22,10 @@ public class OBJkey extends LivingEntity {
     }
     @Override
     public void update() {}
+    public LivingEntity replicate() {
+        return new OBJkey(gp);
+    }
+
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/key", gp.tilesize, gp.tilesize);

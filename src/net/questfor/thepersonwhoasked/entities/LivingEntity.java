@@ -673,7 +673,7 @@ public class LivingEntity extends Data {
     public boolean ItemRequirements(LivingEntity SourceEntity){return false;}
     public void playSE(){}
     public LivingEntity getDestroyedForm(){return null;}
-    public void open(){}
+    public void open(int x, int y, int z, int i){}
     public void searchPath(double taskX, double taskY){
         if(path == null){
             path = new Path();
@@ -905,4 +905,6 @@ public class LivingEntity extends Data {
 
         }
     }
+    public LivingEntity replicate(){return null;}
+    public void Place(double x, double y, double z, int i){}
 }

@@ -69,4 +69,8 @@ public void set(){
     }
     @Override
     public void update() {}
+    @Override
+    public LivingEntity replicate() {
+        return new OBJ_MANA_CRYSTAL(gp);
+    }
 }

@@ -35,4 +35,8 @@ public class OBJ_COIN_BRONZE extends LivingEntity {
     }
     @Override
     public void update() {}
+    @Override
+    public LivingEntity replicate() {
+        return new OBJ_COIN_BRONZE(gp);
+    }
 }

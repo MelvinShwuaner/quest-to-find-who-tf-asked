@@ -45,9 +45,8 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 121;
            GlobalGameThreadConfigs.obj[mapID][i].set();
             i++;
-            GlobalGameThreadConfigs.obj[mapID][i] = new chest(gp);
-            GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 121;
-            GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 123;
+            GlobalGameThreadConfigs.obj[mapID][i] = new chest(gp, 121, 123, 4);
+
             GlobalGameThreadConfigs.obj[mapID][i].inventory.add(new OBJ_BRICK_WALL(gp));
             GlobalGameThreadConfigs.obj[mapID][i].inventory.add(new OBJ_BRICK_WALL(gp));
             GlobalGameThreadConfigs.obj[mapID][i].inventory.add(new OBJ_BRICK_WALL(gp));
@@ -63,10 +62,10 @@ public class GlobalProperties {
             GlobalGameThreadConfigs.obj[mapID][i] = new OBJ_POTION_HEALTH_1(gp);
             GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 120;
             GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 123;
-        GlobalGameThreadConfigs.obj[mapID][i] = new furnace(gp, 121, 124);
+        GlobalGameThreadConfigs.obj[mapID][i] = new furnace(gp, 121, 124, 4);
             i = 0;
             mapID = 1;
-        GlobalGameThreadConfigs.obj[mapID][i] = new chest(gp);
+        GlobalGameThreadConfigs.obj[mapID][i] = new chest(gp, 111, 108, 4);
         GlobalGameThreadConfigs.obj[mapID][i].worldx = gp.tilesize * 111;
         GlobalGameThreadConfigs.obj[mapID][i].worldy = gp.tilesize * 108;
         GlobalGameThreadConfigs.obj[mapID][i].inventory.add(new OBJkey(gp));
@@ -149,7 +148,7 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.Recipes[1].Recipe[0] = new OBJkey(gp);
         GlobalGameThreadConfigs.Recipes[1].Recipe[1] = new OBJ_BRICK_WALL(gp);
         GlobalGameThreadConfigs.Recipes[1].Type = 1;
-        GlobalGameThreadConfigs.Recipes[1].Result = new furnace(gp, 0, 0);
+        GlobalGameThreadConfigs.Recipes[1].Result = new furnace(gp, 0, 0, 0);
     }
 
     public void setScreenRenderer() {

@@ -32,6 +32,10 @@ public class OBJ_IRON_SWORD extends LivingEntity {
     @Override
     public void update() {}
     @Override
+    public LivingEntity replicate() {
+        return new OBJ_IRON_SWORD(gp);
+    }
+    @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/sword_normal", gp.tilesize, gp.tilesize);
     }

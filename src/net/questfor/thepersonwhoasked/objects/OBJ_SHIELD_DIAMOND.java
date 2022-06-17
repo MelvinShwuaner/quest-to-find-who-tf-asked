@@ -26,6 +26,10 @@ public class OBJ_SHIELD_DIAMOND extends LivingEntity {
     @Override
     public void update() {}
     @Override
+    public LivingEntity replicate() {
+        return new OBJ_SHIELD_DIAMOND(gp);
+    }
+    @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/shield_diamond", gp.tilesize, gp.tilesize);
     }
