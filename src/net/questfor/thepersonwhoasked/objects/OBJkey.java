@@ -3,6 +3,7 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class OBJkey extends LivingEntity {
     public OBJkey(MainGame gp){
@@ -28,6 +29,6 @@ public class OBJkey extends LivingEntity {
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/key", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/key", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

@@ -21,15 +21,15 @@ public class OBJdoor extends LivingEntity {
         EntityType = 4;
         description = "how are you holding it?";
         getImageInstance();
-        this.worldx = x * gp.tilesize;
-        this.worldy = y * gp.tilesize;
+        this.worldx = x * GlobalGameThreadConfigs.tilesize;
+        this.worldy = y * GlobalGameThreadConfigs.tilesize;
         worldz = z;
         LightSource = false;
 
     }
     @Override
-    public void update() {if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 46){
-        gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] = 47;
+    public void update() {if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46){
+        gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 47;
     }}
 
 
@@ -52,6 +52,6 @@ public class OBJdoor extends LivingEntity {
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/door", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/door", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

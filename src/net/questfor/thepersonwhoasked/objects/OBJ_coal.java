@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.objects;
 
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
@@ -29,7 +30,7 @@ public class OBJ_coal extends LivingEntity {
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/basic_coall", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/basic_coall", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 
     @Override

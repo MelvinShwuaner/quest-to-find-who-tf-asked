@@ -5,6 +5,7 @@ import net.questfor.thepersonwhoasked.Maingam.UI;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class OBJ_COIN_BRONZE extends LivingEntity {
     public OBJ_COIN_BRONZE(MainGame gpp) {
@@ -25,13 +26,13 @@ public class OBJ_COIN_BRONZE extends LivingEntity {
     }
     public void Use(LivingEntity sourceentity){
         gp.playsound(1);
-        gp.player.bobux += Value;
-        UI.addMessages("bronze coin picked up! value now "+gp.player.bobux);
+        GlobalGameThreadConfigs.player.bobux += Value;
+        UI.addMessages("bronze coin picked up! value now "+GlobalGameThreadConfigs.player.bobux);
     }
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/coin_bronze", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/coin_bronze", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
     @Override
     public void update() {}

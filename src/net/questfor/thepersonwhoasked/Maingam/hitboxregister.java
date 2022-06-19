@@ -19,17 +19,17 @@ public class hitboxregister {
             int entityrightworldx = (int) (entity.worldx + entity.hitbox.x + entity.hitbox.width);
             int entitytopworldy = (int) (entity.worldy + entity.hitbox.y);
             int entitybottomworldy = (int) (entity.worldy + entity.hitbox.y + entity.hitbox.height);
-            int entityleftcol = entityleftworldx / MainGame.tilesize;
-            int entityrightcol = entityrightworldx / MainGame.tilesize;
-            int entitytoprow = entitytopworldy / MainGame.tilesize;
-            int entitybottomrow = entitybottomworldy / MainGame.tilesize;
+            int entityleftcol = entityleftworldx / GlobalGameThreadConfigs.tilesize;
+            int entityrightcol = entityrightworldx / GlobalGameThreadConfigs.tilesize;
+            int entitytoprow = entitytopworldy / GlobalGameThreadConfigs.tilesize;
+            int entitybottomrow = entitybottomworldy / GlobalGameThreadConfigs.tilesize;
             int var10000;
             int worldz1 = (int) entity.worldz;
             int tileNUM1, tileNUM2;
             switch (entity.direction) {
                 case "up":
                     var10000 = (int) (entitytopworldy - entity.speed);
-                    entitytoprow = var10000 / MainGame.tilesize;
+                    entitytoprow = var10000 / GlobalGameThreadConfigs.tilesize;
                     tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz1];
                     tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz1];
                     if(!MainGame.tilemanager.tile[tileNUM1].air || !MainGame.tilemanager.tile[tileNUM2].air){
@@ -41,7 +41,7 @@ public class hitboxregister {
                     break;
                 case "down":
                     var10000 = (int) (entitybottomworldy + entity.speed);
-                    entitybottomrow = var10000 / MainGame.tilesize;
+                    entitybottomrow = var10000 / GlobalGameThreadConfigs.tilesize;
                     tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz1];
                     tileNUM2= MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz1];
                     if(!MainGame.tilemanager.tile[tileNUM1].air || !MainGame.tilemanager.tile[tileNUM2].air){
@@ -53,7 +53,7 @@ public class hitboxregister {
                     break;
                 case "left":
                     var10000 = (int) (entityleftworldx - entity.speed);
-                    entityleftcol = var10000 / MainGame.tilesize;
+                    entityleftcol = var10000 / GlobalGameThreadConfigs.tilesize;
                     tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitybottomrow][worldz1];
                     tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityleftcol][entitytoprow][worldz1];
                     if(!MainGame.tilemanager.tile[tileNUM1].air || !MainGame.tilemanager.tile[tileNUM2].air){
@@ -65,7 +65,7 @@ public class hitboxregister {
                     break;
                 case "right":
                     var10000 = (int) (entityrightworldx + entity.speed);
-                    entityrightcol = var10000 / MainGame.tilesize;
+                    entityrightcol = var10000 / GlobalGameThreadConfigs.tilesize;
                     tileNUM1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitybottomrow][worldz1];
                     tileNUM2 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][entityrightcol][entitytoprow][worldz1];
                     if(!MainGame.tilemanager.tile[tileNUM1].air || !MainGame.tilemanager.tile[tileNUM2].air){
@@ -79,8 +79,8 @@ public class hitboxregister {
         } catch (Exception e) {
             Random random = new Random();
             int I = random.nextInt(50);
-            entity.worldx = I*gp.tilesize;
-            entity.worldy = I*gp.tilesize;
+            entity.worldx = I*GlobalGameThreadConfigs.tilesize;
+            entity.worldy = I*GlobalGameThreadConfigs.tilesize;
             entity.worldz = 7;}
     }
     public int EntityColide(LivingEntity entity, LivingEntity[][] target) {
@@ -132,8 +132,8 @@ public class hitboxregister {
         //checks collision between entity and player
         entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
         entity.hitbox.y = (int) (entity.worldy + entity.hitbox.y);
-        gp.player.hitbox.x = (int) (gp.player.worldx + gp.player.hitbox.x);
-        gp.player.hitbox.y = (int) (gp.player.worldy + gp.player.hitbox.y);
+        GlobalGameThreadConfigs.player.hitbox.x = (int) (GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.hitbox.x);
+        GlobalGameThreadConfigs.player.hitbox.y = (int) (GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.hitbox.y);
         switch (entity.direction) {
             case "up":
                 entity.hitbox.y -= entity.speed;
@@ -148,16 +148,16 @@ public class hitboxregister {
                 entity.hitbox.x += entity.speed;
                 break;
         }
-        if (entity.hitbox.intersects(gp.player.hitbox)) {
-            if (entity.worldz == gp.player.worldz) {
+        if (entity.hitbox.intersects(GlobalGameThreadConfigs.player.hitbox)) {
+            if (entity.worldz == GlobalGameThreadConfigs.player.worldz) {
                 entity.hitboxe = true;
                 ContactPlayer = true;
             }
         }
         entity.hitbox.x = entity.hitboxdefaultx;
         entity.hitbox.y = entity.hitboxdefaulty;
-        gp.player.hitbox.x = gp.player.hitboxdefaultx;
-        gp.player.hitbox.y = gp.player.hitboxdefaulty;
+        GlobalGameThreadConfigs.player.hitbox.x = GlobalGameThreadConfigs.player.hitboxdefaultx;
+        GlobalGameThreadConfigs.player.hitbox.y = GlobalGameThreadConfigs.player.hitboxdefaulty;
 
         return ContactPlayer;
     }
@@ -280,8 +280,8 @@ public class hitboxregister {
         int targetx, targety, targetz;
         for (int i = 0; i < target[1].length; i++) {
             if (target[MainGame.currentmap][i] != null) {
-                targetx = (int) Math.round(target[MainGame.currentmap][i].worldx/gp.tilesize);
-                targety = (int) Math.round(target[MainGame.currentmap][i].worldy/gp.tilesize);
+                targetx = (int) Math.round(target[MainGame.currentmap][i].worldx/GlobalGameThreadConfigs.tilesize);
+                targety = (int) Math.round(target[MainGame.currentmap][i].worldy/GlobalGameThreadConfigs.tilesize);
                 targetz = (int) (target[MainGame.currentmap][i].worldz);
                 if(targetx == x && targety == y){
                     if(targetz == z){
@@ -297,8 +297,8 @@ public class hitboxregister {
         for (int i = 0; i < target[1].length; i++) {
             if (target[MainGame.currentmap][i] != null) {
                 if(target[MainGame.currentmap][i] != entity)
-                targetx = (int) Math.round(target[MainGame.currentmap][i].worldx/gp.tilesize);
-                targety = (int) Math.round(target[MainGame.currentmap][i].worldy/gp.tilesize);
+                targetx = (int) Math.round(target[MainGame.currentmap][i].worldx/GlobalGameThreadConfigs.tilesize);
+                targety = (int) Math.round(target[MainGame.currentmap][i].worldy/GlobalGameThreadConfigs.tilesize);
                 targetz = (int) (target[MainGame.currentmap][i].worldz);
                 if(targetx == x && targety == y){
                     if(targetz == z+1){
@@ -316,10 +316,10 @@ public class hitboxregister {
     public boolean returntileworldz(LivingEntity entity) {
         //checks collision between entity and world
         boolean index = false;
-        boolean shouldtrigger = !checkEntity(gp.player, GlobalGameThreadConfigs.Monsters) && !checkEntity(gp.player, GlobalGameThreadConfigs.NPCS);
+        boolean shouldtrigger = !checkEntity(GlobalGameThreadConfigs.player, GlobalGameThreadConfigs.Monsters) && !checkEntity(GlobalGameThreadConfigs.player, GlobalGameThreadConfigs.NPCS);
 
 try {
-    int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/gp.tilesize)][(int) Math.round(entity.worldy/gp.tilesize)][(int) (entity.worldz-1)];
+    int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(entity.worldy/GlobalGameThreadConfigs.tilesize)][(int) (entity.worldz-1)];
     if(shouldtrigger){
     if (MainGame.tilemanager.tile[TileNum1].air){
             if(entity.worldz > 0)
@@ -329,8 +329,8 @@ try {
 
     Random random = new Random();
     int I = random.nextInt(50);
-    entity.worldx = I*gp.tilesize;
-    entity.worldy = I*gp.tilesize;
+    entity.worldx = I*GlobalGameThreadConfigs.tilesize;
+    entity.worldy = I*GlobalGameThreadConfigs.tilesize;
     entity.worldz = 7;
 
 }
@@ -339,7 +339,7 @@ try {
     public boolean checkWALL(LivingEntity entity){
         boolean index = true;
         try {
-            int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx / gp.tilesize)][(int) Math.round(entity.worldy / gp.tilesize)][(int) entity.worldz + 1];
+            int TileNum1 = MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(entity.worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(entity.worldy / GlobalGameThreadConfigs.tilesize)][(int) entity.worldz + 1];
             if (!MainGame.tilemanager.tile[TileNum1].air) {
                 index = false;
             }

@@ -45,10 +45,10 @@ public class EventHandler {
         //REGISTERS ALL THE EVENTS AND THERE PROPERTIES
 
         /*check if player can trigger an event*/
-        int XDistance = (int) Math.abs(gp.player.worldx - PreviousEventX);
-        int YDistance = (int) Math.abs(gp.player.worldy - PreviousEventY);
+        int XDistance = (int) Math.abs(GlobalGameThreadConfigs.player.worldx - PreviousEventX);
+        int YDistance = (int) Math.abs(GlobalGameThreadConfigs.player.worldy - PreviousEventY);
         int Distance = Math.max(XDistance, YDistance);
-        if (Distance > gp.tilesize) {
+        if (Distance > GlobalGameThreadConfigs.tilesize) {
             canTriggerEvent = true;
         }
         if (!GlobalGameThreadConfigs.isinTital) {
@@ -93,7 +93,7 @@ public class EventHandler {
         if(KeyHandler.enterpressed){
             KeyHandler.enterpressed = false;
             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
-            gp.player.attacking = false;
+            GlobalGameThreadConfigs.player.attacking = false;
             entity.speak();
         }
     }
@@ -103,34 +103,34 @@ public class EventHandler {
         int i = 0;
         if (raidcounter < 3) {
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = col * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = row * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = col * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = row * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = col * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = col * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = row * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = row * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 2) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 2) * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
             i++;
             GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 2) * gp.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(gp.player);
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 2) * GlobalGameThreadConfigs.tilesize;
+            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
             i++;
             if (raidcounter == 0) {
                 for (int amogus = 0; amogus < GlobalGameThreadConfigs.NPCS[1].length; amogus++) {
@@ -169,10 +169,10 @@ public class EventHandler {
             }
         }else{
             MainGame.currentmap = newmap;
-            gp.player.worldx = gp.tilesize*col;
-            gp.player.worldy = gp.tilesize*row;
-            PreviousEventX = (int) gp.player.worldx;
-            PreviousEventY = (int) gp.player.worldy;
+            GlobalGameThreadConfigs.player.worldx = GlobalGameThreadConfigs.tilesize*col;
+            GlobalGameThreadConfigs.player.worldy = GlobalGameThreadConfigs.tilesize*row;
+            PreviousEventX = (int) GlobalGameThreadConfigs.player.worldx;
+            PreviousEventY = (int) GlobalGameThreadConfigs.player.worldy;
             canTriggerEvent = false;
             gp.playsound(13);
         }
@@ -181,24 +181,24 @@ public class EventHandler {
         //DAMAGE EVENT
         GlobalGameThreadConfigs.GameState = GameState;
         UI.currentDialogue = "you fell into a pit! get out";
-        gp.player.health--;
+        GlobalGameThreadConfigs.player.health--;
         canTriggerEvent = false;
     }
     public void healpit(int gamestate){
         //HEAL EVENT
         if(KeyHandler.enterpressed) {
-            if(gp.player.health != gp.player.maxhealth) {
+            if(GlobalGameThreadConfigs.player.health != GlobalGameThreadConfigs.player.maxhealth) {
                 GlobalGameThreadConfigs.GameState = gamestate;
                 UI.currentDialogue = "you drink the water. \n Your health has been recovered";
-                gp.player.health = gp.player.maxhealth;
+                GlobalGameThreadConfigs.player.health = GlobalGameThreadConfigs.player.maxhealth;
                 canTriggerEvent = false;
             }else{
                 GlobalGameThreadConfigs.GameState = gamestate;
                 UI.currentDialogue = "Your health is already full!";
                 canTriggerEvent = false;
             }
-            if(gp.player.Mana < gp.player.MaxMana){
-                gp.player.Mana++;
+            if(GlobalGameThreadConfigs.player.Mana < GlobalGameThreadConfigs.player.MaxMana){
+                GlobalGameThreadConfigs.player.Mana++;
             }
         }
     }
@@ -206,20 +206,20 @@ public class EventHandler {
         //HIT DETECTION AND MANAGER
         boolean hit = false;
         if (map == MainGame.currentmap){
-            gp.player.hitbox.x = (int) gp.player.worldx + gp.player.hitbox.x;
-        gp.player.hitbox.y = (int) gp.player.worldy + gp.player.hitbox.y;
-        eventBus[map][eventCol][eventRow].x = eventCol * gp.tilesize + eventBus[map][eventCol][eventRow].x;
-        eventBus[map][eventCol][eventRow].y = eventRow * gp.tilesize + eventBus[map][eventCol][eventRow].y;
-        if (gp.player.hitbox.intersects(eventBus[map][eventCol][eventRow]) && !eventBus[map][eventCol][eventRow].eventDone) {
-            if (gp.player.direction.contentEquals(ReqDirection) || ReqDirection.contentEquals("any")) ;
+            GlobalGameThreadConfigs.player.hitbox.x = (int) GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.hitbox.x;
+        GlobalGameThreadConfigs.player.hitbox.y = (int) GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.hitbox.y;
+        eventBus[map][eventCol][eventRow].x = eventCol * GlobalGameThreadConfigs.tilesize + eventBus[map][eventCol][eventRow].x;
+        eventBus[map][eventCol][eventRow].y = eventRow * GlobalGameThreadConfigs.tilesize + eventBus[map][eventCol][eventRow].y;
+        if (GlobalGameThreadConfigs.player.hitbox.intersects(eventBus[map][eventCol][eventRow]) && !eventBus[map][eventCol][eventRow].eventDone) {
+            if (GlobalGameThreadConfigs.player.direction.contentEquals(ReqDirection) || ReqDirection.contentEquals("any")) ;
             hit = true;
             //RECORD AND SAVE EVENT VALUES//
-            PreviousEventX = (int) gp.player.worldx;
-            PreviousEventY = (int) gp.player.worldy;
+            PreviousEventX = (int) GlobalGameThreadConfigs.player.worldx;
+            PreviousEventY = (int) GlobalGameThreadConfigs.player.worldy;
 
         }
-        gp.player.hitbox.x = gp.player.hitboxdefaultx;
-        gp.player.hitbox.y = gp.player.hitboxdefaulty;
+        GlobalGameThreadConfigs.player.hitbox.x = GlobalGameThreadConfigs.player.hitboxdefaultx;
+        GlobalGameThreadConfigs.player.hitbox.y = GlobalGameThreadConfigs.player.hitboxdefaulty;
         eventBus[map][eventCol][eventRow].x = eventBus[map][eventCol][eventRow].eventBusDefaultx;
         eventBus[map][eventCol][eventRow].y = eventBus[map][eventCol][eventRow].eventbusDefaulty;
     }

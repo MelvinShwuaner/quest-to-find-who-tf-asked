@@ -25,14 +25,14 @@ public class Mysterious_trader extends LivingEntity {
     }
 
     public void getImageInstance() {
-        up1 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_1", gp.tilesize, gp.tilesize);
-        up2 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_2", gp.tilesize, gp.tilesize);
-        down1 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_1", gp.tilesize, gp.tilesize);
-        down2 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_2", gp.tilesize, gp.tilesize);
-        right1 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_1", gp.tilesize, gp.tilesize);
-        right2 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_2", gp.tilesize, gp.tilesize);
-        left1 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_1", gp.tilesize, gp.tilesize);
-        left2 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_2", gp.tilesize, gp.tilesize);
+        up1 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        up2 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        down1 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        down2 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        right1 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        right2 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        left1 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        left2 = BufferedRenderer("NPCS/Mysterious Trader/mysterious_trader_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 
     public void setAction() {

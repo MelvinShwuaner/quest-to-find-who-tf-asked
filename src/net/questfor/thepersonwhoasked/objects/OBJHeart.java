@@ -5,6 +5,7 @@ import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
 import java.util.Random;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class OBJHeart extends LivingEntity {
     int I;
@@ -58,17 +59,17 @@ public class OBJHeart extends LivingEntity {
             target.health = target.maxhealth;
         }
         if (down1 != image3) {
-            UI.addMessages("you have gained " + Value + "HP" + " your health is now " + gp.player.health);
+            UI.addMessages("you have gained " + Value + "HP" + " your health is now " + GlobalGameThreadConfigs.player.health);
         } else {
-            UI.addMessages("you have lost " + 1 + "HP" + " your health is now " + gp.player.health);
+            UI.addMessages("you have lost " + 1 + "HP" + " your health is now " + GlobalGameThreadConfigs.player.health);
         }
     }
 
     @Override
     public void getImageInstance() {
-        image = BufferedRenderer("objects/heart_full", gp.tilesize, gp.tilesize);
-        image2 = BufferedRenderer("objects/heart_half", gp.tilesize, gp.tilesize);
-        image3 = BufferedRenderer("objects/heart_blank", gp.tilesize, gp.tilesize);
+        image = BufferedRenderer("objects/heart_full", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        image2 = BufferedRenderer("objects/heart_half", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        image3 = BufferedRenderer("objects/heart_blank", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 
     @Override

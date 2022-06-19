@@ -4,6 +4,7 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class Brick extends LivingEntity {
     public Brick(MainGame gpp) {
@@ -29,6 +30,6 @@ public class Brick extends LivingEntity {
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/brick", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/brick", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

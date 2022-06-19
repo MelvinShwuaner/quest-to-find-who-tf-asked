@@ -36,26 +36,26 @@ public class Helper extends LivingEntity {
     }
 
     public void getImageInstance() {
-        up1 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_up_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        up2 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_up_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        down1 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        down2 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_down_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        right1 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_right_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        right2 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_right_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        left1 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_left_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        left2 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_left_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        up1 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_up_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        up2 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_up_2", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        down1 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        down2 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_down_2", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        right1 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_right_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        right2 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_right_2", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        left1 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_left_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        left2 = BufferedRenderer("NPCS/Helper/Walking sprites/boy_left_2", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
     }
 
     @Override
     public void getAttackInstance() {
-        attackup1 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_up_1", (int) (gp.tilesize + worldz), (int) (gp.tilesize + worldz) * 2);
-        attackup2 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_up_2", (int) (gp.tilesize + worldz), (int) (gp.tilesize + worldz) * 2);
-        attackdown1 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_down_1", (int) (gp.tilesize + worldz), (int) (gp.tilesize + worldz) * 2);
-        attackdown2 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_down_2", (int) (gp.tilesize + worldz), (int) (gp.tilesize + worldz) * 2);
-        attackright1 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_right_1", (int) (gp.tilesize + worldz) * 2, (int) (gp.tilesize + worldz));
-        attackright2 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_right_2", (int) (gp.tilesize + worldz) * 2, (int) (gp.tilesize + worldz));
-        attackleft1 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_left_1", (int) (gp.tilesize + worldz) * 2, (int) (gp.tilesize + worldz));
-        attackleft2 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_left_2", (int) (gp.tilesize + worldz) * 2, (int) (gp.tilesize + worldz));
+        attackup1 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_up_1", (int) (GlobalGameThreadConfigs.tilesize + worldz), (int) (GlobalGameThreadConfigs.tilesize + worldz) * 2);
+        attackup2 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_up_2", (int) (GlobalGameThreadConfigs.tilesize + worldz), (int) (GlobalGameThreadConfigs.tilesize + worldz) * 2);
+        attackdown1 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_down_1", (int) (GlobalGameThreadConfigs.tilesize + worldz), (int) (GlobalGameThreadConfigs.tilesize + worldz) * 2);
+        attackdown2 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_down_2", (int) (GlobalGameThreadConfigs.tilesize + worldz), (int) (GlobalGameThreadConfigs.tilesize + worldz) * 2);
+        attackright1 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_right_1", (int) (GlobalGameThreadConfigs.tilesize + worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize + worldz));
+        attackright2 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_right_2", (int) (GlobalGameThreadConfigs.tilesize + worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize + worldz));
+        attackleft1 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_left_1", (int) (GlobalGameThreadConfigs.tilesize + worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize + worldz));
+        attackleft2 = BufferedRenderer("NPCS/Helper/Attacking sprites/boy_attack_left_2", (int) (GlobalGameThreadConfigs.tilesize + worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize + worldz));
     }
 
     public void setAction() {
@@ -118,7 +118,7 @@ public class Helper extends LivingEntity {
     public void update() {
         super.update();
         if
-        (gp.player.health < gp.player.maxhealth) {
+        (GlobalGameThreadConfigs.player.health < GlobalGameThreadConfigs.player.maxhealth) {
             Hostile = true;
         }
         if
@@ -132,7 +132,7 @@ public class Helper extends LivingEntity {
     }
 
     public void Angry() {
-        searchPath(Math.round(taskx/gp.tilesize), Math.round(tasky/gp.tilesize));
+        searchPath(Math.round(taskx/GlobalGameThreadConfigs.tilesize), Math.round(tasky/GlobalGameThreadConfigs.tilesize));
         int id = new Random().nextInt(100) + 1;
         if (id > 70 && projectile.alive == false && primepowercool == 30) {
             projectile.Set((int) worldx, (int) worldy, (int) worldz, direction, true, this);
@@ -206,8 +206,8 @@ public class Helper extends LivingEntity {
                 path = new Path();
             }
             BufferedImage image = null;
-            double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);
-            double screenY = worldy - MainGame.player.worldy + MainGame.player.screenY;
+            double screenX = (worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+            double screenY = worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
             double tempscreenx = screenX;
             double tempscreeny = screenY;
             switch (direction) {
@@ -219,7 +219,7 @@ public class Helper extends LivingEntity {
                             image = up2;
                         }
                     } else {
-                        tempscreeny = screenY - gp.tilesize;
+                        tempscreeny = screenY - GlobalGameThreadConfigs.tilesize;
                         if (spritenumber == 1) {
                             image = attackup1;
                         } else if (spritenumber == 2) {
@@ -265,7 +265,7 @@ public class Helper extends LivingEntity {
                             image = left2;
                         }
                     } else {
-                        tempscreenx = screenX - gp.tilesize;
+                        tempscreenx = screenX - GlobalGameThreadConfigs.tilesize;
                         if (spritenumber == 1) {
                             image = attackleft1;
                         } else if (spritenumber == 2) {
@@ -278,15 +278,15 @@ public class Helper extends LivingEntity {
                 jumpaction++;
                 if(jumpaction < 25){
                     if(isup) {
-                        if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
+                        if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
                             if (jumpaction == 1) {
                                 worldz++;
                             }
                             jumpstate++;
-                            if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                                    (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                                    && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                                    (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                            if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                                    (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                                    && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                                    (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                                 image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
                             }
                         }}
@@ -294,10 +294,10 @@ public class Helper extends LivingEntity {
                     isup = false;
                     jumpstate--;
                     try {
-                        if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                                (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                                && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                                (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                        if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                                (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                                && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                                (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                             image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
                         }}catch (Exception e){
                         System.out.println("Catched null pointer exeption");
@@ -312,10 +312,10 @@ public class Helper extends LivingEntity {
 
                 }
             }
-            if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                    (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                    && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                    (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+            if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                    (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                    && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                    (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                 if (image == null) {
                     getImageInstance();
                     getAttackInstance();
@@ -343,27 +343,27 @@ public class Helper extends LivingEntity {
                     DieAnimation(g2);
                 }
                 if ((EntityType == 2 || EntityType == 1) && Hostile) {
-                    double onescale = gp.tilesize / maxhealth;
+                    double onescale = GlobalGameThreadConfigs.tilesize / maxhealth;
                     double HPValue = onescale * health;
                     g2.setColor(new Color(35, 35, 35));
-                    g2.fillRect((int) (screenX - 1), (int) screenY - 16, gp.tilesize + 2, 12);
+                    g2.fillRect((int) (screenX - 1), (int) screenY - 16, GlobalGameThreadConfigs.tilesize + 2, 12);
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect((int) screenX, (int) screenY - 15, (int) HPValue, 10);
                 }
-                if(worldz > gp.player.worldz){
+                if(worldz > GlobalGameThreadConfigs.player.worldz){
                     float Xdistance;
                     float Ydistance;
-                    int x = (int) Math.round(worldx/gp.tilesize);
-                    int y = (int) Math.round(worldy/gp.tilesize);
-                    if (x > gp.player.worldx / gp.tilesize) {
-                        Xdistance = (float) (x - (gp.player.worldx / gp.tilesize));
+                    int x = (int) Math.round(worldx/GlobalGameThreadConfigs.tilesize);
+                    int y = (int) Math.round(worldy/GlobalGameThreadConfigs.tilesize);
+                    if (x > GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize) {
+                        Xdistance = (float) (x - (GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize));
                     }else{
-                        Xdistance = (float) ((gp.player.worldx / gp.tilesize) - x);
+                        Xdistance = (float) ((GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize) - x);
                     }
-                    if (y > gp.player.worldy / gp.tilesize) {
-                        Ydistance = (float) (y - (gp.player.worldy / gp.tilesize));
+                    if (y > GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize) {
+                        Ydistance = (float) (y - (GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize));
                     }else{
-                        Ydistance = (float) ((gp.player.worldy / gp.tilesize) - y);
+                        Ydistance = (float) ((GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize) - y);
                     }
                     if (Ydistance < 2 && Xdistance < 2){
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));

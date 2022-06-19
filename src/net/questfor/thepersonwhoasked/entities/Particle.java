@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.entities;
 
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 
 import java.awt.*;
@@ -26,8 +27,8 @@ public class Particle extends LivingEntity {
         worldy =SourceEntity.worldy;
 }
     public void draw(Graphics2D g2){
-        int screenX = (int) (worldx - gp.player.worldx + gp.player.screenX);
-        int screenY = (int) (worldy - gp.player.worldy + gp.player.screenY);
+        int screenX = (int) (worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+        int screenY = (int) (worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY);
         g2.setColor(texture);
         g2.fillRect(screenX, screenY, size, size);
     }

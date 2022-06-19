@@ -1,18 +1,15 @@
 package net.questfor.thepersonwhoasked.tile;
-import net.questfor.thepersonwhoasked.Maingam.MainGame;
-import net.questfor.thepersonwhoasked.Maingam.UtilityTool;
-import net.questfor.thepersonwhoasked.Maingam.crash;
-import net.questfor.thepersonwhoasked.Map;
+import net.questfor.thepersonwhoasked.Maingam.*;
+import net.questfor.thepersonwhoasked.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-
+import java.awt.image.*;
+import java.io.*;
 import static net.questfor.thepersonwhoasked.GlobalProperties.gp;
 
 public class Tilemanager {
     public int worldcol, worldrow, worldlayer;
+    public static int tilecount = 0;
     public tile[] tile;
     public int[][][][] mapRendererID, mapspritecounter, mapspritenumber;
     public  String is;
@@ -105,26 +102,26 @@ public class Tilemanager {
     public void setexternaltextures() {
         try {
             earthright1 = ImageIO.read(getClass().getResourceAsStream("/tiles/earthdugright1" + ".png"));
-            earthright1 = scaleimage(earthright1, gp.tilesize, gp.tilesize);
+            earthright1 = scaleimage(earthright1, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             earthup1 = ImageIO.read(getClass().getResourceAsStream("/tiles/earthdugup1" + ".png"));
-            earthup1 = scaleimage(earthup1, gp.tilesize, gp.tilesize);
+            earthup1 = scaleimage(earthup1, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             earthleft1 = ImageIO.read(getClass().getResourceAsStream("/tiles/earthdugleft1" + ".png"));
-            earthleft1 = scaleimage(earthleft1, gp.tilesize, gp.tilesize);
+            earthleft1 = scaleimage(earthleft1, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             earthdown1 = ImageIO.read(getClass().getResourceAsStream("/tiles/earthdugdown1" + ".png"));
-            earthdown1 = scaleimage(earthdown1, gp.tilesize, gp.tilesize);
+            earthdown1 = scaleimage(earthdown1, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             fire[0] = ImageIO.read(getClass().getResourceAsStream("/tiles/1" + ".png"));
-            fire[0] = scaleimage(fire[0], gp.tilesize, gp.tilesize);
+            fire[0] = scaleimage(fire[0], GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             firescreen[0] = scaleimage(fire[0], gp.screenwidth, gp.screenheight);
             fire[1] = ImageIO.read(getClass().getResourceAsStream("/tiles/2" + ".png"));
-            fire[1] = scaleimage(fire[1], gp.tilesize, gp.tilesize);
+            fire[1] = scaleimage(fire[1], GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             firescreen[1] = scaleimage(fire[1], gp.screenwidth, gp.screenheight);
             fire[2] = ImageIO.read(getClass().getResourceAsStream("/tiles/3" + ".png"));
-            fire[2] = scaleimage(fire[2], gp.tilesize, gp.tilesize);
+            fire[2] = scaleimage(fire[2], GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             firescreen[2] = scaleimage(fire[2], gp.screenwidth, gp.screenheight);
             fire[3] = ImageIO.read(getClass().getResourceAsStream("/tiles/4" + ".png"));
-            fire[3]= scaleimage(fire[3], gp.tilesize, gp.tilesize);
+            fire[3]= scaleimage(fire[3], GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             fire[4] = ImageIO.read(getClass().getResourceAsStream("/tiles/5" + ".png"));
-            fire[4]= scaleimage(fire[3], gp.tilesize, gp.tilesize);
+            fire[4]= scaleimage(fire[3], GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             firescreen[3] = scaleimage(fire[3], gp.screenwidth, gp.screenheight);
 
         } catch (IOException e) {
@@ -133,25 +130,19 @@ public class Tilemanager {
     }
 
     public void tileproperties(int index, String imagePath, boolean canjumpover, boolean air, boolean transparent, boolean hot){
-        UtilityTool utool = new UtilityTool();
+        tilecount++;
         try{
             tile[index] = new tile();
             tile[index].image = ImageIO.read(getClass().getResourceAsStream("/tiles/"+ imagePath + ".png"));
-            tile[index].image = utool.scaleimage(tile[index].image, MainGame.tilesize, MainGame.tilesize);
-            tile[index].down[0] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-6);
-            tile[index].down[1] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-12);
-            tile[index].down[2] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-18);
-            tile[index].down[3] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-24);
-            tile[index].down[4] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-30);
-            tile[index].down[5] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-36);
-            tile[index].down[6] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-42);
-            tile[index].down1[0] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-42);
-            tile[index].down1[1] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-36);
-            tile[index].down1[2] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-30);
-            tile[index].down1[3] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-24);
-            tile[index].down1[4] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-18);
-            tile[index].down1[5] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-12);
-            tile[index].down1[6] = cropimage(tile[index].image, 0, 0, MainGame.tilesize, MainGame.tilesize-6);
+            tile[index].image = scaleimage(tile[index].image, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+            tile[index].down[0] = cropimage(tile[index].image, 0, 0, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+            tile[index].down[1] = cropimage(tile[index].image, 0, 0, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize-6);
+            tile[index].down[2] = cropimage(tile[index].image, 0, 0, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize-12);
+            tile[index].down[3] = cropimage(tile[index].image, 0, 0, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize-18);
+            tile[index].down[4] = cropimage(tile[index].image, 0, 0, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize-24);
+            tile[index].down[5] = cropimage(tile[index].image, 0, 0, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize-30);
+            tile[index].down[6] = cropimage(tile[index].image, 0, 0, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize-36);
+            tile[index].down[7] = cropimage(tile[index].image, 0, 0, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize-42);
             tile[index].canjumpover = canjumpover;
             tile[index].air = air;
             tile[index].transparent = transparent;
@@ -175,21 +166,20 @@ public class Tilemanager {
         }
     }
     public void drawground(Graphics2D g2) {
-
         worldcol = 0;
              worldrow = 0;
              worldlayer = 0;
             while (worldcol < MainGame.maxworldcol && worldrow < MainGame.maxworldrow && worldlayer < MainGame.maxworldlayer) {
                 int tileID = mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer];
-                    int worldX = worldcol * MainGame.tilesize;
-                    int worldY = worldrow * MainGame.tilesize;
-                    double screenX = (worldX - MainGame.player.worldx + MainGame.player.screenX);
-                    double screenY = worldY - MainGame.player.worldy + MainGame.player.screenY;
+                    int worldX = worldcol * GlobalGameThreadConfigs.tilesize;
+                    int worldY = worldrow * GlobalGameThreadConfigs.tilesize;
+                    double screenX = (worldX - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+                    double screenY = worldY - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
                         if (tileID != 46) {
                             boolean shouldrender = true;
                             if (worldlayer + 1 < MainGame.maxworldlayer) {
-                                if(worldlayer > gp.player.worldz){
-                                    int i = (int) (worldlayer - gp.player.worldz);
+                                if(worldlayer > GlobalGameThreadConfigs.player.worldz){
+                                    int i = (int) (worldlayer - GlobalGameThreadConfigs.player.worldz);
                                     for(int d = 1; d < i; d++){
                                         if(!tile[mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer - d]].transparent){
                                             boolean up, down, right, left;
@@ -218,8 +208,8 @@ public class Tilemanager {
                                             }
                                         }
                                     }
-                                }else if(worldlayer < gp.player.worldz){
-                                    int i = (int) (gp.player.worldz - worldlayer);
+                                }else if(worldlayer < GlobalGameThreadConfigs.player.worldz){
+                                    int i = (int) (GlobalGameThreadConfigs.player.worldz - worldlayer);
                                     int d;
                                     for(d = 1; d < i; d++){
                                         if(!tile[mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer + d]].transparent){
@@ -253,17 +243,6 @@ public class Tilemanager {
                             }
                             if (shouldrender) {
                                 update(worldcol, worldrow, worldlayer, screenX, screenY, g2);
-                                if ((worldX + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                                        (worldX - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                                        && worldY + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                                        (worldY - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
-                                    if(worldlayer == gp.player.worldz){
-                                g2.drawImage(tile[tileID].image, (int) screenX, (int) screenY, null);
-                                    if (worldlayer != 4) {
-                                        g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                                        g2.fillRect((int) screenX, (int) screenY, gp.tilesize, gp.tilesize);
-                                    }}
-                             }
                                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
                         }
                     }
@@ -283,14 +262,14 @@ public class Tilemanager {
 
 
     public void update(int col, int row, int layer, double x, double y, Graphics2D g2){
-        int worldX = worldcol * MainGame.tilesize;
-        int worldY = worldrow * MainGame.tilesize;
+        int worldX = worldcol * GlobalGameThreadConfigs.tilesize;
+        int worldY = worldrow * GlobalGameThreadConfigs.tilesize;
         try {
 
-            if ((worldX + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                    (worldX - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                    && worldY + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                    (worldY - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+            if ((worldX + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                    (worldX - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                    && worldY + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                    (worldY - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                 if (mapRendererID[MainGame.currentmap][col][row][layer] == 0) {
                     if (mapRendererID[MainGame.currentmap][col + 1][row][layer] == 0) {
                         if (mapRendererID[MainGame.currentmap][col][row][layer] == 0)
@@ -320,9 +299,74 @@ public class Tilemanager {
                     }
                     g2.drawImage(fire[mapspritenumber[MainGame.currentmap][col][row][layer]], (int) (x), (int) (y), null);
                 }
-                if(worldlayer > gp.player.worldz && !(Math.round(gp.player.worldx/gp.tilesize) == col && Math.round(gp.player.worldy/gp.tilesize) == row)){
+                if(worldlayer <= GlobalGameThreadConfigs.player.worldz){
                         boolean shouldrender = true;
+                        boolean up, down, right, left;
+                        if(worldrow+1 < 200){
+                            up = !tile[mapRendererID[MainGame.currentmap][col][row+1][layer]].transparent;
+                        }else{
+                            up = true;
+                        }
+                        if(worldrow-1 > 0){
+                            down = !tile[mapRendererID[MainGame.currentmap][col][row-1][layer]].transparent;
+                        }else{
+                            down = true;
+                        }
+                        if(worldcol+1 < 200){
+                            right = !tile[mapRendererID[MainGame.currentmap][col+1][row][layer]].transparent;
+                        }else{
+                            right = true;
+                        }
+                        if(worldcol-1 > 0){
+                            left = !tile[mapRendererID[MainGame.currentmap][col-1][row][layer]].transparent;
+                        }else{
+                            left = true;
+                        }
+                        if(up && down && right && left){
+                            shouldrender = false;
+                        }
+                        if(shouldrender){
+                            up = false;
+                            down = false;
+                            right = false;
+                            left = false;
+                            if(worldrow+1 < 200){
+                                up = !tile[mapRendererID[MainGame.currentmap][col][row+1][layer-1]].transparent;
+                            }else{
+                                up = true;
+                            }
+                            if(worldrow-1 > 0){
+                                down = !tile[mapRendererID[MainGame.currentmap][col][row-1][layer-1]].transparent;
+                            }else{
+                                down = true;
+                            }
+                            if(worldcol+1 < 200){
+                                right = !tile[mapRendererID[MainGame.currentmap][col+1][row][layer-1]].transparent;
+                            }else{
+                                right = true;
+                            }
+                            if(worldcol-1 > 0){
+                                left = !tile[mapRendererID[MainGame.currentmap][col-1][row][layer-1]].transparent;
+                            }else{
+                                left = true;
+                            }
+                            if(up && down && right && left){
+                                shouldrender = false;
+                            }
+                        }
 
+                        if(shouldrender){
+                            g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[layer], (int) x, (int)y, null);
+                            g2.setColor(new Color(255, 255, 255, worldlayer * 8));
+                            g2.fillRect((int) x, (int) y, tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[layer].getWidth(), tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[layer].getHeight());
+                        }else{
+                            g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].image, (int) x, (int)y, null);
+                            g2.setColor(new Color(255, 255, 255, worldlayer * 8));
+                            g2.fillRect((int) x, (int) y, 48, 48);
+                        }
+                    }
+                if(worldlayer > GlobalGameThreadConfigs.player.worldz && !(Math.round(GlobalGameThreadConfigs.player.worldx/GlobalGameThreadConfigs.tilesize) == col && Math.round(GlobalGameThreadConfigs.player.worldy/GlobalGameThreadConfigs.tilesize) == row)){
+                        boolean shouldrender = true;
                             boolean up, down, right, left;
                             if(worldrow+1 < 200){
                                 up = !tile[mapRendererID[MainGame.currentmap][col][row+1][layer]].transparent;
@@ -377,83 +421,18 @@ public class Tilemanager {
                         }
                     }
                     if(shouldrender){
-                    g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[(int) (layer-gp.player.worldz)], (int) x, (int)y, null);
+                    g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[layer], (int) x, (int)y, null);
                     g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                    g2.fillRect((int) x, (int) y, tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[(int) (layer-gp.player.worldz)].getWidth(), tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[(int) (layer-gp.player.worldz)].getHeight());
+                    g2.fillRect((int) x, (int) y, tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[layer].getWidth(), tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[layer].getHeight());
                 }else{
                         g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].image, (int) x, (int)y, null);
                         g2.setColor(new Color(255, 255, 255, worldlayer * 8));
                         g2.fillRect((int) x, (int) y, 48, 48);
                     }
                 }
-                if(worldlayer < gp.player.worldz){
-                    boolean shouldrender = true;
-                    boolean up, down, right, left;
-                    if(worldrow+1 < 200){
-                        up = !tile[mapRendererID[MainGame.currentmap][col][row+1][layer]].transparent;
-                    }else{
-                        up = true;
-                    }
-                    if(worldrow-1 > 0){
-                        down = !tile[mapRendererID[MainGame.currentmap][col][row-1][layer]].transparent;
-                    }else{
-                        down = true;
-                    }
-                    if(worldcol+1 < 200){
-                        right = !tile[mapRendererID[MainGame.currentmap][col+1][row][layer]].transparent;
-                    }else{
-                        right = true;
-                    }
-                    if(worldcol-1 > 0){
-                        left = !tile[mapRendererID[MainGame.currentmap][col-1][row][layer]].transparent;
-                    }else{
-                        left = true;
-                    }
-                    if(up && down && right && left){
-                        shouldrender = false;
-                    }
-                    if(shouldrender){
-                        up = false;
-                        down = false;
-                        right = false;
-                        left = false;
-                        if(worldrow+1 < 200){
-                            up = !tile[mapRendererID[MainGame.currentmap][col][row+1][layer-1]].transparent;
-                        }else{
-                            up = true;
-                        }
-                        if(worldrow-1 > 0){
-                            down = !tile[mapRendererID[MainGame.currentmap][col][row-1][layer-1]].transparent;
-                        }else{
-                            down = true;
-                        }
-                        if(worldcol+1 < 200){
-                            right = !tile[mapRendererID[MainGame.currentmap][col+1][row][layer-1]].transparent;
-                        }else{
-                            right = true;
-                        }
-                        if(worldcol-1 > 0){
-                            left = !tile[mapRendererID[MainGame.currentmap][col-1][row][layer-1]].transparent;
-                        }else{
-                            left = true;
-                        }
-                        if(up && down && right && left){
-                            shouldrender = false;
-                        }
-                    }
 
-                    if(shouldrender){
-                        g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].down1[(int) (gp.player.worldz-layer)], (int) x, (int)y, null);
-                        g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                        g2.fillRect((int) x, (int) y, tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[(int) (layer-gp.player.worldz)].getWidth(), tile[mapRendererID[MainGame.currentmap][col][row][layer]].down[(int) (layer-gp.player.worldz)].getHeight());
-                    }else{
-                        g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].image, (int) x, (int)y, null);
-                        g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                        g2.fillRect((int) x, (int) y, 48, 48);
-                    }
-                }
-            }
-    }catch (Exception e){
+
+    }}catch (Exception e){
             //System.out.println("error: index out of bounds of length 50: -1");
         }
         }

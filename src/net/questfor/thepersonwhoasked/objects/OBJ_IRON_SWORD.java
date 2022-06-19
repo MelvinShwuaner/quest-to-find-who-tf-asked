@@ -4,6 +4,7 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 
 public class OBJ_IRON_SWORD extends LivingEntity {
@@ -37,6 +38,6 @@ public class OBJ_IRON_SWORD extends LivingEntity {
     }
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/sword_normal", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/sword_normal", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

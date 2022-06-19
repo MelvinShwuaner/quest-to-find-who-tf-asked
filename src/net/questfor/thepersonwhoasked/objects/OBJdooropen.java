@@ -28,8 +28,8 @@ public class OBJdooropen extends LivingEntity {
     }
     @Override
     public void update() {
-        if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] == 47){
-            gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/gp.tilesize)][(int) Math.round(worldy/gp.tilesize)][(int) worldz] = 46;
+        if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 47){
+            gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
         }
     }
 
@@ -37,7 +37,7 @@ public class OBJdooropen extends LivingEntity {
     public void open(int x, int y, int z, int i) {
         if(KeyHandler.enterpressed){
             gp.playsound(3);
-            GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdoor(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx/gp.tilesize, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy/gp.tilesize, GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz);
+            GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new OBJdoor(gp, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx/GlobalGameThreadConfigs.tilesize, (int) GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy/GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz);
         }
     }
 
@@ -46,6 +46,6 @@ public class OBJdooropen extends LivingEntity {
     }
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/dooropen", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/dooropen", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

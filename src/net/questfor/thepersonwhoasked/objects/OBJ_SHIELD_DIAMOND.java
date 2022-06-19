@@ -4,6 +4,7 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class OBJ_SHIELD_DIAMOND extends LivingEntity {
     public OBJ_SHIELD_DIAMOND(MainGame gpp) {
@@ -31,6 +32,6 @@ public class OBJ_SHIELD_DIAMOND extends LivingEntity {
     }
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/shield_diamond", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/shield_diamond", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

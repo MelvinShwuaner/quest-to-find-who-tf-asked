@@ -176,7 +176,7 @@ public class LivingEntity extends Data {
 
         UI.currentDialogue = dialogues[dialogueIndex];
         dialogueIndex++;
-        switch (gp.player.direction){
+        switch (GlobalGameThreadConfigs.player.direction){
             case "up" -> direction = "down";
             case "down" -> direction = "up";
             case "right" -> direction = "left";
@@ -319,10 +319,10 @@ public class LivingEntity extends Data {
                 GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].Hostile = true;
             }
             GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible = true;
-            if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                    (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                    && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                    (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+            if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                    (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                    && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                    (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                 gp.playsound(5);
             }
         }
@@ -334,15 +334,15 @@ public class LivingEntity extends Data {
                 GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = droppedItem;
                 int I = new Random().nextInt(100) + 1;
                 if (I > 50){
-                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx = worldx + gp.tilesize/2;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx = worldx + GlobalGameThreadConfigs.tilesize/2;
             } else {
-                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx = worldx - gp.tilesize/2;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx = worldx - GlobalGameThreadConfigs.tilesize/2;
                 }
                 I = new Random().nextInt(100) + 1;
                 if(I > 50){
-                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy = worldy + gp.tilesize/2;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy = worldy + GlobalGameThreadConfigs.tilesize/2;
                 }else {
-                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy = worldy - gp.tilesize/2;
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy = worldy - GlobalGameThreadConfigs.tilesize/2;
                 }
                 break;
             }
@@ -361,20 +361,20 @@ public class LivingEntity extends Data {
     }
     public void Use(LivingEntity target){}
     public void AttackPLayer(int trueAttackDamage){
-        if(!MainGame.player.invincible){
-            int damage = trueAttackDamage - gp.player.defence;
+        if(!GlobalGameThreadConfigs.player.invincible){
+            int damage = trueAttackDamage - GlobalGameThreadConfigs.player.defence;
             if(damage < 0){
                 damage = 0;
             }
-            MainGame.player.health-= damage;
-            UI.addMessages("You have been hit! health is now to "+gp.player.health);
-            MainGame.player.invincible = true;
+            GlobalGameThreadConfigs.player.health-= damage;
+            UI.addMessages("You have been hit! health is now to "+GlobalGameThreadConfigs.player.health);
+            GlobalGameThreadConfigs.player.invincible = true;
             gp.playsound(5);
         }
     }
     public void draw(Graphics2D g2){
-        double screenX = (worldx - MainGame.player.worldx + MainGame.player.screenX);
-        double screenY = worldy - MainGame.player.worldy + MainGame.player.screenY;
+        double screenX = (worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+        double screenY = worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
         if(path == null){
             path = new Path();
         }
@@ -413,15 +413,15 @@ public class LivingEntity extends Data {
             jumpaction++;
             if(jumpaction < 25){
                 if(isup) {
-                    if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
+                    if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
                         if (jumpaction == 1) {
                             worldz++;
                         }
                         jumpstate++;
-                        if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                                (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                                && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                                (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                        if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                                (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                                && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                                (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                             if(image != null){
                             if(image.getWidth()+jumpstate > 0 && image.getHeight()+jumpstate > 0){
                             image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
@@ -431,10 +431,10 @@ public class LivingEntity extends Data {
                 isup = false;
                 jumpstate--;
                 try {
-                    if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                            (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                            && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                            (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                    if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                            (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                            && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                            (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                         if(image != null){
                             if(image.getWidth()+jumpstate > 0 && image.getHeight()+jumpstate > 0){
 
@@ -455,25 +455,25 @@ public class LivingEntity extends Data {
         if (drawingpath){
             g2.setColor(Color.red);
             for (int i = 0; i < path.pathlist.size(); i++) {
-                int worldx = path.pathlist.get(i).col * gp.tilesize;
-                int worldy = path.pathlist.get(i).row * gp.tilesize;
-                double screenx = (worldx - MainGame.player.worldx + MainGame.player.screenX);
-                double screeny = worldy - MainGame.player.worldy + MainGame.player.screenY;
-                g2.fillRect((int) screenx, (int) screeny, gp.tilesize, gp.tilesize);
+                int worldx = path.pathlist.get(i).col * GlobalGameThreadConfigs.tilesize;
+                int worldy = path.pathlist.get(i).row * GlobalGameThreadConfigs.tilesize;
+                double screenx = (worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+                double screeny = worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
+                g2.fillRect((int) screenx, (int) screeny, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
             }
         }
         //RENDERER
         try {
-            if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                    (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                    && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                    (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+            if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                    (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                    && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                    (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                 //HP BAR
                 if ((EntityType == 2 || EntityType == 1) && Hostile) {
-                    double onescale = gp.tilesize / maxhealth;
+                    double onescale = GlobalGameThreadConfigs.tilesize / maxhealth;
                     double HPValue = onescale * health;
                     g2.setColor(new Color(35, 35, 35));
-                    g2.fillRect((int) (screenX - 1), (int) screenY - 16, gp.tilesize + 2, 12);
+                    g2.fillRect((int) (screenX - 1), (int) screenY - 16, GlobalGameThreadConfigs.tilesize + 2, 12);
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect((int) screenX, (int) screenY - 15, (int) HPValue, 10);
                 }
@@ -518,20 +518,20 @@ public class LivingEntity extends Data {
                     }
                 }
             }
-                if(worldz > gp.player.worldz){
+                if(worldz > GlobalGameThreadConfigs.player.worldz){
                     float Xdistance;
                     float Ydistance;
-                    int x = (int) Math.round(worldx/gp.tilesize);
-                    int y = (int) Math.round(worldy/gp.tilesize);
-                    if (x > gp.player.worldx / gp.tilesize) {
-                        Xdistance = (float) (x - (gp.player.worldx / gp.tilesize));
+                    int x = (int) Math.round(worldx/GlobalGameThreadConfigs.tilesize);
+                    int y = (int) Math.round(worldy/GlobalGameThreadConfigs.tilesize);
+                    if (x > GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize) {
+                        Xdistance = (float) (x - (GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize));
                     }else{
-                        Xdistance = (float) ((gp.player.worldx / gp.tilesize) - x);
+                        Xdistance = (float) ((GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize) - x);
                     }
-                    if (y > gp.player.worldy / gp.tilesize) {
-                        Ydistance = (float) (y - (gp.player.worldy / gp.tilesize));
+                    if (y > GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize) {
+                        Ydistance = (float) (y - (GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize));
                     }else{
-                        Ydistance = (float) ((gp.player.worldy / gp.tilesize) - y);
+                        Ydistance = (float) ((GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize) - y);
                     }
                     if (Ydistance < 2 && Xdistance < 2){
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
@@ -564,11 +564,11 @@ public class LivingEntity extends Data {
 
     public BufferedImage BufferedRenderer(String imagePath, int width, int height){
         //OPTIMIZES THE RENDERER TO MAKE IT MORE EFFICIENT
-        UtilityTool utool = new UtilityTool();
+
         BufferedImage ScaledImage = null;
         try{
             ScaledImage = ImageIO.read(getClass().getResourceAsStream("/entities/"+imagePath+".png"));
-            ScaledImage = utool.scaleimage(ScaledImage, width, height);
+            ScaledImage = scaleimage(ScaledImage, width, height);
         }catch (Exception e) {
             crash.main(e);
         }
@@ -580,10 +580,10 @@ public class LivingEntity extends Data {
     public void attackEntity(int attackindex, int dmg) {
         if (attackindex != 999) {
             if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible == false) {
-                if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                        (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                        && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                        (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                        (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                        && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                        (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                     gp.playsound(6);
                 }
                 dealKnockback(GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex]);
@@ -654,10 +654,10 @@ public class LivingEntity extends Data {
             if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].name.equals("Brick wall")) {
                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].ItemRequirements(this)) {
                     GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].health-= TrueAttackDamage;
-                    if ((worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                            (worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                            && worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                            (worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
+                    if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                            (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                            && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                            (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                     GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].playSE();}
                     GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI].invincible = true;
                     ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI], GlobalGameThreadConfigs.obj[MainGame.currentmap][tileentityI]);
@@ -678,21 +678,21 @@ public class LivingEntity extends Data {
         if(path == null){
             path = new Path();
         }
-        int startcol = (int) ((worldx+hitbox.x)/gp.tilesize);
-        int startrow = (int) ((worldy+hitbox.y)/gp.tilesize);
+        int startcol = (int) ((worldx+hitbox.x)/GlobalGameThreadConfigs.tilesize);
+        int startrow = (int) ((worldy+hitbox.y)/GlobalGameThreadConfigs.tilesize);
         path.setNodes(startcol, startrow, (int) taskX, (int) taskY, (int) worldz, this);
         if(path.search()){
-            int nextx = path.pathlist.get(0).col*gp.tilesize;
-            int nexty = path.pathlist.get(0).row*gp.tilesize;
+            int nextx = path.pathlist.get(0).col*GlobalGameThreadConfigs.tilesize;
+            int nexty = path.pathlist.get(0).row*GlobalGameThreadConfigs.tilesize;
             int enleftx = (int) (worldx+hitbox.x);
             int enrightx = (int) (worldx+hitbox.x+hitbox.width);
             int enupy = (int) (worldy+hitbox.y);
             int endowny = (int) (worldy+hitbox.y+hitbox.height);
-            if(enupy > nexty && enleftx >= nextx && enrightx < nextx +gp.tilesize){
+            if(enupy > nexty && enleftx >= nextx && enrightx < nextx +GlobalGameThreadConfigs.tilesize){
                 direction = "up";
-            }else if(enupy < nexty && enleftx >= nextx && enrightx < nextx +gp.tilesize){
+            }else if(enupy < nexty && enleftx >= nextx && enrightx < nextx +GlobalGameThreadConfigs.tilesize){
                 direction = "down";
-            } else if(enupy >= nexty && endowny < nexty + gp.tilesize){
+            } else if(enupy >= nexty && endowny < nexty + GlobalGameThreadConfigs.tilesize){
                 if(enleftx > nextx){
                     direction = "left";
                 }else{
@@ -737,13 +737,13 @@ public class LivingEntity extends Data {
             int I = random.nextInt(100)+1;
             if (actionLock > 30) {
                     if (I > 50){
-                        if (worldy < Math.round(taskY*gp.tilesize)) {
+                        if (worldy < Math.round(taskY*GlobalGameThreadConfigs.tilesize)) {
                             direction = "down";
                         } else {
                             direction = "up";
                         }
                 }else{
-                        if (worldx < Math.round(taskX*gp.tilesize)) {
+                        if (worldx < Math.round(taskX*GlobalGameThreadConfigs.tilesize)) {
                             direction = "right";
                         } else {
                             direction = "left";
@@ -774,21 +774,22 @@ public class LivingEntity extends Data {
         return scaledImage;
     }
     public void drawwalls(Graphics2D g2, LivingEntity entity) {
-        int worldcol = (int) Math.round(entity.worldx/MainGame.tilesize);
-        int worldrow = (int) Math.round(entity.worldy / MainGame.tilesize);
+        try{
+        int worldcol = (int) Math.round(entity.worldx/GlobalGameThreadConfigs.tilesize);
+        int worldrow = (int) Math.round(entity.worldy / GlobalGameThreadConfigs.tilesize);
         int worldlayer = 0;
         while (worldlayer < MainGame.maxworldlayer) {
 
             int tileID = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer];
-            int worldX = worldcol * MainGame.tilesize;
-            int worldY = worldrow * MainGame.tilesize;
-            double screenX = (worldX - MainGame.player.worldx + MainGame.player.screenX);
-            double screenY = worldY - MainGame.player.worldy + MainGame.player.screenY;
+            int worldX = worldcol * GlobalGameThreadConfigs.tilesize;
+            int worldY = worldrow * GlobalGameThreadConfigs.tilesize;
+            double screenX = (worldX - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+            double screenY = worldY - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
             if (tileID != 46) {
                 boolean shouldrenderr = true;
                 if(worldlayer+1 < MainGame.maxworldlayer) {
-                    if(worldlayer > gp.player.worldz){
-                        int i = (int) (worldlayer - gp.player.worldz);
+                    if(worldlayer > GlobalGameThreadConfigs.player.worldz){
+                        int i = (int) (worldlayer - GlobalGameThreadConfigs.player.worldz);
                         for(int d = 1; d < i; d++){
                             if(!gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer - d]].transparent){
                                 boolean up, down, right, left;
@@ -822,50 +823,67 @@ public class LivingEntity extends Data {
                 if(shouldrenderr)  {
                     boolean shouldrender = true;
                     if(worldlayer >= entity.worldz){
-                    if (worldlayer > entity.worldz) {
-                            boolean up, down, right, left;
+                    if (worldlayer > entity.worldz){
+                        boolean up, down, right, left;
+                        if(worldrow+1 < 200){
+                            up = !gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow+1][worldlayer]].transparent;
+                        }else{
+                            up = true;
+                        }
+                        if(worldrow-1 > 0){
+                            down = !gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow-1][worldlayer]].transparent;
+                        }else{
+                            down = true;
+                        }
+                        if(worldcol+1 < 200){
+                            right = !gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol+1][worldrow][worldlayer]].transparent;
+                        }else{
+                            right = true;
+                        }
+                        if(worldcol-1 > 0){
+                            left = !gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol-1][worldrow][worldlayer]].transparent;
+                        }else{
+                            left = true;
+                        }
+                        if(up && down && right && left){
+                            shouldrender = false;
+                        }
+                        if(shouldrender){
+                            up = false;
+                            down = false;
+                            right = false;
+                            left = false;
                             if(worldrow+1 < 200){
-                                up = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow +1][worldlayer] != 46;
+                                up = !gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow+1][worldlayer+1]].transparent;
                             }else{
                                 up = true;
                             }
                             if(worldrow-1 > 0){
-                                down = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow -1][worldlayer] != 46;
+                                down = !gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow-1][worldlayer+1]].transparent;
                             }else{
                                 down = true;
                             }
                             if(worldcol+1 < 200){
-                                right = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol +1][worldrow][worldlayer] != 46;
+                                right = !gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol+1][worldrow][worldlayer+1]].transparent;
                             }else{
                                 right = true;
                             }
                             if(worldcol-1 > 0){
-                                left = gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol -1][worldrow][worldlayer] != 46;
+                                left = !gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol-1][worldrow][worldlayer+1]].transparent;
                             }else{
                                 left = true;
                             }
                             if(up && down && right && left){
                                 shouldrender = false;
-
                             }
-                            if(shouldrender){
-                                int i = (int) (worldlayer - gp.player.worldz);
-                                int e = 0;
-                                for(int d = 1; d <= i; d++){
-                                    if (gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer - d] == 46) {
-                                        e++;
-                                    }
-                                }
-                                if(e == i){
-                                    shouldrender = false;
-                                }
-                            }}else{
+                        }
+                    }else{
                         shouldrender = false;
                     }
                             if(shouldrender){
-                                g2.drawImage(gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer]].down[(int) (worldlayer -gp.player.worldz)], (int) screenX, (int)screenY, null);
+                                g2.drawImage(gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer]].down[worldlayer], (int) screenX, (int)screenY, null);
                                 g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                                g2.fillRect((int) screenX, (int) screenY, gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer]].down[(int) (worldlayer -gp.player.worldz)].getWidth(), gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer]].down[(int) (worldlayer -gp.player.worldz)].getHeight());
+                                g2.fillRect((int) screenX, (int) screenY, gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer]].down[worldlayer].getWidth(), gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer]].down[worldlayer].getHeight());
                             }else{
                                 g2.drawImage(gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer]].image, (int) screenX, (int)screenY, null);
                                 if (gp.tilemanager.mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer] == 52) {
@@ -886,7 +904,9 @@ public class LivingEntity extends Data {
 
                 }}
             worldlayer++;
-            }
+            }}catch (Exception e) {
+
+        }
 
         }
 

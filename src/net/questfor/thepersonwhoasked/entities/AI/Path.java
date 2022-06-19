@@ -70,8 +70,8 @@ public class Path extends Data {
                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] != null) {
                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].EntityType == 4) {
                         if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz == layer || GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz-1 == layer){
-                            int itcol = (int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx / MainGame.tilesize);
-                            int itrow = (int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy / MainGame.tilesize);
+                            int itcol = (int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx / GlobalGameThreadConfigs.tilesize);
+                            int itrow = (int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy / GlobalGameThreadConfigs.tilesize);
                             if((itcol != -1 && itcol != 50) && itrow != -1 && itrow != 50) {
                                 nodes[itcol][itrow].solid = true;
                             }
@@ -82,8 +82,8 @@ public class Path extends Data {
                 if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i] != null) {
                     if(entity != GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i]){
                         if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldz == layer){
-                            int itcol = (int) Math.round(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldx / MainGame.tilesize);
-                            int itrow = (int) Math.round(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldy / MainGame.tilesize);
+                            int itcol = (int) Math.round(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldx / GlobalGameThreadConfigs.tilesize);
+                            int itrow = (int) Math.round(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldy / GlobalGameThreadConfigs.tilesize);
                             if((itcol != -1 && itcol != 50) && itrow != -1 && itrow != 50){
                             nodes[itcol][itrow].solid = true;
                         }}}
@@ -93,8 +93,8 @@ public class Path extends Data {
                 if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] != null) {
                     if(entity != GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i]){
                         if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldz == layer || GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldz-1 == layer){
-                            int itcol = (int) Math.round(GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx / MainGame.tilesize);
-                            int itrow = (int) Math.round(GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy / MainGame.tilesize);
+                            int itcol = (int) Math.round(GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx / GlobalGameThreadConfigs.tilesize);
+                            int itrow = (int) Math.round(GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy / GlobalGameThreadConfigs.tilesize);
                             if((itcol != -1 && itcol != 50) && itrow != -1 && itrow != 50){
                                 nodes[itcol][itrow].solid = true;
                             }}

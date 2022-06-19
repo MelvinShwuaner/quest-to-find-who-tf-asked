@@ -4,6 +4,7 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class OBJ_IRON_SHOVEL extends LivingEntity {
     public OBJ_IRON_SHOVEL(MainGame gpp) {
@@ -35,6 +36,6 @@ public class OBJ_IRON_SHOVEL extends LivingEntity {
     }
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/shovel", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/shovel", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

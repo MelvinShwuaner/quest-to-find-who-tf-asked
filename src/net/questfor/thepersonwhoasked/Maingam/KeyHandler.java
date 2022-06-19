@@ -33,13 +33,11 @@ public class KeyHandler extends Data implements KeyListener {
     public static int PAUSE = KeyEvent.VK_P;
     public static int INVENTORY = KeyEvent.VK_TAB, OPEN = KeyEvent.VK_ENTER;
 
-
     @Override
     public void keyPressed(KeyEvent e) {
         try {
             //MANAGES KEY BINDINGS WHEN YOU PRESS THEM//
             int code = e.getKeyCode();
-
             if(GlobalGameThreadConfigs.isinTital) {
                 if (code == KeyEvent.VK_UP) {
                     UI.commandnum--;
@@ -73,23 +71,23 @@ public class KeyHandler extends Data implements KeyListener {
                         primepowera = true;
                     }
                     if (code == UP) {
-                        if (upPressed == false) {
+                        if (!upPressed) {
                             upPressed = true;
 
                         }
                     }
                     if (code == DOWN) {
-                        if (downPressed == false) {
+                        if (!downPressed) {
                             downPressed = true;
                         }
                     }
                     if (code == LEFT) {
-                        if (leftPressed == false) {
+                        if (!leftPressed) {
                             leftPressed = true;
                         }
                     }
                     if (code == RIGHT) {
-                        if (rightPressed == false) {
+                        if (!rightPressed) {
                             rightPressed = true;
                         }
                     }
@@ -98,17 +96,13 @@ public class KeyHandler extends Data implements KeyListener {
 
                     }
                     if (code == FPSC) {
-                        if (!checkFPS) {
-                            checkFPS = true;
-                        } else {
-                            checkFPS = false;
-                        }
+                        checkFPS = !checkFPS;
                     }
                     if (code == KeyEvent.VK_SPACE) {
                         if (!jump) {
-                            if(MainGame.player.canjump){
-                            MainGame.player.isup = true;
-                            MainGame.player.jumping = true;
+                            if(GlobalGameThreadConfigs.player.canjump){
+                            GlobalGameThreadConfigs.player.isup = true;
+                            GlobalGameThreadConfigs.player.jumping = true;
                             jump = true;
                         }}
                     }
@@ -181,22 +175,22 @@ public class KeyHandler extends Data implements KeyListener {
                     if (GlobalGameThreadConfigs.CharacterStats){
                         if (code == KeyEvent.VK_1) {
                             int codenum = 1;
-                            gp.player.convertItem(codenum);
+                            GlobalGameThreadConfigs.player.convertItem(codenum);
                         } else if (code == KeyEvent.VK_2) {
                             int codenum = 2;
-                            gp.player.convertItem(codenum);
+                            GlobalGameThreadConfigs.player.convertItem(codenum);
                         } else if (code == KeyEvent.VK_3) {
                             int codenum = 3;
-                            gp.player.convertItem(codenum);
+                            GlobalGameThreadConfigs.player.convertItem(codenum);
                         } else if (code == KeyEvent.VK_4) {
                             int codenum = 4;
-                            gp.player.convertItem(codenum);
+                            GlobalGameThreadConfigs.player.convertItem(codenum);
                         } else if (code == KeyEvent.VK_5) {
                             int codenum = 5;
-                            gp.player.convertItem(codenum);
+                            GlobalGameThreadConfigs.player.convertItem(codenum);
                         } else if (code == KeyEvent.VK_6) {
                             int codenum = 6;
-                            gp.player.convertItem(codenum);
+                            GlobalGameThreadConfigs.player.convertItem(codenum);
                         }
                 }
                     if(code == KeyEvent.VK_ESCAPE){
@@ -294,7 +288,7 @@ public class KeyHandler extends Data implements KeyListener {
                             }
                         }
                     }
-                    if(code != KeyEvent.VK_DOWN && code != OPEN && code != KeyEvent.VK_UP && UI.optionstate == 1){
+                    if(code != KeyEvent.VK_DOWN && code != KeyEvent.VK_UP && UI.optionstate == 1){
                         switch (UI.commandnum){
                             case 1 -> UP = code;
                             case 2 -> DOWN = code;
@@ -415,12 +409,8 @@ public class KeyHandler extends Data implements KeyListener {
         if (code == KeyEvent.VK_ESCAPE) {
             UI.commandnum = 0;
             switch (UI.tradestate) {
-                case 0:
-                    GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
-                    break;
-                case 1, 2:
-                    UI.tradestate = 0;
-                    break;
+                case 0 -> GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                case 1, 2 -> UI.tradestate = 0;
             }
         }
         if (UI.tradestate == 0) {
@@ -502,6 +492,7 @@ public class KeyHandler extends Data implements KeyListener {
             }
         }
     }
+
     @Override
     public void keyReleased(KeyEvent e) {
         //MANAGES KEY BINDINGS WHEN YOU RELEASE THEM//

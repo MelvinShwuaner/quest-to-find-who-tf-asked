@@ -23,17 +23,22 @@ public class Projectile extends LivingEntity{
         if(up1 == null){
             getImageInstance();
         }
-        if(SourceEntity == gp.player || SourceEntity.EntityType == 2){
+        if(SourceEntity == GlobalGameThreadConfigs.player || SourceEntity.EntityType == 2){
             int monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
+            int projectileI = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.projectilelist);
+            super.damageprojectile(projectileI);
+            if(projectileI != 999){
+                alive = false;
+            }
             if(monsterindex != 999){
                 attackEntity(monsterindex, AttackValue);
                 ParticlePropertyManager(SourceEntity.projectile, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][monsterindex]);
                 alive = false;
             }
-        }if(SourceEntity != gp.player && SourceEntity.EntityType == 1){
+        }if(SourceEntity != GlobalGameThreadConfigs.player && SourceEntity.EntityType == 1){
             boolean contactPlayer = gp.hregister.PlayerColide(this);
-            if(!gp.player.invincible && contactPlayer){
-                ParticlePropertyManager(SourceEntity.projectile, gp.player);
+            if(!GlobalGameThreadConfigs.player.invincible && contactPlayer){
+                ParticlePropertyManager(SourceEntity.projectile, GlobalGameThreadConfigs.player);
                 AttackPLayer(AttackValue);
                 alive = false;
             }

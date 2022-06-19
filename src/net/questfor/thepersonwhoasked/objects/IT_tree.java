@@ -1,5 +1,6 @@
 package net.questfor.thepersonwhoasked.objects;
 
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
@@ -8,8 +9,8 @@ public class IT_tree extends LivingEntity{
     public IT_tree(MainGame gpp, int col, int row) {
         super(gpp);
         name = "Dry tree";
-        this.worldx = gp.tilesize * col;
-        this.worldy = gp.tilesize*row;
+        this.worldx = GlobalGameThreadConfigs.tilesize * col;
+        this.worldy = GlobalGameThreadConfigs.tilesize*row;
         EntityType = 4;
         health = 2;
         LightSource = false;
@@ -19,7 +20,7 @@ public class IT_tree extends LivingEntity{
         return iscorrectItem;
     }
     public void playSE(){gp.playsound(11);}
-    public LivingEntity getDestroyedForm(){return new IT_Tree_Trunk(gp, (int) (worldx/gp.tilesize), (int) worldy/gp.tilesize);}
+    public LivingEntity getDestroyedForm(){return new IT_Tree_Trunk(gp, (int) (worldx/GlobalGameThreadConfigs.tilesize), (int) worldy/GlobalGameThreadConfigs.tilesize);}
     public Color getparticleColor(){return new Color(0x41321E);}
     public int getparticleSize(){return 6;}
     public int getparticlespeed(){return 1;}
@@ -27,6 +28,6 @@ public class IT_tree extends LivingEntity{
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("TileEntity/drytree", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("TileEntity/drytree", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

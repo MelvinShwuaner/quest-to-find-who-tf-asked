@@ -5,6 +5,7 @@ import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
 import java.util.Random;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class Old_Man extends LivingEntity {
     boolean player;
@@ -25,30 +26,30 @@ public class Old_Man extends LivingEntity {
     }
 
     public void getImageInstance() {
-        up1 = BufferedRenderer("NPCS/old man/oldman_up_1", gp.tilesize, gp.tilesize);
-        up2 = BufferedRenderer("NPCS/old man/oldman_up_2", gp.tilesize, gp.tilesize);
-        down1 = BufferedRenderer("NPCS/old man/oldman_down_1", gp.tilesize, gp.tilesize);
-        down2 = BufferedRenderer("NPCS/old man/oldman_down_2", gp.tilesize, gp.tilesize);
-        right1 = BufferedRenderer("NPCS/old man/oldman_right_1", gp.tilesize, gp.tilesize);
-        right2 = BufferedRenderer("NPCS/old man/oldman_right_2", gp.tilesize, gp.tilesize);
-        left1 = BufferedRenderer("NPCS/old man/oldman_left_1", gp.tilesize, gp.tilesize);
-        left2 = BufferedRenderer("NPCS/old man/oldman_left_2", gp.tilesize, gp.tilesize);
+        up1 = BufferedRenderer("NPCS/old man/oldman_up_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        up2 = BufferedRenderer("NPCS/old man/oldman_up_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        down1 = BufferedRenderer("NPCS/old man/oldman_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        down2 = BufferedRenderer("NPCS/old man/oldman_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        right1 = BufferedRenderer("NPCS/old man/oldman_right_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        right2 = BufferedRenderer("NPCS/old man/oldman_right_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        left1 = BufferedRenderer("NPCS/old man/oldman_left_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        left2 = BufferedRenderer("NPCS/old man/oldman_left_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 
     public void setAction() {
 
                 if(onpath){
                     if(goingup){
-                        taskx = Math.round(1107/gp.tilesize);
-                        tasky = Math.round(588/gp.tilesize);
+                        taskx = Math.round(1107/GlobalGameThreadConfigs.tilesize);
+                        tasky = Math.round(588/GlobalGameThreadConfigs.tilesize);
                         goup();
                     }else if(!Hostile){
-                        tasky = Math.round(1932/gp.tilesize);
-                        taskx = Math.round(1107/gp.tilesize);
+                        tasky = Math.round(1932/GlobalGameThreadConfigs.tilesize);
+                        taskx = Math.round(1107/GlobalGameThreadConfigs.tilesize);
                         searchPath(taskx, tasky);
                     }else{
-                    taskx = Math.round(target.worldx/gp.tilesize);
-                    tasky = Math.round(target.worldy/gp.tilesize);
+                    taskx = Math.round(target.worldx/GlobalGameThreadConfigs.tilesize);
+                    tasky = Math.round(target.worldy/GlobalGameThreadConfigs.tilesize);
                     searchPath(taskx, tasky);
                 }}else {
                     actionLock++;
@@ -75,7 +76,7 @@ public class Old_Man extends LivingEntity {
 
     public void goup() {
         searchPath(taskx, tasky);
-        if(Math.round(worldx/gp.tilesize) == taskx && Math.round(worldy/gp.tilesize) == tasky){
+        if(Math.round(worldx/GlobalGameThreadConfigs.tilesize) == taskx && Math.round(worldy/GlobalGameThreadConfigs.tilesize) == tasky){
                 if (speed > 0) {
                     dialogues[0] = "Take a wish. will you?";
                     dialogues[2] = ""; dialogues[3] = "";
@@ -95,6 +96,6 @@ public class Old_Man extends LivingEntity {
         super.speak();
         onpath = true;
         Hostile = true;
-        target = gp.player;
+        target = GlobalGameThreadConfigs.player;
         }
     }

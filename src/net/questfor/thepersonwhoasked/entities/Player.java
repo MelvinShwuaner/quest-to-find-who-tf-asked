@@ -20,8 +20,8 @@ public class Player extends LivingEntity {
     int counter = 0;
     public Player(MainGame gpp) {
         super(gpp);
-        screenX = MainGame.screenwidth / 2 - (MainGame.tilesize / 2);
-        screenY = MainGame.screenheight / 2 - (MainGame.tilesize / 2);
+        screenX = MainGame.screenwidth / 2 - (GlobalGameThreadConfigs.tilesize / 2);
+        screenY = MainGame.screenheight / 2 - (GlobalGameThreadConfigs.tilesize / 2);
         hitbox = new Rectangle();
         hitbox.x = 8;
         hitbox.y = 16;
@@ -33,8 +33,8 @@ public class Player extends LivingEntity {
         Ammo = 10;
         name = "Player";
         inventorysize = 20;
-        worldx = gp.tilesize * 107;
-        worldy = gp.tilesize * 114;
+        worldx = GlobalGameThreadConfigs.tilesize * 107;
+        worldy = GlobalGameThreadConfigs.tilesize * 114;
         defaultspeed = 4;
         speed = defaultspeed;
         direction = "left";
@@ -83,72 +83,72 @@ public class Player extends LivingEntity {
 
     //IMAGES
     public void getImageInstance() {
-        up1 = BufferedRenderer("player/boy_up_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        up2 = BufferedRenderer("player/boy_up_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        down1 = BufferedRenderer("player/boy_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        down2 = BufferedRenderer("player/boy_down_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        right1 = BufferedRenderer("player/boy_right_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        right2 = BufferedRenderer("player/boy_right_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        left1 = BufferedRenderer("player/boy_left_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        left2 = BufferedRenderer("player/boy_left_2", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        up1 = BufferedRenderer("player/boy_up_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        up2 = BufferedRenderer("player/boy_up_2", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        down1 = BufferedRenderer("player/boy_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        down2 = BufferedRenderer("player/boy_down_2", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        right1 = BufferedRenderer("player/boy_right_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        right2 = BufferedRenderer("player/boy_right_2", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        left1 = BufferedRenderer("player/boy_left_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        left2 = BufferedRenderer("player/boy_left_2", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
     }
 
     public void getAttackInstance() {
         if (hasweapon) {
             if (currentweapon.name.equals("Iron sword")) {
-                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown1 = BufferedRenderer("player/Attack/boy_attack_down_1",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown2 = BufferedRenderer("player/Attack/boy_attack_down_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
-                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
+                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown1 = BufferedRenderer("player/Attack/boy_attack_down_1",(int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown2 = BufferedRenderer("player/Attack/boy_attack_down_2", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", (int) (GlobalGameThreadConfigs.tilesize+worldz)*2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (GlobalGameThreadConfigs.tilesize+worldz)*2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
             }
             if(currentweapon.name.equals("Iron shovel")){
-                attackright1 = BufferedRenderer("player/Attack/boy_attack_shovel_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));;
-                attackright2 = BufferedRenderer("player/Attack/boy_attack_shovel_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));;
-                attackright3 = BufferedRenderer("player/Attack/boy_attack_shovel_right_3", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackleft1 = BufferedRenderer("player/Attack/boy_attack_shovel_left_0", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
-                attackleft2 = BufferedRenderer("player/Attack/boy_attack_shovel_left_1", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
-                attackleft3 = BufferedRenderer("player/Attack/boy_attack_shovel_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
-                attackup1 = BufferedRenderer("player/Attack/boy_attack_shovel_up_0", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackup2 = BufferedRenderer("player/Attack/boy_attack_shovel_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackup3 = BufferedRenderer("player/Attack/boy_attack_shovel_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown1 = BufferedRenderer("player/Attack/shoveldown1",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown2 = BufferedRenderer("player/Attack/shoveldown2",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown3 = BufferedRenderer("player/Attack/shoveldown3",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackright1 = BufferedRenderer("player/Attack/boy_attack_shovel_right_1", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));;
+                attackright2 = BufferedRenderer("player/Attack/boy_attack_shovel_right_2", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));;
+                attackright3 = BufferedRenderer("player/Attack/boy_attack_shovel_right_3", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_attack_shovel_left_0", (int) (GlobalGameThreadConfigs.tilesize+worldz)*2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_attack_shovel_left_1", (int) (GlobalGameThreadConfigs.tilesize+worldz)*2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft3 = BufferedRenderer("player/Attack/boy_attack_shovel_left_2", (int) (GlobalGameThreadConfigs.tilesize+worldz)*2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackup1 = BufferedRenderer("player/Attack/boy_attack_shovel_up_0", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_attack_shovel_up_1", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackup3 = BufferedRenderer("player/Attack/boy_attack_shovel_up_2", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown1 = BufferedRenderer("player/Attack/shoveldown1",(int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown2 = BufferedRenderer("player/Attack/shoveldown2",(int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown3 = BufferedRenderer("player/Attack/shoveldown3",(int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
             }
             if(currentweapon.name.equals("Iron pickaxe")){
-                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
-                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (gp.tilesize+worldz)*2, (int) (gp.tilesize+worldz));
-                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown1 = BufferedRenderer("player/Attack/shoveldown1",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown2 = BufferedRenderer("player/Attack/shoveldown2",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown3 = BufferedRenderer("player/Attack/shoveldown3",(int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
+                attackright1 = BufferedRenderer("player/Attack/boy_attack_right_1", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackright2 = BufferedRenderer("player/Attack/boy_attack_right_2", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_attack_left_1", (int) (GlobalGameThreadConfigs.tilesize+worldz)*2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_attack_left_2", (int) (GlobalGameThreadConfigs.tilesize+worldz)*2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackup1 = BufferedRenderer("player/Attack/boy_attack_up_1", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_attack_up_2", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown1 = BufferedRenderer("player/Attack/shoveldown1",(int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown2 = BufferedRenderer("player/Attack/shoveldown2",(int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown3 = BufferedRenderer("player/Attack/shoveldown3",(int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
             }
             if (currentweapon.name.equals("WoodCutter's axe")) {
-                attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown1 = BufferedRenderer("player/Attack/boy_axe_down_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackdown2 = BufferedRenderer("player/Attack/boy_axe_down_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-                attackright1 = BufferedRenderer("player/Attack/boy_axe_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackright2 = BufferedRenderer("player/Attack/boy_axe_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-                attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+                attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown1 = BufferedRenderer("player/Attack/boy_axe_down_1", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackdown2 = BufferedRenderer("player/Attack/boy_axe_down_2", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+                attackright1 = BufferedRenderer("player/Attack/boy_axe_right_1", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackright2 = BufferedRenderer("player/Attack/boy_axe_right_2", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+                attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
             }
         }else{
-            attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-            attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-            attackdown1 = BufferedRenderer("player/Attack/boy_axe_down_1", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-            attackdown2 = BufferedRenderer("player/Attack/boy_axe_down_2", (int) (gp.tilesize+worldz), (int) (gp.tilesize+worldz) * 2);
-            attackright1 = BufferedRenderer("player/Attack/boy_axe_right_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-            attackright2 = BufferedRenderer("player/Attack/boy_axe_right_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-            attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
-            attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", (int) (gp.tilesize+worldz) * 2, (int) (gp.tilesize+worldz));
+            attackup1 = BufferedRenderer("player/Attack/boy_axe_up_1", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+            attackup2 = BufferedRenderer("player/Attack/boy_axe_up_2", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+            attackdown1 = BufferedRenderer("player/Attack/boy_axe_down_1", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+            attackdown2 = BufferedRenderer("player/Attack/boy_axe_down_2", (int) (GlobalGameThreadConfigs.tilesize+worldz), (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2);
+            attackright1 = BufferedRenderer("player/Attack/boy_axe_right_1", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+            attackright2 = BufferedRenderer("player/Attack/boy_axe_right_2", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+            attackleft1 = BufferedRenderer("player/Attack/boy_axe_left_1", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
+            attackleft2 = BufferedRenderer("player/Attack/boy_axe_left_2", (int) (GlobalGameThreadConfigs.tilesize+worldz) * 2, (int) (GlobalGameThreadConfigs.tilesize+worldz));
         }
 
     }
@@ -163,6 +163,9 @@ public class Player extends LivingEntity {
 
     public void update() {
         try {
+            if(GlobalGameThreadConfigs.Buildmode){
+                burning = false;
+            }
             if(burning){
                     if(!invincible && ((burningcounter == 0) || (burningcounter == 10) || (burningcounter == 20) || (burningcounter == 30) || (burningcounter == 40) || (burningcounter == 50))){
                      health--; gp.playsound(10);
@@ -182,9 +185,9 @@ public class Player extends LivingEntity {
                 getImageInstance();
                 getAttackInstance();
             }
-            for (int i = 0; i < inventory.size(); i++) {
-                if (inventory.get(i).down1 == null) {
-                    inventory.get(i).getImageInstance();
+            for (LivingEntity livingEntity : inventory) {
+                if (livingEntity.down1 == null) {
+                    livingEntity.getImageInstance();
                 }
             }
             if(LightSource){
@@ -477,7 +480,7 @@ public class Player extends LivingEntity {
             }
             if (invincible == false && GlobalGameThreadConfigs.Monsters[MainGame.currentmap][monsterindex].dying == false) {
                 health -= damage;
-                UI.addMessages("You have been hit! health is now to " + gp.player.health);
+                UI.addMessages("You have been hit! health is now to " + GlobalGameThreadConfigs.player.health);
                 gp.playsound(5);
                 invincible = true;
             }
@@ -599,12 +602,12 @@ public class Player extends LivingEntity {
             int tempscreenx = screenX;
             int tempscreeny = screenY;
             //Try Reading this line. I will wait ;D
-            if(GlobalGameThreadConfigs.isinTital == false){if(KeyHandler.upPressed || KeyHandler.downPressed || KeyHandler.rightPressed || KeyHandler.leftPressed){switch (direction) {case "up": if (attacking == false){if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}}else{tempscreeny = screenY - gp.tilesize; if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}else if (spritenumber == 3){image = attackup3;}} break; case "down": if(attacking == false){if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}break; case "right": if(attacking == false){if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}else if (spritenumber == 3){image = attackright3;}}break; case "left": if(attacking == false){if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;}}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}else if (spritenumber == 3){image = attackleft3;}} break;}}else{switch (direction){case "right" -> {if(attacking == false){image = right1;}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}else if (spritenumber == 3){image = attackright3;}} }case "left" -> {if(attacking == false){image = left1;}else{tempscreenx = screenX - gp.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}else if (spritenumber == 3){image = attackleft3;}}}case "up" -> {if(attacking == false){image = up1;}else{tempscreeny = screenY - gp.tilesize;if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}else if (spritenumber == 3){image = attackup3;}}} case "down" -> {if(attacking == false){image = down1;}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}}}}}else{switch (direction) {case "up": if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}break; case "down": if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}break; case "right": if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}break; case "left": if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;} break;}}
+            if(GlobalGameThreadConfigs.isinTital == false){if(KeyHandler.upPressed || KeyHandler.downPressed || KeyHandler.rightPressed || KeyHandler.leftPressed){switch (direction) {case "up": if (attacking == false){if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}}else{tempscreeny = screenY - GlobalGameThreadConfigs.tilesize; if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}else if (spritenumber == 3){image = attackup3;}} break; case "down": if(attacking == false){if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}break; case "right": if(attacking == false){if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}else if (spritenumber == 3){image = attackright3;}}break; case "left": if(attacking == false){if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;}}else{tempscreenx = screenX - GlobalGameThreadConfigs.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}else if (spritenumber == 3){image = attackleft3;}} break;}}else{switch (direction){case "right" -> {if(attacking == false){image = right1;}else{if (spritenumber == 1) {image = attackright1;} else if (spritenumber == 2) {image = attackright2;}else if (spritenumber == 3){image = attackright3;}} }case "left" -> {if(attacking == false){image = left1;}else{tempscreenx = screenX - GlobalGameThreadConfigs.tilesize; if (spritenumber == 1) {image = attackleft1;} else if (spritenumber == 2) {image = attackleft2;}else if (spritenumber == 3){image = attackleft3;}}}case "up" -> {if(attacking == false){image = up1;}else{tempscreeny = screenY - GlobalGameThreadConfigs.tilesize;if (spritenumber == 1) {image = attackup1;} else if (spritenumber == 2) {image = attackup2;}else if (spritenumber == 3){image = attackup3;}}} case "down" -> {if(attacking == false){image = down1;}else{if (spritenumber == 1) {image = attackdown1;} else if (spritenumber == 2) {image = attackdown2;}else if (spritenumber == 3){image = attackdown3;}}}}}}else{switch (direction) {case "up": if (spritenumber == 1) {image = up1;} else if (spritenumber == 2) {image = up2;}break; case "down": if (spritenumber == 1) {image = down1;} else if (spritenumber == 2) {image = down2;}break; case "right": if (spritenumber == 1) {image = right1;} else if (spritenumber == 2) {image = right2;}break; case "left": if (spritenumber == 1) {image = left1;} else if (spritenumber == 2) {image = left2;} break;}}
             if(jumping){
                 jumpaction++;
                 if(jumpaction < 25){
                     if(isup) {
-                        if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/gp.tilesize), Math.round(worldy/gp.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
+                        if (gp.hregister.checkWALL(this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz, GlobalGameThreadConfigs.NPCS, this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz,  GlobalGameThreadConfigs.Monsters, this) && gp.hregister.checkentitywall(Math.round(worldx/GlobalGameThreadConfigs.tilesize), Math.round(worldy/GlobalGameThreadConfigs.tilesize), worldz, GlobalGameThreadConfigs.obj, this) ) {
                         if (jumpaction == 1) {
                                 worldz++;
                             }
@@ -722,7 +725,7 @@ public class Player extends LivingEntity {
         }else if(KeyHandler.sprint){
             z++;
         }
-        canbreak = gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z] != 46;
+        canbreak = gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 46;
         if(!canbreak && (KeyHandler.sprint || KeyHandler.CROUCH)){
             switch (direction) {
                 case "down" -> y += 48;
@@ -732,11 +735,11 @@ public class Player extends LivingEntity {
             }
         }
         attacking = true;
-        if(gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z] != 47){
+        if(gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 47){
             if (currentweapon.Type == Type_shovel) {
-                switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z]) {
-                    case 39,0 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
-                    case 45 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+                switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z]) {
+                    case 39,0 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
+                    case 45 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
                         for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
                             if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new Clay(gp);
@@ -746,10 +749,10 @@ public class Player extends LivingEntity {
                             }
                         }
                     }
-                    case 10, 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 39;
+                    case 10, 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 39;
                 }}else if(currentweapon.Type == Type_pickaxe){
-                switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z]) {
-                    case 49 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+                switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z]) {
+                    case 49 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
                         for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
                             if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new OBJ_coal(gp);
@@ -760,7 +763,7 @@ public class Player extends LivingEntity {
                             }
                         }
                     }
-                    case 50 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+                    case 50 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
                         for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
                             if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new Stone(gp);
@@ -771,7 +774,7 @@ public class Player extends LivingEntity {
                             }
                         }
                     }
-                    case 48 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / gp.tilesize)][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+                    case 48 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
                         for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
                             if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new OBJ_BRICK_WALL(gp);
@@ -787,7 +790,7 @@ public class Player extends LivingEntity {
         }else{
             for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
                 if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] != null){
-                    if(Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldx/gp.tilesize) == Math.round(x/gp.tilesize) && Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldy/gp.tilesize) == Math.round(y/gp.tilesize) && GlobalGameThreadConfigs.obj[currentmap][ii].worldz==z){
+                    if(Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldx/GlobalGameThreadConfigs.tilesize) == Math.round(x/GlobalGameThreadConfigs.tilesize) && Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldy/GlobalGameThreadConfigs.tilesize) == Math.round(y/GlobalGameThreadConfigs.tilesize) && GlobalGameThreadConfigs.obj[currentmap][ii].worldz==z){
                         if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].ItemRequirements(this)) {
                             if (!GlobalGameThreadConfigs.obj[currentmap][ii].invincible) {
                                 GlobalGameThreadConfigs.obj[currentmap][ii].health -= TrueAttackDamage;
@@ -795,7 +798,7 @@ public class Player extends LivingEntity {
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].invincible = true;
                                 ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii], GlobalGameThreadConfigs.obj[MainGame.currentmap][ii]);
                                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].health <= 0) {
-                                    MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx / gp.tilesize)][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy / gp.tilesize)][(int) GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz] = 46;
+                                    MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy / GlobalGameThreadConfigs.tilesize)][(int) GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz] = 46;
                                     GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].getDestroyedForm();
                                     GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].HandleItems();
                                 }
@@ -825,7 +828,7 @@ public class Player extends LivingEntity {
         }else if(KeyHandler.sprint){
             z++;
         }
-        canbreak = gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z] != 46;
+        canbreak = gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 46;
         if(!canbreak && (KeyHandler.sprint || KeyHandler.CROUCH)){
             switch (direction) {
                 case "down" -> y += 48;
@@ -835,12 +838,12 @@ public class Player extends LivingEntity {
             }
         }
         attacking = true;
-        if(gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z] != 47){
-            gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+        if(gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 47){
+            gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
         }else{
             for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
                 if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] != null){
-                    if(Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldx/gp.tilesize) == Math.round(x/gp.tilesize) && Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldy/gp.tilesize) == Math.round(y/gp.tilesize) && GlobalGameThreadConfigs.obj[currentmap][ii].worldz==z){
+                    if(Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldx/GlobalGameThreadConfigs.tilesize) == Math.round(x/GlobalGameThreadConfigs.tilesize) && Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldy/GlobalGameThreadConfigs.tilesize) == Math.round(y/GlobalGameThreadConfigs.tilesize) && GlobalGameThreadConfigs.obj[currentmap][ii].worldz==z){
                         if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].ItemRequirements(this)) {
                             if (!GlobalGameThreadConfigs.obj[currentmap][ii].invincible) {
                                 GlobalGameThreadConfigs.obj[currentmap][ii].health -= TrueAttackDamage;
@@ -848,10 +851,10 @@ public class Player extends LivingEntity {
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].invincible = true;
                                 ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii], GlobalGameThreadConfigs.obj[MainGame.currentmap][ii]);
                                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].health <= 0) {
-                                    MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx / gp.tilesize)][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy / gp.tilesize)][(int) GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz] = 46;
+                                    MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy / GlobalGameThreadConfigs.tilesize)][(int) GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz] = 46;
                                     GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].getDestroyedForm();
                                     GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].HandleItems();
-                                    gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / gp.tilesize))][(int) Math.round(y / gp.tilesize)][(int) z] = 46;
+                                    gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
 
                                 }
                                 ii = GlobalGameThreadConfigs.obj[1].length;}

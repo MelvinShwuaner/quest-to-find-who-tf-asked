@@ -70,39 +70,39 @@ class MainGame : JPanel(), Runnable {
 
     fun updateticks() {
         //occures AFTER the filtered ticks are removed, happens on every tick that remains
-        if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
+        if (GameState == PlayState) {
             //PLAY STATE RENDERING//
             /**PLAYER**/
             player.update()
             /**NPCS**/
-            for (i in GlobalGameThreadConfigs.NPCS[1].indices) {
-                if (GlobalGameThreadConfigs.NPCS[currentmap][i] != null) {
-                    GlobalGameThreadConfigs.NPCS[currentmap][i].update()
-                    if (GlobalGameThreadConfigs.NPCS[currentmap][i] != null) {
-                    if(!GlobalGameThreadConfigs.NPCS[currentmap][i].alive) {
-                        GlobalGameThreadConfigs.NPCS[currentmap][i].HandleItems()
-                        GlobalGameThreadConfigs.NPCS[currentmap][i] = null
+            for (i in NPCS[1].indices) {
+                if (NPCS[currentmap][i] != null) {
+                    NPCS[currentmap][i].update()
+                    if (NPCS[currentmap][i] != null) {
+                    if(!NPCS[currentmap][i].alive) {
+                        NPCS[currentmap][i].HandleItems()
+                        NPCS[currentmap][i] = null
                     }}
                     }
 
             }
             /**MOBS**/
-            for(i in GlobalGameThreadConfigs.Monsters[1].indices){
-                if(GlobalGameThreadConfigs.Monsters[currentmap][i] != null){
-                    if(!GlobalGameThreadConfigs.Monsters[currentmap][i].dying) {
-                        GlobalGameThreadConfigs.Monsters[currentmap][i].update()
+            for(i in Monsters[1].indices){
+                if(Monsters[currentmap][i] != null){
+                    if(!Monsters[currentmap][i].dying) {
+                        Monsters[currentmap][i].update()
                     }
-                    if(GlobalGameThreadConfigs.Monsters[currentmap][i] != null){
-                    if(!GlobalGameThreadConfigs.Monsters[currentmap][i].alive){
-                        GlobalGameThreadConfigs.Monsters[currentmap][i].HandleItems()
-                        GlobalGameThreadConfigs.Monsters[currentmap][i] = null
+                    if(Monsters[currentmap][i] != null){
+                    if(!Monsters[currentmap][i].alive){
+                        Monsters[currentmap][i].HandleItems()
+                        Monsters[currentmap][i] = null
                     }}}
             }
             /**TILE ENTITIES**/
 
         }
         //PAUSE STATE RENDERING//
-        if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.pauseState) {
+        if (GameState == pauseState) {
             stopmusic()
         }
         /**OBJECTS**/
@@ -123,43 +123,43 @@ class MainGame : JPanel(), Runnable {
             }
             tilemanager.drawground(g2)
             /*DISPLAYS ENTITYS AND OBJECTS*/
-            GlobalGameThreadConfigs.entitylist.add(player)
+            entitylist.add(player)
 
-            for (i in GlobalGameThreadConfigs.NPCS[1].indices) {
-                if (GlobalGameThreadConfigs.NPCS[currentmap][i] != null) {
-                    GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.NPCS[currentmap][i])
+            for (i in NPCS[1].indices) {
+                if (NPCS[currentmap][i] != null) {
+                    entitylist.add(NPCS[currentmap][i])
                 }
             }
             for (i in obj[1].indices) {
                 if (obj[currentmap][i] != null) {
-                    GlobalGameThreadConfigs.entitylist.add(obj[currentmap][i])
+                    entitylist.add(obj[currentmap][i])
                 }
             }
-            for (i in GlobalGameThreadConfigs.Monsters[1].indices) {
-                if (GlobalGameThreadConfigs.Monsters[currentmap][i] != null) {
-                    GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.Monsters[currentmap][i])
+            for (i in Monsters[1].indices) {
+                if (Monsters[currentmap][i] != null) {
+                    entitylist.add(Monsters[currentmap][i])
                 }
             }
-            for (i in GlobalGameThreadConfigs.projectilelist[1].indices) {
-                if (GlobalGameThreadConfigs.projectilelist[currentmap][i] != null) {
-                    GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.projectilelist[currentmap][i])
+            for (i in projectilelist[1].indices) {
+                if (projectilelist[currentmap][i] != null) {
+                    entitylist.add(projectilelist[currentmap][i])
                 }
             }
-            for (i in GlobalGameThreadConfigs.particleList.indices) {
-                if (GlobalGameThreadConfigs.particleList[i] != null) {
-                    GlobalGameThreadConfigs.entitylist.add(GlobalGameThreadConfigs.particleList[i])
+            for (i in particleList.indices) {
+                if (particleList[i] != null) {
+                    entitylist.add(particleList[i])
                 }
             }
             /**TILE ENTITY RENDERING**/
 
             /*SORT ENTITYS IN POSITIONS*/
             GeneralHandler.main(g2)
-            if(GlobalGameThreadConfigs.dark){
-            GlobalGameThreadConfigs.Emanager.setup()
-            GlobalGameThreadConfigs.Emanager.draw(g2)}
+            if(dark){
+            Emanager.setup()
+            Emanager.draw(g2)}
 
             /*HANDLES FPS AND DRAW TIME FUNC*/
-            if (KeyHandler.checkFPS && GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
+            if (KeyHandler.checkFPS && GameState == PlayState) {
                 val drawEND: Long = System.nanoTime()
                 val passed: Long = drawEND - drawStart
                 g2.color = Color.white
@@ -188,7 +188,7 @@ class MainGame : JPanel(), Runnable {
     }
     fun drawtoscreen() {
         val g = graphics
-        g.drawImage(GlobalGameThreadConfigs.tempscreen, 0, 0, screenwidth2, screenheight2, null)
+        g.drawImage(tempscreen, 0, 0, screenwidth2, screenheight2, null)
         g.dispose()
     }
 
@@ -197,7 +197,6 @@ class MainGame : JPanel(), Runnable {
          //SETS ADVANCED AND CONFIG VALUES//
          //TILES
         @JvmField
-        var tilesize = 48
         var maxscreencol = 20
         var maxscreenrow = 12
          @JvmField
@@ -228,9 +227,6 @@ class MainGame : JPanel(), Runnable {
          @JvmField
          //EVENTS//
         var ehandler = EventHandler(MainGame())
-        @JvmField
-        //PLAYER//
-        var player = Player(MainGame())
         @JvmField
 
          //WORLD RENDERER//
@@ -264,14 +260,14 @@ class MainGame : JPanel(), Runnable {
              }else{
                  screenheight2 = screenheight
                  screenwidth2 = screenwidth
-                 GlobalGameThreadConfigs.gd.fullScreenWindow = null
+                 gd.fullScreenWindow = null
 
              }
              System.out.println("toggled full screen!")
          }
          @JvmStatic
           fun setFullScreen() {
-             GlobalGameThreadConfigs.gd.fullScreenWindow = Main.window
+             gd.fullScreenWindow = Main.window
              screenwidth2 = Main.window.width;
              screenheight2 = Main.window.height
              System.out.println("successfully started screen")

@@ -5,12 +5,13 @@ import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
 import java.util.Random;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class IT_Tree_Trunk extends LivingEntity {
     public IT_Tree_Trunk(MainGame gpp, int col, int row) {
         super(gpp);
-        this.worldx = gp.tilesize * col;
-        this.worldy = gp.tilesize*row;
+        this.worldx = GlobalGameThreadConfigs.tilesize * col;
+        this.worldy = GlobalGameThreadConfigs.tilesize*row;
         EntityType = 3;
         hitbox = new Rectangle(0, 0, 0, 0);
         collision = false;
@@ -29,7 +30,7 @@ public class IT_Tree_Trunk extends LivingEntity {
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("TileEntity/trunk", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("TileEntity/trunk", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
-    public LivingEntity getDestroyedForm(){return new IT_Tree_Trunk(gp, (int) (worldx/gp.tilesize), (int) worldy/gp.tilesize);}
+    public LivingEntity getDestroyedForm(){return new IT_Tree_Trunk(gp, (int) (worldx/GlobalGameThreadConfigs.tilesize), (int) worldy/GlobalGameThreadConfigs.tilesize);}
 }

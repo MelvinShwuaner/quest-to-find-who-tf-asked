@@ -1,4 +1,5 @@
 package net.questfor.thepersonwhoasked.objects;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.Maingam.UI;
@@ -48,16 +49,16 @@ public void set(){
             target.Mana = 0;
         }
         if (down1 != image2){
-            UI.addMessages("you have gained " + Value+"Mana" + " your Mana is now " + gp.player.Mana);
+            UI.addMessages("you have gained " + Value+"Mana" + " your Mana is now " + GlobalGameThreadConfigs.player.Mana);
         }else{
-            UI.addMessages("you have lost " + 1+"Mana" + " your Mana is now " + gp.player.Mana);
+            UI.addMessages("you have lost " + 1+"Mana" + " your Mana is now " + GlobalGameThreadConfigs.player.Mana);
         }
     }
 
     @Override
     public void getImageInstance() {
-        image = BufferedRenderer("objects/manacrystal_full", gp.tilesize, gp.tilesize);
-        image2 = BufferedRenderer("objects/manacrystal_blank", gp.tilesize, gp.tilesize);
+        image = BufferedRenderer("objects/manacrystal_full", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        image2 = BufferedRenderer("objects/manacrystal_blank", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 
     @Override

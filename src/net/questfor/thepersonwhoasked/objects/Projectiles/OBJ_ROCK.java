@@ -31,14 +31,14 @@ public class OBJ_ROCK extends Projectile {
         hitboxdefaulty = hitbox.y;
     }
     public void getImageInstance(){
-        up1 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        up2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        down1 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        down2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        left1 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        left2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        right1 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
-        right2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (gp.tilesize+(worldz)), (int) (gp.tilesize+(worldz)));
+        up1 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        up2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        down1 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        down2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        left1 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        left2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        right1 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
+        right2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
     }
     public boolean haveresource(LivingEntity sourceEntity){
         boolean haveresource = false;
@@ -58,17 +58,17 @@ public class OBJ_ROCK extends Projectile {
         if(up1 == null){
             getImageInstance();
         }
-        if(SourceEntity == gp.player || SourceEntity.EntityType == 2){
+        if(SourceEntity == GlobalGameThreadConfigs.player || SourceEntity.EntityType == 2){
             int monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
             if(monsterindex != 999){
                 attackEntity(monsterindex, AttackValue);
                 ParticlePropertyManager(SourceEntity.projectile, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][monsterindex]);
                 alive = false;
             }
-        }if(SourceEntity != gp.player && SourceEntity.EntityType == 1){
+        }if(SourceEntity != GlobalGameThreadConfigs.player && SourceEntity.EntityType == 1){
             boolean contactPlayer = gp.hregister.PlayerColide(this);
-            if(!gp.player.invincible && contactPlayer){
-                ParticlePropertyManager(SourceEntity.projectile, gp.player);
+            if(!GlobalGameThreadConfigs.player.invincible && contactPlayer){
+                ParticlePropertyManager(SourceEntity.projectile, GlobalGameThreadConfigs.player);
                 AttackPLayer(AttackValue);
                 alive = false;
             }
@@ -131,7 +131,7 @@ public class OBJ_ROCK extends Projectile {
             image = scaleimage(image, (int) (image.getWidth() - worldz), (int) (image.getHeight() - worldz));
         }
 
-        if(!gp.hregister.checktileworld((int) Math.round(worldx / gp.tilesize), (int) Math.round(worldy / gp.tilesize), (int) worldz)){
+        if(!gp.hregister.checktileworld((int) Math.round(worldx / GlobalGameThreadConfigs.tilesize), (int) Math.round(worldy / GlobalGameThreadConfigs.tilesize), (int) worldz)){
             alive = false;
         }
 

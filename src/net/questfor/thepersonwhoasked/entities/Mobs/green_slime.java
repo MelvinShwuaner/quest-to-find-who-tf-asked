@@ -30,14 +30,14 @@ public class green_slime extends LivingEntity {
         forgiveondeath = false;
     }
     public void getImageInstance() {
-        up1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", gp.tilesize, gp.tilesize);
-        up2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", gp.tilesize, gp.tilesize);
-        down1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", gp.tilesize, gp.tilesize);
-        down2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", gp.tilesize, gp.tilesize);
-        right1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", gp.tilesize, gp.tilesize);
-        right2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", gp.tilesize, gp.tilesize);
-        left1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", gp.tilesize, gp.tilesize);
-        left2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", gp.tilesize, gp.tilesize);
+        up1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        up2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        down1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        down2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        right1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        right2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        left1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+        left2 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_2", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
     public void setAction(){
         if(up1 == null){
@@ -69,8 +69,8 @@ public class green_slime extends LivingEntity {
     public void Angry() {
 
         if(target != null) {
-            taskx = Math.round(target.worldx/gp.tilesize);
-            tasky = Math.round(target.worldy/gp.tilesize);
+            taskx = Math.round(target.worldx/GlobalGameThreadConfigs.tilesize);
+            tasky = Math.round(target.worldy/GlobalGameThreadConfigs.tilesize);
             searchPath(taskx, tasky);
             int id = new Random().nextInt(100) + 1;
 

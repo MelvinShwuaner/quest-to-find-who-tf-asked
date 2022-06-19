@@ -37,16 +37,16 @@ public class UI  {
 
     public static boolean right = false, left = false; public static int stackamount = 1, code = 999;
     //STATS//
-    public static int frameX = gp.tilesize - 350;
-    public static int invX = (gp.tilesize * 13) + 350;
+    public static int frameX = GlobalGameThreadConfigs.tilesize - 350;
+    public static int invX = (GlobalGameThreadConfigs.tilesize * 13) + 350;
     public static String fullscreentext = "Windowed";
-    public static int dframeX = invX, frameY = gp.tilesize;
+    public static int dframeX = invX, frameY = GlobalGameThreadConfigs.tilesize;
     public static boolean transitionfinushed = false;
     public static int SlotCol = 0, slotRow = 0;
     public static int npcslotcol = 0, npcslotrow = 0;
     public static int commandnum = 0;
-    public static int frameWidth = gp.tilesize * 6;
-    public static int frameHeight = gp.tilesize * 10;
+    public static int frameWidth = GlobalGameThreadConfigs.tilesize * 6;
+    public static int frameHeight = GlobalGameThreadConfigs.tilesize * 10;
     public static boolean slotstate = false;
     public static int optionstate = 0;
     public static int tradestate = 0;
@@ -79,15 +79,15 @@ public class UI  {
             if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
                 drawPlayerBar();
                 displayAnimationOnScreen();
-                if (frameX != gp.tilesize - 350) {
+                if (frameX != GlobalGameThreadConfigs.tilesize - 350) {
                     displaySTATS();
-                    displayINV(gp.player, false, false);
+                    displayINV(GlobalGameThreadConfigs.player, false, false);
                 }
                 if (GlobalGameThreadConfigs.inchest) {
-                    if(Objects.equals(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].name, "chest"))
+                    if(Objects.equals(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].name, "chest"))
                       DisplayChest();
                 } else {
-                    frameHeight = gp.tilesize * 10;
+                    frameHeight = GlobalGameThreadConfigs.tilesize * 10;
                 }
                 if (!GlobalGameThreadConfigs.CharacterStats) {
                     drawMessages();
@@ -96,16 +96,16 @@ public class UI  {
                     if (!transitionfinushed) {
                         frameX += 5;
                         invX -= 5;
-                        dframeX = invX - (gp.tilesize * 3) - 24;
+                        dframeX = invX - (GlobalGameThreadConfigs.tilesize * 3) - 24;
                     }
-                    if (frameX == gp.tilesize - 45) {
+                    if (frameX == GlobalGameThreadConfigs.tilesize - 45) {
                         transitionfinushed = true;
                     }
                 } else {
-                    if (frameX != gp.tilesize - 350) {
+                    if (frameX != GlobalGameThreadConfigs.tilesize - 350) {
                         frameX -= 5;
                         invX += 5;
-                        dframeX = invX - (gp.tilesize * 3) - 24;
+                        dframeX = invX - (GlobalGameThreadConfigs.tilesize * 3) - 24;
                     } else {
                         transitionfinushed = false;
                     }
@@ -142,10 +142,10 @@ public class UI  {
             case "Furnace" -> DisplayFurnace();
             case "crafting" -> DisplayTable();
         }
-        int x = gp.tilesize * 2;
-        int y = gp.tilesize * 9;
-        int width = gp.tilesize * 6;
-        int height = gp.tilesize * 2;
+        int x = GlobalGameThreadConfigs.tilesize * 2;
+        int y = GlobalGameThreadConfigs.tilesize * 9;
+        int width = GlobalGameThreadConfigs.tilesize * 6;
+        int height = GlobalGameThreadConfigs.tilesize * 2;
         drawSubWindow(x, y, width, height);
         g2.drawString("[ESC] back", x + 24, y + 60);
     }
@@ -153,28 +153,28 @@ public class UI  {
         displayUI(npc, false);
         if(code != 999){
             int ItemIndex = getItemIndex();
-            if (ItemIndex < gp.player.inventory.size()) {
-                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code) == null){
-                    LivingEntity SelectedItem = gp.player.inventory.get(ItemIndex);
+            if (ItemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(code) == null){
+                    LivingEntity SelectedItem = GlobalGameThreadConfigs.player.inventory.get(ItemIndex);
                     if(stackamount > SelectedItem.stacksize){
                         stackamount = SelectedItem.stacksize;
                     }
                 SelectedItem.stacksize -= stackamount;
                 if (SelectedItem.stacksize <= 0) {
-                    gp.player.inventory.remove(SelectedItem);
+                    GlobalGameThreadConfigs.player.inventory.remove(SelectedItem);
                 }
                 LivingEntity newentity = createnewobject(SelectedItem);
                 newentity.stacksize = stackamount;
-                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(code, newentity);
+                GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.set(code, newentity);
             }
             }else{
-                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code) != null) {
-                    LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code);
-                    GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(code, null);
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(code) != null) {
+                    LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(code);
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.set(code, null);
 
                     LivingEntity newentity = createnewobject(SelectedItem);
                     newentity.stacksize = SelectedItem.stacksize;
-                    gp.player.inventory.add(newentity);
+                    GlobalGameThreadConfigs.player.inventory.add(newentity);
                 }
             }
             code = 999;
@@ -184,33 +184,33 @@ public class UI  {
                 if (GlobalGameThreadConfigs.Recipes[i] != null) {
                     for (int d = 0; d < 9; d++){
                         if (GlobalGameThreadConfigs.Recipes[i].Recipe[d] != null) {
-                            if((GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(d) != null)){
-                            if (Objects.equals(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(d).name, GlobalGameThreadConfigs.Recipes[i].Recipe[d].name)) {
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[d] = true;
+                            if((GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(d) != null)){
+                            if (Objects.equals(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(d).name, GlobalGameThreadConfigs.Recipes[i].Recipe[d].name)) {
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[d] = true;
                             }
                             }
                         }else {
-                            if ((GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(d) == null)) {
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[d] = true;
+                            if ((GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(d) == null)) {
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[d] = true;
                             }
                         }
                         if(d == 8){
-                            boolean cancraft = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[0] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[1] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[2] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[3] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[4] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[5] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[6] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[7] && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[8];
+                            boolean cancraft = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[0] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[1] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[2] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[3] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[4] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[5] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[6] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[7] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[8];
                             if(cancraft) {
                                 LivingEntity SelectedItem = createnewobject(GlobalGameThreadConfigs.Recipes[i].Result);
-                                gp.player.inventory.add(SelectedItem);
+                                GlobalGameThreadConfigs.player.inventory.add(SelectedItem);
                                 for (int a = 0; a < 9; a++){
-                                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(a) != null) {
-                                        GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(a).stacksize--;
-                                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(a).stacksize <= 0) {
-                                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(a, null);
+                                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(a) != null) {
+                                        GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(a).stacksize--;
+                                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(a).stacksize <= 0) {
+                                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.set(a, null);
                                         }
                                     }
                                 }
                                 i = GlobalGameThreadConfigs.Recipes.length;
                             }
                             for(int c = 0; c < 9; c++) {
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].slot[c] = false;
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[c] = false;
                             }
                         }
                 }
@@ -220,7 +220,7 @@ public class UI  {
         }
     }
     public static void displayAnimationOnScreen(){
-        if(gp.player.burning){
+        if(GlobalGameThreadConfigs.player.burning){
             GlobalGameThreadConfigs.animationcounter++;
             if (GlobalGameThreadConfigs.animationcounter >= 5) {
                 GlobalGameThreadConfigs.animationcounter = 0;
@@ -238,9 +238,9 @@ public class UI  {
         displayUI(npc, false);
         if (code != 999) {
             int ItemIndex = getItemIndex();
-            if (ItemIndex < gp.player.inventory.size()) {
-                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code) == null) {
-                    LivingEntity SelectedItem = gp.player.inventory.get(ItemIndex);
+            if (ItemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(code) == null) {
+                    LivingEntity SelectedItem = GlobalGameThreadConfigs.player.inventory.get(ItemIndex);
                     if (code == 0) {
                         if (SelectedItem.smeltable) {
                             if(stackamount > SelectedItem.stacksize){
@@ -248,11 +248,11 @@ public class UI  {
                             }
                             SelectedItem.stacksize -= stackamount;
                             if (SelectedItem.stacksize <= 0) {
-                                gp.player.inventory.remove(SelectedItem);
+                                GlobalGameThreadConfigs.player.inventory.remove(SelectedItem);
                             }
                             LivingEntity newentity = createnewobject(SelectedItem);
                             newentity.stacksize = stackamount;
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(code, newentity);
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.set(code, newentity);
                         }
                     } else if (code == 6) {
                         if (SelectedItem.fuel) {
@@ -261,57 +261,57 @@ public class UI  {
                             }
                             SelectedItem.stacksize -= stackamount;
                             if (SelectedItem.stacksize <= 0) {
-                                gp.player.inventory.remove(SelectedItem);
+                                GlobalGameThreadConfigs.player.inventory.remove(SelectedItem);
                             }
                             LivingEntity newentity = createnewobject(SelectedItem);
                             newentity.stacksize = stackamount;
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(code, newentity);
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.set(code, newentity);
                         }
                     }
 
                 }
             } else {
-                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code) != null) {
-                    LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(code);
+                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(code) != null) {
+                    LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(code);
                     if(stackamount > SelectedItem.stacksize){
                         stackamount = SelectedItem.stacksize;
                     }
                     SelectedItem.stacksize -= stackamount;
                     if (SelectedItem.stacksize <= 0) {
-                        GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.remove(SelectedItem);
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.remove(SelectedItem);
                     }
                     LivingEntity newentity = createnewobject(SelectedItem);
                     newentity.stacksize = stackamount;
-                    gp.player.inventory.add(newentity);
+                    GlobalGameThreadConfigs.player.inventory.add(newentity);
                 }
             }
             code = 999;
         }
 
-        int x = gp.tilesize * 12;
-        int y = gp.tilesize * 9;
-        int width = gp.tilesize * 6;
-        int height = gp.tilesize * 2;
+        int x = GlobalGameThreadConfigs.tilesize * 12;
+        int y = GlobalGameThreadConfigs.tilesize * 9;
+        int width = GlobalGameThreadConfigs.tilesize * 6;
+        int height = GlobalGameThreadConfigs.tilesize * 2;
         drawSubWindow(x, y, width, height);
 
-        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].smelting){
-        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].cool > 1 && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].cool <= GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].maxcool) {
-            double onescale = 200 / GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].maxcool;
-            double HPValue = onescale * GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].cool;
+        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].smelting){
+        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].cool > 1 && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].cool <= GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].maxcool) {
+            double onescale = 200 / GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].maxcool;
+            double HPValue = onescale * GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].cool;
             g2.setColor(Color.white);
             g2.fillRect((int) x+20, (int) y + 20, (int) HPValue, 30);
         }
     }
         if (KeyHandler.enterpressed) {
             KeyHandler.enterpressed = false;
-            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(0) != null && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(6) != null)
-              GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].smelting = true;
-            if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].hasfinushedcol == 2) {
-                if(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(5) != null) {
-                    LivingEntity SelectedItem = createnewobject(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(5));
-                    SelectedItem.stacksize = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(5).stacksize;
-                    gp.player.inventory.add(SelectedItem);
-                    GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.set(5, null);
+            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(0) != null && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(6) != null)
+              GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].smelting = true;
+            if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].hasfinushedcol == 2) {
+                if(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(5) != null) {
+                    LivingEntity SelectedItem = createnewobject(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(5));
+                    SelectedItem.stacksize = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(5).stacksize;
+                    GlobalGameThreadConfigs.player.inventory.add(SelectedItem);
+                    GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.set(5, null);
                 }
             }
         }
@@ -326,13 +326,13 @@ public class UI  {
     }
     public static void trade_select(){
         drawDialogueScreen();
-        int x = gp.tilesize*15;
-        int y = (int) (gp.tilesize*4.5);
-        int width = gp.tilesize*3;
-        int height = (int) (gp.tilesize*3.5);
+        int x = GlobalGameThreadConfigs.tilesize*15;
+        int y = (int) (GlobalGameThreadConfigs.tilesize*4.5);
+        int width = GlobalGameThreadConfigs.tilesize*3;
+        int height = (int) (GlobalGameThreadConfigs.tilesize*3.5);
         drawSubWindow(x, y, width, height);
-        x+=gp.tilesize;
-        y+=gp.tilesize;
+        x+=GlobalGameThreadConfigs.tilesize;
+        y+=GlobalGameThreadConfigs.tilesize;
         g2.drawString("Buy", x, y);
         if(commandnum == 0){
             g2.drawString(">", x-24, y);
@@ -341,7 +341,7 @@ public class UI  {
                 KeyHandler.enterpressed = false;
             }
         }
-        y+=gp.tilesize;
+        y+=GlobalGameThreadConfigs.tilesize;
         g2.drawString("Sell", x, y);
         if(commandnum == 1){
             g2.drawString(">", x-24, y);
@@ -350,7 +350,7 @@ public class UI  {
                 KeyHandler.enterpressed = false;
             }
         }
-        y+=gp.tilesize;
+        y+=GlobalGameThreadConfigs.tilesize;
         g2.drawString("Leave", x, y);
         if(commandnum == 2){
             g2.drawString(">", x-24, y);
@@ -365,25 +365,25 @@ public class UI  {
     }
     public static void trade_buy() {
         displayINV(npc, true, true);
-        int x = gp.tilesize * 2;
-        int y = gp.tilesize * 9;
-        int width = gp.tilesize * 6;
-        int height = gp.tilesize * 2;
+        int x = GlobalGameThreadConfigs.tilesize * 2;
+        int y = GlobalGameThreadConfigs.tilesize * 9;
+        int width = GlobalGameThreadConfigs.tilesize * 6;
+        int height = GlobalGameThreadConfigs.tilesize * 2;
         drawSubWindow(x, y, width, height);
         g2.drawString("[ESC] back", x + 24, y + 60);
-        x = gp.tilesize * 12;
-        y = gp.tilesize * 9;
-        width = gp.tilesize * 6;
-        height = gp.tilesize * 2;
+        x = GlobalGameThreadConfigs.tilesize * 12;
+        y = GlobalGameThreadConfigs.tilesize * 9;
+        width = GlobalGameThreadConfigs.tilesize * 6;
+        height = GlobalGameThreadConfigs.tilesize * 2;
         drawSubWindow(x, y, width, height);
         g2.setFont(g2.getFont().deriveFont(25f));
-        g2.drawString("your bobux: " + gp.player.bobux, x + 24, y + 60);
+        g2.drawString("your bobux: " + GlobalGameThreadConfigs.player.bobux, x + 24, y + 60);
         int itemindex = getnpcItemIndex();
         if (itemindex < npc.inventory.size()) {
-            x = (int) (gp.tilesize * 5.5);
-            y = (int) (gp.tilesize * 5.5);
-            width = (int) (gp.tilesize * 2.5);
-            height = gp.tilesize;
+            x = (int) (GlobalGameThreadConfigs.tilesize * 5.5);
+            y = (int) (GlobalGameThreadConfigs.tilesize * 5.5);
+            width = (int) (GlobalGameThreadConfigs.tilesize * 2.5);
+            height = GlobalGameThreadConfigs.tilesize;
             drawSubWindow(x, y, width, height);
             g2.drawImage(bobux, x + 10, y + 8, 32, 32, null);
             int stack= stackamount;
@@ -396,11 +396,11 @@ public class UI  {
             x += 42;
             g2.drawString(text, x, y + 30);
             if (KeyHandler.enterpressed) {
-                if ((npc.inventory.get(itemindex).Value*2)*stackamount > gp.player.bobux) {
+                if ((npc.inventory.get(itemindex).Value*2)*stackamount > GlobalGameThreadConfigs.player.bobux) {
                     GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
                     currentDialogue = "You need more bobux to buy that \n broke boy";
                     drawDialogueScreen();
-                } else if (gp.player.inventory.size() == gp.player.inventorysize) {
+                } else if (GlobalGameThreadConfigs.player.inventory.size() == GlobalGameThreadConfigs.player.inventorysize) {
                     tradestate = 0;
                     GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
                     currentDialogue = "Your inventory is full!";
@@ -408,7 +408,7 @@ public class UI  {
                     if(stackamount > npc.inventory.get(itemindex).stacksize){
                         stackamount = npc.inventory.get(itemindex).stacksize;
                     }
-                    gp.player.bobux -= (npc.inventory.get(itemindex).Value*2)*stackamount;
+                    GlobalGameThreadConfigs.player.bobux -= (npc.inventory.get(itemindex).Value*2)*stackamount;
                     LivingEntity SelectedItem = npc.inventory.get(itemindex);
                     if(stackamount > npc.inventory.get(itemindex).stacksize){
                         stackamount = npc.inventory.get(itemindex).stacksize;
@@ -419,7 +419,7 @@ public class UI  {
                     }
                     LivingEntity newItem = createnewobject(SelectedItem);
                     newItem.stacksize = stackamount;
-                    gp.player.inventory.add(newItem);
+                    GlobalGameThreadConfigs.player.inventory.add(newItem);
                     stackamount = 1;
                 }
             }
@@ -427,53 +427,53 @@ public class UI  {
     }
     public static void trade_sell(){
         displayINV(npc,true, false);
-        int x = gp.tilesize * 2;
-        int y = gp.tilesize * 9;
-        int width = gp.tilesize * 6;
-        int height = gp.tilesize * 2;
+        int x = GlobalGameThreadConfigs.tilesize * 2;
+        int y = GlobalGameThreadConfigs.tilesize * 9;
+        int width = GlobalGameThreadConfigs.tilesize * 6;
+        int height = GlobalGameThreadConfigs.tilesize * 2;
         drawSubWindow(x, y, width, height);
         g2.drawString("[ESC] back", x + 24, y + 60);
-        x = gp.tilesize * 12;
-        y = gp.tilesize * 9;
-        width = gp.tilesize * 6;
-        height = gp.tilesize * 2;
+        x = GlobalGameThreadConfigs.tilesize * 12;
+        y = GlobalGameThreadConfigs.tilesize * 9;
+        width = GlobalGameThreadConfigs.tilesize * 6;
+        height = GlobalGameThreadConfigs.tilesize * 2;
         drawSubWindow(x, y, width, height);
         g2.setFont(g2.getFont().deriveFont(25f));
-        g2.drawString("your bobux: " + gp.player.bobux, x + 24, y + 60);
+        g2.drawString("your bobux: " + GlobalGameThreadConfigs.player.bobux, x + 24, y + 60);
         int itemindex = getItemIndex();
-        if (itemindex < gp.player.inventory.size()) {
-            x = (int) (gp.tilesize * 15.5);
-            y = (int) (gp.tilesize * 5.5);
-            width = (int) (gp.tilesize * 2.5);
-            height = gp.tilesize;
+        if (itemindex < GlobalGameThreadConfigs.player.inventory.size()) {
+            x = (int) (GlobalGameThreadConfigs.tilesize * 15.5);
+            y = (int) (GlobalGameThreadConfigs.tilesize * 5.5);
+            width = (int) (GlobalGameThreadConfigs.tilesize * 2.5);
+            height = GlobalGameThreadConfigs.tilesize;
             drawSubWindow(x, y, width, height);
             g2.drawImage(bobux, x + 10, y + 8, 32, 32, null);
             int stack = stackamount;
-            if(stack > gp.player.inventory.get(itemindex).stacksize){
-                stack  =gp.player.inventory.get(itemindex).stacksize;
+            if(stack > GlobalGameThreadConfigs.player.inventory.get(itemindex).stacksize){
+                stack  =GlobalGameThreadConfigs.player.inventory.get(itemindex).stacksize;
             }
-            int price = (gp.player.inventory.get(itemindex).Value)*stack;
+            int price = (GlobalGameThreadConfigs.player.inventory.get(itemindex).Value)*stack;
             String text = "" + price;
             g2.setFont(g2.getFont().deriveFont(15f));
             x += 42;
             g2.drawString(text, x, y + 30);
             if (KeyHandler.enterpressed) {
-                if(gp.player.inventory.get(itemindex) == gp.player.currentshield || gp.player.inventory.get(itemindex) == gp.player.currentweapon){
+                if(GlobalGameThreadConfigs.player.inventory.get(itemindex) == GlobalGameThreadConfigs.player.currentshield || GlobalGameThreadConfigs.player.inventory.get(itemindex) == GlobalGameThreadConfigs.player.currentweapon){
                     commandnum = 0;
                     GlobalGameThreadConfigs.GameState =GlobalGameThreadConfigs.dialogueState;
                     currentDialogue = "you can not sell a equipped item! un equip it";
                 }else {
-                    LivingEntity SelectedItem = gp.player.inventory.get(itemindex);
-                    if(stackamount > gp.player.inventory.get(itemindex).stacksize){
-                        stackamount = gp.player.inventory.get(itemindex).stacksize;
+                    LivingEntity SelectedItem = GlobalGameThreadConfigs.player.inventory.get(itemindex);
+                    if(stackamount > GlobalGameThreadConfigs.player.inventory.get(itemindex).stacksize){
+                        stackamount = GlobalGameThreadConfigs.player.inventory.get(itemindex).stacksize;
                     }
-                    gp.player.inventory.get(itemindex).stacksize -= stackamount;
+                    GlobalGameThreadConfigs.player.inventory.get(itemindex).stacksize -= stackamount;
                     if (SelectedItem.stacksize <= 0) {
-                        gp.player.inventory.remove(itemindex);
+                        GlobalGameThreadConfigs.player.inventory.remove(itemindex);
                     }
                     LivingEntity newitem = createnewobject(SelectedItem);
                     newitem.stacksize = stackamount;
-                    gp.player.bobux += price;
+                    GlobalGameThreadConfigs.player.bobux += price;
                     npc.inventory.add(newitem);
                     for(int i = 0; i < npc.inventory.size(); i++){
                         if(npc.inventory.get(i) != null){
@@ -501,14 +501,14 @@ public class UI  {
         text = "Game Over";
         g2.setColor(Color.BLACK);
         x = getXforCenterText(text);
-        y = gp.tilesize * 4;
+        y = GlobalGameThreadConfigs.tilesize * 4;
         g2.drawString(text, x, y);
         g2.setColor(Color.WHITE);
         g2.drawString(text, x - 4, y);
         g2.setFont(g2.getFont().deriveFont(50F));
         text = "Retry";
         x = getXforCenterText(text);
-        y += gp.tilesize * 4;
+        y += GlobalGameThreadConfigs.tilesize * 4;
         g2.drawString(text, x, y);
         if (commandnum == 0) {
             g2.drawString(">", x - 40, y);
@@ -542,10 +542,10 @@ public class UI  {
     public static void drawoptionscreen() {
         g2.setColor(Color.white);
         g2.setFont(g2.getFont().deriveFont(24F));
-        int frameX = gp.tilesize*6;
-        int frameY = gp.tilesize;
-        int framewidth = gp.tilesize*8;
-        int frameheight = gp.tilesize*10;
+        int frameX = GlobalGameThreadConfigs.tilesize*6;
+        int frameY = GlobalGameThreadConfigs.tilesize;
+        int framewidth = GlobalGameThreadConfigs.tilesize*8;
+        int frameheight = GlobalGameThreadConfigs.tilesize*10;
         drawSubWindow(frameX, frameY , framewidth, frameheight);
         switch (optionstate){
             case 0: option_top(frameX, frameY); break;
@@ -555,8 +555,8 @@ public class UI  {
     }
 
     public static void EndGameConfirm(int frameX, int frameY) {
-        int textx = frameX + gp.tilesize;
-        int texty = frameY +gp.tilesize*3;
+        int textx = frameX + GlobalGameThreadConfigs.tilesize;
+        int texty = frameY +GlobalGameThreadConfigs.tilesize*3;
         currentDialogue = "Quit the game and return \n to title screen?";
 
         for(String line: currentDialogue.split("\n")){
@@ -565,7 +565,7 @@ public class UI  {
         }
         String text = "Yes";
         textx = getXforCenterText(text);
-        texty += gp.tilesize*3;
+        texty += GlobalGameThreadConfigs.tilesize*3;
         g2.drawString(text, textx, texty);
         if(commandnum == 0) {
             g2.drawString(">", textx - 25, texty);
@@ -579,7 +579,7 @@ public class UI  {
         }
         text = "No";
         textx = getXforCenterText(text);
-        texty += gp.tilesize;
+        texty += GlobalGameThreadConfigs.tilesize;
         g2.drawString(text, textx, texty);
         if(commandnum == 1){
             g2.drawString(">", textx-25, texty);
@@ -597,11 +597,11 @@ public class UI  {
         int textY;
         String text = "options";
         textX = getXforCenterText(text);
-        textY = framey+gp.tilesize;
+        textY = framey+GlobalGameThreadConfigs.tilesize;
         g2.drawString(text, textX, textY);
 
-        textX = framex + gp.tilesize;
-        textY += gp.tilesize*2;
+        textX = framex + GlobalGameThreadConfigs.tilesize;
+        textY += GlobalGameThreadConfigs.tilesize*2;
         g2.drawString("size: "+fullscreentext, textX, textY);
         if(commandnum == 0) {
             g2.drawString(">", textX - 25, textY);
@@ -618,17 +618,17 @@ public class UI  {
                 MainGame.togglefullscreen();
         }
         }
-        textY += gp.tilesize;
+        textY += GlobalGameThreadConfigs.tilesize;
         g2.drawString("Music Volume", textX, textY);
         if(commandnum == 1){
             g2.drawString(">", textX-25, textY);
         }
-        textY += gp.tilesize;
+        textY += GlobalGameThreadConfigs.tilesize;
         g2.drawString("Sound Volume", textX, textY);
         if(commandnum == 2){
             g2.drawString(">", textX-25, textY);
         }
-        textY += gp.tilesize;
+        textY += GlobalGameThreadConfigs.tilesize;
         g2.drawString("Controls", textX, textY);
         if(commandnum == 3){
             g2.drawString(">", textX-25, textY);
@@ -638,7 +638,7 @@ public class UI  {
                 commandnum = 1;
             }
         }
-        textY += gp.tilesize;
+        textY += GlobalGameThreadConfigs.tilesize;
         g2.drawString("Leave Game", textX, textY);
         if(commandnum == 4){
             g2.drawString(">", textX-25, textY);
@@ -648,7 +648,7 @@ public class UI  {
                 KeyHandler.enterpressed = false;
             }
         }
-        textY += gp.tilesize;
+        textY += GlobalGameThreadConfigs.tilesize;
         g2.drawString("Save Data", textX, textY);
         if(commandnum == 5){
             g2.drawString(">", textX-25, textY);
@@ -663,7 +663,7 @@ public class UI  {
                     GlobalSaveManager.saveplayerworlddata();
             }
         }
-        textY += gp.tilesize;
+        textY += GlobalGameThreadConfigs.tilesize;
         if(commandnum == 6){
             g2.drawString(">", textX-25, textY);
             if(KeyHandler.enterpressed){
@@ -675,14 +675,14 @@ public class UI  {
         g2.drawString("Exit And Save", textX, textY);
 
         g2.setStroke(new BasicStroke(3));
-        textX = framex + gp.tilesize*5;
+        textX = framex + GlobalGameThreadConfigs.tilesize*5;
 
-        textY = framey + gp.tilesize*3 + 27;
+        textY = framey + GlobalGameThreadConfigs.tilesize*3 + 27;
         g2.drawRect(textX, textY, 120, 24);
         int volumewidth = 24*gp.music.volumescale;
         g2.fillRect(textX, textY, volumewidth, 24);
 
-        textY += gp.tilesize;
+        textY += GlobalGameThreadConfigs.tilesize;
         g2.drawRect(textX, textY, 120, 24);
         volumewidth = 24*gp.sound.volumescale;
         g2.fillRect(textX, textY, volumewidth, 24);
@@ -692,7 +692,7 @@ public class UI  {
         int textY;
         String text = "Controls";textX = getXforCenterText(text);
         g2.setFont(g2.getFont().deriveFont(15F));
-        textY = framey+gp.tilesize;
+        textY = framey+GlobalGameThreadConfigs.tilesize;
         g2.drawString(text, textX, textY);
         textX = framex + 96;
         textY += 24;
@@ -748,48 +748,48 @@ public class UI  {
     }
 
     public static void DisplayChest() {
-        frameHeight = gp.tilesize * 5;
+        frameHeight = GlobalGameThreadConfigs.tilesize * 5;
         //SLOTS
         final int slotXstart = frameX + 20;
         final int slotYstart = frameY + 20;
         int slotX = slotXstart;
         int slotY = slotYstart;
-        for (int i = 0; i < GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size(); i++) {
-            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(i).first){
+        for (int i = 0; i < GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.size(); i++) {
+            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(i).first){
                 g2.setColor(Color.red);
-                g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
-            }else if(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(i).secound){
+                g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
+            }else if(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(i).secound){
                 g2.setColor(Color.blue);
-                g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
+                g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
             }
-            g2.drawImage(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(i).down1, slotX, slotY, null);
+            g2.drawImage(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(i).down1, slotX, slotY, null);
             g2.setColor(Color.white);
-            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(i).maxstacksize > 1)
-              g2.drawString(""+GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(i).stacksize, slotX, slotY+10);
-            slotX += gp.tilesize;
+            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(i).maxstacksize > 1)
+              g2.drawString(""+GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(i).stacksize, slotX, slotY+10);
+            slotX += GlobalGameThreadConfigs.tilesize;
             if (i == 4 || i == 9 || i == 14) {
                 slotX = slotXstart;
-                slotY += gp.tilesize;
+                slotY += GlobalGameThreadConfigs.tilesize;
             }
         }
         selectItem();
         if (slotstate) {
-            int cursorX = slotXstart + (gp.tilesize * SlotCol);
-            int cursorY = slotYstart + (gp.tilesize * slotRow);
-            int cursorwidth = gp.tilesize;
-            int cursorheight = gp.tilesize;
+            int cursorX = slotXstart + (GlobalGameThreadConfigs.tilesize * SlotCol);
+            int cursorY = slotYstart + (GlobalGameThreadConfigs.tilesize * slotRow);
+            int cursorwidth = GlobalGameThreadConfigs.tilesize;
+            int cursorheight = GlobalGameThreadConfigs.tilesize;
             g2.setStroke(new BasicStroke(3));
             g2.setColor(Color.white);
             g2.drawRoundRect(cursorX, cursorY, cursorwidth, cursorheight, 10, 10);
             int dframeY = frameY + +frameHeight;
-            int dframewidth = frameWidth * 2 - ((gp.tilesize * 2) + 24);
-            int dframeheight = gp.tilesize * 3;
+            int dframewidth = frameWidth * 2 - ((GlobalGameThreadConfigs.tilesize * 2) + 24);
+            int dframeheight = GlobalGameThreadConfigs.tilesize * 3;
             int textx = (dframeX + 20);
-            int texty = dframeY + gp.tilesize;
+            int texty = dframeY + GlobalGameThreadConfigs.tilesize;
             int itemIndex = getItemIndex();
-            if (itemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size()) {
+            if (itemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.size()) {
                 drawSubWindow(dframeX, dframeY, dframewidth, dframeheight);
-                for (String line : GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex).description.split("\n")) {
+                for (String line : GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex).description.split("\n")) {
                     g2.drawString(line, textx, texty);
                     texty += 32;
                 }
@@ -799,25 +799,25 @@ public class UI  {
             if(KeyHandler.use){
                 KeyHandler.use = false;
                 if(!merging) {
-                    if (itemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size()){
-                        if (!GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex).first)
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex).first = true;
-                    merger = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex);
+                    if (itemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.size()){
+                        if (!GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex).first)
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex).first = true;
+                    merger = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex);
                     merging = true;
                     mergerindex = itemIndex;
                 }
                 }else if(!mergingg) {
-                    if (itemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size()){
-                        if (!GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex).first) {
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex).secound = true;
-                            if (merger.maxstacksize > 1 && GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex).maxstacksize > 1) {
+                    if (itemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.size()){
+                        if (!GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex).first) {
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex).secound = true;
+                            if (merger.maxstacksize > 1 && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex).maxstacksize > 1) {
                                 mergingg = true;
-                                mergerr = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex);
+                                mergerr = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex);
                             } else {
                                 merging = false;
                                 merger = null;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(itemIndex).secound = false;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(mergerindex).first = false;
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(itemIndex).secound = false;
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(mergerindex).first = false;
                             }
                         }
                     }else{
@@ -828,11 +828,11 @@ public class UI  {
                         merger.first = false;
                         merging = false;
                         if(merger.stacksize <= 0){
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.remove(merger);
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.remove(merger);
                         }
                         LivingEntity newentity = createnewobject(merger);
                         newentity.stacksize = stackamount;
-                        GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.add(newentity);
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.add(newentity);
                         stackamount = 1;
                     }
                 }else {
@@ -845,7 +845,7 @@ public class UI  {
                         merger.stacksize-= stackamount;
                         mergerr.stacksize += stackamount;
                         if (merger.stacksize <= 0) {
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.remove(merger);
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.remove(merger);
                         }
                         mergerr.secound = false;
                         merger.first = false;
@@ -868,55 +868,55 @@ public class UI  {
     public static void displayINV(LivingEntity entity, boolean npc, boolean cursor) {
         //FRAME
         if (GlobalGameThreadConfigs.CharacterStats || transitionfinushed){
-        int frameWidth = gp.tilesize * 6;
-        int frameHeight = gp.tilesize * 5;
+        int frameWidth = GlobalGameThreadConfigs.tilesize * 6;
+        int frameHeight = GlobalGameThreadConfigs.tilesize * 5;
         drawSubWindow(invX, frameY, frameWidth, frameHeight);
         //SLOTS
        final int slotXstart = invX + 20;
         final int slotYstart = frameY + 20;
         int slotX = slotXstart;
         int slotY = slotYstart;
-        for (int i = 0; i < gp.player.inventory.size(); i++) {
-            if (gp.player.inventory.get(i) == gp.player.currentweapon || gp.player.inventory.get(i) == gp.player.currentshield) {
+        for (int i = 0; i < GlobalGameThreadConfigs.player.inventory.size(); i++) {
+            if (GlobalGameThreadConfigs.player.inventory.get(i) == GlobalGameThreadConfigs.player.currentweapon || GlobalGameThreadConfigs.player.inventory.get(i) == GlobalGameThreadConfigs.player.currentshield) {
                 g2.setColor(new Color(0xFFFF00));
-                g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
+                g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
             }
-            if(gp.player.inventory.get(i).first){
+            if(GlobalGameThreadConfigs.player.inventory.get(i).first){
                 g2.setColor(Color.red);
-                g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
-            }else if(gp.player.inventory.get(i).secound){
+                g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
+            }else if(GlobalGameThreadConfigs.player.inventory.get(i).secound){
                 g2.setColor(Color.blue);
-                g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
+                g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
             }
-            g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
+            g2.drawImage(GlobalGameThreadConfigs.player.inventory.get(i).down1, slotX, slotY, null);
             g2.setColor(Color.white);
-            if(gp.player.inventory.get(i).maxstacksize > 1)
-              g2.drawString(""+gp.player.inventory.get(i).stacksize, slotX, slotY+10);
-            slotX += gp.tilesize;
+            if(GlobalGameThreadConfigs.player.inventory.get(i).maxstacksize > 1)
+              g2.drawString(""+GlobalGameThreadConfigs.player.inventory.get(i).stacksize, slotX, slotY+10);
+            slotX += GlobalGameThreadConfigs.tilesize;
             if (i == 4 || i == 9 || i == 14) {
                 slotX = slotXstart;
-                slotY += gp.tilesize;
+                slotY += GlobalGameThreadConfigs.tilesize;
             }
         }
         if (!slotstate || !GlobalGameThreadConfigs.inchest) {
             if (!cursor) {
-                int cursorX = slotXstart + (gp.tilesize * SlotCol);
-                int cursorY = slotYstart + (gp.tilesize * slotRow);
-                int cursorwidth = gp.tilesize;
-                int cursorheight = gp.tilesize;
+                int cursorX = slotXstart + (GlobalGameThreadConfigs.tilesize * SlotCol);
+                int cursorY = slotYstart + (GlobalGameThreadConfigs.tilesize * slotRow);
+                int cursorwidth = GlobalGameThreadConfigs.tilesize;
+                int cursorheight = GlobalGameThreadConfigs.tilesize;
                 g2.setStroke(new BasicStroke(3));
                 g2.setColor(Color.white);
                 g2.drawRoundRect(cursorX, cursorY, cursorwidth, cursorheight, 10, 10);
                 int dframeY = frameY + +frameHeight;
-                int dframewidth = frameWidth * 2 - ((gp.tilesize * 2) + 24);
-                int dframeheight = gp.tilesize * 3;
+                int dframewidth = frameWidth * 2 - ((GlobalGameThreadConfigs.tilesize * 2) + 24);
+                int dframeheight = GlobalGameThreadConfigs.tilesize * 3;
                 int textx = (dframeX + 20);
-                int texty = dframeY + gp.tilesize;
+                int texty = dframeY + GlobalGameThreadConfigs.tilesize;
                 int itemIndex = getItemIndex();
                 togglestack(itemIndex);
-                if (itemIndex < gp.player.inventory.size()) {
+                if (itemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
                     drawSubWindow(dframeX, dframeY, dframewidth, dframeheight);
-                    for (String line : gp.player.inventory.get(itemIndex).description.split("\n")) {
+                    for (String line : GlobalGameThreadConfigs.player.inventory.get(itemIndex).description.split("\n")) {
                         g2.drawString(line, textx, texty);
                         texty += 32;
                     }
@@ -927,26 +927,26 @@ public class UI  {
                     KeyHandler.use = false;
                     if(!merging){
 
-                        if(itemIndex < gp.player.inventory.size()) {
-                            if (!gp.player.inventory.get(itemIndex).first)
-                                gp.player.inventory.get(itemIndex).first = true;
-                            merger = gp.player.inventory.get(itemIndex);
+                        if(itemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
+                            if (!GlobalGameThreadConfigs.player.inventory.get(itemIndex).first)
+                                GlobalGameThreadConfigs.player.inventory.get(itemIndex).first = true;
+                            merger = GlobalGameThreadConfigs.player.inventory.get(itemIndex);
                             merging = true;
                             mergerindex = itemIndex;
                         }
                     }else if(!mergingg) {
-                        if (itemIndex < gp.player.inventory.size()){
+                        if (itemIndex < GlobalGameThreadConfigs.player.inventory.size()){
 
-                            if (!gp.player.inventory.get(itemIndex).first) {
-                                gp.player.inventory.get(itemIndex).secound = true;
-                                if (merger.maxstacksize > 1 && gp.player.inventory.get(itemIndex).maxstacksize > 1) {
+                            if (!GlobalGameThreadConfigs.player.inventory.get(itemIndex).first) {
+                                GlobalGameThreadConfigs.player.inventory.get(itemIndex).secound = true;
+                                if (merger.maxstacksize > 1 && GlobalGameThreadConfigs.player.inventory.get(itemIndex).maxstacksize > 1) {
                                     mergingg = true;
-                                    mergerr = gp.player.inventory.get(itemIndex);
+                                    mergerr = GlobalGameThreadConfigs.player.inventory.get(itemIndex);
                                 } else {
                                     merging = false;
                                     merger = null;
-                                    gp.player.inventory.get(itemIndex).secound = false;
-                                    gp.player.inventory.get(mergerindex).first = false;
+                                    GlobalGameThreadConfigs.player.inventory.get(itemIndex).secound = false;
+                                    GlobalGameThreadConfigs.player.inventory.get(mergerindex).first = false;
                                 }
                             }
                     }else{
@@ -957,11 +957,11 @@ public class UI  {
                             merger.first = false;
                             merging = false;
                             if(merger.stacksize <= 0){
-                                gp.player.inventory.remove(merger);
+                                GlobalGameThreadConfigs.player.inventory.remove(merger);
                             }
                             LivingEntity newentity = createnewobject(merger);
                             newentity.stacksize = stackamount;
-                            gp.player.inventory.add(newentity);
+                            GlobalGameThreadConfigs.player.inventory.add(newentity);
                             stackamount = 1;
                         }
                     }else if(mergerr != null){
@@ -972,7 +972,7 @@ public class UI  {
                             merger.stacksize-= stackamount;
                             mergerr.stacksize += stackamount;
                                 if (merger.stacksize <= 0) {
-                                    gp.player.inventory.remove(merger);
+                                    GlobalGameThreadConfigs.player.inventory.remove(merger);
                                 }
                             mergerr.secound = false;
                             merger.first = false;
@@ -995,56 +995,56 @@ public class UI  {
             }
         }
     }else{
-            int framex = gp.tilesize*12;
-            int frameWidth = gp.tilesize * 6;
-            int frameHeight = gp.tilesize * 5;
+            int framex = GlobalGameThreadConfigs.tilesize*12;
+            int frameWidth = GlobalGameThreadConfigs.tilesize * 6;
+            int frameHeight = GlobalGameThreadConfigs.tilesize * 5;
             drawSubWindow(framex, frameY, frameWidth, frameHeight);
             //SLOTS
             final int slotXstart = framex + 20;
             final int slotYstart = frameY + 20;
             int slotX = slotXstart;
             int slotY = slotYstart;
-            for (int i = 0; i < gp.player.inventory.size(); i++) {
-                if (gp.player.inventory.get(i) == gp.player.currentweapon || gp.player.inventory.get(i) == gp.player.currentshield) {
+            for (int i = 0; i < GlobalGameThreadConfigs.player.inventory.size(); i++) {
+                if (GlobalGameThreadConfigs.player.inventory.get(i) == GlobalGameThreadConfigs.player.currentweapon || GlobalGameThreadConfigs.player.inventory.get(i) == GlobalGameThreadConfigs.player.currentshield) {
                     g2.setColor(new Color(0xFFFF00));
-                    g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
+                    g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
                 }
-                if(gp.player.inventory.get(i).first){
+                if(GlobalGameThreadConfigs.player.inventory.get(i).first){
                     g2.setColor(Color.red);
-                    g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
-                }else if(gp.player.inventory.get(i).secound){
+                    g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
+                }else if(GlobalGameThreadConfigs.player.inventory.get(i).secound){
                     g2.setColor(Color.blue);
-                    g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
+                    g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
                 }
-                g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
+                g2.drawImage(GlobalGameThreadConfigs.player.inventory.get(i).down1, slotX, slotY, null);
                 g2.setColor(Color.white);
-                g2.drawString(""+gp.player.inventory.get(i).stacksize, slotX, slotY);
-                slotX += gp.tilesize;
+                g2.drawString(""+GlobalGameThreadConfigs.player.inventory.get(i).stacksize, slotX, slotY);
+                slotX += GlobalGameThreadConfigs.tilesize;
                 if (i == 4 || i == 9 || i == 14) {
                     slotX = slotXstart;
-                    slotY += gp.tilesize;
+                    slotY += GlobalGameThreadConfigs.tilesize;
                 }
             }
             if (!slotstate || !GlobalGameThreadConfigs.inchest) {
                 if (!cursor) {
-                    int cursorX = slotXstart + (gp.tilesize * SlotCol);
-                    int cursorY = slotYstart + (gp.tilesize * slotRow);
-                    int cursorwidth = gp.tilesize;
-                    int cursorheight = gp.tilesize;
+                    int cursorX = slotXstart + (GlobalGameThreadConfigs.tilesize * SlotCol);
+                    int cursorY = slotYstart + (GlobalGameThreadConfigs.tilesize * slotRow);
+                    int cursorwidth = GlobalGameThreadConfigs.tilesize;
+                    int cursorheight = GlobalGameThreadConfigs.tilesize;
                     g2.setStroke(new BasicStroke(3));
                     g2.setColor(Color.white);
                     g2.drawRoundRect(cursorX, cursorY, cursorwidth, cursorheight, 10, 10);
                     int dframeY = frameY + +frameHeight;
-                    int dframewidth = frameWidth * 2 - ((gp.tilesize * 4));
-                    int dframeheight = gp.tilesize * 3;
-                    framex -= gp.tilesize;
+                    int dframewidth = frameWidth * 2 - ((GlobalGameThreadConfigs.tilesize * 4));
+                    int dframeheight = GlobalGameThreadConfigs.tilesize * 3;
+                    framex -= GlobalGameThreadConfigs.tilesize;
                     int textx = (framex+ 20);
-                    int texty = dframeY + gp.tilesize;
+                    int texty = dframeY + GlobalGameThreadConfigs.tilesize;
                     int itemIndex = getItemIndex();
                     togglestack(itemIndex);
-                    if (itemIndex < gp.player.inventory.size()) {
+                    if (itemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
                         drawSubWindow(framex, dframeY, dframewidth, dframeheight);
-                        for (String line : gp.player.inventory.get(itemIndex).description.split("\n")) {
+                        for (String line : GlobalGameThreadConfigs.player.inventory.get(itemIndex).description.split("\n")) {
                             g2.drawString(line, textx, texty);
                             texty += 32;
                         }
@@ -1055,27 +1055,27 @@ public class UI  {
                         KeyHandler.use = false;
                         if(!merging){
 
-                            if(itemIndex < gp.player.inventory.size()) {
-                                if (!gp.player.inventory.get(itemIndex).first)
-                                    gp.player.inventory.get(itemIndex).first = true;
-                                merger = gp.player.inventory.get(itemIndex);
+                            if(itemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
+                                if (!GlobalGameThreadConfigs.player.inventory.get(itemIndex).first)
+                                    GlobalGameThreadConfigs.player.inventory.get(itemIndex).first = true;
+                                merger = GlobalGameThreadConfigs.player.inventory.get(itemIndex);
                                 merging = true;
                                 mergerindex = itemIndex;
                             }
                         }else if(!mergingg) {
 
-                            if (itemIndex < gp.player.inventory.size()){
-                                if (!gp.player.inventory.get(itemIndex).first) {
+                            if (itemIndex < GlobalGameThreadConfigs.player.inventory.size()){
+                                if (!GlobalGameThreadConfigs.player.inventory.get(itemIndex).first) {
 
-                                    gp.player.inventory.get(itemIndex).secound = true;
-                                    if (merger.maxstacksize > 1 && gp.player.inventory.get(itemIndex).maxstacksize > 1) {
+                                    GlobalGameThreadConfigs.player.inventory.get(itemIndex).secound = true;
+                                    if (merger.maxstacksize > 1 && GlobalGameThreadConfigs.player.inventory.get(itemIndex).maxstacksize > 1) {
                                         mergingg = true;
-                                        mergerr = gp.player.inventory.get(itemIndex);
+                                        mergerr = GlobalGameThreadConfigs.player.inventory.get(itemIndex);
                                     } else {
                                         merging = false;
                                         merger = null;
-                                        gp.player.inventory.get(itemIndex).secound = false;
-                                        gp.player.inventory.get(mergerindex).first = false;
+                                        GlobalGameThreadConfigs.player.inventory.get(itemIndex).secound = false;
+                                        GlobalGameThreadConfigs.player.inventory.get(mergerindex).first = false;
                                     }
                                 }
                             }else{
@@ -1087,10 +1087,10 @@ public class UI  {
                                 merging = false;
                                 LivingEntity newentity = createnewobject(merger);
                                 newentity.stacksize = stackamount;
-                                gp.player.inventory.add(newentity);
+                                GlobalGameThreadConfigs.player.inventory.add(newentity);
                                 stackamount = 1;
                                 if(merger.stacksize <= 0){
-                                    gp.player.inventory.remove(merger);
+                                    GlobalGameThreadConfigs.player.inventory.remove(merger);
                                 }
                             }
                         }else {
@@ -1102,7 +1102,7 @@ public class UI  {
                                 merger.stacksize-= stackamount;
                                 mergerr.stacksize += stackamount;
                                 if (merger.stacksize <= 0) {
-                                    gp.player.inventory.remove(merger);
+                                    GlobalGameThreadConfigs.player.inventory.remove(merger);
                                 }
                                 mergerr.secound = false;
                                 merger.first = false;
@@ -1120,10 +1120,10 @@ public class UI  {
             }
         }
         if(npc) {
-            int frameX = gp.tilesize * 2;
-            int frameY = gp.tilesize;
-            int framewidth = gp.tilesize * 6;
-            int frameheight = gp.tilesize * 5;
+            int frameX = GlobalGameThreadConfigs.tilesize * 2;
+            int frameY = GlobalGameThreadConfigs.tilesize;
+            int framewidth = GlobalGameThreadConfigs.tilesize * 6;
+            int frameheight = GlobalGameThreadConfigs.tilesize * 5;
             int slotcol = npcslotcol;
             int slotrow = npcslotrow;
             drawSubWindow(frameX, frameY, framewidth, frameheight);
@@ -1137,25 +1137,25 @@ public class UI  {
                 g2.setColor(Color.white);
                 if(entity.inventory.get(i).maxstacksize > 1)
                   g2.drawString(""+entity.inventory.get(i).stacksize, slotx, sloty+10);
-                slotx += gp.tilesize;
+                slotx += GlobalGameThreadConfigs.tilesize;
                 if (i == 4 || i == 9 || i == 14) {
                     slotx = slotxstart;
-                    sloty += gp.tilesize;
+                    sloty += GlobalGameThreadConfigs.tilesize;
                 }
             }
             if (cursor) {
-                int cursorX = slotxstart + (gp.tilesize * slotcol);
-                int cursorY = slotystart + (gp.tilesize * slotrow);
-                int cursorwidth = gp.tilesize;
-                int cursorheight = gp.tilesize;
+                int cursorX = slotxstart + (GlobalGameThreadConfigs.tilesize * slotcol);
+                int cursorY = slotystart + (GlobalGameThreadConfigs.tilesize * slotrow);
+                int cursorwidth = GlobalGameThreadConfigs.tilesize;
+                int cursorheight = GlobalGameThreadConfigs.tilesize;
                 g2.setStroke(new BasicStroke(3));
                 g2.setColor(Color.white);
                 g2.drawRoundRect(cursorX, cursorY, cursorwidth, cursorheight, 10, 10);
                 int dframeY = frameY +frameheight;
-                int dframewidth = frameWidth * 2 - ((gp.tilesize * 2) + 24);
-                int dframeheight = gp.tilesize * 3;
+                int dframewidth = frameWidth * 2 - ((GlobalGameThreadConfigs.tilesize * 2) + 24);
+                int dframeheight = GlobalGameThreadConfigs.tilesize * 3;
                 int textx = (frameX + 20);
-                int texty = dframeY + gp.tilesize;
+                int texty = dframeY + GlobalGameThreadConfigs.tilesize;
                 int itemIndex = getnpcItemIndex();
                 togglenpcstack(itemIndex, entity);
                 if (itemIndex < entity.inventory.size()) {
@@ -1171,59 +1171,59 @@ public class UI  {
         }
     }
     public static void displayUI(LivingEntity entity, boolean cursor) {
-            int framex = gp.tilesize*12;
-            int frameWidth = gp.tilesize * 6;
-            int frameHeight = gp.tilesize * 5;
+            int framex = GlobalGameThreadConfigs.tilesize*12;
+            int frameWidth = GlobalGameThreadConfigs.tilesize * 6;
+            int frameHeight = GlobalGameThreadConfigs.tilesize * 5;
             drawSubWindow(framex, frameY, frameWidth, frameHeight);
             //SLOTS
             final int slotXstart = framex + 20;
             final int slotYstart = frameY + 20;
             int slotX = slotXstart;
             int slotY = slotYstart;
-            for (int i = 0; i < gp.player.inventory.size(); i++) {
-                if (gp.player.inventory.get(i) == gp.player.currentweapon || gp.player.inventory.get(i) == gp.player.currentshield) {
+            for (int i = 0; i < GlobalGameThreadConfigs.player.inventory.size(); i++) {
+                if (GlobalGameThreadConfigs.player.inventory.get(i) == GlobalGameThreadConfigs.player.currentweapon || GlobalGameThreadConfigs.player.inventory.get(i) == GlobalGameThreadConfigs.player.currentshield) {
                     g2.setColor(new Color(0xFFFF00));
-                    g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
+                    g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
                 }
-                if(gp.player.inventory.get(i).first){
+                if(GlobalGameThreadConfigs.player.inventory.get(i).first){
                     g2.setColor(Color.red);
-                    g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
-                }else if(gp.player.inventory.get(i).secound){
+                    g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
+                }else if(GlobalGameThreadConfigs.player.inventory.get(i).secound){
                     g2.setColor(Color.blue);
-                    g2.fillRoundRect(slotX, slotY, gp.tilesize, gp.tilesize, 10, 10);
+                    g2.fillRoundRect(slotX, slotY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize, 10, 10);
                 }
-                g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
+                g2.drawImage(GlobalGameThreadConfigs.player.inventory.get(i).down1, slotX, slotY, null);
                 g2.setColor(Color.white);
-                g2.drawString(""+gp.player.inventory.get(i).stacksize, slotX, slotY);
-                slotX += gp.tilesize;
+                g2.drawString(""+GlobalGameThreadConfigs.player.inventory.get(i).stacksize, slotX, slotY);
+                slotX += GlobalGameThreadConfigs.tilesize;
                 if (i == 4 || i == 9 || i == 14) {
                     slotX = slotXstart;
-                    slotY += gp.tilesize;
+                    slotY += GlobalGameThreadConfigs.tilesize;
                 }
             }
             if (!slotstate || !GlobalGameThreadConfigs.inchest) {
                 if (!cursor) {
-                    int cursorX = slotXstart + (gp.tilesize * SlotCol);
-                    int cursorY = slotYstart + (gp.tilesize * slotRow);
-                    int cursorwidth = gp.tilesize;
-                    int cursorheight = gp.tilesize;
+                    int cursorX = slotXstart + (GlobalGameThreadConfigs.tilesize * SlotCol);
+                    int cursorY = slotYstart + (GlobalGameThreadConfigs.tilesize * slotRow);
+                    int cursorwidth = GlobalGameThreadConfigs.tilesize;
+                    int cursorheight = GlobalGameThreadConfigs.tilesize;
                     g2.setStroke(new BasicStroke(3));
                     g2.setColor(Color.white);
                     g2.drawRoundRect(cursorX, cursorY, cursorwidth, cursorheight, 10, 10);
                     int dframeY = frameY + +frameHeight;
-                    int dframewidth = frameWidth * 2 - ((gp.tilesize * 4));
-                    int dframeheight = gp.tilesize * 3;
-                    framex -= gp.tilesize;
+                    int dframewidth = frameWidth * 2 - ((GlobalGameThreadConfigs.tilesize * 4));
+                    int dframeheight = GlobalGameThreadConfigs.tilesize * 3;
+                    framex -= GlobalGameThreadConfigs.tilesize;
                     int textx = (framex+ 20);
-                    int texty = dframeY + gp.tilesize;
+                    int texty = dframeY + GlobalGameThreadConfigs.tilesize;
                     int itemIndex = getItemIndex();
                     togglestack(itemIndex);
-                    if (itemIndex < gp.player.inventory.size()) {
-                        if(gp.player.inventory.get(itemIndex).stacksize < stackamount){
-                            stackamount = gp.player.inventory.get(itemIndex).stacksize;
+                    if (itemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
+                        if(GlobalGameThreadConfigs.player.inventory.get(itemIndex).stacksize < stackamount){
+                            stackamount = GlobalGameThreadConfigs.player.inventory.get(itemIndex).stacksize;
                         }
                         drawSubWindow(framex, dframeY, dframewidth, dframeheight);
-                        for (String line : gp.player.inventory.get(itemIndex).description.split("\n")) {
+                        for (String line : GlobalGameThreadConfigs.player.inventory.get(itemIndex).description.split("\n")) {
                             g2.drawString(line, textx, texty);
                             texty += 32;
                         }
@@ -1233,25 +1233,25 @@ public class UI  {
                     if(KeyHandler.use){
                         KeyHandler.use = false;
                         if(!merging){
-                            if(itemIndex < gp.player.inventory.size()) {
-                                if (!gp.player.inventory.get(itemIndex).first)
-                                    gp.player.inventory.get(itemIndex).first = true;
-                                merger = gp.player.inventory.get(itemIndex);
+                            if(itemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
+                                if (!GlobalGameThreadConfigs.player.inventory.get(itemIndex).first)
+                                    GlobalGameThreadConfigs.player.inventory.get(itemIndex).first = true;
+                                merger = GlobalGameThreadConfigs.player.inventory.get(itemIndex);
                                 merging = true;
                                 mergerindex = itemIndex;
                             }
                         }else if(!mergingg) {
-                            if (itemIndex < gp.player.inventory.size()){
-                                if (!gp.player.inventory.get(itemIndex).first) {
-                                    gp.player.inventory.get(itemIndex).secound = true;
-                                    if (merger.maxstacksize > 1 && gp.player.inventory.get(itemIndex).maxstacksize > 1) {
+                            if (itemIndex < GlobalGameThreadConfigs.player.inventory.size()){
+                                if (!GlobalGameThreadConfigs.player.inventory.get(itemIndex).first) {
+                                    GlobalGameThreadConfigs.player.inventory.get(itemIndex).secound = true;
+                                    if (merger.maxstacksize > 1 && GlobalGameThreadConfigs.player.inventory.get(itemIndex).maxstacksize > 1) {
                                         mergingg = true;
-                                        mergerr = gp.player.inventory.get(itemIndex);
+                                        mergerr = GlobalGameThreadConfigs.player.inventory.get(itemIndex);
                                     } else {
                                         merging = false;
                                         merger = null;
-                                        gp.player.inventory.get(itemIndex).secound = false;
-                                        gp.player.inventory.get(mergerindex).first = false;
+                                        GlobalGameThreadConfigs.player.inventory.get(itemIndex).secound = false;
+                                        GlobalGameThreadConfigs.player.inventory.get(mergerindex).first = false;
                                     }
                                 }
                             }else{
@@ -1262,11 +1262,11 @@ public class UI  {
                                 merger.first = false;
                                 merging = false;
                                 if(merger.stacksize <= 0){
-                                    gp.player.inventory.remove(merger);
+                                    GlobalGameThreadConfigs.player.inventory.remove(merger);
                                 }
                                 LivingEntity newentity = createnewobject(merger);
                                 newentity.stacksize = stackamount;
-                                gp.player.inventory.add(newentity);
+                                GlobalGameThreadConfigs.player.inventory.add(newentity);
                                 stackamount = 1;
                             }
                         }else {
@@ -1277,7 +1277,7 @@ public class UI  {
                                 merger.stacksize-= stackamount;
                                 mergerr.stacksize += stackamount;
                                 if (merger.stacksize <= 0) {
-                                    gp.player.inventory.remove(merger);
+                                    GlobalGameThreadConfigs.player.inventory.remove(merger);
                                 }
                                 mergerr.secound = false;
                                 merger.first = false;
@@ -1293,10 +1293,10 @@ public class UI  {
                     }
                 }
             }
-            int frameX = gp.tilesize * 2;
-            int frameY = gp.tilesize;
-            int framewidth = gp.tilesize * 6;
-            int frameheight = gp.tilesize * 6;
+            int frameX = GlobalGameThreadConfigs.tilesize * 2;
+            int frameY = GlobalGameThreadConfigs.tilesize;
+            int framewidth = GlobalGameThreadConfigs.tilesize * 6;
+            int frameheight = GlobalGameThreadConfigs.tilesize * 6;
             int slotcol = npcslotcol;
             int slotrow = npcslotrow;
             drawSubWindow(frameX, frameY, framewidth, frameheight);
@@ -1308,30 +1308,30 @@ public class UI  {
             for (int i = 0; i < entity.inventory.size(); i++) {
                 if(entity.inventory.get(i) != null) {
                     switch (i) {
-                        case 1 -> slotx = slotxstart + gp.tilesize;
-                        case 2 -> slotx = slotxstart + (gp.tilesize * 2);
+                        case 1 -> slotx = slotxstart + GlobalGameThreadConfigs.tilesize;
+                        case 2 -> slotx = slotxstart + (GlobalGameThreadConfigs.tilesize * 2);
                         case 3 -> {
                             slotx = slotxstart;
-                            sloty = slotystart+gp.tilesize;}
+                            sloty = slotystart+GlobalGameThreadConfigs.tilesize;}
                         case 4 -> {
-                            slotx = slotxstart + (gp.tilesize);
-                            sloty = slotystart+gp.tilesize;
+                            slotx = slotxstart + (GlobalGameThreadConfigs.tilesize);
+                            sloty = slotystart+GlobalGameThreadConfigs.tilesize;
                         }
                         case 5 -> {
-                            slotx = slotxstart + (gp.tilesize*2);
-                            sloty = slotystart + (gp.tilesize);
+                            slotx = slotxstart + (GlobalGameThreadConfigs.tilesize*2);
+                            sloty = slotystart + (GlobalGameThreadConfigs.tilesize);
                         }
                         case 6 -> {
                             slotx = slotxstart;
-                            sloty = slotystart  + (gp.tilesize * 2);
+                            sloty = slotystart  + (GlobalGameThreadConfigs.tilesize * 2);
                         }
                         case 7 -> {
-                            slotx = slotxstart + gp.tilesize;
-                            sloty = (slotystart + gp.tilesize * 2);
+                            slotx = slotxstart + GlobalGameThreadConfigs.tilesize;
+                            sloty = (slotystart + GlobalGameThreadConfigs.tilesize * 2);
                         }
                         case 8 -> {
-                            slotx = slotxstart + (gp.tilesize*2);
-                            sloty = (slotystart + gp.tilesize * 2);
+                            slotx = slotxstart + (GlobalGameThreadConfigs.tilesize*2);
+                            sloty = (slotystart + GlobalGameThreadConfigs.tilesize * 2);
                         }
                     }
                     g2.drawImage(entity.inventory.get(i).down1, slotx, sloty, null);
@@ -1341,18 +1341,18 @@ public class UI  {
                 }
             }
             if (cursor) {
-                int cursorX = slotxstart + (gp.tilesize * slotcol);
-                int cursorY = slotystart + (gp.tilesize * slotrow);
-                int cursorwidth = gp.tilesize;
-                int cursorheight = gp.tilesize;
+                int cursorX = slotxstart + (GlobalGameThreadConfigs.tilesize * slotcol);
+                int cursorY = slotystart + (GlobalGameThreadConfigs.tilesize * slotrow);
+                int cursorwidth = GlobalGameThreadConfigs.tilesize;
+                int cursorheight = GlobalGameThreadConfigs.tilesize;
                 g2.setStroke(new BasicStroke(3));
                 g2.setColor(Color.white);
                 g2.drawRoundRect(cursorX, cursorY, cursorwidth, cursorheight, 10, 10);
                 int dframeY = frameY +frameheight;
-                int dframewidth = frameWidth * 2 - ((gp.tilesize * 2) + 24);
-                int dframeheight = gp.tilesize * 3;
+                int dframewidth = frameWidth * 2 - ((GlobalGameThreadConfigs.tilesize * 2) + 24);
+                int dframeheight = GlobalGameThreadConfigs.tilesize * 3;
                 int textx = (frameX + 20);
-                int texty = dframeY + gp.tilesize;
+                int texty = dframeY + GlobalGameThreadConfigs.tilesize;
                 int itemIndex = getnpcItemIndex();
                 togglenpcstack(itemIndex, entity);
                 if (itemIndex < entity.inventory.size()) {
@@ -1385,7 +1385,7 @@ public class UI  {
     }
     public static void togglestack(int ItemIndex){if(KeyHandler.sprint){
         g2.setFont(g2.getFont().deriveFont(20f));
-        g2.drawString(""+stackamount,getXforCenterText(""+stackamount), gp.tilesize*5);
+        g2.drawString(""+stackamount,getXforCenterText(""+stackamount), GlobalGameThreadConfigs.tilesize*5);
         if(right){
             stackamount++;
         }
@@ -1396,7 +1396,7 @@ public class UI  {
     }}
     public static void togglenpcstack(int ItemIndex, LivingEntity entity){if(KeyHandler.sprint){
         g2.setFont(g2.getFont().deriveFont(20f));
-        g2.drawString(""+stackamount,getXforCenterText(""+stackamount), gp.tilesize*5);
+        g2.drawString(""+stackamount,getXforCenterText(""+stackamount), GlobalGameThreadConfigs.tilesize*5);
         if(right){
             stackamount++;
         }
@@ -1412,64 +1412,64 @@ public class UI  {
         if (KeyHandler.moveitem) {
             KeyHandler.moveitem = false;
             if (!slotstate) {
-                if (ItemIndex < gp.player.inventory.size()) {
-                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size() != GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventorysize) {
+                if (ItemIndex < GlobalGameThreadConfigs.player.inventory.size()) {
+                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.size() != GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventorysize) {
                         if (!KeyHandler.CROUCH) {
-                            LivingEntity SelectedItem = gp.player.inventory.get(ItemIndex);
-                            if(stackamount > gp.player.inventory.get(ItemIndex).stacksize){
-                                stackamount = gp.player.inventory.get(ItemIndex).stacksize;
+                            LivingEntity SelectedItem = GlobalGameThreadConfigs.player.inventory.get(ItemIndex);
+                            if(stackamount > GlobalGameThreadConfigs.player.inventory.get(ItemIndex).stacksize){
+                                stackamount = GlobalGameThreadConfigs.player.inventory.get(ItemIndex).stacksize;
                             }
-                            gp.player.inventory.get(ItemIndex).stacksize -= stackamount;
+                            GlobalGameThreadConfigs.player.inventory.get(ItemIndex).stacksize -= stackamount;
                             if (SelectedItem.stacksize <= 0) {
-                                gp.player.inventory.remove(ItemIndex);
+                                GlobalGameThreadConfigs.player.inventory.remove(ItemIndex);
                             }
                             LivingEntity newItem = createnewobject(SelectedItem);
                             newItem.stacksize = stackamount;
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.add(newItem);
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.add(newItem);
 
-                            if (SelectedItem == gp.player.currentshield) {
-                                gp.player.currentshield = null;
-                                gp.player.getDefenceValues();
-                            } else if (SelectedItem == gp.player.currentweapon) {
-                                gp.player.currentweapon = null;
-                                gp.player.getAttackValues();
+                            if (SelectedItem == GlobalGameThreadConfigs.player.currentshield) {
+                                GlobalGameThreadConfigs.player.currentshield = null;
+                                GlobalGameThreadConfigs.player.getDefenceValues();
+                            } else if (SelectedItem == GlobalGameThreadConfigs.player.currentweapon) {
+                                GlobalGameThreadConfigs.player.currentweapon = null;
+                                GlobalGameThreadConfigs.player.getAttackValues();
                             }
                             stackamount = 1;
                         }
                         else {
-                            LivingEntity SelectedItem = gp.player.inventory.get(ItemIndex);
-                           gp.player.inventory.remove(ItemIndex);
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.add(SelectedItem);
-                            if (SelectedItem == gp.player.currentshield) {
-                                gp.player.currentshield = null;
-                                gp.player.getDefenceValues();
-                            } else if (SelectedItem == gp.player.currentweapon) {
-                                gp.player.currentweapon = null;
-                                gp.player.getAttackValues();
+                            LivingEntity SelectedItem = GlobalGameThreadConfigs.player.inventory.get(ItemIndex);
+                           GlobalGameThreadConfigs.player.inventory.remove(ItemIndex);
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.add(SelectedItem);
+                            if (SelectedItem == GlobalGameThreadConfigs.player.currentshield) {
+                                GlobalGameThreadConfigs.player.currentshield = null;
+                                GlobalGameThreadConfigs.player.getDefenceValues();
+                            } else if (SelectedItem == GlobalGameThreadConfigs.player.currentweapon) {
+                                GlobalGameThreadConfigs.player.currentweapon = null;
+                                GlobalGameThreadConfigs.player.getAttackValues();
                             }
                         }
                     }
                 }
             } else {
-                if (ItemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.size()) {
-                    if (gp.player.inventory.size() != gp.player.inventorysize) {
+                if (ItemIndex < GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.size()) {
+                    if (GlobalGameThreadConfigs.player.inventory.size() != GlobalGameThreadConfigs.player.inventorysize) {
                         if (!KeyHandler.CROUCH) {
-                            if(stackamount > GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(ItemIndex).stacksize){
-                                stackamount = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(ItemIndex).stacksize;
+                            if(stackamount > GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(ItemIndex).stacksize){
+                                stackamount = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(ItemIndex).stacksize;
                             }
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(ItemIndex).stacksize-= stackamount;
-                            LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(ItemIndex);
+                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(ItemIndex).stacksize-= stackamount;
+                            LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(ItemIndex);
                             if (SelectedItem.stacksize <= 0) {
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.remove(ItemIndex);
+                                GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.remove(ItemIndex);
                             }
                             LivingEntity newItem = createnewobject(SelectedItem);
-                            gp.player.inventory.add(newItem);
-                            gp.player.inventory.get(gp.player.inventory.size() - 1).stacksize = stackamount;
+                            GlobalGameThreadConfigs.player.inventory.add(newItem);
+                            GlobalGameThreadConfigs.player.inventory.get(GlobalGameThreadConfigs.player.inventory.size() - 1).stacksize = stackamount;
                             stackamount = 1;
                         }else{
-                            LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.get(ItemIndex);
-                             GlobalGameThreadConfigs.obj[MainGame.currentmap][gp.player.objindex].inventory.remove(ItemIndex);
-                            gp.player.inventory.add(SelectedItem);
+                            LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(ItemIndex);
+                             GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.remove(ItemIndex);
+                            GlobalGameThreadConfigs.player.inventory.add(SelectedItem);
                         }
                     }
                 }
@@ -1484,8 +1484,8 @@ public class UI  {
 
     public static void drawMessages() {
 
-        int Messagex = gp.tilesize - 30;
-        int Messagey = gp.tilesize * 4;
+        int Messagex = GlobalGameThreadConfigs.tilesize - 30;
+        int Messagey = GlobalGameThreadConfigs.tilesize * 4;
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16f));
         for (int i = 0; i < messages.size(); i++) {
             if (messages.get(i) != null) {
@@ -1518,33 +1518,33 @@ public class UI  {
         g2.setFont(g2.getFont().deriveFont(20F));
         if (!GlobalGameThreadConfigs.inchest) {
             int textX = frameX + 20;
-            int textY = frameY + gp.tilesize;
+            int textY = frameY + GlobalGameThreadConfigs.tilesize;
             final int lineHeight = 30;
-            g2.drawString("level: " + gp.player.level, textX, textY);
+            g2.drawString("level: " + GlobalGameThreadConfigs.player.level, textX, textY);
             textY += lineHeight;
-            g2.drawString("health: " + gp.player.health + "/" + gp.player.maxhealth, textX, textY);
+            g2.drawString("health: " + GlobalGameThreadConfigs.player.health + "/" + GlobalGameThreadConfigs.player.maxhealth, textX, textY);
             textY += lineHeight;
-            g2.drawString("Mana: " + gp.player.Mana + "/" + gp.player.MaxMana, textX, textY);
+            g2.drawString("Mana: " + GlobalGameThreadConfigs.player.Mana + "/" + GlobalGameThreadConfigs.player.MaxMana, textX, textY);
             textY += lineHeight;
-            g2.drawString("strength: " + gp.player.strength, textX, textY);
+            g2.drawString("strength: " + GlobalGameThreadConfigs.player.strength, textX, textY);
             textY += lineHeight;
-            g2.drawString("defence: " + gp.player.defence, textX, textY);
+            g2.drawString("defence: " + GlobalGameThreadConfigs.player.defence, textX, textY);
             textY += lineHeight;
-            g2.drawString("dexterity: " + gp.player.dexterity, textX, textY);
+            g2.drawString("dexterity: " + GlobalGameThreadConfigs.player.dexterity, textX, textY);
             textY += lineHeight;
-            g2.drawString("XP: " + gp.player.XP + "/" + gp.player.MaxXP, textX, textY);
+            g2.drawString("XP: " + GlobalGameThreadConfigs.player.XP + "/" + GlobalGameThreadConfigs.player.MaxXP, textX, textY);
             textY += lineHeight;
-            g2.drawString("bobux: " + gp.player.bobux, textX, textY);
+            g2.drawString("bobux: " + GlobalGameThreadConfigs.player.bobux, textX, textY);
             textY += lineHeight;
-            if (gp.player.currentweapon != null){
-                g2.drawString("weapon: " + gp.player.currentweapon.name, textX, textY);
+            if (GlobalGameThreadConfigs.player.currentweapon != null){
+                g2.drawString("weapon: " + GlobalGameThreadConfigs.player.currentweapon.name, textX, textY);
             textY += lineHeight;
         }else{
                 g2.drawString("weapon: " + "none", textX, textY);
                 textY += lineHeight;
             }
-            if(gp.player.currentshield != null) {
-                g2.drawString("shield: " + gp.player.currentshield.name, textX, textY);
+            if(GlobalGameThreadConfigs.player.currentshield != null) {
+                g2.drawString("shield: " + GlobalGameThreadConfigs.player.currentshield.name, textX, textY);
             }else{
                 g2.drawString("shield: " + "none", textX, textY);
             }
@@ -1557,45 +1557,45 @@ public class UI  {
         messageID.add(0);
     }
     public static void drawPlayerBar() {
-        int x = MainGame.tilesize / 2;
-        int y = MainGame.tilesize / 2;
+        int x = GlobalGameThreadConfigs.tilesize / 2;
+        int y = GlobalGameThreadConfigs.tilesize / 2;
         int i = 0;
-        while (i < MainGame.player.maxhealth / 2) {
+        while (i < GlobalGameThreadConfigs.player.maxhealth / 2) {
             g2.drawImage(heart_blank, x, y, null);
             i++;
-            x += gp.tilesize;
+            x += GlobalGameThreadConfigs.tilesize;
         }
-        x = MainGame.tilesize / 2;
-        y = MainGame.tilesize / 2;
+        x = GlobalGameThreadConfigs.tilesize / 2;
+        y = GlobalGameThreadConfigs.tilesize / 2;
         i = 0;
-        while (i < gp.player.health) {
+        while (i < GlobalGameThreadConfigs.player.health) {
             g2.drawImage(heart_half, x, y, null);
             i++;
-            if (i < gp.player.health) {
+            if (i < GlobalGameThreadConfigs.player.health) {
                 g2.drawImage(heart_full, x, y, null);
             }
             i++;
-            x += gp.tilesize;
+            x += GlobalGameThreadConfigs.tilesize;
 
         }
         g2.setColor(Color.white);
         if (gp.keyM.checkFPS) {
-            if (gp.player.invincible == true) {
-                g2.drawString("" + gp.player.hitTime, 10, 160);
+            if (GlobalGameThreadConfigs.player.invincible == true) {
+                g2.drawString("" + GlobalGameThreadConfigs.player.hitTime, 10, 160);
             }
         }
-        x = (gp.tilesize / 2)-5;
-        y = (int) (gp.tilesize*1.5);
+        x = (GlobalGameThreadConfigs.tilesize / 2)-5;
+        y = (int) (GlobalGameThreadConfigs.tilesize*1.5);
         i = 0;
-        while (i < gp.player.MaxMana){
+        while (i < GlobalGameThreadConfigs.player.MaxMana){
             g2.drawImage(crystal_blank, x, y, null);
             i++;
             x += 35;
         }
-        x = (gp.tilesize / 2)-5;
-        y = (int) (gp.tilesize*1.5);
+        x = (GlobalGameThreadConfigs.tilesize / 2)-5;
+        y = (int) (GlobalGameThreadConfigs.tilesize*1.5);
         i = 0;
-        while (i < gp.player.Mana){
+        while (i < GlobalGameThreadConfigs.player.Mana){
             g2.drawImage(crystal_full, x, y, null);
             i++;
             x += 35;
@@ -1609,12 +1609,12 @@ public class UI  {
             Tcount = 0;
             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
             MainGame.currentmap = gp.ehandler.tempmap;
-            gp.player.worldx = gp.tilesize*gp.ehandler.tempcol;
-            gp.player.worldy = gp.tilesize*gp.ehandler.temprow;
-            gp.ehandler.PreviousEventX = (int) gp.player.worldx;
-            gp.ehandler.PreviousEventY = (int) gp.player.worldy;
+            GlobalGameThreadConfigs.player.worldx = GlobalGameThreadConfigs.tilesize*gp.ehandler.tempcol;
+            GlobalGameThreadConfigs.player.worldy = GlobalGameThreadConfigs.tilesize*gp.ehandler.temprow;
+            gp.ehandler.PreviousEventX = (int) GlobalGameThreadConfigs.player.worldx;
+            gp.ehandler.PreviousEventY = (int) GlobalGameThreadConfigs.player.worldy;
         }
 
     }
     //2047 bytes long -------------------//
-     public static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Quest To Find Who Asked";int x = getXforCenterText(text);int y = gp.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += MainGame.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += MainGame.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-MainGame.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}public static void drawDialogueScreen() {int x = gp.tilesize * 2;int y = gp.tilesize/2;int width = MainGame.screenwidth - (gp.tilesize*4);int height = gp.tilesize*4;drawSubWindow(x, y, width, height);x += gp.tilesize;y += gp.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));if(currentDialogue != null)for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}
+     public static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Quest To Find Who Asked";int x = getXforCenterText(text);int y = GlobalGameThreadConfigs.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}public static void drawDialogueScreen() {int x = GlobalGameThreadConfigs.tilesize * 2;int y = GlobalGameThreadConfigs.tilesize/2;int width = MainGame.screenwidth - (GlobalGameThreadConfigs.tilesize*4);int height = GlobalGameThreadConfigs.tilesize*4;drawSubWindow(x, y, width, height);x += GlobalGameThreadConfigs.tilesize;y += GlobalGameThreadConfigs.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));if(currentDialogue != null)for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}

@@ -19,12 +19,12 @@ public Lighting(MainGame gpp){
     Area ScreenArea = new Area(new Rectangle2D.Double(0, 0, gp.screenwidth, gp.screenheight));
     for(int i = 0; i < GlobalGameThreadConfigs.lights[1].length; i++){
         if(GlobalGameThreadConfigs.lights[MainGame.currentmap][i] != null){
-            if ((GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldx + MainGame.tilesize > MainGame.player.worldx - MainGame.player.screenX &&
-                    (GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldx - MainGame.tilesize < MainGame.player.worldx + MainGame.player.screenX))
-                    && GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldy + MainGame.tilesize > MainGame.player.worldy - MainGame.player.screenY &&
-                    (GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldy - MainGame.tilesize < MainGame.player.worldy + MainGame.player.screenY)) {
-            int centerx = (int) ((GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldx - MainGame.player.worldx + MainGame.player.screenX)+(gp.tilesize/2));
-            int centery = (int) ((GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldy - MainGame.player.worldy + MainGame.player.screenY)+(gp.tilesize/2));
+            if ((GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                    (GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                    && GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                    (GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
+            int centerx = (int) ((GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX)+(GlobalGameThreadConfigs.tilesize/2));
+            int centery = (int) ((GlobalGameThreadConfigs.lights[MainGame.currentmap][i].worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)+(GlobalGameThreadConfigs.tilesize/2));
             double x = centerx-(GlobalGameThreadConfigs.lights[MainGame.currentmap][i].size/2);
             double y = centery-(GlobalGameThreadConfigs.lights[MainGame.currentmap][i].size/2);
             Shape circleShape = new Ellipse2D.Double(x, y, GlobalGameThreadConfigs.lights[MainGame.currentmap][i].size, GlobalGameThreadConfigs.lights[MainGame.currentmap][i].size);

@@ -1,4 +1,5 @@
 package net.questfor.thepersonwhoasked.objects;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
@@ -30,6 +31,6 @@ public class Clay extends LivingEntity {
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/clay", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/clay", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

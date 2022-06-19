@@ -5,6 +5,7 @@ import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.entities.Player;
 
 import java.awt.*;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class OBJ_POTION_HEALTH_1 extends LivingEntity {
     public OBJ_POTION_HEALTH_1(MainGame gpp) {
@@ -39,6 +40,6 @@ public class OBJ_POTION_HEALTH_1 extends LivingEntity {
     }
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/potion_red", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/potion_red", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }

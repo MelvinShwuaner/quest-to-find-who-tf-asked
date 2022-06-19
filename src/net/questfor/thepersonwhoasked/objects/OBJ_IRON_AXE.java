@@ -4,6 +4,7 @@ import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.awt.*;
+import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 
 public class OBJ_IRON_AXE extends LivingEntity {
     public OBJ_IRON_AXE(MainGame gpp) {
@@ -35,6 +36,6 @@ public class OBJ_IRON_AXE extends LivingEntity {
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/axe", gp.tilesize, gp.tilesize);
+        down1 = BufferedRenderer("objects/axe", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
     }
 }
