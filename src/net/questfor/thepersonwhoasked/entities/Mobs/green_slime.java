@@ -14,7 +14,7 @@ public class green_slime extends LivingEntity {
         super(gpp);
         EntityType = 1;
         name = "Green Slime";
-        defaultspeed = 2;
+        defaultspeed = 3;
         speed = defaultspeed;
         maxhealth = 10;
         TrueAttackDamage = 5;
@@ -28,6 +28,9 @@ public class green_slime extends LivingEntity {
         level = 5;
         projectile = new OBJ_ROCK(gpp);
         forgiveondeath = false;
+        Hostile = true;
+        target = GlobalGameThreadConfigs.player;
+        LightSource = false;
     }
     public void getImageInstance() {
         up1 = BufferedRenderer("Monsters/greenslime/tier1/greenslime_down_1", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);

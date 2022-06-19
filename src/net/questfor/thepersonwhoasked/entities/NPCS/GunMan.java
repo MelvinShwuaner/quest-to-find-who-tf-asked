@@ -2,41 +2,41 @@ package net.questfor.thepersonwhoasked.entities.NPCS;
 
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
-import net.questfor.thepersonwhoasked.Maingam.UI;
 import net.questfor.thepersonwhoasked.entities.AI.Path;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.objects.OBJHeart;
 import net.questfor.thepersonwhoasked.objects.OBJ_COIN_BRONZE;
 import net.questfor.thepersonwhoasked.objects.OBJ_MANA_CRYSTAL;
-import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
+import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_ROCK;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class Helper extends LivingEntity {
-    boolean startposition = true;
+import static net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs.player;
 
 
-    public Helper(MainGame gpp) {
+public class GunMan extends LivingEntity {
+
+    public GunMan(MainGame gpp) {
         super(gpp);
-        EntityType = 2;
-        name = "Helper";
-        defaultspeed = 3;
+        EntityType = 1;
+        name = "GunMan";
+        defaultspeed = 6;
         speed = defaultspeed;
         maxhealth = 20;
         TrueAttackDamage = 5;
-        defence = 10;
+        defence = 20;
         health = maxhealth;
         hitbox = new Rectangle(3, 18, 42, 30);
         hitbox.height = 30;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         XP = 7;
-        setDialogues();
         level = 5;
-        projectile = new OBJ_FireBall(gpp);
-        direction = "right";
+        projectile = new OBJ_ROCK(gpp);
+Hostile = true;
+LightSource = true;
     }
 
     public void getImageInstance() {
@@ -63,10 +63,7 @@ public class Helper extends LivingEntity {
     }
 
     public void setAction() {
-        if(startposition){
-            speed = 5;
-            searchPath(121,146);
-        }else{
+
             if (!Hostile) {
                 actionLock++;
                 if (actionLock == 120) {
@@ -87,45 +84,42 @@ public class Helper extends LivingEntity {
                     actionLock = 0;
                 }
             } else {
-                    for (int i = 0; i < GlobalGameThreadConfigs.Monsters[1].length; i++) {
-                        if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] != null) {
+
                             if (distancex < previoustaskx) {
-                                if (worldx > GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx) {
-                                    distancex = worldx - GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx;
+                                if (worldx > player.worldx) {
+                                    distancex = worldx - player.worldx;
                                 } else {
-                                    distancex = GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx - worldx;
+                                    distancex = player.worldx - worldx;
                                 }
-                                taskx = GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx;
+                                taskx = player.worldx;
                                 previoustaskx = distancex;
 
                             }
                             if (distancey < previoustasky) {
-                                if (worldy > GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy) {
-                                    distancey = worldy - GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy;
+                                if (worldy > player.worldy) {
+                                    distancey = worldy - player.worldy;
                                 } else {
-                                    distancey = GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy - worldy;
+                                    distancey = player.worldy - worldy;
                                 }
                                 previoustasky = distancey;
-                                tasky = GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy;
+                                tasky = player.worldy;
 
                             }
-                        }
-                        if (i == GlobalGameThreadConfigs.Monsters[1].length - 1) {
-                            break;
-                        }
-                    }
+
+
+
 
                     if(distancex < 50 && distancey < 50){
                         attacking = true;
                 }
                 Angry();
             }
-        }}
+        }
     @Override
     public void update() {
+        boolean ishostile = Hostile;
         super.update();
-        if
-        (GlobalGameThreadConfigs.player.health < GlobalGameThreadConfigs.player.maxhealth) {
+        if(ishostile){
             Hostile = true;
         }
         if
@@ -213,8 +207,8 @@ public class Helper extends LivingEntity {
                 path = new Path();
             }
             BufferedImage image = null;
-            double screenX = (worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
-            double screenY = worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
+            double screenX = (worldx - player.worldx + player.screenX);
+            double screenY = worldy - player.worldy + player.screenY;
             double tempscreenx = screenX;
             double tempscreeny = screenY;
             switch (direction) {
@@ -314,10 +308,10 @@ public class Helper extends LivingEntity {
 
                 }
             }
-            if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
-                    (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
-                    && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
-                    (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
+            if ((worldx + GlobalGameThreadConfigs.tilesize > player.worldx - player.screenX &&
+                    (worldx - GlobalGameThreadConfigs.tilesize < player.worldx + player.screenX))
+                    && worldy + GlobalGameThreadConfigs.tilesize > player.worldy - player.screenY &&
+                    (worldy - GlobalGameThreadConfigs.tilesize < player.worldy + player.screenY)) {
                 if (image == null) {
                     getImageInstance();
                     getAttackInstance();
@@ -352,20 +346,20 @@ public class Helper extends LivingEntity {
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect((int) screenX, (int) screenY - 15, (int) HPValue, 10);
                 }
-                if(worldz > GlobalGameThreadConfigs.player.worldz){
+                if(worldz > player.worldz){
                     float Xdistance;
                     float Ydistance;
                     int x = (int) Math.round(worldx/GlobalGameThreadConfigs.tilesize);
                     int y = (int) Math.round(worldy/GlobalGameThreadConfigs.tilesize);
-                    if (x > GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize) {
-                        Xdistance = (float) (x - (GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize));
+                    if (x > player.worldx / GlobalGameThreadConfigs.tilesize) {
+                        Xdistance = (float) (x - (player.worldx / GlobalGameThreadConfigs.tilesize));
                     }else{
-                        Xdistance = (float) ((GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize) - x);
+                        Xdistance = (float) ((player.worldx / GlobalGameThreadConfigs.tilesize) - x);
                     }
-                    if (y > GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize) {
-                        Ydistance = (float) (y - (GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize));
+                    if (y > player.worldy / GlobalGameThreadConfigs.tilesize) {
+                        Ydistance = (float) (y - (player.worldy / GlobalGameThreadConfigs.tilesize));
                     }else{
-                        Ydistance = (float) ((GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize) - y);
+                        Ydistance = (float) ((player.worldy / GlobalGameThreadConfigs.tilesize) - y);
                     }
                     if (Ydistance < 2 && Xdistance < 2){
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
@@ -408,8 +402,10 @@ public class Helper extends LivingEntity {
                     worldx += attackHitbox.width;
                 }
             }
-            int attackindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
-            attackEntity(attackindex, TrueAttackDamage);
+                boolean ContactPLayer = gp.hregister.PlayerColide(this);
+                if(ContactPLayer){
+                    AttackPLayer(TrueAttackDamage);
+                }
 
             worldx = currentworldx;
             worldy = currentworldy;
@@ -423,20 +419,5 @@ public class Helper extends LivingEntity {
             hasattacked = true;
             spritecounter = 0;
         }
-    }
-    public void setDialogues(){
-        dialogues[0] = "You: I hate this game i keep dying on it!!";
-        dialogues[1] = name+": Uhh did anyone ask? ";
-        dialogues[2] = "You: shushh";
-        dialogues[3] = name+": AHH HELL NAH";
-    }
-
-    @Override
-    public void speak(){
-        //dialogue functions
-        direction = "right";
-        UI.currentDialogue = dialogues[dialogueIndex];
-        dialogueIndex++;
-
     }
 }

@@ -63,8 +63,13 @@ public class Path extends Data {
         int row = 0;
         while (col < MainGame.maxworldcol && row < MainGame.maxworldrow) {
             int tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer];
-            if (tileNUM != 46) {
+            if (!MainGame.tilemanager.tile[tileNUM].air) {
+                tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer+1];
+                if (!MainGame.tilemanager.tile[tileNUM].air) {
                 nodes[col][row].solid = true;
+            }else if(entity.jumping){
+                    nodes[col][row].solid = true;
+                }
             }
             for (int i = 0; i < GlobalGameThreadConfigs.obj[1].length; i++) {
                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] != null) {

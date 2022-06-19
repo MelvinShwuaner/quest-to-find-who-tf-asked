@@ -5,6 +5,8 @@ import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+
+import static net.questfor.thepersonwhoasked.Maingam.KeyHandler.sprint;
 import static net.questfor.thepersonwhoasked.Maingam.MainGame.currentmap;
 import static net.questfor.thepersonwhoasked.Maingam.MainGame.sound;
 
@@ -33,13 +35,13 @@ public class Player extends LivingEntity {
         Ammo = 10;
         name = "Player";
         inventorysize = 20;
-        worldx = GlobalGameThreadConfigs.tilesize * 107;
-        worldy = GlobalGameThreadConfigs.tilesize * 114;
+            worldx = GlobalGameThreadConfigs.tilesize * 113;
+        worldy = GlobalGameThreadConfigs.tilesize * 109;
         defaultspeed = 4;
         speed = defaultspeed;
-        direction = "left";
+        direction = "up";
         worldz = 4;
-        maxhealth = 10;
+        maxhealth = 12;
         health = maxhealth;
         invincible = false;
         attackHitbox.width = 36;
@@ -201,11 +203,30 @@ public class Player extends LivingEntity {
                     }
                 }
             }
-            if(KeyHandler.sprint){
-                speed = 6;
-            }else if(KeyHandler.CROUCH){
+                if(sprint){
+                breathcounter--;
+                if(breathcounter > 0) {
+                    speed = 6;
+                }else{
+                    sprinting = false;
+                }}
+                if(!sprinting){
+                    if ((!KeyHandler.upPressed && !KeyHandler.downPressed && !KeyHandler.rightPressed && !KeyHandler.leftPressed)) {
+
+                        breathcounter+=2;
+                    if(breathcounter == 80){
+                        sprinting = true;
+                    }
+                }}
+            if(KeyHandler.CROUCH && !sprint){
                 speed = 2;
-            }else{
+                if(!sprinting){
+                    breathcounter++;
+                    if(breathcounter == 80){
+                        sprinting = true;
+                    }
+                }
+            }else if(!sprint){
                 speed = 4;
             }
             hasweapon = currentweapon != null;
@@ -263,6 +284,8 @@ public class Player extends LivingEntity {
             }
             //MOVEMENT
             if (GlobalGameThreadConfigs.isinTital == false) {
+
+
                 if (KeyHandler.upPressed || KeyHandler.downPressed || KeyHandler.rightPressed || KeyHandler.leftPressed) {
 
                     if (KeyHandler.upPressed) {
@@ -316,8 +339,9 @@ public class Player extends LivingEntity {
                 }
             }
             hitboxe = false;
-            MainGame.hregister.checkTile(this);
-
+            //MainGame.hregister.checkTile(this);
+            if(!GlobalGameThreadConfigs.isinTital)
+              MainGame.ehandler.returnEvent();
             //OBJECT COLLISIONS
             objindex = MainGame.hregister.worldzobjectreturn(this, GlobalGameThreadConfigs.obj);
             pickupObject(objindex);
@@ -353,7 +377,14 @@ public class Player extends LivingEntity {
                     if(!frozen){
                     if (KeyHandler.upPressed || KeyHandler.downPressed) {
                         if (KeyHandler.rightPressed || KeyHandler.leftPressed) {
-                            speed = 3;
+                            if(KeyHandler.sprint){
+                                if(breathcounter > 0){
+                                    speed = 5;
+                                }
+                            }else{
+
+                                speed =3;
+                            }
                         }
                     }
                     if (KeyHandler.upPressed || KeyHandler.downPressed || KeyHandler.rightPressed || KeyHandler.leftPressed) {
@@ -549,12 +580,10 @@ public class Player extends LivingEntity {
                     GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
                     if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogues[GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogueIndex] != null) {
                         GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].speak();
-                        if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].dialogues[0].equals("Take a wish. will you?")) {
-                            speed = 0;
-                            screenY++;
-                        }
                     } else {
                         GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.PlayState;
+                        if(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].name.equals("idontknowthenameofthisguy"))
+                            GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i] = null;
                     }
                 }
             }
@@ -615,7 +644,7 @@ public class Player extends LivingEntity {
                             try {
                                 image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
                             }catch (Exception e){
-                                System.out.println("Catched null pointer exeption");
+
                             }                            }
                     }
                 }else{
@@ -624,7 +653,7 @@ public class Player extends LivingEntity {
                     try {
                         image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
                     }catch (Exception e){
-                       System.out.println("Catched null pointer exeption");
+
                     }
                     if(jumpstate < 0) {
                         jumpaction = 0;
@@ -650,7 +679,7 @@ public class Player extends LivingEntity {
                         }
                     }
                 }catch (Exception d){
-                    System.out.println("Catched null pointer exeption");
+
                 }
             }
 
@@ -713,25 +742,25 @@ public class Player extends LivingEntity {
         double x = worldx;
         double z = worldz;
         boolean canbreak;
-        if(!KeyHandler.CROUCH && !KeyHandler.sprint){
+        if(!KeyHandler.CROUCH && !sprint){
             switch (direction) {
-                case "down" -> y += 48;
-                case "up" -> y -= 48;
-                case "left" -> x -= 48;
-                case "right" -> x += 48;
+                case "down" -> y += GlobalGameThreadConfigs.tilesize;
+                case "up" -> y -= GlobalGameThreadConfigs.tilesize;
+                case "left" -> x -= GlobalGameThreadConfigs.tilesize;
+                case "right" -> x += GlobalGameThreadConfigs.tilesize;
             }}else
         if(KeyHandler.CROUCH){
             z--;
-        }else if(KeyHandler.sprint){
+        }else if(sprint){
             z++;
         }
         canbreak = gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 46;
-        if(!canbreak && (KeyHandler.sprint || KeyHandler.CROUCH)){
+        if(!canbreak && (sprint || KeyHandler.CROUCH)){
             switch (direction) {
-                case "down" -> y += 48;
-                case "up" -> y -= 48;
-                case "left" -> x -= 48;
-                case "right" -> x += 48;
+                case "down" -> y += GlobalGameThreadConfigs.tilesize;
+                case "up" -> y -= GlobalGameThreadConfigs.tilesize;
+                case "left" -> x -= GlobalGameThreadConfigs.tilesize;
+                case "right" -> x += GlobalGameThreadConfigs.tilesize;
             }
         }
         attacking = true;
@@ -816,31 +845,33 @@ public class Player extends LivingEntity {
         double x = worldx;
         double z = worldz;
         boolean canbreak;
-        if(!KeyHandler.CROUCH && !KeyHandler.sprint){
+        if(!KeyHandler.CROUCH && !sprint){
             switch (direction) {
-                case "down" -> y += 48;
-                case "up" -> y -= 48;
-                case "left" -> x -= 48;
-                case "right" -> x += 48;
+                case "down" -> y += GlobalGameThreadConfigs.tilesize;
+                case "up" -> y -= GlobalGameThreadConfigs.tilesize;
+                case "left" -> x -= GlobalGameThreadConfigs.tilesize;
+                case "right" -> x += GlobalGameThreadConfigs.tilesize;
             }}else
         if(KeyHandler.CROUCH){
             z--;
-        }else if(KeyHandler.sprint){
+        }else if(sprint){
             z++;
         }
         canbreak = gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 46;
-        if(!canbreak && (KeyHandler.sprint || KeyHandler.CROUCH)){
+        if(!canbreak && (sprint || KeyHandler.CROUCH)){
             switch (direction) {
-                case "down" -> y += 48;
-                case "up" -> y -= 48;
-                case "left" -> x -= 48;
-                case "right" -> x += 48;
+                case "down" -> y += GlobalGameThreadConfigs.tilesize;
+                case "up" -> y -= GlobalGameThreadConfigs.tilesize;
+                case "left" -> x -= GlobalGameThreadConfigs.tilesize;
+                case "right" -> x += GlobalGameThreadConfigs.tilesize;
             }
         }
         attacking = true;
         if(gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 47){
             gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
         }else{
+            gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
+
             for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
                 if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] != null){
                     if(Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldx/GlobalGameThreadConfigs.tilesize) == Math.round(x/GlobalGameThreadConfigs.tilesize) && Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldy/GlobalGameThreadConfigs.tilesize) == Math.round(y/GlobalGameThreadConfigs.tilesize) && GlobalGameThreadConfigs.obj[currentmap][ii].worldz==z){

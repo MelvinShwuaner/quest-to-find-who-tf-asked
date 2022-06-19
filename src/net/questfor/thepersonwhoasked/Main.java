@@ -29,7 +29,7 @@ public  class Main{
 
     public static ImageIcon urmom = new ImageIcon(Main.class.getClassLoader().getResource("shipgame/logo.png"));
     public static void main(String[] args) {
-        //System.setOut(ps);
+        System.setOut(ps);
         createnewwindow();
     }
     public static void createnewwindow(){

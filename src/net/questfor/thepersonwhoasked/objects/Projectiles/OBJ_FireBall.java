@@ -23,7 +23,7 @@ public class OBJ_FireBall extends Projectile {
         hitbox = new Rectangle();
         hitbox.x = 0;
         hitbox.y = 16;
-        hitbox.width = 48;
+        hitbox.width = GlobalGameThreadConfigs.tilesize;
         hitbox.height = 16;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;

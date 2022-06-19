@@ -1600,6 +1600,18 @@ public class UI  {
             i++;
             x += 35;
         }
+        if(!GlobalGameThreadConfigs.player.sprinting || KeyHandler.sprint)
+        {
+            x = (GlobalGameThreadConfigs.tilesize / 2)-5;
+            y+= 96;
+            double onescale = GlobalGameThreadConfigs.tilesize*2 / 80;
+            double HPValue = onescale * GlobalGameThreadConfigs.player.breathcounter;
+            g2.setColor(new Color(255, 255, 255));
+            g2.fillRect((int) (x - 1), (int) y - 16, GlobalGameThreadConfigs.tilesize * 2, 12);
+            g2.setColor(new Color(0, 0, 0));
+            g2.fillRect((int) x, (int) y - 15, (int) HPValue, 10);
+        }
+
     }
     public static void drawTransition(){
         Tcount++;

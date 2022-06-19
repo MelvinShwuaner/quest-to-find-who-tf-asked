@@ -19,13 +19,13 @@ public class OBJ_BRICK_WALL extends LivingEntity {
         hitbox = new Rectangle();
         hitbox.x = 0;
         hitbox.y = 16;
-        hitbox.width = 48;
+        hitbox.width = GlobalGameThreadConfigs.tilesize;
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         EntityType = 3;
         maxstacksize = 64;
-        tile = 48;
+        tile = GlobalGameThreadConfigs.tilesize;
     }
 
     @Override

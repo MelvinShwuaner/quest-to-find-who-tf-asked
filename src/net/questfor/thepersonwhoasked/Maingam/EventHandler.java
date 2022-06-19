@@ -10,7 +10,7 @@ public class EventHandler {
     boolean canTriggerEvent = true;
     public int tempmap, tempcol, temprow;
     public static int raidcounter = 0;
-    public int i;
+    public static boolean finushconversation = false;
 
     EventHandler(MainGame gpp) {
         this.gp = gpp;
@@ -34,7 +34,6 @@ public class EventHandler {
             }
             if (row == MainGame.maxworldrow) {
                 row = 0;
-                col = 0;
                 mapID++;
             }
         }
@@ -51,111 +50,53 @@ public class EventHandler {
         if (Distance > GlobalGameThreadConfigs.tilesize) {
             canTriggerEvent = true;
         }
-        if (!GlobalGameThreadConfigs.isinTital) {
-            if (i < GlobalGameThreadConfigs.Monsters[1].length && GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] == null) {
-                i++;
-            }
-            if (i == 5){
-                i = 0;
-                swarmpit(22, 13);
-            if (raidcounter == 1) {
-                UI.addMessages("Go back to spawn!");
-            }
-        }
-    }
 
         if (canTriggerEvent) {
             /*Assign events*/
-            if (hit(0,27, 16, "right")) {
-                damagepit(GlobalGameThreadConfigs.dialogueState);
-            }
-            if (hit(0,23, 19, "any")) {
-                damagepit(GlobalGameThreadConfigs.dialogueState);
-            }
-            if (hit(0,23, 12, "up")) {
-                healpit(GlobalGameThreadConfigs.dialogueState);
-            }
+            if(hit(0, 113, 109, "any")){
+                if(!finushconversation){
+                speak(GlobalGameThreadConfigs.NPCS[0][1]);
+                if(GlobalGameThreadConfigs.NPCS[0][1].dialogueIndex == 4){
+                    gp.tilemanager.mapRendererID[0][110][109][4] = 46;
+                    gp.tilemanager.mapRendererID[0][110][109][5] = 46;
+                    gp.tilemanager.mapRendererID[0][110][110][4] = 46;
+                    gp.tilemanager.mapRendererID[0][110][110][5] = 46;
+                    gp.tilemanager.mapRendererID[0][110][111][4] = 46;
+                    gp.tilemanager.mapRendererID[0][110][111][5] = 46;
+                    gp.tilemanager.mapRendererID[0][109][108][4] = 52;
+                    gp.tilemanager.mapRendererID[0][111][111][4] = 52;
+                    gp.tilemanager.mapRendererID[0][108][111][4] = 52;
+                    gp.tilemanager.mapRendererID[0][109][109][4] = 52;
+                    gp.tilemanager.mapRendererID[0][110][111][4] = 52;
+                    gp.tilemanager.mapRendererID[0][124][110][3] = 46;
+                    gp.tilemanager.mapRendererID[0][124][109][3] = 46;
+                    gp.tilemanager.mapRendererID[0][123][109][3] = 39;
+                    gp.tilemanager.mapRendererID[0][122][109][3] = 39;
+                    gp.tilemanager.mapRendererID[0][122][108][3] = 39;
+                    gp.tilemanager.mapRendererID[0][123][108][3] = 39;
+                    gp.tilemanager.mapRendererID[0][122][107][4] = 46;
+                    gp.tilemanager.mapRendererID[0][123][107][4] = 46;
+                    gp.tilemanager.mapRendererID[0][123][107][5] = 46;
+                    gp.tilemanager.mapRendererID[0][124][107][4] = 46;
+                    finushconversation = true;
+                }
+            }}
+            if(hit(0, 110, 109, "any") || hit(0, 110, 110, "any") || hit(0, 110, 111, "any")){
 
-            if(hit(0, 10, 40, "any")){
-                swapworld(1, 12, 12, true);
-
-            }
-            if(hit(1, 12, 13, "any")){
-                swapworld(0, 10, 40, false);
-            }
-            if(hit(1,12,9,"up")){
-                speak(GlobalGameThreadConfigs.NPCS[1][0]);
             }
         }
     }
 
     public void speak(LivingEntity entity) {
-        if(KeyHandler.enterpressed){
+
             KeyHandler.enterpressed = false;
             GlobalGameThreadConfigs.GameState = GlobalGameThreadConfigs.dialogueState;
             GlobalGameThreadConfigs.player.attacking = false;
             entity.speak();
-        }
+
     }
 
-    //EXPERIMENTAL
-    public static void swarmpit(int col, int row) {
-        int i = 0;
-        if (raidcounter < 3) {
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = col * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = row * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
-            i++;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = col * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
-            i++;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = row * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
-            i++;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
-            i++;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 2) * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 1) * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
-            i++;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] = new green_slime(gp);
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx = (col + 1) * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy = (row + 2) * GlobalGameThreadConfigs.tilesize;
-            GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].makemeHostile(GlobalGameThreadConfigs.player);
-            i++;
-            if (raidcounter == 0) {
-                for (int amogus = 0; amogus < GlobalGameThreadConfigs.NPCS[1].length; amogus++) {
-                    if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus] != null) {
-                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].onpath = true;
-                    }
-                }
-            }
-        }
-            if(raidcounter == 3) {
-                raidcounter = 4;
-                UI.addMessages("Talk to the NPC");
-                for (int amogus = 0; amogus < GlobalGameThreadConfigs.NPCS[1].length; amogus++) {
-                    if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus] != null) {
-                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].goingup = true;
-                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].dialogues[1] = "Thank you for saving us! follow me";
-                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].dialogues[2] = "Lets go to this special pond";
-                        GlobalGameThreadConfigs.NPCS[MainGame.currentmap][amogus].dialogues[3] = "";
 
-                    }
-
-                }
-            }
-            raidcounter++;
-    }
     public void swapworld(int newmap, int col, int row, boolean requireskey){
         if(requireskey){
             if(KeyHandler.enterpressed){
@@ -211,8 +152,8 @@ public class EventHandler {
         eventBus[map][eventCol][eventRow].x = eventCol * GlobalGameThreadConfigs.tilesize + eventBus[map][eventCol][eventRow].x;
         eventBus[map][eventCol][eventRow].y = eventRow * GlobalGameThreadConfigs.tilesize + eventBus[map][eventCol][eventRow].y;
         if (GlobalGameThreadConfigs.player.hitbox.intersects(eventBus[map][eventCol][eventRow]) && !eventBus[map][eventCol][eventRow].eventDone) {
-            if (GlobalGameThreadConfigs.player.direction.contentEquals(ReqDirection) || ReqDirection.contentEquals("any")) ;
-            hit = true;
+            if (GlobalGameThreadConfigs.player.direction.contentEquals(ReqDirection) || ReqDirection.contentEquals("any"))
+              hit = true;
             //RECORD AND SAVE EVENT VALUES//
             PreviousEventX = (int) GlobalGameThreadConfigs.player.worldx;
             PreviousEventY = (int) GlobalGameThreadConfigs.player.worldy;

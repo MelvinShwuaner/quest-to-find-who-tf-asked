@@ -265,28 +265,19 @@ public class Tilemanager {
         int worldX = worldcol * GlobalGameThreadConfigs.tilesize;
         int worldY = worldrow * GlobalGameThreadConfigs.tilesize;
         try {
-
             if ((worldX + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
                     (worldX - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
                     && worldY + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
                     (worldY - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
+
                 if (mapRendererID[MainGame.currentmap][col][row][layer] == 0) {
-                    if (mapRendererID[MainGame.currentmap][col + 1][row][layer] == 0) {
-                        if (mapRendererID[MainGame.currentmap][col][row][layer] == 0)
-                            g2.drawImage(earthright1, (int) (x), (int) (y), null);
+                    if(layer > 0 && layer < 4)
+                      mapRendererID[MainGame.currentmap][col][row][layer] = 39;
+                    if(layer == 4){
+                        mapRendererID[MainGame.currentmap][col][row][layer] = 10;
                     }
-                    if (mapRendererID[MainGame.currentmap][col - 1][row][layer] == 0) {
-                        if (mapRendererID[MainGame.currentmap][col][row][layer] == 0)
-                            g2.drawImage(earthleft1, (int) (x), (int) (y), null);
-                    }
-                    if (mapRendererID[MainGame.currentmap][col][row - 1][layer] == 0) {
-                        if (mapRendererID[MainGame.currentmap][col][row][layer] == 0)
-                            g2.drawImage(earthup1, (int) (x), (int) (y), null);
-                    }
-                    if (mapRendererID[MainGame.currentmap][col][row + 1][layer] == 0) {
-                        if (mapRendererID[MainGame.currentmap][col][row][layer] == 0)
-                            g2.drawImage(earthdown1, (int) (x), (int) (y), null);
-                    }
+                    if(layer > 4)
+                        mapRendererID[MainGame.currentmap][col][row][layer] = 46;
                 }
                 if (mapRendererID[MainGame.currentmap][col][row][layer] == 52) {
                     mapspritecounter[MainGame.currentmap][col][row][layer]++;
@@ -362,7 +353,7 @@ public class Tilemanager {
                         }else{
                             g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].image, (int) x, (int)y, null);
                             g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                            g2.fillRect((int) x, (int) y, 48, 48);
+                            g2.fillRect((int) x, (int) y, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
                         }
                     }
                 if(worldlayer > GlobalGameThreadConfigs.player.worldz && !(Math.round(GlobalGameThreadConfigs.player.worldx/GlobalGameThreadConfigs.tilesize) == col && Math.round(GlobalGameThreadConfigs.player.worldy/GlobalGameThreadConfigs.tilesize) == row)){
@@ -427,7 +418,7 @@ public class Tilemanager {
                 }else{
                         g2.drawImage(tile[mapRendererID[MainGame.currentmap][col][row][layer]].image, (int) x, (int)y, null);
                         g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                        g2.fillRect((int) x, (int) y, 48, 48);
+                        g2.fillRect((int) x, (int) y, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
                     }
                 }
 

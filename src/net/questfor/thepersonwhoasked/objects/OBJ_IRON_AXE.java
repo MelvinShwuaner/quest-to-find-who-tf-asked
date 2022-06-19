@@ -18,7 +18,7 @@ public class OBJ_IRON_AXE extends LivingEntity {
         hitbox = new Rectangle();
         hitbox.x = 0;
         hitbox.y = 16;
-        hitbox.width = 48;
+        hitbox.width = GlobalGameThreadConfigs.tilesize;
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;

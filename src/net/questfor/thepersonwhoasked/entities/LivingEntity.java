@@ -21,7 +21,7 @@ public class LivingEntity extends Data {
     public transient Path path;
     public boolean attacking = false;
     public boolean hasattacked = false;
-    public boolean LightSource, burning;
+    public boolean LightSource = false, burning;
     public int Lightposition = 0;
     public boolean foundposition = false;
     public Light light;
@@ -31,7 +31,8 @@ public class LivingEntity extends Data {
     public int defaultspeed;
     public int knockbackcounter = 0;
     public  double worldz = 4;
-    public boolean high = true;
+    public int breathcounter = 80;
+    public boolean sprinting = true;
     public double speed;
     //HEALTH//
     public int maxhealth;
@@ -129,7 +130,6 @@ public class LivingEntity extends Data {
     public LivingEntity(MainGame gpp){
         this.gp = gpp;
         path = new Path();
-        LightSource = true;
 
     }
     public void setAction(){}
@@ -258,21 +258,12 @@ public class LivingEntity extends Data {
         }
         if (!hitboxe)
             if(!frozen){{
-            switch (direction){
-                case"up":
-                    worldy = worldy - speed;
-                    break;
-                case "down":
-                    worldy = worldy + speed;
-                    break;
-
-                case "right":
-                    worldx = worldx + speed;
-                    break;
-                case "left":
-                    worldx = worldx - speed;
-                    break;
-            }
+                switch (direction) {
+                    case "up" -> worldy = worldy - speed;
+                    case "down" -> worldy = worldy + speed;
+                    case "right" -> worldx = worldx + speed;
+                    case "left" -> worldx = worldx - speed;
+                }
             if(LightSource)
                 updateLight(Lightposition);
         }}
@@ -313,9 +304,7 @@ public class LivingEntity extends Data {
                 damage = 0;
             }
             GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].health -= damage;
-            if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Old man")) {
-                UI.addMessages("Help me im being hurt!");
-            } else if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Helper")) {
+            if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].name.equals("Helper")) {
                 GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].Hostile = true;
             }
             GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].invincible = true;
@@ -418,29 +407,19 @@ public class LivingEntity extends Data {
                             worldz++;
                         }
                         jumpstate++;
-                        if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
-                                (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
-                                && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
-                                (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
-                            if(image != null){
-                            if(image.getWidth()+jumpstate > 0 && image.getHeight()+jumpstate > 0){
+                        try {
                             image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
-                    }}}
-                }}
+                        }catch (Exception e){
+
+                        }                            }
+                }
             }else{
                 isup = false;
                 jumpstate--;
                 try {
-                    if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
-                            (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
-                            && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
-                            (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
-                        if(image != null){
-                            if(image.getWidth()+jumpstate > 0 && image.getHeight()+jumpstate > 0){
+                    image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
+                }catch (Exception e){
 
-                                image = scaleimage(image, image.getWidth() + jumpstate, image.getHeight() + jumpstate);
-                            }}                }}catch (Exception e){
-                    System.out.println("Catched null pointer exeption");
                 }
                 if(jumpstate < 0) {
                     jumpaction = 0;
@@ -898,7 +877,7 @@ public class LivingEntity extends Data {
                                     g2.drawImage(gp.tilemanager.fire[gp.tilemanager.mapspritenumber[MainGame.currentmap][worldcol][worldrow][worldlayer]], (int) (screenX), (int) (screenY), null);
                                 }
                                 g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                                g2.fillRect((int) screenX, (int) screenY, 48, 48);
+                                g2.fillRect((int) screenX, (int) screenY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
                             }
                         }
 

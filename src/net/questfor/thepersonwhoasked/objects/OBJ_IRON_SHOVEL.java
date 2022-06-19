@@ -18,7 +18,7 @@ public class OBJ_IRON_SHOVEL extends LivingEntity {
         hitbox.x = 0;
         LightSource = false;
         hitbox.y = 16;
-        hitbox.width = 48;
+        hitbox.width = GlobalGameThreadConfigs.tilesize;
         hitbox.height = 32;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;

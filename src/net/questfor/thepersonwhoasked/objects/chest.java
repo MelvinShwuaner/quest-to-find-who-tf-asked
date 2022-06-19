@@ -18,8 +18,8 @@ public class chest extends LivingEntity {
         hitbox = new Rectangle();
         hitbox.x = 0;
         hitbox.y = 0;
-        hitbox.width = 48;
-        hitbox.height = 48;
+        hitbox.width = GlobalGameThreadConfigs.tilesize;
+        hitbox.height = GlobalGameThreadConfigs.tilesize;
         hitboxdefaultx = hitbox.x;
         hitboxdefaulty = hitbox.y;
         maxstacksize = 16;
