@@ -245,6 +245,7 @@ class MainGame : JPanel(), Runnable {
                 lights = Array(maxmap) { arrayOfNulls<Light>(100) }
              tilemanager.set()
              player = Player(MainGame())
+             ehandler = EventHandler(MainGame())
             MultiRender.setObjectRenderer()
             MultiRender.setNPCrenderers()
             MultiRender.setMonsterRenderers()

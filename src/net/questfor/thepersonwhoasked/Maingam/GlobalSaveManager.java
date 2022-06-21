@@ -66,7 +66,6 @@ public class GlobalSaveManager {
             worldDataStorage.Monsters = GlobalGameThreadConfigs.Monsters;
             worldDataStorage.NPCS = GlobalGameThreadConfigs.NPCS;
             worldDataStorage.obj = GlobalGameThreadConfigs.obj;
-            worldDataStorage.raidcount = EventHandler.raidcounter;
             worldDataStorage.player = GlobalGameThreadConfigs.player;
             worldDataStorage.mapdata = gp.tilemanager.mapRendererID;
             worldDataStorage.currentmap = MainGame.currentmap;

@@ -28,7 +28,6 @@ public class green_slime extends LivingEntity {
         level = 5;
         projectile = new OBJ_ROCK(gpp);
         forgiveondeath = false;
-        Hostile = true;
         target = GlobalGameThreadConfigs.player;
         LightSource = false;
     }

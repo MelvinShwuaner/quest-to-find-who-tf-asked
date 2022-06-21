@@ -10,6 +10,7 @@ import net.questfor.thepersonwhoasked.objects.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class GlobalProperties {
     /*SETS THE LOCATION OF ENTITIES ON THERE WORLD*/
@@ -58,29 +59,25 @@ public class GlobalProperties {
                 GlobalGameThreadConfigs.NPCS[mapID][1] = new Helper(gp);
         GlobalGameThreadConfigs.NPCS[mapID][1].worldx = GlobalGameThreadConfigs.tilesize * 121;
         GlobalGameThreadConfigs.NPCS[mapID][1].worldy = GlobalGameThreadConfigs.tilesize * 109;
+        GlobalGameThreadConfigs.NPCS[mapID][3] = new BackRoundNpc(gp, 4, "oldman", 106*GlobalGameThreadConfigs.tilesize, 115*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
+        ArrayList<LivingEntity> inventory = new ArrayList<>();
+        inventory.add(new OBJ_POTION_HEALTH_1(gp));
+    inventory.get(0).stacksize = 4;
+     inventory.add(new OBJ_IRON_SHOVEL(gp));
+        inventory.add(new OBJ_IRON_AXE(gp));
+     inventory.add(new OBJ_SHIELD_DIAMOND(gp));
+        inventory.add(new OBJ_coal(gp));
+       inventory.get(4).stacksize = 30;
+       String[] dialogues = new String[9];
+       dialogues[0] = "Hello";
+        GlobalGameThreadConfigs.NPCS[mapID][5] = new BackRoundNpc(gp, 4, "oldman", 104*GlobalGameThreadConfigs.tilesize, 119*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][4] = new BackRoundNpc(gp, 4, "oldman", 116*GlobalGameThreadConfigs.tilesize, 116*GlobalGameThreadConfigs.tilesize, 4, 121, 159, 20, 2, true, inventory, true, false, dialogues);
+        GlobalGameThreadConfigs.NPCS[mapID][6] = new BackRoundNpc(gp, 4, "oldman", 126*GlobalGameThreadConfigs.tilesize, 116*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][7] = new BackRoundNpc(gp, 4, "oldman", 127*GlobalGameThreadConfigs.tilesize, 117*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][8] = new BackRoundNpc(gp, 4, "oldman", 137*GlobalGameThreadConfigs.tilesize, 112*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][9] = new BackRoundNpc(gp, 4, "oldman", 123*GlobalGameThreadConfigs.tilesize, 118*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
 
-        GlobalGameThreadConfigs.NPCS[mapID][3] = new Old_Man(gp);
-        GlobalGameThreadConfigs.NPCS[mapID][3].worldx = GlobalGameThreadConfigs.tilesize * 111;
-        GlobalGameThreadConfigs.NPCS[mapID][3].worldy = GlobalGameThreadConfigs.tilesize * 19;
-        GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[1] = "Hello. its a nice day \n outside isnt it?";
-        GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[2] = "You should go to the main square,\n were all going to be there";
-        GlobalGameThreadConfigs.NPCS[mapID][3].dialogues[3] = "OK bye!";
-        GlobalGameThreadConfigs.NPCS[mapID][3].direction = "right";
-        GlobalGameThreadConfigs.NPCS[mapID][3].speed = 0;
-        GlobalGameThreadConfigs.NPCS[mapID][3].frozen = true;
-            GlobalGameThreadConfigs.NPCS[mapID][0] = new Mysterious_trader(gp);
-            GlobalGameThreadConfigs.NPCS[mapID][0].worldx = GlobalGameThreadConfigs.tilesize * 112;
-            GlobalGameThreadConfigs.NPCS[mapID][0].worldy = GlobalGameThreadConfigs.tilesize * 106;
-            GlobalGameThreadConfigs.NPCS[mapID][0].speed = 0;
-            GlobalGameThreadConfigs.NPCS[mapID][0].frozen = true;
-        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_POTION_HEALTH_1(gp));
-        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.get(0).stacksize = 4;
-        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_IRON_SHOVEL(gp));
-        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_IRON_AXE(gp));
-        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_SHIELD_DIAMOND(gp));
-        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.add(new OBJ_coal(gp));
-        GlobalGameThreadConfigs.NPCS[mapID][0].inventory.get(4).stacksize = 30;
-}
+    }
     public  void setMonsterRenderers(){
         GlobalGameThreadConfigs.Monsters = new LivingEntity[MainGame.maxmap][20];
         int mapID = 0;
@@ -96,12 +93,7 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.Monsters[mapID][3] = new green_slime(gp);
         GlobalGameThreadConfigs.Monsters[mapID][3].worldx = GlobalGameThreadConfigs.tilesize*122;
         GlobalGameThreadConfigs.Monsters[mapID][3].worldy = GlobalGameThreadConfigs.tilesize*135;
-        GlobalGameThreadConfigs.Monsters[mapID][4] = new green_slime(gp);
-        GlobalGameThreadConfigs.Monsters[mapID][4].worldx = GlobalGameThreadConfigs.tilesize*122;
-        GlobalGameThreadConfigs.Monsters[mapID][4].worldy = GlobalGameThreadConfigs.tilesize*134;
-        GlobalGameThreadConfigs.Monsters[mapID][5] = new GunMan(gp);
-        GlobalGameThreadConfigs.Monsters[mapID][5].worldx = GlobalGameThreadConfigs.tilesize*116;
-        GlobalGameThreadConfigs.Monsters[mapID][5].worldy = GlobalGameThreadConfigs.tilesize*103;
+
     }
     public void SetRecipes(){
         GlobalGameThreadConfigs.Recipes[0] = new Recipe();

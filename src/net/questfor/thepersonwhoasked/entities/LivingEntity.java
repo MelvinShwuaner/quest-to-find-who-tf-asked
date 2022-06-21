@@ -249,8 +249,10 @@ public class LivingEntity extends Data {
         if(primepowercool < 30){
             primepowercool++;
         }
-        if(dialogues[dialogueIndex] == null){
-            cantalk++;
+        if(dialogues != null){
+            if(dialogues[dialogueIndex] == null){
+                cantalk++;
+            }
         }
         if(cantalk > 30){
             cantalk = 0;

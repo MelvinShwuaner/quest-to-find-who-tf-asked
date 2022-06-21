@@ -8,7 +8,6 @@ import java.awt.*;
 import java.util.Random;
 
 public class idontknowthenameofthisguy extends LivingEntity {
-    boolean player;
     public idontknowthenameofthisguy(MainGame gpp) {
         super(gpp);
         direction = "right";
@@ -37,8 +36,12 @@ public class idontknowthenameofthisguy extends LivingEntity {
     }
 
     public void setAction() {
-
-
+        if(speed == 5){
+                searchPath(110,141);
+                if(Math.round(worldx/GlobalGameThreadConfigs.tilesize) == 110 && Math.round(worldy/GlobalGameThreadConfigs.tilesize) == 141){
+                    alive = false;
+                }
+        }
             }
 
 

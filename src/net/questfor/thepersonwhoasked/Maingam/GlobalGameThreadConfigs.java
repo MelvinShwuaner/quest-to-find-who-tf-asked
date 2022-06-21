@@ -34,7 +34,7 @@ public class GlobalGameThreadConfigs extends Data {
     public static java.awt.Graphics2D g2;
     public static java.awt.GraphicsEnvironment ge = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
     public static java.awt.GraphicsDevice gd = ge.getDefaultScreenDevice();
-    public static boolean Buildmode = true;
+    public static boolean Buildmode = false;
     public static int tilesize = 48;
     public static net.questfor.thepersonwhoasked.entities.Player player = new net.questfor.thepersonwhoasked.entities.Player(net.questfor.thepersonwhoasked.GlobalProperties.gp);
 }

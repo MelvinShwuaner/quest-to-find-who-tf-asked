@@ -1,7 +1,9 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
-import net.questfor.thepersonwhoasked.entities.Mobs.green_slime;
+import net.questfor.thepersonwhoasked.entities.Mobs.GunMan;
+import net.questfor.thepersonwhoasked.entities.NPCS.idontknowthenameofthisguy;
+
 public class EventHandler {
     static MainGame gp;
     EventProperties eventBus[][][];
@@ -9,8 +11,8 @@ public class EventHandler {
     int PreviousEventX, PreviousEventY;
     boolean canTriggerEvent = true;
     public int tempmap, tempcol, temprow;
-    public static int raidcounter = 0;
-    public static boolean finushconversation = false;
+    public  int raidcounter = 0;
+    public boolean finushconversation = false, isFinushconversation = false, doneconversation = false;
 
     EventHandler(MainGame gpp) {
         this.gp = gpp;
@@ -78,11 +80,42 @@ public class EventHandler {
                     gp.tilemanager.mapRendererID[0][123][107][4] = 46;
                     gp.tilemanager.mapRendererID[0][123][107][5] = 46;
                     gp.tilemanager.mapRendererID[0][124][107][4] = 46;
+                    gp.playsound(10);
                     finushconversation = true;
                 }
             }}
             if(hit(0, 110, 109, "any") || hit(0, 110, 110, "any") || hit(0, 110, 111, "any")){
+                if(GlobalGameThreadConfigs.NPCS[0][2] == null){
+                    GlobalGameThreadConfigs.NPCS[0][2] = new idontknowthenameofthisguy(gp);
+                    GlobalGameThreadConfigs.NPCS[0][2].worldx = 108 * GlobalGameThreadConfigs.tilesize;
+                    GlobalGameThreadConfigs.NPCS[0][2].worldy = 110 * GlobalGameThreadConfigs.tilesize;
+                }
+                if(!isFinushconversation){
+                    speak(GlobalGameThreadConfigs.NPCS[0][2]);
+                    if(GlobalGameThreadConfigs.NPCS[0][2].dialogueIndex == 8){
+                        GlobalGameThreadConfigs.NPCS[0][2].speed = 5;
+                        isFinushconversation = true;
 
+                    }
+                }
+            }
+            if(isFinushconversation){
+                raidcounter++;
+                if((raidcounter == 80) ||hit(0, 109, 109, "any") || hit(0, 109, 110, "any") || hit(0, 109, 111, "any")
+){
+                    if(!doneconversation){
+                    gp.tilemanager.mapRendererID[0][119][109][5] = 46;
+                    gp.tilemanager.mapRendererID[0][119][110][5] = 46;
+                        GlobalGameThreadConfigs.Monsters[0][5] = new GunMan(gp);
+                        GlobalGameThreadConfigs.Monsters[0][5].worldx = GlobalGameThreadConfigs.tilesize*122;
+                        GlobalGameThreadConfigs.Monsters[0][5].worldy = GlobalGameThreadConfigs.tilesize*105;
+                        for(int i = 0; i < 4; i++){
+                            GlobalGameThreadConfigs.Monsters[0][i].makemeHostile(GlobalGameThreadConfigs.player);
+                        }
+
+                    gp.playsound(10);
+                    doneconversation = true;
+                }}
             }
         }
     }

@@ -10,7 +10,7 @@ public class WorldDataStorage extends Data {
     LivingEntity Monsters[][];
 
     LivingEntity obj[][];
-    int raidcount;
+
     Player player;
     int mapdata[][][][];
     int currentmap;

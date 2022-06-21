@@ -63,15 +63,20 @@ public class Path extends Data {
         int row = 0;
         while (col < MainGame.maxworldcol && row < MainGame.maxworldrow) {
             int tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer];
-            if (!MainGame.tilemanager.tile[tileNUM].air) {
-                tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer+1];
-                if (!MainGame.tilemanager.tile[tileNUM].air) {
+            if (!MainGame.tilemanager.tile[tileNUM].air || MainGame.tilemanager.tile[tileNUM].hot) {
+                int i = 0;
+                if(layer < 7){
+                    i = 1;
+                }
+                tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer+i];
+                if (!MainGame.tilemanager.tile[tileNUM].air || MainGame.tilemanager.tile[tileNUM].hot) {
                 nodes[col][row].solid = true;
             }else if(entity.jumping){
                     nodes[col][row].solid = true;
                 }
             }
-            for (int i = 0; i < GlobalGameThreadConfigs.obj[1].length; i++) {
+            int size = GlobalGameThreadConfigs.obj[1].length;
+            for (int i = 0; i < size; i++) {
                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] != null) {
                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].EntityType == 4) {
                         if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz == layer || GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz-1 == layer){
@@ -83,10 +88,11 @@ public class Path extends Data {
                             }}
                 }
             }
-            for (int i = 0; i < GlobalGameThreadConfigs.NPCS[1].length; i++) {
+            size = GlobalGameThreadConfigs.NPCS[1].length;
+            for (int i = 0; i < size; i++) {
                 if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i] != null) {
                     if(entity != GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i]){
-                        if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldz == layer){
+                        if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldz == layer || GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldz-1 == layer){
                             int itcol = (int) Math.round(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldx / GlobalGameThreadConfigs.tilesize);
                             int itrow = (int) Math.round(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldy / GlobalGameThreadConfigs.tilesize);
                             if((itcol != -1 && itcol != 50) && itrow != -1 && itrow != 50){
@@ -94,7 +100,8 @@ public class Path extends Data {
                         }}}
                 }
             }
-            for (int i = 0; i < GlobalGameThreadConfigs.Monsters[1].length; i++) {
+            size = GlobalGameThreadConfigs.Monsters[1].length;
+            for (int i = 0; i < size; i++) {
                 if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] != null) {
                     if(entity != GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i]){
                         if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldz == layer || GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldz-1 == layer){

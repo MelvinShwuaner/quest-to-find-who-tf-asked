@@ -1,11 +1,10 @@
 package net.questfor.thepersonwhoasked.entities;
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.objects.*;
-import net.questfor.thepersonwhoasked.objects.Projectiles.OBJ_FireBall;
+import net.questfor.thepersonwhoasked.objects.Projectiles.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-
 import static net.questfor.thepersonwhoasked.Maingam.KeyHandler.sprint;
 import static net.questfor.thepersonwhoasked.Maingam.MainGame.currentmap;
 import static net.questfor.thepersonwhoasked.Maingam.MainGame.sound;
@@ -19,7 +18,7 @@ public class Player extends LivingEntity {
     public  boolean hasweapon = true;
     public int i = 0;
     boolean hasfound = false;
-    int counter = 0;
+
     public Player(MainGame gpp) {
         super(gpp);
         screenX = MainGame.screenwidth / 2 - (GlobalGameThreadConfigs.tilesize / 2);
@@ -339,9 +338,9 @@ public class Player extends LivingEntity {
                 }
             }
             hitboxe = false;
-            //MainGame.hregister.checkTile(this);
-            if(!GlobalGameThreadConfigs.isinTital)
-              MainGame.ehandler.returnEvent();
+            MainGame.hregister.checkTile(this);
+           //if(!GlobalGameThreadConfigs.isinTital)
+              //MainGame.ehandler.returnEvent();
             //OBJECT COLLISIONS
             objindex = MainGame.hregister.worldzobjectreturn(this, GlobalGameThreadConfigs.obj);
             pickupObject(objindex);
@@ -349,25 +348,6 @@ public class Player extends LivingEntity {
             //ENTITY COLLISIONS
             int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
             interactNPC(npcindex);
-            if (npcindex != 999) {
-                if ((GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].dialogues[0] != null)){
-                    if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][npcindex].dialogues[0].equals("Take a wish. will you?")) {
-                        speed = 0;
-                        screenY++;
-                        counter++;
-                        if (counter == 30) {
-                            UI.addMessages("Thank you for Alpha testing My Game");
-                        }
-                        if (counter == 180) {
-                            UI.addMessages("Hope you enjoy the rest of your day, if you encountered bugs please \n go to https:discord.gg/tRva2AM2Gk and message @bruhkid2345");
-                        }
-                        if (counter == 360) {
-                            UI.addMessages("Bye :D !!!!");
-                        }
-                    }
-            }
-
-        }
                 int Monsterindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.Monsters);
                 attacked(Monsterindex);
        KeyHandler.enterpressed = false;
@@ -521,6 +501,7 @@ public class Player extends LivingEntity {
     public void pickupObject(int i) {
         try {
             if (i != 999) {
+
                 if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].EntityType == 3) {
                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].Type == Type_Current) {
                         GlobalGameThreadConfigs.obj[MainGame.currentmap][i].Use(this);
@@ -552,8 +533,7 @@ public class Player extends LivingEntity {
             }
         } catch (Exception e) {
             crash.main(e);
-        }
-    }
+    }}
 
     public void GetItems() {
         inventory.add(currentweapon);
@@ -692,7 +672,7 @@ public class Player extends LivingEntity {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
             if(KeyHandler.checkFPS)
-              g2.drawRect((int) (tempscreenx+hitbox.x), (int) (tempscreeny+hitbox.y), hitbox.width, hitbox.height);
+              g2.drawRect( (tempscreenx+hitbox.x),  (tempscreeny+hitbox.y), hitbox.width, hitbox.height);
         }catch(Exception e){
             e.printStackTrace();
         }
