@@ -37,15 +37,19 @@ public class GeneralHandler {
             @Override
             public int compare(LivingEntity e1, LivingEntity e2) {
                 int result;
+                if(e1.Vehicle != e2.Vehicle){
+                    result = Integer.compare( e1.Vehicle,  e2.Vehicle);
+                }else{
                 if (e1.worldz == e2.worldz) {
                     result = Integer.compare((int) e1.worldy, (int) e2.worldy);
                 }else{
                     result = Integer.compare((int) e1.worldz, (int) e2.worldz);
-                }
+                }}
                 return result;
             }
         });
         for(int i = 0; i < GlobalGameThreadConfigs.entitylist.size(); i++) {
+
             GlobalGameThreadConfigs.entitylist.get(i).draw(g2);
         }
         GlobalGameThreadConfigs.entitylist.clear();

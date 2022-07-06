@@ -3,6 +3,7 @@ package net.questfor.thepersonwhoasked.entities.Mobs;
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 
+import net.questfor.thepersonwhoasked.Maingam.UI;
 import net.questfor.thepersonwhoasked.entities.AI.Path;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 import net.questfor.thepersonwhoasked.objects.*;
@@ -34,7 +35,9 @@ public class GunMan extends LivingEntity {
         XP = 7;
         level = 5;
         projectile = new Bullet(gp);
+        currentweapon = new OBJ_IRON_SWORD(gp);
 Hostile = true;
+target = player;
 LightSource = true;
     }
 
@@ -85,23 +88,23 @@ LightSource = true;
             } else {
 
                             if (distancex < previoustaskx) {
-                                if (worldx > player.worldx) {
-                                    distancex = worldx - player.worldx;
+                                if (worldx > target.worldx) {
+                                    distancex = worldx - target.worldx;
                                 } else {
-                                    distancex = player.worldx - worldx;
+                                    distancex = target.worldx - worldx;
                                 }
-                                taskx = player.worldx;
+                                taskx = target.worldx;
                                 previoustaskx = distancex;
 
                             }
                             if (distancey < previoustasky) {
-                                if (worldy > player.worldy) {
-                                    distancey = worldy - player.worldy;
+                                if (worldy > target.worldy) {
+                                    distancey = worldy - target.worldy;
                                 } else {
-                                    distancey = player.worldy - worldy;
+                                    distancey = target.worldy - worldy;
                                 }
                                 previoustasky = distancey;
-                                tasky = player.worldy;
+                                tasky = target.worldy;
 
                             }
 
@@ -173,32 +176,6 @@ LightSource = true;
     public int getparticleMaxHealth() {
         return 23;
     }
-
-    public void attackEntity(int attackindex, int dmg) {
-        if (attackindex != 999) {
-            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible == false) {
-                gp.playsound(6);
-                int damage = dmg - GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].defence;
-                if (damage < 0) {
-                    damage = 0;
-                }
-                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health -= damage;
-                ParticleAttackManager(this, GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex]);
-                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].makemeHostile(this);
-                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].HostileTime = 0;
-                GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].invincible = true;
-            }
-            if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying == false) {
-                if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].health < 0) {
-                    GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].dying = true;
-                    previoustasky = 10000;
-                    previoustaskx = 10000;
-                    XP += GlobalGameThreadConfigs.Monsters[MainGame.currentmap][attackindex].XP;
-                }
-            }
-        }
-    }
-
     @Override
     public void draw(Graphics2D g2) {
         try {
@@ -206,8 +183,8 @@ LightSource = true;
                 path = new Path();
             }
             BufferedImage image = null;
-            double screenX = (worldx - player.worldx + player.screenX);
-            double screenY = worldy - player.worldy + player.screenY;
+            double screenX = (worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+            double screenY = worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
             double tempscreenx = screenX;
             double tempscreeny = screenY;
             switch (direction) {
@@ -307,10 +284,20 @@ LightSource = true;
 
                 }
             }
-            if ((worldx + GlobalGameThreadConfigs.tilesize > player.worldx - player.screenX &&
-                    (worldx - GlobalGameThreadConfigs.tilesize < player.worldx + player.screenX))
-                    && worldy + GlobalGameThreadConfigs.tilesize > player.worldy - player.screenY &&
-                    (worldy - GlobalGameThreadConfigs.tilesize < player.worldy + player.screenY)) {
+            if (drawingpath){
+                g2.setColor(Color.red);
+                for (int i = 0; i < path.pathlist.size(); i++) {
+                    int worldx = path.pathlist.get(i).col * GlobalGameThreadConfigs.tilesize;
+                    int worldy = path.pathlist.get(i).row * GlobalGameThreadConfigs.tilesize;
+                    double screenx = (worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+                    double screeny = worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
+                    g2.fillRect((int) screenx, (int) screeny, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+                }
+            }
+            if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
+                    (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
+                    && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
+                    (worldy - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY)) {
                 if (image == null) {
                     getImageInstance();
                     getAttackInstance();
@@ -345,20 +332,20 @@ LightSource = true;
                     g2.setColor(new Color(255, 0, 30));
                     g2.fillRect((int) screenX, (int) screenY - 15, (int) HPValue, 10);
                 }
-                if(worldz > player.worldz){
+                if(worldz > GlobalGameThreadConfigs.player.worldz){
                     float Xdistance;
                     float Ydistance;
                     int x = (int) Math.round(worldx/GlobalGameThreadConfigs.tilesize);
                     int y = (int) Math.round(worldy/GlobalGameThreadConfigs.tilesize);
-                    if (x > player.worldx / GlobalGameThreadConfigs.tilesize) {
-                        Xdistance = (float) (x - (player.worldx / GlobalGameThreadConfigs.tilesize));
+                    if (x > GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize) {
+                        Xdistance = (float) (x - (GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize));
                     }else{
-                        Xdistance = (float) ((player.worldx / GlobalGameThreadConfigs.tilesize) - x);
+                        Xdistance = (float) ((GlobalGameThreadConfigs.player.worldx / GlobalGameThreadConfigs.tilesize) - x);
                     }
-                    if (y > player.worldy / GlobalGameThreadConfigs.tilesize) {
-                        Ydistance = (float) (y - (player.worldy / GlobalGameThreadConfigs.tilesize));
+                    if (y > GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize) {
+                        Ydistance = (float) (y - (GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize));
                     }else{
-                        Ydistance = (float) ((player.worldy / GlobalGameThreadConfigs.tilesize) - y);
+                        Ydistance = (float) ((GlobalGameThreadConfigs.player.worldy / GlobalGameThreadConfigs.tilesize) - y);
                     }
                     if (Ydistance < 2 && Xdistance < 2){
                         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
@@ -417,6 +404,19 @@ LightSource = true;
             attacking = false;
             hasattacked = true;
             spritecounter = 0;
+        }
+    }
+    public void AttackPLayer(int trueAttackDamage){
+        if(!GlobalGameThreadConfigs.player.invincible){
+            int damage = trueAttackDamage - GlobalGameThreadConfigs.player.defence;
+            if(damage < 0){
+                damage = 0;
+            }
+            GlobalGameThreadConfigs.player.health-= damage;
+            dealKnockback(player);
+            UI.addMessages("You have been hit! health is now to "+GlobalGameThreadConfigs.player.health);
+            GlobalGameThreadConfigs.player.invincible = true;
+            gp.playsound(5);
         }
     }
 }

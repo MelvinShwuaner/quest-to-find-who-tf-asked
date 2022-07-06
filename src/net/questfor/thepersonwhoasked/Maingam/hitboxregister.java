@@ -1,6 +1,7 @@
 package net.questfor.thepersonwhoasked.Maingam;
 
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
+import net.questfor.thepersonwhoasked.entities.Player;
 
 import java.util.Random;
 
@@ -190,7 +191,7 @@ public class hitboxregister {
     }
     public boolean worldzentityreturn(LivingEntity entity, LivingEntity[][] target) {
         //checks collision between a entity and another entity
-        boolean index = false;
+        boolean index = true;
         for (int i = 0; i < target[1].length; i++) {
             if (target[MainGame.currentmap][i] != null) {
                 entity.hitbox.x = (int) (entity.worldx + entity.hitbox.x);
@@ -213,10 +214,9 @@ public class hitboxregister {
                 }
                 if (entity.hitbox.intersects(target[MainGame.currentmap][i].hitbox)) {
                     if (target[MainGame.currentmap][i] != entity) {
-                        if (entity.worldz == target[MainGame.currentmap][i].worldz+1) {
-                            index = true;
-                        }
+                            index = false;
                     }
+
                 }
                 entity.hitbox.x = entity.hitboxdefaultx;
                 entity.hitbox.y = entity.hitboxdefaulty;
@@ -340,4 +340,20 @@ try {
 
         }
         return index;
-}}
+}
+
+    public boolean returntileworldzonvehicle(LivingEntity entity, int vehindex) {
+        boolean index = true;
+        boolean shouldtrigger = !checkEntity(GlobalGameThreadConfigs.player, GlobalGameThreadConfigs.Monsters) && !checkEntity(GlobalGameThreadConfigs.player, GlobalGameThreadConfigs.NPCS);
+        try{
+        int TileNum1 = GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].tiles[(int) (Math.round(entity.worldx / GlobalGameThreadConfigs.tilesize) - Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldx / GlobalGameThreadConfigs.tilesize))][(int) (Math.round(entity.worldy / GlobalGameThreadConfigs.tilesize) - Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldy / GlobalGameThreadConfigs.tilesize))][(int) (entity.worldz - GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldz)];
+        if (shouldtrigger) {
+            if (MainGame.tilemanager.tile[TileNum1].air) {
+                System.out.println("e");
+                index = false;
+            }}}catch (Exception e){
+            System.out.println("s");
+        }
+            return index;
+
+    }}

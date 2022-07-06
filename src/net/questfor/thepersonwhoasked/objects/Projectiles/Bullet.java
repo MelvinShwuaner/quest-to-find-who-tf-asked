@@ -12,7 +12,7 @@ public class Bullet extends Projectile {
     public Bullet(MainGame gpp) {
         super(gpp);
         this.gp  = gpp;
-        name = "Rock";
+        name = "Bullet";
         speed = 20;
         maxhealth = 200;
         health = maxhealth;
@@ -40,11 +40,7 @@ public class Bullet extends Projectile {
         right2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
     }
     public boolean haveresource(LivingEntity sourceEntity){
-        boolean haveresource = false;
-        if(sourceEntity.Ammo >= UseCost){
-            haveresource = true;
-        }
-        return haveresource;
+        return sourceEntity.Ammo >= UseCost;
     }
     public void RemoveResource(LivingEntity source){
         source.Ammo -= UseCost;

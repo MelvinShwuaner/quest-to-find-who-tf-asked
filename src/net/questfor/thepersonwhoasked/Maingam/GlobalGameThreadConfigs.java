@@ -19,6 +19,7 @@ public class GlobalGameThreadConfigs extends Data {
 
     public static net.questfor.thepersonwhoasked.entities.LivingEntity[][] Monsters = new net.questfor.thepersonwhoasked.entities.LivingEntity[MainGame.maxmap][20];
     public static net.questfor.thepersonwhoasked.entities.LivingEntity[][] NPCS = new net.questfor.thepersonwhoasked.entities.LivingEntity[MainGame.maxmap][10];
+    public static net.questfor.thepersonwhoasked.entities.Vehicles.Vehicle[][] Vehicles = new net.questfor.thepersonwhoasked.entities.Vehicles.Vehicle[MainGame.maxmap][10];
     public static Recipe[] Recipes = new Recipe[20];
     public static String filepath;
     public static net.questfor.thepersonwhoasked.entities.LivingEntity[][] obj = new net.questfor.thepersonwhoasked.entities.LivingEntity[MainGame.maxmap][100];
@@ -34,7 +35,7 @@ public class GlobalGameThreadConfigs extends Data {
     public static java.awt.Graphics2D g2;
     public static java.awt.GraphicsEnvironment ge = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
     public static java.awt.GraphicsDevice gd = ge.getDefaultScreenDevice();
-    public static boolean Buildmode = false;
+    public static boolean Buildmode = true;
     public static int tilesize = 48;
     public static net.questfor.thepersonwhoasked.entities.Player player = new net.questfor.thepersonwhoasked.entities.Player(net.questfor.thepersonwhoasked.GlobalProperties.gp);
 }

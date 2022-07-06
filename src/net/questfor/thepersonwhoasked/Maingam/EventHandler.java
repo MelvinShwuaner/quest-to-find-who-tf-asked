@@ -12,7 +12,7 @@ public class EventHandler {
     boolean canTriggerEvent = true;
     public int tempmap, tempcol, temprow;
     public  int raidcounter = 0;
-    public boolean finushconversation = false, isFinushconversation = false, doneconversation = false;
+    public boolean finushconversation = false, isFinushconversation = false, doneconversation = false, isDoneconversation = false;
 
     EventHandler(MainGame gpp) {
         this.gp = gpp;
@@ -55,7 +55,8 @@ public class EventHandler {
 
         if (canTriggerEvent) {
             /*Assign events*/
-            if(hit(0, 113, 109, "any")){
+            if(hit(0, 113, 109, "any"))
+            {
                 if(!finushconversation){
                 speak(GlobalGameThreadConfigs.NPCS[0][1]);
                 if(GlobalGameThreadConfigs.NPCS[0][1].dialogueIndex == 4){
@@ -84,12 +85,15 @@ public class EventHandler {
                     finushconversation = true;
                 }
             }}
-            if(hit(0, 110, 109, "any") || hit(0, 110, 110, "any") || hit(0, 110, 111, "any")){
+            if(finushconversation){
+                raidcounter++;
+            if((raidcounter > 40 && raidcounter < 80) || hit(0, 110, 109, "any") || hit(0, 110, 110, "any") || hit(0, 110, 111, "any")){
                 if(GlobalGameThreadConfigs.NPCS[0][2] == null){
                     GlobalGameThreadConfigs.NPCS[0][2] = new idontknowthenameofthisguy(gp);
                     GlobalGameThreadConfigs.NPCS[0][2].worldx = 108 * GlobalGameThreadConfigs.tilesize;
                     GlobalGameThreadConfigs.NPCS[0][2].worldy = 110 * GlobalGameThreadConfigs.tilesize;
                 }
+                GlobalGameThreadConfigs.player.direction = "left";
                 if(!isFinushconversation){
                     speak(GlobalGameThreadConfigs.NPCS[0][2]);
                     if(GlobalGameThreadConfigs.NPCS[0][2].dialogueIndex == 8){
@@ -100,25 +104,43 @@ public class EventHandler {
                 }
             }
             if(isFinushconversation){
-                raidcounter++;
                 if((raidcounter == 80) ||hit(0, 109, 109, "any") || hit(0, 109, 110, "any") || hit(0, 109, 111, "any")
 ){
-                    if(!doneconversation){
-                    gp.tilemanager.mapRendererID[0][119][109][5] = 46;
-                    gp.tilemanager.mapRendererID[0][119][110][5] = 46;
-                        GlobalGameThreadConfigs.Monsters[0][5] = new GunMan(gp);
-                        GlobalGameThreadConfigs.Monsters[0][5].worldx = GlobalGameThreadConfigs.tilesize*122;
-                        GlobalGameThreadConfigs.Monsters[0][5].worldy = GlobalGameThreadConfigs.tilesize*105;
-                        for(int i = 0; i < 4; i++){
-                            GlobalGameThreadConfigs.Monsters[0][i].makemeHostile(GlobalGameThreadConfigs.player);
+                    if(!doneconversation) {
+                        gp.tilemanager.mapRendererID[0][119][109][5] = 46;
+                        gp.tilemanager.mapRendererID[0][119][110][5] = 46;
+                        GlobalGameThreadConfigs.Monsters[0][4] = new GunMan(gp);
+                        GlobalGameThreadConfigs.Monsters[0][4].worldx = GlobalGameThreadConfigs.tilesize * 122;
+                        GlobalGameThreadConfigs.Monsters[0][4].worldy = GlobalGameThreadConfigs.tilesize * 105;
+                        for (int i = 0; i < 4; i++) {
+                           GlobalGameThreadConfigs.Monsters[0][i].makemeHostile(GlobalGameThreadConfigs.player);
+                        }
+                        for (int i = 3; i < 10; i++) {
+                            GlobalGameThreadConfigs.NPCS[0][i].onpath = true;
                         }
 
-                    gp.playsound(10);
-                    doneconversation = true;
+                        GlobalGameThreadConfigs.NPCS[0][1].dialogueIndex = 5;
+                        speak(GlobalGameThreadConfigs.NPCS[0][1]);
+                        gp.playsound(10);
+                        doneconversation = true;
+                    }
                 }}
-            }
+            }}
+            if(Math.round(GlobalGameThreadConfigs.player.worldy/GlobalGameThreadConfigs.tilesize) == 156 && MainGame.currentmap == 0){
+                if(isDoneconversation){
+                GlobalGameThreadConfigs.player.speed = 0;
+                GlobalGameThreadConfigs.player.cantmove = true;
+                for (int i = 0; i < 5; i++) {
+                    GlobalGameThreadConfigs.Monsters[0][i].makemeHostile(GlobalGameThreadConfigs.obj[0][7]);
+                }
+                GlobalGameThreadConfigs.NPCS[0][3].worldy = 165*GlobalGameThreadConfigs.tilesize;
+                GlobalGameThreadConfigs.NPCS[0][3].worldx = GlobalGameThreadConfigs.player.worldx;
+                GlobalGameThreadConfigs.NPCS[0][3].taskx = Math.round(GlobalGameThreadConfigs.player.worldx/GlobalGameThreadConfigs.tilesize);
+                GlobalGameThreadConfigs.NPCS[0][3].tasky = Math.round(GlobalGameThreadConfigs.player.worldy/GlobalGameThreadConfigs.tilesize);
+                isDoneconversation = true;
+            }}
         }
-    }
+
 
     public void speak(LivingEntity entity) {
 

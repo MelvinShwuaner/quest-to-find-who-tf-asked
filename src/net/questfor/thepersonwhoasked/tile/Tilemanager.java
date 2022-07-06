@@ -8,6 +8,7 @@ import java.io.*;
 import static net.questfor.thepersonwhoasked.GlobalProperties.gp;
 
 public class Tilemanager {
+
     public int worldcol, worldrow, worldlayer;
     public static int tilecount = 0;
     public tile[] tile;
@@ -87,7 +88,7 @@ public class Tilemanager {
         tileproperties(45,"clayblock", true, false, false, false);
         //AIR
         tileproperties(46,"air", true, true, true, false);
-        //OCUPIED OBJECT
+        //OCUPIED OBJECT //USED FOR AI AND DETECTING OBJECTS
         tileproperties(47, "air", true, false, false, false);
 
         tileproperties(48, "brickwall", true, false, false, false);
@@ -96,6 +97,12 @@ public class Tilemanager {
         tileproperties(51, "black", true, false, false, false);
         //FIRE
         tileproperties(52, "air", true, true, true, true);
+        //OCCUPIED ENTITY //USED FOR AI
+        tileproperties(53,"air", true, true, true, false);
+        //CONTROL PANEL
+        tileproperties(54,"black", true, false, false, false);
+        //TIRE
+        tileproperties(55,"black", true, false, false, false);
 
     }
 
@@ -175,7 +182,7 @@ public class Tilemanager {
                     int worldY = worldrow * GlobalGameThreadConfigs.tilesize;
                     double screenX = (worldX - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
                     double screenY = worldY - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
-                        if (tileID != 46) {
+                        if (tileID != 46 && tileID != 53 && tileID != 47) {
                             boolean shouldrender = true;
                             if (worldlayer + 1 < MainGame.maxworldlayer) {
                                 if(worldlayer > GlobalGameThreadConfigs.player.worldz){

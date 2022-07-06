@@ -2,6 +2,7 @@ package net.questfor.thepersonwhoasked.entities;
 
 import net.questfor.thepersonwhoasked.Maingam.*;
 import net.questfor.thepersonwhoasked.World.Light;
+import net.questfor.thepersonwhoasked.entities.AI.Node;
 import net.questfor.thepersonwhoasked.entities.AI.Path;
 
 import javax.imageio.ImageIO;
@@ -10,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static net.questfor.thepersonwhoasked.GlobalProperties.gp;
 import static net.questfor.thepersonwhoasked.Maingam.MainGame.currentmap;
 
 //is the parent class for all entities including player
@@ -19,6 +19,7 @@ public class LivingEntity extends Data {
     //WORLD//
     public MainGame gp;
     public transient Path path;
+    public transient Node oldPath;
     public boolean attacking = false;
     public boolean hasattacked = false;
     public boolean LightSource = false, burning;
@@ -27,6 +28,7 @@ public class LivingEntity extends Data {
     public Light light;
     public  double worldx;
     public  double worldy;
+
     public boolean goingup;
     public int defaultspeed;
     public int knockbackcounter = 0;
@@ -48,12 +50,13 @@ public class LivingEntity extends Data {
     public transient  BufferedImage up1, up2, down1, down2, down3, left1, left2, right1, right2;
     public transient BufferedImage attackup1, attackup2, attackup3, attackdown1, attackdown2, attackdown3,
             attackleft1, attackleft2, attackleft3, attackright1, attackright2, attackright3;
-    boolean drawingpath = false;
+    public boolean drawingpath = false;
     //MOVEMENT AND ANIMATION//
     public String direction = "down";
     public String frozendirection = direction;
     public int spritecounter = 0;
     public int spritenumber = 1;
+    public boolean controlling = false;
     int animationLength = 0;
     //HITBOX//
     public Rectangle hitbox;
@@ -66,7 +69,7 @@ public class LivingEntity extends Data {
     public boolean hitboxe = false;
     //AI//
     public int actionLock = 0;
-    public int objindex;
+    public int objindex, vehindex;
 
     public  boolean isup = false;
     public boolean Hostile = false;
@@ -74,6 +77,7 @@ public class LivingEntity extends Data {
     public double taskx = 0, tasky = 0;
     public boolean forgiveondeath = true;
     public boolean onpath = false;
+
     public LivingEntity target;
     public double distancex = 0, distancey = 0;
     public double previoustaskx = 1, previoustasky = 1;
@@ -119,13 +123,15 @@ public class LivingEntity extends Data {
     public int frames = 2;
     public int Type_sword = 1, Type_constumable = 2, Type_pickaxe = 3, Type_armor = 4, Type_projectile = 5, Type_Current = 6, Type_axe = 7, Type_shovel = 8;
     public int UseCost;
+    public int knockbackpower = 0;
     //SMELTING
     public boolean fuel; public boolean smeltable; public LivingEntity Outcome; public boolean smelting = false; public int cool = 0; public int maxcool = 50; public int colspeed = 1; public int hasfinushedcol = 0;
     //RECIPE
     public boolean[] slot =  new boolean[9];
     public boolean NBTDATA = false;
     public boolean jumping = false, canjump = true;
-
+    public boolean passanger = false;
+    public int Vehicle = 1;
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
         this.gp = gpp;
@@ -202,7 +208,7 @@ public class LivingEntity extends Data {
                 }
             }
         }
-        if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.returntileworldz(this)) {
+        if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) && MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) && MainGame.hregister.returntileworldz(this)) {
             if (!isup) {
                 worldz--;
                 getImageInstance();
@@ -222,11 +228,17 @@ public class LivingEntity extends Data {
                     frozendirection = direction;
                     frozen = false;
                 }
+                if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
+                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
+                }
                 switch (frozendirection) {
                     case "up" -> worldy = worldy - speed;
                     case "down" -> worldy = worldy + speed;
                     case "right" -> worldx = worldx + speed;
                     case "left" -> worldx = worldx - speed;
+                }
+                if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
+                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
                 }
                 knockbackcounter++;
                 if(knockbackcounter == 2){
@@ -237,6 +249,9 @@ public class LivingEntity extends Data {
                     frozen = false;
                 }
             }
+        }
+        if(worldz == 8){
+            worldz = 7;
         }
         setAction();
         checkCollision();
@@ -260,11 +275,17 @@ public class LivingEntity extends Data {
         }
         if (!hitboxe)
             if(!frozen){{
+                if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
+                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
+                }
                 switch (direction) {
                     case "up" -> worldy = worldy - speed;
                     case "down" -> worldy = worldy + speed;
                     case "right" -> worldx = worldx + speed;
                     case "left" -> worldx = worldx - speed;
+                }
+                if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
+                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
                 }
             if(LightSource)
                 updateLight(Lightposition);
@@ -339,7 +360,7 @@ public class LivingEntity extends Data {
             }
         }
     }
-    private void Regenerate() {
+    protected void Regenerate() {
         if(!Hostile) {
             regenerationcooldown++;
             if (regenerationcooldown > 200) {
@@ -659,11 +680,11 @@ public class LivingEntity extends Data {
         if(path == null){
             path = new Path();
         }
-        int startcol = (int) ((worldx+hitbox.x)/GlobalGameThreadConfigs.tilesize);
-        int startrow = (int) ((worldy+hitbox.y)/GlobalGameThreadConfigs.tilesize);
+        int startcol = (int) Math.round((worldx)/GlobalGameThreadConfigs.tilesize);
+        int startrow = (int)Math.round((worldy)/GlobalGameThreadConfigs.tilesize);
         path.setNodes(startcol, startrow, (int) taskX, (int) taskY, (int) worldz, this);
         if(path.search()){
-            int nextx = path.pathlist.get(0).col*GlobalGameThreadConfigs.tilesize;
+         int nextx = path.pathlist.get(0).col*GlobalGameThreadConfigs.tilesize;
             int nexty = path.pathlist.get(0).row*GlobalGameThreadConfigs.tilesize;
             int enleftx = (int) (worldx+hitbox.x);
             int enrightx = (int) (worldx+hitbox.x+hitbox.width);
@@ -694,13 +715,13 @@ public class LivingEntity extends Data {
             }else if(enupy < nexty && enleftx > nextx){
                 direction = "down";
                 checkCollision();
-                if(hitboxe){
+                if(hitboxe && !jumping){
                     direction = "left";
                 }
             }else if(enupy < nexty && enleftx < nextx){
                 direction = "down";
                 checkCollision();
-                if(hitboxe){
+                if(hitboxe && !jumping){
                     direction = "right";
                 }
             }
@@ -766,7 +787,7 @@ public class LivingEntity extends Data {
             int worldY = worldrow * GlobalGameThreadConfigs.tilesize;
             double screenX = (worldX - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
             double screenY = worldY - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
-            if (tileID != 46) {
+            if (tileID != 46 && tileID != 53 && tileID != 47) {
                 boolean shouldrenderr = true;
                 if(worldlayer+1 < MainGame.maxworldlayer) {
                     if(worldlayer > GlobalGameThreadConfigs.player.worldz){
@@ -878,8 +899,7 @@ public class LivingEntity extends Data {
                                     }
                                     g2.drawImage(gp.tilemanager.fire[gp.tilemanager.mapspritenumber[MainGame.currentmap][worldcol][worldrow][worldlayer]], (int) (screenX), (int) (screenY), null);
                                 }
-                                g2.setColor(new Color(255, 255, 255, worldlayer * 8));
-                                g2.fillRect((int) screenX, (int) screenY, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+
                             }
                         }
 
@@ -895,7 +915,7 @@ public class LivingEntity extends Data {
 
     public void dealKnockback(LivingEntity entity){
         entity.frozendirection = direction;
-        entity.speed = 10;
+        entity.speed = currentweapon.knockbackpower;
         entity.frozen = true;
     }
 
@@ -908,4 +928,12 @@ public class LivingEntity extends Data {
     }
     public LivingEntity replicate(){return null;}
     public void Place(double x, double y, double z, int i){}
+    public void enterVehcile(int vehicleindex){
+        worldx = GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].enterX*GlobalGameThreadConfigs.tilesize;
+        worldy = GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].enterY*GlobalGameThreadConfigs.tilesize;
+        GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].passengers.add(this);
+        worldz = GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].worldz+1;
+        passanger = true;
+        vehindex = vehicleindex;
+    }
 }

@@ -17,6 +17,7 @@ public class Player extends LivingEntity {
 
     public  boolean hasweapon = true;
     public int i = 0;
+    public boolean cantmove = false;
     boolean hasfound = false;
 
     public Player(MainGame gpp) {
@@ -34,12 +35,12 @@ public class Player extends LivingEntity {
         Ammo = 10;
         name = "Player";
         inventorysize = 20;
-            worldx = GlobalGameThreadConfigs.tilesize * 113;
-        worldy = GlobalGameThreadConfigs.tilesize * 109;
+            worldx = GlobalGameThreadConfigs.tilesize * 95;
+        worldy = GlobalGameThreadConfigs.tilesize * 156;
         defaultspeed = 4;
         speed = defaultspeed;
         direction = "up";
-        worldz = 4;
+        worldz = 5;
         maxhealth = 12;
         health = maxhealth;
         invincible = false;
@@ -213,6 +214,9 @@ public class Player extends LivingEntity {
                     if ((!KeyHandler.upPressed && !KeyHandler.downPressed && !KeyHandler.rightPressed && !KeyHandler.leftPressed)) {
 
                         breathcounter+=2;
+                    if(breathcounter > 80){
+                        breathcounter = 80;
+                    }
                     if(breathcounter == 80){
                         sprinting = true;
                     }
@@ -221,6 +225,9 @@ public class Player extends LivingEntity {
                 speed = 2;
                 if(!sprinting){
                     breathcounter++;
+                    if(breathcounter > 80){
+                        breathcounter = 80;
+                    }
                     if(breathcounter == 80){
                         sprinting = true;
                     }
@@ -233,39 +240,19 @@ public class Player extends LivingEntity {
             if (KeyHandler.use) {
               Use();
             }
-            if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) || MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) || MainGame.hregister.returntileworldz(this)) {
-                if (!isup) {
+            if (MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.Monsters) && MainGame.hregister.worldzentityreturn(this, GlobalGameThreadConfigs.NPCS) && MainGame.hregister.returntileworldz(this)) {
+                boolean yes = false;
+                if(passanger){
+                   yes = MainGame.hregister.returntileworldzonvehicle(this, vehindex);
+                }
+                if (!isup && !yes) {
                     worldz--;
                     getImageInstance();
                     updatehitbox();
                     getAttackInstance();
                 }
             }
-            if(frozen){
-                checkCollision();
-                if(hitboxe){
-                    knockbackcounter = 0;
-                    frozen = false;
-                    speed = defaultspeed;
-                }else{
-                    switch (frozendirection) {
-                        case "up" -> worldy = worldy - speed;
-                        case "down" -> worldy = worldy + speed;
-                        case "right" -> worldx = worldx + speed;
-                        case "left" -> worldx = worldx - speed;
-                    }
-                    if(LightSource)
-                      updateLight(Lightposition);
-                    knockbackcounter++;
-                    if(knockbackcounter == 2){
-                        speed--;
-                        knockbackcounter = 0;
-                    }
-                    if(speed == defaultspeed){
-                        frozen = false;
-                    }
-                }
-            }
+
             if (KeyHandler.primepowera && projectile.alive == false && primepowercool == 30 && projectile.haveresource(this)) {
                 projectile.Set((int) worldx, (int) worldy, (int) worldz, direction, true, this);
                 projectile.RemoveResource(this);
@@ -286,7 +273,7 @@ public class Player extends LivingEntity {
 
 
                 if (KeyHandler.upPressed || KeyHandler.downPressed || KeyHandler.rightPressed || KeyHandler.leftPressed) {
-
+                    if(!cantmove){
                     if (KeyHandler.upPressed) {
                         direction = "up";
                     }
@@ -299,7 +286,7 @@ public class Player extends LivingEntity {
                     if (KeyHandler.leftPressed) {
                         direction = "left";
                     }
-                }
+                }}
                 if (attacking == true) {
                     Attack();
                 } else if
@@ -339,8 +326,8 @@ public class Player extends LivingEntity {
             }
             hitboxe = false;
             MainGame.hregister.checkTile(this);
-           //if(!GlobalGameThreadConfigs.isinTital)
-              //MainGame.ehandler.returnEvent();
+           if(!GlobalGameThreadConfigs.isinTital)
+              MainGame.ehandler.returnEvent();
             //OBJECT COLLISIONS
             objindex = MainGame.hregister.worldzobjectreturn(this, GlobalGameThreadConfigs.obj);
             pickupObject(objindex);
@@ -353,6 +340,37 @@ public class Player extends LivingEntity {
        KeyHandler.enterpressed = false;
 
             if (GlobalGameThreadConfigs.isinTital == false) {
+                if(frozen){
+                    checkCollision();
+                    if(hitboxe){
+                        knockbackcounter = 0;
+                        frozen = false;
+                        speed = defaultspeed;
+                    }else{
+                        if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
+                            gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
+                        }
+                        switch (frozendirection) {
+                            case "up" -> worldy = worldy - speed;
+                            case "down" -> worldy = worldy + speed;
+                            case "right" -> worldx = worldx + speed;
+                            case "left" -> worldx = worldx - speed;
+                        }
+                        if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
+                            gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
+                        }
+                        if(LightSource)
+                            updateLight(Lightposition);
+                        knockbackcounter++;
+                        if(knockbackcounter == 2){
+                            speed--;
+                            knockbackcounter = 0;
+                        }
+                        if(speed == defaultspeed){
+                            frozen = false;
+                        }
+                    }
+                }
                 if (!hitboxe) {
                     if(!frozen){
                     if (KeyHandler.upPressed || KeyHandler.downPressed) {
@@ -367,8 +385,12 @@ public class Player extends LivingEntity {
                             }
                         }
                     }
+                    if(!controlling){
                     if (KeyHandler.upPressed || KeyHandler.downPressed || KeyHandler.rightPressed || KeyHandler.leftPressed) {
                         if((!KeyHandler.rightPressed && !KeyHandler.leftPressed) || (!KeyHandler.leftPressed && KeyHandler.rightPressed)|| (KeyHandler.leftPressed && !KeyHandler.rightPressed)){
+                            if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
+                                gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
+                            }
                         if (KeyHandler.upPressed) {
                             worldy = worldy - speed;
                         }
@@ -381,13 +403,18 @@ public class Player extends LivingEntity {
                         if (KeyHandler.leftPressed) {
                             worldx = worldx - speed;
                         }
+                        if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
+                            gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
+                        }
                         if(LightSource){
                           updateLight(Lightposition);
-
-                    }}}
+                    }}}else{
+                        GlobalGameThreadConfigs.Vehicles[currentmap][vehindex].speed = this.speed+4;
+                    }
+                    }
                 }
             } else if (GlobalGameThreadConfigs.isinTital && hitboxe == false) {
-                if(!frozen){
+
                 switch (this.direction) {
                     case "up":
                         worldy -= this.speed;
@@ -401,7 +428,7 @@ public class Player extends LivingEntity {
                     case "right":
                         worldx += this.speed;
                 }
-                    updateLight(Lightposition);}
+                    updateLight(Lightposition);
             }
             if (!attacking) {
                 spritecounter++;
@@ -546,11 +573,12 @@ public class Player extends LivingEntity {
         inventory.add(new nulitem(gp, 10, "grass"));
         inventory.add(new nulitem(gp, 39, "dirt"));
         inventory.add(new nulitem(gp, 44, "table"));
-        inventory.add(new nulitem(gp, 51, "tv"));
+        inventory.add(new nulitem(gp, 54, "tv"));
         inventory.add(new nulitem(gp, 52, "fire"));
-        inventory.add(new nulitem(gp, 41, "tree"));
+        inventory.add(new nulitem(gp, 55, "tire"));
         inventory.add(new nulitem(gp, 13, "water"));
         inventory.add(new crafting_table(gp, 0, 0, 0));
+        inventory.add(new OBJkey(gp));
     }
 
     public void interactNPC(int i) {

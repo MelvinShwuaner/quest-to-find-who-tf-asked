@@ -6,6 +6,8 @@ import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
 import java.util.ArrayList;
 
+import static net.questfor.thepersonwhoasked.GlobalProperties.gp;
+
 public class Path extends Data {
     static final long serialVersionUID = -6942014L;
     
@@ -15,9 +17,12 @@ public class Path extends Data {
     Node startnode, goalnode, currentnode;
     boolean goalreached = false;
     int step = 0;
+    int z;
+    LivingEntity entityy;
     public Path(){
         instantiateNode();
     }
+
     public void instantiateNode(){
         nodes = new Node[MainGame.maxworldcol][MainGame.maxworldrow];
         int col = 0;
@@ -51,67 +56,30 @@ public class Path extends Data {
     }
     public void setNodes(int startcol, int startrow, int goalcol, int goalrow, int layer, LivingEntity entity) {
         resetNodes();
+        z = layer;
+        entityy = entity;
         startnode = nodes[startcol][startrow];
         currentnode = startnode;
-        try {
             goalnode = nodes[goalcol][goalrow];
-        }catch (Exception e){
-            goalnode = nodes[30][30];
-        }
+
         openlist.add(currentnode);
         int col = 0;
         int row = 0;
         while (col < MainGame.maxworldcol && row < MainGame.maxworldrow) {
             int tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer];
-            if (!MainGame.tilemanager.tile[tileNUM].air || MainGame.tilemanager.tile[tileNUM].hot) {
+
+            if (!MainGame.tilemanager.tile[tileNUM].air || MainGame.tilemanager.tile[tileNUM].hot || tileNUM == 53) {
                 int i = 0;
                 if(layer < 7){
                     i = 1;
                 }
                 tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer+i];
-                if (!MainGame.tilemanager.tile[tileNUM].air || MainGame.tilemanager.tile[tileNUM].hot) {
+                if (!MainGame.tilemanager.tile[tileNUM].air || MainGame.tilemanager.tile[tileNUM].hot || tileNUM == 53) {
                 nodes[col][row].solid = true;
             }else if(entity.jumping){
+
                     nodes[col][row].solid = true;
-                }
-            }
-            int size = GlobalGameThreadConfigs.obj[1].length;
-            for (int i = 0; i < size; i++) {
-                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i] != null) {
-                    if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].EntityType == 4) {
-                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz == layer || GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldz-1 == layer){
-                            int itcol = (int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldx / GlobalGameThreadConfigs.tilesize);
-                            int itrow = (int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][i].worldy / GlobalGameThreadConfigs.tilesize);
-                            if((itcol != -1 && itcol != 50) && itrow != -1 && itrow != 50) {
-                                nodes[itcol][itrow].solid = true;
-                            }
-                            }}
-                }
-            }
-            size = GlobalGameThreadConfigs.NPCS[1].length;
-            for (int i = 0; i < size; i++) {
-                if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i] != null) {
-                    if(entity != GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i]){
-                        if (GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldz == layer || GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldz-1 == layer){
-                            int itcol = (int) Math.round(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldx / GlobalGameThreadConfigs.tilesize);
-                            int itrow = (int) Math.round(GlobalGameThreadConfigs.NPCS[MainGame.currentmap][i].worldy / GlobalGameThreadConfigs.tilesize);
-                            if((itcol != -1 && itcol != 50) && itrow != -1 && itrow != 50){
-                            nodes[itcol][itrow].solid = true;
-                        }}}
-                }
-            }
-            size = GlobalGameThreadConfigs.Monsters[1].length;
-            for (int i = 0; i < size; i++) {
-                if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i] != null) {
-                    if(entity != GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i]){
-                        if (GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldz == layer || GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldz-1 == layer){
-                            int itcol = (int) Math.round(GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldx / GlobalGameThreadConfigs.tilesize);
-                            int itrow = (int) Math.round(GlobalGameThreadConfigs.Monsters[MainGame.currentmap][i].worldy / GlobalGameThreadConfigs.tilesize);
-                            if((itcol != -1 && itcol != 50) && itrow != -1 && itrow != 50){
-                                nodes[itcol][itrow].solid = true;
-                            }}
-                }}
-            }
+                }            }
         getCost(nodes[col][row]);
         col++;
         if (col == MainGame.maxworldcol) {
@@ -130,7 +98,8 @@ public class Path extends Data {
 
     }
     public boolean search(){
-        while (!goalreached && step < 500){
+        while (!goalreached){
+            if(step < 500){
             int col = currentnode.col;
             int row = currentnode.row;
             currentnode.checked = true;
@@ -153,10 +122,12 @@ public class Path extends Data {
                 if(openlist.get(i).fcost < bestnodefcost){
                     bestnodeindex = i;
                     bestnodefcost = openlist.get(i).fcost;
+
                 }
                 else if(openlist.get(i).fcost == bestnodefcost){
                     if(openlist.get(i).gcost < openlist.get(bestnodeindex).gcost){
                         bestnodeindex = i;
+
                     }
                 }
             }
@@ -171,6 +142,16 @@ public class Path extends Data {
             }
             step++;
         }
+            //currentnode.hcost < startnode.hcost || currentnode.gcost <= startnode.gcost
+        else if(currentnode.hcost < startnode.hcost || currentnode.gcost <= startnode.gcost){
+            goalnode = currentnode;
+                goalreached = true;
+                trackpath();
+
+        }
+        else{
+            break;}
+            }
         return goalreached;
     }
 
@@ -189,4 +170,41 @@ public class Path extends Data {
             openlist.add(node);
         }
 }
+public void moveworldz(Node node){
+        if(gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][node.col][node.row][z-1]].air){
+            for(int i =1; i < z; i++){
+                if(!gp.tilemanager.tile[gp.tilemanager.mapRendererID[MainGame.currentmap][node.col][node.row][z-i]].air){
+                    i--;
+                    z = z-i;
+                    setNodeswithoutreset(z, entityy);
+                    break;
+                }
+            }
+    }
+}
+public void setNodeswithoutreset(int layer, LivingEntity entity) {
+        int col = 0;
+        int row = 0;
+        while (col < MainGame.maxworldcol && row < MainGame.maxworldrow) {
+            int tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer];
+
+            if (!MainGame.tilemanager.tile[tileNUM].air || MainGame.tilemanager.tile[tileNUM].hot || tileNUM == 53) {
+                int i = 0;
+                if(layer < 7){
+                    i = 1;
+                }
+                tileNUM = MainGame.tilemanager.mapRendererID[MainGame.currentmap][col][row][layer+i];
+                if (!MainGame.tilemanager.tile[tileNUM].air || MainGame.tilemanager.tile[tileNUM].hot || tileNUM == 53) {
+                    nodes[col][row].solid = true;
+                }else if(entity.jumping){
+
+                    nodes[col][row].solid = true;
+                }            }
+            getCost(nodes[col][row]);
+            col++;
+            if (col == MainGame.maxworldcol) {
+                col = 0;
+                row++;
+            }
+        }}
 }

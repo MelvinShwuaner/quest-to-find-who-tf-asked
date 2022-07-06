@@ -6,6 +6,7 @@ import net.questfor.thepersonwhoasked.Maingam.Recipe;
 import net.questfor.thepersonwhoasked.entities.*;
 import net.questfor.thepersonwhoasked.entities.Mobs.*;
 import net.questfor.thepersonwhoasked.entities.NPCS.*;
+import net.questfor.thepersonwhoasked.entities.Vehicles.Vehicle;
 import net.questfor.thepersonwhoasked.objects.*;
 
 import java.awt.*;
@@ -23,7 +24,7 @@ public class GlobalProperties {
     public void setObjectRenderer() {
         GlobalGameThreadConfigs.obj = new LivingEntity[MainGame.maxmap][100];
         /*RENDER OBJECTS*/
-        int i = 6;
+        int i = 4;
         int mapID = 0;
             GlobalGameThreadConfigs.obj[mapID][1] = new OBJ_COIN_BRONZE(gp);
             GlobalGameThreadConfigs.obj[mapID][2] = new OBJkey(gp);
@@ -47,11 +48,8 @@ public class GlobalProperties {
            GlobalGameThreadConfigs.obj[mapID][i].set();
             i++;
 
-            GlobalGameThreadConfigs.obj[mapID][i] = new OBJ_POTION_HEALTH_1(gp);
-            GlobalGameThreadConfigs.obj[mapID][i].worldx = GlobalGameThreadConfigs.tilesize * 120;
-            GlobalGameThreadConfigs.obj[mapID][i].worldy = GlobalGameThreadConfigs.tilesize * 123;
+            GlobalGameThreadConfigs.obj[mapID][i] = new chest(gp, 120, 123, 4);
     }
-
     /*render NPCS and MONSTERS*/
     public void setNPCrenderers() {
         GlobalGameThreadConfigs.NPCS = new LivingEntity[MainGame.maxmap][10];
@@ -59,7 +57,7 @@ public class GlobalProperties {
                 GlobalGameThreadConfigs.NPCS[mapID][1] = new Helper(gp);
         GlobalGameThreadConfigs.NPCS[mapID][1].worldx = GlobalGameThreadConfigs.tilesize * 121;
         GlobalGameThreadConfigs.NPCS[mapID][1].worldy = GlobalGameThreadConfigs.tilesize * 109;
-        GlobalGameThreadConfigs.NPCS[mapID][3] = new BackRoundNpc(gp, 4, "oldman", 106*GlobalGameThreadConfigs.tilesize, 115*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][3] = new BackRoundNpc(gp, 4, "oldman", 106*GlobalGameThreadConfigs.tilesize, 115*GlobalGameThreadConfigs.tilesize, 4,121, 165, 20, 2, false, null, false, false, null);
         ArrayList<LivingEntity> inventory = new ArrayList<>();
         inventory.add(new OBJ_POTION_HEALTH_1(gp));
     inventory.get(0).stacksize = 4;
@@ -70,12 +68,12 @@ public class GlobalProperties {
        inventory.get(4).stacksize = 30;
        String[] dialogues = new String[9];
        dialogues[0] = "Hello";
-        GlobalGameThreadConfigs.NPCS[mapID][5] = new BackRoundNpc(gp, 4, "oldman", 104*GlobalGameThreadConfigs.tilesize, 119*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
-        GlobalGameThreadConfigs.NPCS[mapID][4] = new BackRoundNpc(gp, 4, "oldman", 116*GlobalGameThreadConfigs.tilesize, 116*GlobalGameThreadConfigs.tilesize, 4, 121, 159, 20, 2, true, inventory, true, false, dialogues);
-        GlobalGameThreadConfigs.NPCS[mapID][6] = new BackRoundNpc(gp, 4, "oldman", 126*GlobalGameThreadConfigs.tilesize, 116*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
-        GlobalGameThreadConfigs.NPCS[mapID][7] = new BackRoundNpc(gp, 4, "oldman", 127*GlobalGameThreadConfigs.tilesize, 117*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
-        GlobalGameThreadConfigs.NPCS[mapID][8] = new BackRoundNpc(gp, 4, "oldman", 137*GlobalGameThreadConfigs.tilesize, 112*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
-        GlobalGameThreadConfigs.NPCS[mapID][9] = new BackRoundNpc(gp, 4, "oldman", 123*GlobalGameThreadConfigs.tilesize, 118*GlobalGameThreadConfigs.tilesize, 4,121, 159, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][5] = new BackRoundNpc(gp, 4, "oldman", 104*GlobalGameThreadConfigs.tilesize, 119*GlobalGameThreadConfigs.tilesize, 4,125, 165, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][4] = new BackRoundNpc(gp, 4, "oldman", 116*GlobalGameThreadConfigs.tilesize, 116*GlobalGameThreadConfigs.tilesize, 4, 121, 170, 20, 2, true, inventory, true, false, dialogues);
+        GlobalGameThreadConfigs.NPCS[mapID][6] = new BackRoundNpc(gp, 4, "oldman", 126*GlobalGameThreadConfigs.tilesize, 116*GlobalGameThreadConfigs.tilesize, 4,121, 180, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][7] = new BackRoundNpc(gp, 4, "oldman", 127*GlobalGameThreadConfigs.tilesize, 117*GlobalGameThreadConfigs.tilesize, 4,150, 170, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][8] = new BackRoundNpc(gp, 4, "oldman", 137*GlobalGameThreadConfigs.tilesize, 112*GlobalGameThreadConfigs.tilesize, 4,150, 165, 20, 2, false, null, false, false, null);
+        GlobalGameThreadConfigs.NPCS[mapID][9] = new BackRoundNpc(gp, 4, "oldman", 123*GlobalGameThreadConfigs.tilesize, 118*GlobalGameThreadConfigs.tilesize, 4,150, 180, 20, 2, false, null, false, false, null);
 
     }
     public  void setMonsterRenderers(){
@@ -119,6 +117,13 @@ public class GlobalProperties {
         GlobalGameThreadConfigs.tempscreen = new BufferedImage(MainGame.screenwidth, MainGame.screenheight, BufferedImage.TYPE_INT_ARGB);
         GlobalGameThreadConfigs.g2 = (Graphics2D)GlobalGameThreadConfigs.tempscreen.getGraphics();
 
+    }
+
+    public void setVehicles() {
+        int MapID = 0;
+        int i = 0;
+     GlobalGameThreadConfigs.Vehicles[MapID][i] = new Vehicle(gp, MapID, 95, 100, 155, 161, 5, 7, 8, true, 98, 159, 98, 160);
+      GlobalGameThreadConfigs.player.enterVehcile(i);
     }
 
 }

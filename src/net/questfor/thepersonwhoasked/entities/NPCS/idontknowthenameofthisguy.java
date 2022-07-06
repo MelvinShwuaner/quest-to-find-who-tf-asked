@@ -22,6 +22,7 @@ public class idontknowthenameofthisguy extends LivingEntity {
         health = maxhealth;
         forgiveondeath = false;
         name = "idontknowthenameofthisguy";
+
     }
 
     public void getImageInstance() {

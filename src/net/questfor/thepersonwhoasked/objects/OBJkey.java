@@ -1,4 +1,5 @@
 package net.questfor.thepersonwhoasked.objects;
+import net.questfor.thepersonwhoasked.Maingam.KeyHandler;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
 
@@ -30,5 +31,29 @@ public class OBJkey extends LivingEntity {
     @Override
     public void getImageInstance() {
         down1 = BufferedRenderer("objects/key", GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+    }
+
+    @Override
+    public void Place(double x, double y, double z, int i) {
+        if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
+            switch (GlobalGameThreadConfigs.player.direction) {
+                case "down" -> y += 50;
+                case "up" -> y -= 50;
+                case "left" -> x -= 50;
+                case "right" -> x += 50;
+            }
+        }else if(KeyHandler.CROUCH){
+            z--;
+        }else if(KeyHandler.sprint){
+            z++;
+        }
+        if(MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(x/GlobalGameThreadConfigs.tilesize)][(int) Math.round(y/GlobalGameThreadConfigs.tilesize)][(int) z] == 54){
+            if(GlobalGameThreadConfigs.player.passanger){
+                if(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].controlX == (int) Math.round(x/GlobalGameThreadConfigs.tilesize) && GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].controlY == (int) Math.round(y/GlobalGameThreadConfigs.tilesize)){
+                    GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].controller.add(0, GlobalGameThreadConfigs.player);
+                    GlobalGameThreadConfigs.player.controlling = true;
+                }
+            }
+        }
     }
 }

@@ -86,6 +86,12 @@ class MainGame : JPanel(), Runnable {
                     }
 
             }
+            for (i in Vehicles[1].indices) {
+                if (Vehicles[currentmap][i] != null) {
+                    Vehicles[currentmap][i].update()
+                }
+
+            }
             /**MOBS**/
             for(i in Monsters[1].indices){
                 if(Monsters[currentmap][i] != null){
@@ -124,7 +130,11 @@ class MainGame : JPanel(), Runnable {
             tilemanager.drawground(g2)
             /*DISPLAYS ENTITYS AND OBJECTS*/
             entitylist.add(player)
-
+            for (i in Vehicles[1].indices) {
+                if (Vehicles[currentmap][i] != null) {
+                    entitylist.add(Vehicles[currentmap][i])
+                }
+            }
             for (i in NPCS[1].indices) {
                 if (NPCS[currentmap][i] != null) {
                     entitylist.add(NPCS[currentmap][i])
@@ -170,12 +180,12 @@ class MainGame : JPanel(), Runnable {
                 g2.drawString("World: $currentmap", 10, 240)
                 g2.drawString("Z: ${player.worldz}", 10, 180)
                 g2.drawString(
-                    "WORLD ROW: ${(player.worldy + player.hitbox.y) / tilesize}",
+                    "WORLD ROW: ${Math.round(player.worldy / tilesize)}",
                     10,
                     210
                 )
                 g2.drawString(
-                    "WORLD COL: ${(player.worldx + player.hitbox.x) / tilesize}",
+                    "WORLD COL: ${Math.round(player.worldx / tilesize)}",
                     10,
                     190
                 )
@@ -250,7 +260,7 @@ class MainGame : JPanel(), Runnable {
             MultiRender.setNPCrenderers()
             MultiRender.setMonsterRenderers()
              MultiRender.SetRecipes()
-
+MultiRender.setVehicles()
              System.out.println("Set all NBT data successfully")
 
         }

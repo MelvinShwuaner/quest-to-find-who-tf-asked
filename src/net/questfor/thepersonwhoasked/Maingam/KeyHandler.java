@@ -32,6 +32,7 @@ public class KeyHandler extends Data implements KeyListener {
     public static int UP = KeyEvent.VK_W, DOWN = KeyEvent.VK_S, RIGHT = KeyEvent.VK_D, LEFT = KeyEvent.VK_A, SHIFT = KeyEvent.VK_SHIFT;
     public static int PAUSE = KeyEvent.VK_P;
     public static int INVENTORY = KeyEvent.VK_TAB, OPEN = KeyEvent.VK_ENTER;
+    public static int turnOn = KeyEvent.VK_N, turnOf = KeyEvent.VK_F;
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -151,6 +152,9 @@ public class KeyHandler extends Data implements KeyListener {
                             }
                         }
 
+                    }
+                    if(GlobalGameThreadConfigs.player.controlling){
+                        control(code);
                     }
                     if (code == INVENTORY) {
                         if (!GlobalGameThreadConfigs.CharacterStats) {
@@ -314,6 +318,16 @@ public class KeyHandler extends Data implements KeyListener {
             }
         }catch(Exception er){
             crash.main(er);
+        }
+    }
+
+    public void control(int code) {
+        if(code == turnOn){
+            System.out.println("deez nuts foreber");
+            GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].on = true;
+        }else if(code == turnOf){
+            GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].on = false;
+
         }
     }
 

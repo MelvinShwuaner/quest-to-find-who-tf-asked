@@ -65,7 +65,7 @@ public class Helper extends LivingEntity {
     public void setAction() {
         if(startposition){
             speed = 5;
-            searchPath(121,146);
+            searchPath(121,165);
         }else{
             if (!Hostile) {
                 actionLock++;
@@ -314,6 +314,16 @@ public class Helper extends LivingEntity {
 
                 }
             }
+            if (drawingpath){
+                g2.setColor(Color.red);
+                for (int i = 0; i < path.pathlist.size(); i++) {
+                    int worldx = path.pathlist.get(i).col * GlobalGameThreadConfigs.tilesize;
+                    int worldy = path.pathlist.get(i).row * GlobalGameThreadConfigs.tilesize;
+                    double screenx = (worldx - GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX);
+                    double screeny = worldy - GlobalGameThreadConfigs.player.worldy + GlobalGameThreadConfigs.player.screenY;
+                    g2.fillRect((int) screenx, (int) screeny, GlobalGameThreadConfigs.tilesize, GlobalGameThreadConfigs.tilesize);
+                }
+            }
             if ((worldx + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldx - GlobalGameThreadConfigs.player.screenX &&
                     (worldx - GlobalGameThreadConfigs.tilesize < GlobalGameThreadConfigs.player.worldx + GlobalGameThreadConfigs.player.screenX))
                     && worldy + GlobalGameThreadConfigs.tilesize > GlobalGameThreadConfigs.player.worldy - GlobalGameThreadConfigs.player.screenY &&
@@ -429,6 +439,7 @@ public class Helper extends LivingEntity {
         dialogues[1] = name+": Uhh did anyone ask? ";
         dialogues[2] = "You: shushh";
         dialogues[3] = name+": AHH HELL NAH";
+        dialogues[5] = "You: what was that explosion??";
     }
 
     @Override
