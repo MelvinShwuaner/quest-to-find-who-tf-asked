@@ -116,6 +116,9 @@ class MainGame : JPanel(), Runnable {
             if(obj[currentmap][i] != null){
                 obj[currentmap][i]?.updateimage()
                 obj[currentmap][i]?.update()
+                if(!obj[currentmap][i].alive){
+                    obj[currentmap][i] = null;
+                }
             }
         }
     }
@@ -260,7 +263,7 @@ class MainGame : JPanel(), Runnable {
             MultiRender.setNPCrenderers()
             MultiRender.setMonsterRenderers()
              MultiRender.SetRecipes()
-MultiRender.setVehicles()
+             MultiRender.setVehicles()
              System.out.println("Set all NBT data successfully")
 
         }

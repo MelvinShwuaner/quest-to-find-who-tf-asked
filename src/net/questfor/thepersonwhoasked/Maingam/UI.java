@@ -174,7 +174,7 @@ public class UI  {
 
                     LivingEntity newentity = createnewobject(SelectedItem);
                     newentity.stacksize = SelectedItem.stacksize;
-                    GlobalGameThreadConfigs.player.inventory.add(newentity);
+                    additemtoentity(GlobalGameThreadConfigs.player, newentity);
                 }
             }
             code = 999;
@@ -198,7 +198,8 @@ public class UI  {
                             boolean cancraft = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[0] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[1] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[2] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[3] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[4] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[5] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[6] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[7] && GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].slot[8];
                             if(cancraft) {
                                 LivingEntity SelectedItem = createnewobject(GlobalGameThreadConfigs.Recipes[i].Result);
-                                GlobalGameThreadConfigs.player.inventory.add(SelectedItem);
+
+                                additemtoentity(GlobalGameThreadConfigs.player, SelectedItem);
                                 for (int a = 0; a < 9; a++){
                                     if (GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(a) != null) {
                                         GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(a).stacksize--;
@@ -282,7 +283,7 @@ public class UI  {
                     }
                     LivingEntity newentity = createnewobject(SelectedItem);
                     newentity.stacksize = stackamount;
-                    GlobalGameThreadConfigs.player.inventory.add(newentity);
+                    additemtoentity(GlobalGameThreadConfigs.player, newentity);
                 }
             }
             code = 999;
@@ -310,7 +311,7 @@ public class UI  {
                 if(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(5) != null) {
                     LivingEntity SelectedItem = createnewobject(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(5));
                     SelectedItem.stacksize = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(5).stacksize;
-                    GlobalGameThreadConfigs.player.inventory.add(SelectedItem);
+                    additemtoentity(GlobalGameThreadConfigs.player, SelectedItem);
                     GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.set(5, null);
                 }
             }
@@ -419,7 +420,8 @@ public class UI  {
                     }
                     LivingEntity newItem = createnewobject(SelectedItem);
                     newItem.stacksize = stackamount;
-                    GlobalGameThreadConfigs.player.inventory.add(newItem);
+                    additemtoentity(GlobalGameThreadConfigs.player, newItem);
+
                     stackamount = 1;
                 }
             }
@@ -474,7 +476,8 @@ public class UI  {
                     LivingEntity newitem = createnewobject(SelectedItem);
                     newitem.stacksize = stackamount;
                     GlobalGameThreadConfigs.player.bobux += price;
-                    npc.inventory.add(newitem);
+
+                    additemtoentity(npc, newitem);
                     for(int i = 0; i < npc.inventory.size(); i++){
                         if(npc.inventory.get(i) != null){
                             LivingEntity falseindex = createnewobject(npc.inventory.get(i));
@@ -832,7 +835,7 @@ public class UI  {
                         }
                         LivingEntity newentity = createnewobject(merger);
                         newentity.stacksize = stackamount;
-                        GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.add(newentity);
+                        additemtoentity(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex], newentity);
                         stackamount = 1;
                     }
                 }else {
@@ -961,7 +964,7 @@ public class UI  {
                             }
                             LivingEntity newentity = createnewobject(merger);
                             newentity.stacksize = stackamount;
-                            GlobalGameThreadConfigs.player.inventory.add(newentity);
+                            additemtoentity(GlobalGameThreadConfigs.player, newentity);
                             stackamount = 1;
                         }
                     }else if(mergerr != null){
@@ -1087,7 +1090,7 @@ public class UI  {
                                 merging = false;
                                 LivingEntity newentity = createnewobject(merger);
                                 newentity.stacksize = stackamount;
-                                GlobalGameThreadConfigs.player.inventory.add(newentity);
+                                additemtoentity(GlobalGameThreadConfigs.player, newentity);
                                 stackamount = 1;
                                 if(merger.stacksize <= 0){
                                     GlobalGameThreadConfigs.player.inventory.remove(merger);
@@ -1266,7 +1269,7 @@ public class UI  {
                                 }
                                 LivingEntity newentity = createnewobject(merger);
                                 newentity.stacksize = stackamount;
-                                GlobalGameThreadConfigs.player.inventory.add(newentity);
+                                additemtoentity(GlobalGameThreadConfigs.player, newentity);
                                 stackamount = 1;
                             }
                         }else {
@@ -1425,8 +1428,7 @@ public class UI  {
                             }
                             LivingEntity newItem = createnewobject(SelectedItem);
                             newItem.stacksize = stackamount;
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.add(newItem);
-
+                            additemtoentity(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex], newItem);
                             if (SelectedItem == GlobalGameThreadConfigs.player.currentshield) {
                                 GlobalGameThreadConfigs.player.currentshield = null;
                                 GlobalGameThreadConfigs.player.getDefenceValues();
@@ -1439,7 +1441,7 @@ public class UI  {
                         else {
                             LivingEntity SelectedItem = GlobalGameThreadConfigs.player.inventory.get(ItemIndex);
                            GlobalGameThreadConfigs.player.inventory.remove(ItemIndex);
-                            GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.add(SelectedItem);
+                            additemtoentity(GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex], SelectedItem);
                             if (SelectedItem == GlobalGameThreadConfigs.player.currentshield) {
                                 GlobalGameThreadConfigs.player.currentshield = null;
                                 GlobalGameThreadConfigs.player.getDefenceValues();
@@ -1463,13 +1465,13 @@ public class UI  {
                                 GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.remove(ItemIndex);
                             }
                             LivingEntity newItem = createnewobject(SelectedItem);
-                            GlobalGameThreadConfigs.player.inventory.add(newItem);
+                            additemtoentity(GlobalGameThreadConfigs.player, newItem);
                             GlobalGameThreadConfigs.player.inventory.get(GlobalGameThreadConfigs.player.inventory.size() - 1).stacksize = stackamount;
                             stackamount = 1;
                         }else{
                             LivingEntity SelectedItem = GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.get(ItemIndex);
                              GlobalGameThreadConfigs.obj[MainGame.currentmap][GlobalGameThreadConfigs.player.objindex].inventory.remove(ItemIndex);
-                            GlobalGameThreadConfigs.player.inventory.add(SelectedItem);
+                            additemtoentity(GlobalGameThreadConfigs.player, SelectedItem);
                         }
                     }
                 }
@@ -1628,5 +1630,21 @@ public class UI  {
         }
 
     }
-    //2047 bytes long -------------------//
-     public static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Quest To Find Who Asked";int x = getXforCenterText(text);int y = GlobalGameThreadConfigs.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}public static void drawDialogueScreen() {int x = GlobalGameThreadConfigs.tilesize * 2;int y = GlobalGameThreadConfigs.tilesize/2;int width = MainGame.screenwidth - (GlobalGameThreadConfigs.tilesize*4);int height = GlobalGameThreadConfigs.tilesize*4;drawSubWindow(x, y, width, height);x += GlobalGameThreadConfigs.tilesize;y += GlobalGameThreadConfigs.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));if(currentDialogue != null)for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}}
+    //2296 bytes long -------------------//
+    public static void drawTitleScreen() {try {g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60));String text = "Quest To Find Who Asked";int x = getXforCenterText(text);int y = GlobalGameThreadConfigs.tilesize * 2;g2.setColor(Color.black);g2.drawString(text, x+5, y+5);g2.setColor(Color.white);g2.drawString(text, x, y);g2.setColor(Color.black);g2.setFont(g2.getFont().deriveFont(Font.BOLD, 40F));text = "START NEW GAME";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 3;if(commandnum == 0){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.white);text = "CONTINUE FROM SAVE FILE";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 2;if(commandnum == 1){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);g2.setColor(Color.red);text = "QUIT GAME";x = getXforCenterText(text);y += GlobalGameThreadConfigs.tilesize * 2;if(commandnum == 2){g2.drawString(">", x-GlobalGameThreadConfigs.tilesize, y);}g2.drawString(text, x, y);}catch (Exception e){e.printStackTrace();}}public static void drawDialogueScreen() {int x = GlobalGameThreadConfigs.tilesize * 2;int y = GlobalGameThreadConfigs.tilesize/2;int width = MainGame.screenwidth - (GlobalGameThreadConfigs.tilesize*4);int height = GlobalGameThreadConfigs.tilesize*4;drawSubWindow(x, y, width, height);x += GlobalGameThreadConfigs.tilesize;y += GlobalGameThreadConfigs.tilesize;g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));if(currentDialogue != null)for(String line : currentDialogue.split("\n")){g2.drawString(line, x, y);y += 40;}}public static void drawSubWindow(int x, int y, int width, int height){Color c = new Color(0, 0, 0, 210);g2.setColor(c);g2.fillRoundRect(x, y, width, height, 35, 35);c = new Color(255, 255, 255);g2.setColor(c);g2.setStroke(new BasicStroke(5));g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);}public static void drawPauseScreen(){g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 80));String text = "Paused";int x;x = getXforCenterText(text);int y = MainGame.screenheight / 2;g2.drawString(text, x, y);}public static int getXforCenterText(String text){int Length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();int x = MainGame.screenwidth/2 - Length/2;return x;}
+    public static void additemtoentity(LivingEntity entity, LivingEntity item){
+        boolean alreadythere = false;
+        for(int i = 0; i < entity.inventory.size(); i++){
+            if(entity.inventory.get(i).name.equals(item.name)){
+                if(entity.inventory.get(i).stacksize + item.stacksize <= item.maxstacksize){
+                    alreadythere = true;
+                    entity.inventory.get(i).stacksize += item.stacksize;
+                }
+            }
+        }
+        if(!alreadythere){
+            entity.inventory.add(item);
+        }
+    }
+
+}

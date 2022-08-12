@@ -3,15 +3,17 @@ package net.questfor.thepersonwhoasked.objects;
 import net.questfor.thepersonwhoasked.Maingam.GlobalGameThreadConfigs;
 import net.questfor.thepersonwhoasked.Maingam.KeyHandler;
 import net.questfor.thepersonwhoasked.Maingam.MainGame;
+import net.questfor.thepersonwhoasked.Maingam.crash;
 import net.questfor.thepersonwhoasked.entities.LivingEntity;
-import net.questfor.thepersonwhoasked.entities.Vehicles.Vehicle;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
-public class nulitem extends LivingEntity {
-    public nulitem(MainGame gp, int tilel, String name){
+public class Shield extends LivingEntity {
+    public Shield(MainGame gp){
         super(gp);
-        this.name = name;
+
         getImageInstance();
         description = "a simple "+name;
         hitbox = new Rectangle();
@@ -24,7 +26,7 @@ public class nulitem extends LivingEntity {
         EntityType = 3;
         maxstacksize = 64;
         LightSource = false;
-        tile = tilel;
+        
     }
     @Override
     public void update() {}
@@ -32,6 +34,12 @@ public class nulitem extends LivingEntity {
     @Override
     public void Place(double x, double y, double z, int i) {
         boolean canplace;
+        switch (GlobalGameThreadConfigs.player.direction) {
+            case "down" -> tile = 60;
+            case "up" -> tile = 61;
+            case "left" -> tile = 62;
+            case "right" -> tile = 63;
+        }
         if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
             switch (GlobalGameThreadConfigs.player.direction) {
                 case "down" -> y += 48;
@@ -86,11 +94,23 @@ public class nulitem extends LivingEntity {
 
     @Override
     public LivingEntity replicate() {
-        return new nulitem(gp, tile, name);
+        return new Shield(gp);
     }
 
     @Override
     public void getImageInstance() {
-        down1 = BufferedRenderer("objects/stone", GlobalGameThreadConfigs.tilesize-2, GlobalGameThreadConfigs.tilesize-5);
+        down1 = BufferedRenderer("shieldup", GlobalGameThreadConfigs.tilesize-2, GlobalGameThreadConfigs.tilesize-5);
+    }
+    public BufferedImage BufferedRenderer(String imagePath, int width, int height){
+        //OPTIMIZES THE RENDERER TO MAKE IT MORE EFFICIENT
+
+        BufferedImage ScaledImage = null;
+        try{
+            ScaledImage = ImageIO.read(getClass().getResourceAsStream("/tiles/"+imagePath+".png"));
+            ScaledImage = scaleimage(ScaledImage, width, height);
+        }catch (Exception e) {
+            crash.main(e);
+        }
+        return ScaledImage;
     }
 }

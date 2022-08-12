@@ -1,9 +1,13 @@
 package net.questfor.thepersonwhoasked.Maingam;
 import net.questfor.thepersonwhoasked.entities.Player;
+import net.questfor.thepersonwhoasked.objects.throwableTNT;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
+import static net.questfor.thepersonwhoasked.Maingam.MainGame.currentmap;
+
 public class KeyHandler extends Data implements KeyListener {
     MainGame gp;
     KeyHandler(MainGame gpp){
@@ -70,6 +74,14 @@ public class KeyHandler extends Data implements KeyListener {
                 if (GlobalGameThreadConfigs.GameState == GlobalGameThreadConfigs.PlayState) {
                     if(code == primepowerc){
                         primepowera = true;
+                    }
+                    if(code == KeyEvent.VK_X) {
+                        for(int i = 0; i < GlobalGameThreadConfigs.obj[0].length; i++){
+                            if(GlobalGameThreadConfigs.obj[currentmap][i] == null){
+                                GlobalGameThreadConfigs.obj[currentmap][i] = new throwableTNT(gp, GlobalGameThreadConfigs.player.worldx, GlobalGameThreadConfigs.player.worldy, GlobalGameThreadConfigs.player.worldz+1, 20, GlobalGameThreadConfigs.player.direction);
+                                break;
+                            }
+                        }
                     }
                     if (code == UP) {
                         if (!upPressed) {
@@ -323,11 +335,16 @@ public class KeyHandler extends Data implements KeyListener {
 
     public void control(int code) {
         if(code == turnOn){
-            System.out.println("deez nuts foreber");
             GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].on = true;
         }else if(code == turnOf){
             GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].on = false;
-
+        }
+        if(code == KeyEvent.VK_SHIFT){
+            GlobalGameThreadConfigs.player.controlling = false;
+            GlobalGameThreadConfigs.Vehicles[currentmap][GlobalGameThreadConfigs.player.vehindex].controller.remove(0);
+        }
+        if(code == primepowerc){
+            GlobalGameThreadConfigs.Vehicles[currentmap][GlobalGameThreadConfigs.player.vehindex].Fire();
         }
     }
 

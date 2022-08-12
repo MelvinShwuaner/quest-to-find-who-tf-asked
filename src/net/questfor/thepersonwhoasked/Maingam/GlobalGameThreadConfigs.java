@@ -17,9 +17,9 @@ public class GlobalGameThreadConfigs extends Data {
     public static int animationcounter = 0;
     public static int animationnumber = 0;
 
-    public static net.questfor.thepersonwhoasked.entities.LivingEntity[][] Monsters = new net.questfor.thepersonwhoasked.entities.LivingEntity[MainGame.maxmap][20];
-    public static net.questfor.thepersonwhoasked.entities.LivingEntity[][] NPCS = new net.questfor.thepersonwhoasked.entities.LivingEntity[MainGame.maxmap][10];
-    public static net.questfor.thepersonwhoasked.entities.Vehicles.Vehicle[][] Vehicles = new net.questfor.thepersonwhoasked.entities.Vehicles.Vehicle[MainGame.maxmap][10];
+    public static net.questfor.thepersonwhoasked.entities.LivingEntity[][] Monsters = new net.questfor.thepersonwhoasked.entities.LivingEntity[MainGame.maxmap][100];
+    public static net.questfor.thepersonwhoasked.entities.LivingEntity[][] NPCS = new net.questfor.thepersonwhoasked.entities.LivingEntity[MainGame.maxmap][100];
+    public static net.questfor.thepersonwhoasked.entities.Vehicles.Vehicle[][] Vehicles = new net.questfor.thepersonwhoasked.entities.Vehicles.Vehicle[MainGame.maxmap][100];
     public static Recipe[] Recipes = new Recipe[20];
     public static String filepath;
     public static net.questfor.thepersonwhoasked.entities.LivingEntity[][] obj = new net.questfor.thepersonwhoasked.entities.LivingEntity[MainGame.maxmap][100];

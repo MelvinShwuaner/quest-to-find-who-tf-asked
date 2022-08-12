@@ -41,11 +41,7 @@ public class OBJ_ROCK extends Projectile {
         right2 = BufferedRenderer("objects/Projectile/rock_down_1", (int) (GlobalGameThreadConfigs.tilesize+(worldz)), (int) (GlobalGameThreadConfigs.tilesize+(worldz)));
     }
     public boolean haveresource(LivingEntity sourceEntity){
-        boolean haveresource = false;
-        if(sourceEntity.Ammo >= UseCost){
-            haveresource = true;
-        }
-        return haveresource;
+        return sourceEntity.Ammo >= UseCost;
     }
     public void RemoveResource(LivingEntity source){
         source.Ammo -= UseCost;
@@ -136,7 +132,8 @@ public class OBJ_ROCK extends Projectile {
         }
 
         if(health <= 0){
-            alive = false;
+            health = maxhealth;
+
         }
         spritecounter++;
     }

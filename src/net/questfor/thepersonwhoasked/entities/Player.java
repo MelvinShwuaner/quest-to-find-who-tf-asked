@@ -35,12 +35,12 @@ public class Player extends LivingEntity {
         Ammo = 10;
         name = "Player";
         inventorysize = 20;
-            worldx = GlobalGameThreadConfigs.tilesize * 95;
+            worldx = GlobalGameThreadConfigs.tilesize * 98;
         worldy = GlobalGameThreadConfigs.tilesize * 156;
         defaultspeed = 4;
         speed = defaultspeed;
         direction = "up";
-        worldz = 5;
+        worldz = 6;
         maxhealth = 12;
         health = maxhealth;
         invincible = false;
@@ -52,8 +52,8 @@ public class Player extends LivingEntity {
         XP = 0;
         MaxXP = 4;
         bobux = 50;
-        currentweapon = new OBJ_IRON_SHOVEL(gp);
-        currentshield = new OBJ_SHIELD_WOOD(gp);
+        currentweapon = new OBJ_IRON_PICKAXE(gp);
+        currentshield = new nulitem(gp, 50, "Stone");
         defence = getDefenceValues();
         TrueAttackDamage = getAttackValues();
         projectile = new OBJ_FireBall(gp);
@@ -62,6 +62,7 @@ public class Player extends LivingEntity {
         LightSource = true;
 
         GetItems();
+
         getAttackInstance();
         getImageInstance();
     }
@@ -232,8 +233,10 @@ public class Player extends LivingEntity {
                         sprinting = true;
                     }
                 }
-            }else if(!sprint){
-                speed = 4;
+            }else if(!sprint) {
+                if (!frozen){
+                    speed = 4;
+            }
             }
             hasweapon = currentweapon != null;
             //PLAYER ATTACK//
@@ -253,7 +256,7 @@ public class Player extends LivingEntity {
                 }
             }
 
-            if (KeyHandler.primepowera && projectile.alive == false && primepowercool == 30 && projectile.haveresource(this)) {
+            if (KeyHandler.primepowera && projectile.alive == false && primepowercool == 30 && projectile.haveresource(this) && !controlling) {
                 projectile.Set((int) worldx, (int) worldy, (int) worldz, direction, true, this);
                 projectile.RemoveResource(this);
                 for(int i = 0; i<GlobalGameThreadConfigs.projectilelist[1].length; i++){
@@ -325,7 +328,8 @@ public class Player extends LivingEntity {
                 }
             }
             hitboxe = false;
-            MainGame.hregister.checkTile(this);
+            MainGame.hregister.TileColide(this);
+            gp.hregister.VehicleColide(this);
            if(!GlobalGameThreadConfigs.isinTital)
               MainGame.ehandler.returnEvent();
             //OBJECT COLLISIONS
@@ -342,25 +346,20 @@ public class Player extends LivingEntity {
             if (GlobalGameThreadConfigs.isinTital == false) {
                 if(frozen){
                     checkCollision();
+                    Move(frozendirection, speed);
+                    if(frozendirection2 != null){
+                        Move(frozendirection2, speed);
+                    }
+                    if(LightSource)
+                        updateLight(Lightposition);
                     if(hitboxe){
                         knockbackcounter = 0;
                         frozen = false;
                         speed = defaultspeed;
+                        if (speed / 1.5 >= 0)
+                            health -= speed / 1.5;
+                        ParticlePropertyManager(this, this);
                     }else{
-                        if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
-                            gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
-                        }
-                        switch (frozendirection) {
-                            case "up" -> worldy = worldy - speed;
-                            case "down" -> worldy = worldy + speed;
-                            case "right" -> worldx = worldx + speed;
-                            case "left" -> worldx = worldx - speed;
-                        }
-                        if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
-                            gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
-                        }
-                        if(LightSource)
-                            updateLight(Lightposition);
                         knockbackcounter++;
                         if(knockbackcounter == 2){
                             speed--;
@@ -371,40 +370,44 @@ public class Player extends LivingEntity {
                         }
                     }
                 }
-                if (!hitboxe) {
+
                     if(!frozen){
                     if (KeyHandler.upPressed || KeyHandler.downPressed) {
-                        if (KeyHandler.rightPressed || KeyHandler.leftPressed) {
+                        if (KeyHandler.rightPressed || KeyHandler.leftPressed) {if (!hitboxe) {
+
                             if(KeyHandler.sprint){
                                 if(breathcounter > 0){
                                     speed = 5;
                                 }
-                            }else{
+                            }else {
 
-                                speed =3;
-                            }
+                                speed = 3;
+                            }}
                         }
                     }
                     if(!controlling){
                     if (KeyHandler.upPressed || KeyHandler.downPressed || KeyHandler.rightPressed || KeyHandler.leftPressed) {
-                        if((!KeyHandler.rightPressed && !KeyHandler.leftPressed) || (!KeyHandler.leftPressed && KeyHandler.rightPressed)|| (KeyHandler.leftPressed && !KeyHandler.rightPressed)){
-                            if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
-                                gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
+                        if (!hitboxe) {
+                            if ((!KeyHandler.rightPressed && !KeyHandler.leftPressed) || (!KeyHandler.leftPressed && KeyHandler.rightPressed) || (KeyHandler.leftPressed && !KeyHandler.rightPressed)) {
+                                if (gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53) {
+                                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
+                                }
+                                if (KeyHandler.upPressed) {
+                                    worldy = worldy - speed;
+                                }
+                                if (KeyHandler.downPressed) {
+                                    worldy = worldy + speed;
+                                }
                             }
-                        if (KeyHandler.upPressed) {
-                            worldy = worldy - speed;
-                        }
-                        if (KeyHandler.downPressed) {
-                            worldy = worldy + speed;
-                        }}
-                        if (KeyHandler.rightPressed) {
-                            worldx = worldx + speed;
-                        }
-                        if (KeyHandler.leftPressed) {
-                            worldx = worldx - speed;
-                        }
-                        if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
-                            gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
+                            if (KeyHandler.rightPressed) {
+                                worldx = worldx + speed;
+                            }
+                            if (KeyHandler.leftPressed) {
+                                worldx = worldx - speed;
+                            }
+                            if (gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
+                                gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
+                            }
                         }
                         if(LightSource){
                           updateLight(Lightposition);
@@ -412,23 +415,10 @@ public class Player extends LivingEntity {
                         GlobalGameThreadConfigs.Vehicles[currentmap][vehindex].speed = this.speed+4;
                     }
                     }
-                }
+
             } else if (GlobalGameThreadConfigs.isinTital && hitboxe == false) {
 
-                switch (this.direction) {
-                    case "up":
-                        worldy -= this.speed;
-                        break;
-                    case "down":
-                        worldy += this.speed;
-                        break;
-                    case "left":
-                        worldx -= this.speed;
-                        break;
-                    case "right":
-                        worldx += this.speed;
-                }
-                    updateLight(Lightposition);
+                Move(direction, speed);
             }
             if (!attacking) {
                 spritecounter++;
@@ -565,20 +555,20 @@ public class Player extends LivingEntity {
     public void GetItems() {
         inventory.add(currentweapon);
         inventory.add(currentshield);
-
         inventory.add(new nulitem(gp, 50, "Stone"));
         inventory.add(new OBJ_BRICK_WALL(gp));
-        inventory.add(new nulitem(gp, 40, "wall"));
+        inventory.add(new nulitem(gp, 49, "coal"));
         inventory.add(new nulitem(gp, 43, "wood"));
-        inventory.add(new nulitem(gp, 10, "grass"));
+        inventory.add(new furnace(gp, 0, 0, 0));
         inventory.add(new nulitem(gp, 39, "dirt"));
         inventory.add(new nulitem(gp, 44, "table"));
         inventory.add(new nulitem(gp, 54, "tv"));
-        inventory.add(new nulitem(gp, 52, "fire"));
-        inventory.add(new nulitem(gp, 55, "tire"));
+        inventory.add(new nulitem(gp, 56, "shredder"));
         inventory.add(new nulitem(gp, 13, "water"));
-        inventory.add(new crafting_table(gp, 0, 0, 0));
+        inventory.add(new Shield(gp));
         inventory.add(new OBJkey(gp));
+        inventory.add(new Storageunit(gp, 0, 0, 0));
+        inventory.add(new nulitem(gp, 64, "fire"));
     }
 
     public void interactNPC(int i) {
@@ -595,11 +585,8 @@ public class Player extends LivingEntity {
                     }
                 }
             }
-            if (KeyHandler.attack) {
-                if(GlobalGameThreadConfigs.Buildmode)
-                  BuildDestroy();
-                else
-                    Destroy();
+            if (KeyHandler.attack && currentweapon != null) {
+            Destroy();
             }
         } catch (Exception e) {
             crash.main(e);
@@ -772,136 +759,18 @@ public class Player extends LivingEntity {
             }
         }
         attacking = true;
-        if(gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 47){
-            if (currentweapon.Type == Type_shovel) {
-                switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z]) {
-                    case 39,0 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
-                    case 45 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
-                        for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
-                            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new Clay(gp);
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx = x;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy = y;GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz = z;
-                                ii = GlobalGameThreadConfigs.obj[1].length;
-                            }
-                        }
-                    }
-                    case 10, 11 -> gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 39;
-                }}else if(currentweapon.Type == Type_pickaxe){
-                switch (gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z]) {
-                    case 49 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
-                        for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
-                            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new OBJ_coal(gp);
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx = x;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy = y;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz = z;
-                                ii = GlobalGameThreadConfigs.obj[1].length;
-                            }
-                        }
-                    }
-                    case 50 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
-                        for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
-                            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new Stone(gp);
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx = x;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy = y;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz = z;
-                                ii = GlobalGameThreadConfigs.obj[1].length;
-                            }
-                        }
-                    }
-                    case 48 -> {gp.tilemanager.mapRendererID[gp.currentmap][(int) Math.round(x / GlobalGameThreadConfigs.tilesize)][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
-                        for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
-                            if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] == null){
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = new OBJ_BRICK_WALL(gp);
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx = x;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy = y;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz = z;
-                                ii = GlobalGameThreadConfigs.obj[1].length;
-                            }
-                        }
-                    }
-                }
-            }
-        }else{
-            for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
-                if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] != null){
-                    if(Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldx/GlobalGameThreadConfigs.tilesize) == Math.round(x/GlobalGameThreadConfigs.tilesize) && Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldy/GlobalGameThreadConfigs.tilesize) == Math.round(y/GlobalGameThreadConfigs.tilesize) && GlobalGameThreadConfigs.obj[currentmap][ii].worldz==z){
-                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].ItemRequirements(this)) {
-                            if (!GlobalGameThreadConfigs.obj[currentmap][ii].invincible) {
-                                GlobalGameThreadConfigs.obj[currentmap][ii].health -= TrueAttackDamage;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].playSE();
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].invincible = true;
-                                ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii], GlobalGameThreadConfigs.obj[MainGame.currentmap][ii]);
-                                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].health <= 0) {
-                                    MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy / GlobalGameThreadConfigs.tilesize)][(int) GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz] = 46;
-                                    GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].getDestroyedForm();
-                                    GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].HandleItems();
-                                }
-                                ii = GlobalGameThreadConfigs.obj[1].length;}
-                        }
-                    }}
-            }
-        }
+        currentweapon.Destroy(x, y, z);
         playsound(7);
         KeyHandler.attack = false;
     }
-    public void BuildDestroy()
-    {
-        double y = worldy;
-        double x = worldx;
-        double z = worldz;
-        boolean canbreak;
-        if(!KeyHandler.CROUCH && !sprint){
-            switch (direction) {
-                case "down" -> y += GlobalGameThreadConfigs.tilesize;
-                case "up" -> y -= GlobalGameThreadConfigs.tilesize;
-                case "left" -> x -= GlobalGameThreadConfigs.tilesize;
-                case "right" -> x += GlobalGameThreadConfigs.tilesize;
-            }}else
-        if(KeyHandler.CROUCH){
-            z--;
-        }else if(sprint){
-            z++;
-        }
-        canbreak = gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 46;
-        if(!canbreak && (sprint || KeyHandler.CROUCH)){
-            switch (direction) {
-                case "down" -> y += GlobalGameThreadConfigs.tilesize;
-                case "up" -> y -= GlobalGameThreadConfigs.tilesize;
-                case "left" -> x -= GlobalGameThreadConfigs.tilesize;
-                case "right" -> x += GlobalGameThreadConfigs.tilesize;
-            }
-        }
-        attacking = true;
-        if(gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] != 47){
-            gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
-        }else{
-            gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
-
-            for(int ii = 0; ii < GlobalGameThreadConfigs.obj[1].length; ii++){
-                if(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] != null){
-                    if(Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldx/GlobalGameThreadConfigs.tilesize) == Math.round(x/GlobalGameThreadConfigs.tilesize) && Math.round(GlobalGameThreadConfigs.obj[currentmap][ii].worldy/GlobalGameThreadConfigs.tilesize) == Math.round(y/GlobalGameThreadConfigs.tilesize) && GlobalGameThreadConfigs.obj[currentmap][ii].worldz==z){
-                        if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].ItemRequirements(this)) {
-                            if (!GlobalGameThreadConfigs.obj[currentmap][ii].invincible) {
-                                GlobalGameThreadConfigs.obj[currentmap][ii].health -= TrueAttackDamage;
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].playSE();
-                                GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].invincible = true;
-                                ParticlePropertyManager(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii], GlobalGameThreadConfigs.obj[MainGame.currentmap][ii]);
-                                if (GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].health <= 0) {
-                                    MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldy / GlobalGameThreadConfigs.tilesize)][(int) GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].worldz] = 46;
-                                    GlobalGameThreadConfigs.obj[MainGame.currentmap][ii] = GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].getDestroyedForm();
-                                    GlobalGameThreadConfigs.obj[MainGame.currentmap][ii].HandleItems();
-                                    gp.tilemanager.mapRendererID[gp.currentmap][(int) (Math.round(x / GlobalGameThreadConfigs.tilesize))][(int) Math.round(y / GlobalGameThreadConfigs.tilesize)][(int) z] = 46;
-
-                                }
-                                ii = GlobalGameThreadConfigs.obj[1].length;}
-                        }
-                    }}
-            }
-        }
-        playsound(7);
-        KeyHandler.attack = false;
+    public void dealKnockbacktome(String direction, String direction2, int knockbackpower){
+        this.frozendirection = direction;
+        this.frozendirection2 = direction2;
+        this.speed = knockbackpower;
+        frozen = true;
     }
+    public Color getparticleColor(){return new Color(0xB30E08);}
+    public int getparticleSize(){return 6;}
+    public int getparticlespeed(){return 1;}
+    public int getparticleMaxHealth(){return 20;}
 }

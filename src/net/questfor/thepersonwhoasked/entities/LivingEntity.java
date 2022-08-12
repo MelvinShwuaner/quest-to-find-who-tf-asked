@@ -54,6 +54,7 @@ public class LivingEntity extends Data {
     //MOVEMENT AND ANIMATION//
     public String direction = "down";
     public String frozendirection = direction;
+    public String frozendirection2 = null;
     public int spritecounter = 0;
     public int spritenumber = 1;
     public boolean controlling = false;
@@ -131,12 +132,14 @@ public class LivingEntity extends Data {
     public boolean NBTDATA = false;
     public boolean jumping = false, canjump = true;
     public boolean passanger = false;
-    public int Vehicle = 1;
+    public boolean Cannon = false;
+    public boolean setascannon = false;
+
     //FUNCTIONS//
     public LivingEntity(MainGame gpp){
         this.gp = gpp;
         path = new Path();
-
+        setascannon = false;
     }
     public void setAction(){}
     public void updateLight(int i){
@@ -219,27 +222,20 @@ public class LivingEntity extends Data {
         /*AI for Monsters And NPCS*/
         if(frozen){
             checkCollision();
+            Move(frozendirection, speed);
+            if(frozendirection2 != null){
+                Move(frozendirection2, speed);
+            }
+            if(LightSource)
+                updateLight(Lightposition);
             if(hitboxe){
                 knockbackcounter = 0;
                 frozen = false;
                 speed = defaultspeed;
+                if (speed / 1.5 >= 0)
+                    health -= speed / 1.5;
+                ParticlePropertyManager(this, this);
             }else{
-                if(frozendirection == null){
-                    frozendirection = direction;
-                    frozen = false;
-                }
-                if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
-                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
-                }
-                switch (frozendirection) {
-                    case "up" -> worldy = worldy - speed;
-                    case "down" -> worldy = worldy + speed;
-                    case "right" -> worldx = worldx + speed;
-                    case "left" -> worldx = worldx - speed;
-                }
-                if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
-                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
-                }
                 knockbackcounter++;
                 if(knockbackcounter == 2){
                     speed--;
@@ -275,20 +271,7 @@ public class LivingEntity extends Data {
         }
         if (!hitboxe)
             if(!frozen){{
-                if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
-                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
-                }
-                switch (direction) {
-                    case "up" -> worldy = worldy - speed;
-                    case "down" -> worldy = worldy + speed;
-                    case "right" -> worldx = worldx + speed;
-                    case "left" -> worldx = worldx - speed;
-                }
-                if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
-                    gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
-                }
-            if(LightSource)
-                updateLight(Lightposition);
+                Move(direction, speed);
         }}
         if(!attacking){
         spritecounter++;
@@ -755,7 +738,8 @@ public class LivingEntity extends Data {
         }}}
     public void checkCollision(){
         hitboxe = false;
-        gp.hregister.checkTile(this);
+        gp.hregister.TileColide(this);
+        gp.hregister.VehicleColide(this);
         int npcindex = gp.hregister.EntityColide(this, GlobalGameThreadConfigs.NPCS);
         if(EntityType == 1 && npcindex != 999){
             AttackNPC(TrueAttackDamage, npcindex);
@@ -928,12 +912,52 @@ public class LivingEntity extends Data {
     }
     public LivingEntity replicate(){return null;}
     public void Place(double x, double y, double z, int i){}
+    public void Destroy(double x, double y, double z){}
+
     public void enterVehcile(int vehicleindex){
-        worldx = GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].enterX*GlobalGameThreadConfigs.tilesize;
-        worldy = GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].enterY*GlobalGameThreadConfigs.tilesize;
         GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].passengers.add(this);
-        worldz = GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].worldz+1;
         passanger = true;
         vehindex = vehicleindex;
+
+    }
+
+    public void exitVehicle(int vehicleindex) {
+        GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].passengers.remove(this);
+        if (GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].controller.size() > 0){
+            if(controlling){
+            GlobalGameThreadConfigs.Vehicles[currentmap][vehicleindex].controller.remove(0);
+            controlling = false;
+    }}
+        passanger = false;
+        vehindex = 999;
+    }
+    public void dealKnockbacktome(String direction, String direction2, int knockbackpower){
+        frozendirection = direction;
+        frozendirection2 = direction2;
+        speed = knockbackpower;
+        frozen = true;
+    }
+    public void Move(String direction, double speed){
+        try{
+        if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 53){
+            gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 46;
+        }
+        switch (direction) {
+            case "up" -> worldy = worldy - speed;
+            case "down" -> worldy = worldy + speed;
+            case "right" -> worldx = worldx + speed;
+            case "left" -> worldx = worldx - speed;
+            case "destroy" -> health -= 10;
+        }
+        if(gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46) {
+            gp.tilemanager.mapRendererID[currentmap][(int) Math.round(worldx / GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy / GlobalGameThreadConfigs.tilesize)][(int) worldz] = 53;
+        }
+        if(LightSource)
+            updateLight(Lightposition);
+    }catch (Exception ignored){}
+}
+
+    public void setasCannon() {
+        setascannon = true;
     }
 }

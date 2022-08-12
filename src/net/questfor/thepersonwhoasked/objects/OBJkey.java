@@ -35,25 +35,32 @@ public class OBJkey extends LivingEntity {
 
     @Override
     public void Place(double x, double y, double z, int i) {
-        if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
-            switch (GlobalGameThreadConfigs.player.direction) {
-                case "down" -> y += 50;
-                case "up" -> y -= 50;
-                case "left" -> x -= 50;
-                case "right" -> x += 50;
+        try {
+            if (!KeyHandler.CROUCH && !KeyHandler.sprint) {
+                switch (GlobalGameThreadConfigs.player.direction) {
+                    case "down" -> y += 50;
+                    case "up" -> y -= 50;
+                    case "left" -> x -= 50;
+                    case "right" -> x += 50;
+                }
+            } else if (KeyHandler.CROUCH) {
+                z--;
+            } else if (KeyHandler.sprint) {
+                z++;
             }
-        }else if(KeyHandler.CROUCH){
-            z--;
-        }else if(KeyHandler.sprint){
-            z++;
-        }
-        if(MainGame.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(x/GlobalGameThreadConfigs.tilesize)][(int) Math.round(y/GlobalGameThreadConfigs.tilesize)][(int) z] == 54){
-            if(GlobalGameThreadConfigs.player.passanger){
-                if(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].controlX == (int) Math.round(x/GlobalGameThreadConfigs.tilesize) && GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].controlY == (int) Math.round(y/GlobalGameThreadConfigs.tilesize)){
+
+            if (GlobalGameThreadConfigs.player.passanger) {
+                if (GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].tiles
+                [(int) (Math.round(x / GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].worldx/GlobalGameThreadConfigs.tilesize))]
+                [(int) (Math.round(y / GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].worldy/GlobalGameThreadConfigs.tilesize))]
+                [(int) (z-GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].worldz)] == 54) {
                     GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][GlobalGameThreadConfigs.player.vehindex].controller.add(0, GlobalGameThreadConfigs.player);
                     GlobalGameThreadConfigs.player.controlling = true;
                 }
             }
+
+        } catch (Exception ignored){
+
         }
     }
 }

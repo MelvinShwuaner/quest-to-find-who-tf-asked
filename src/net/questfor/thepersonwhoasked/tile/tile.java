@@ -7,5 +7,6 @@ public class tile {
     public BufferedImage image;
     public BufferedImage[] down = new BufferedImage[8];
     public boolean canjumpover, fluid, air, transparent, hot;
+    public String name;
 
 }

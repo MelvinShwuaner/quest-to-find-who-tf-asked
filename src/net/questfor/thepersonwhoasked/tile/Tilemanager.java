@@ -99,11 +99,25 @@ public class Tilemanager {
         tileproperties(52, "air", true, true, true, true);
         //OCCUPIED ENTITY //USED FOR AI
         tileproperties(53,"air", true, true, true, false);
-        //CONTROL PANEL
+        //CONTROL PANEL/ENGINE
         tileproperties(54,"black", true, false, false, false);
         //TIRE
         tileproperties(55,"black", true, false, false, false);
-
+        //shredders/spikes
+        tileproperties(56,"shredderdown", true, false, true, false);
+        tileproperties(57,"shredderup.", true, false, true, false);
+        tileproperties(58, "shredderleft", true, false, true, false);
+        tileproperties(59, "shredderright", true, false, true, false);
+        //shields
+        tileproperties(60,"shielddown", true, false, true, false);
+        tileproperties(61,"shieldup", true, false, true, false);
+        tileproperties(62, "shieldleft", true, false, true, false);
+        tileproperties(63, "shieldright", true, false, true, false);
+        //cranes
+        tileproperties(64, "cranedown", true, false, true, false);
+        tileproperties(65, "craneup", true, false, true, false);
+        tileproperties(66, "craneleft", true, false, true, false);
+        tileproperties(67, "craneright",true, false, true, false);
     }
 
     public void setexternaltextures() {
@@ -154,6 +168,7 @@ public class Tilemanager {
             tile[index].air = air;
             tile[index].transparent = transparent;
             tile[index].hot = hot;
+            tile[index].name = imagePath;
         }catch(Exception e){
             crash.main(e);
         }
@@ -219,6 +234,7 @@ public class Tilemanager {
                                     int i = (int) (GlobalGameThreadConfigs.player.worldz - worldlayer);
                                     int d;
                                     for(d = 1; d < i; d++){
+                                        if(worldlayer+d < 8){
                                         if(!tile[mapRendererID[MainGame.currentmap][worldcol][worldrow][worldlayer + d]].transparent){
                                             boolean up, down, right, left;
                                             if(worldrow+1 < 200){
@@ -245,12 +261,11 @@ public class Tilemanager {
                                             shouldrender = false;
                                                     }
                                         }
-                                    }
+                                    }}
                                 }
                             }
                             if (shouldrender) {
                                 update(worldcol, worldrow, worldlayer, screenX, screenY, g2);
-                                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
                         }
                     }
                     worldcol++;
@@ -287,6 +302,9 @@ public class Tilemanager {
                         mapRendererID[MainGame.currentmap][col][row][layer] = 46;
                 }
                 if (mapRendererID[MainGame.currentmap][col][row][layer] == 52) {
+                    if(tile[mapRendererID[MainGame.currentmap][col][row][layer-1]].air ){
+                        mapRendererID[MainGame.currentmap][col][row][layer] = 46;
+                    }
                     mapspritecounter[MainGame.currentmap][col][row][layer]++;
                     if (mapspritecounter[MainGame.currentmap][col][row][layer] >= 4) {
                         mapspritecounter[MainGame.currentmap][col][row][layer] = 0;
@@ -442,7 +460,9 @@ public class Tilemanager {
         return scaledImage;
     }
     public BufferedImage cropimage(BufferedImage image, int startX, int startY, int endX, int endY){
-        BufferedImage img = image.getSubimage(startX, startY, endX, endY); //fill in the corners of the desired crop location here
+        BufferedImage img = image.getSubimage(startX,
+
+                startY, endX, endY); //fill in the corners of the desired crop location here
         BufferedImage copyOfImage = new BufferedImage(img.getWidth(), img.getHeight(), image.getType());
         Graphics g = copyOfImage.createGraphics();
         g.drawImage(img, 0, 0, null);

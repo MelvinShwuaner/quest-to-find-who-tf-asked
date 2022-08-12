@@ -40,6 +40,36 @@ public class furnace extends LivingEntity {
         worldy = row*GlobalGameThreadConfigs.tilesize;
         worldz = layer;
     }
+    public furnace(MainGame gp, double col, double row, double layer){
+        super(gp);
+        name = "furnace";
+        LightSource = false;
+        getImageInstance();
+        EntityType = 4;
+        collision = true;
+        description = "a slow rusty furnace, is really hot!";
+        hitbox = new Rectangle();
+        hitbox.x = 0;
+        hitbox.y = 0;
+        hitbox.width = GlobalGameThreadConfigs.tilesize;
+        hitbox.height = GlobalGameThreadConfigs.tilesize;
+        hitboxdefaultx = hitbox.x;
+        hitboxdefaulty = hitbox.y;
+        maxstacksize = 16;
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        inventory.add(null);
+        maxcool = 100;
+        worldx = col;
+        worldy = row;
+        worldz = layer;
+    }
 
     @Override
     public void getImageInstance() {
@@ -54,8 +84,11 @@ public class furnace extends LivingEntity {
     }}
     @Override
     public void update() {
-        if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46){
+if(!passanger) {       if(gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] == 46){
             gp.tilemanager.mapRendererID[MainGame.currentmap][(int) Math.round(worldx/GlobalGameThreadConfigs.tilesize)][(int) Math.round(worldy/GlobalGameThreadConfigs.tilesize)][(int) worldz] = 47;
+        }}else{
+    if(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].tiles[(int) ( Math.round(worldx/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldx/GlobalGameThreadConfigs.tilesize))][(int) ( Math.round(worldy/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldy/GlobalGameThreadConfigs.tilesize))][(int) ( worldz-GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldz)] == 46){
+        GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].tiles[(int) ( Math.round(worldx/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldx/GlobalGameThreadConfigs.tilesize))][(int) ( Math.round(worldy/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldy/GlobalGameThreadConfigs.tilesize))][(int) ( worldz-GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldz)] = 47;    }
         }
         if(smelting){
             increasecool();
@@ -132,7 +165,7 @@ public class furnace extends LivingEntity {
     public void Place(double x, double y, double z, int i){
         boolean canplace;
         if(!KeyHandler.CROUCH && !KeyHandler.sprint) {
-            switch (direction) {
+            switch (GlobalGameThreadConfigs.player.direction) {
                 case "down" -> y += 50;
                 case "up" -> y -= 50;
                 case "left" -> x -= 50;
@@ -154,7 +187,26 @@ public class furnace extends LivingEntity {
             canplace = gp.hregister.checkEntityWorld(Math.round(x / GlobalGameThreadConfigs.tilesize), Math.round(y / GlobalGameThreadConfigs.tilesize),z, GlobalGameThreadConfigs.obj) && gp.hregister.checkEntityWorld(Math.round(x / GlobalGameThreadConfigs.tilesize), Math.round(y / GlobalGameThreadConfigs.tilesize),z, GlobalGameThreadConfigs.Monsters) && gp.hregister.checkEntityWorld(Math.round(x / GlobalGameThreadConfigs.tilesize), Math.round(y / GlobalGameThreadConfigs.tilesize), z,GlobalGameThreadConfigs.NPCS) && gp.hregister.checktileworld((int) Math.round(x / GlobalGameThreadConfigs.tilesize), (int) Math.round(y / GlobalGameThreadConfigs.tilesize), (int) z);
         }
         if (canplace && (!gp.hregister.checktileworld((int) Math.round(x / GlobalGameThreadConfigs.tilesize), (int) Math.round(y / GlobalGameThreadConfigs.tilesize), (int) z-1) || !gp.hregister.checktileworld((int) Math.round(x / GlobalGameThreadConfigs.tilesize), (int) Math.round(y / GlobalGameThreadConfigs.tilesize), (int) z+1) || !gp.hregister.checktileworld((int) Math.round(x / GlobalGameThreadConfigs.tilesize), (int) Math.round(y / GlobalGameThreadConfigs.tilesize)+1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / GlobalGameThreadConfigs.tilesize), (int) Math.round(y / GlobalGameThreadConfigs.tilesize)-1, (int) z) || !gp.hregister.checktileworld((int) Math.round(x / GlobalGameThreadConfigs.tilesize)+1, (int) Math.round(y / GlobalGameThreadConfigs.tilesize), (int) z) || !gp.hregister.checktileworld((int) Math.round(x / GlobalGameThreadConfigs.tilesize)-1, (int) Math.round(y / GlobalGameThreadConfigs.tilesize), (int) z))) {
-            GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new furnace(gp, (int) Math.round(x / GlobalGameThreadConfigs.tilesize), (int) Math.round(y / GlobalGameThreadConfigs.tilesize), z);
+            boolean ptile = false;
+            for(int index = 0; index < GlobalGameThreadConfigs.Vehicles[0].length; index++){
+                if(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index] != null){
+                    if(((Math.round(x/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].worldx/GlobalGameThreadConfigs.tilesize)) >= 0 && (Math.round(x/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].worldx/GlobalGameThreadConfigs.tilesize)) <= GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].width)
+                            && ((Math.round(y/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].worldy/GlobalGameThreadConfigs.tilesize)) >= 0 && (Math.round(y/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].worldy/GlobalGameThreadConfigs.tilesize)) <= GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].height)
+                            && (z >= GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].worldz && z <= GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].worldz+GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][index].depth)
+                    ){
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new furnace(
+                                gp,
+                                ((Math.round(x/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldx/GlobalGameThreadConfigs.tilesize))*48)+GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldx,
+                                ((Math.round(y/GlobalGameThreadConfigs.tilesize)-Math.round(GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldy/GlobalGameThreadConfigs.tilesize))*48)+GlobalGameThreadConfigs.Vehicles[MainGame.currentmap][vehindex].worldy,
+                                z
+                                );
+                        GlobalGameThreadConfigs.obj[MainGame.currentmap][i].enterVehcile(index);
+                        ptile = true;
+                    }
+                }
+            }
+            if(!ptile)
+            {GlobalGameThreadConfigs.obj[MainGame.currentmap][i] = new furnace(gp, (int) Math.round(x / GlobalGameThreadConfigs.tilesize), (int) Math.round(y / GlobalGameThreadConfigs.tilesize), z);}
             if(!GlobalGameThreadConfigs.Buildmode){
             GlobalGameThreadConfigs.player.currentshield.stacksize--;
             if (GlobalGameThreadConfigs.player.currentshield.stacksize <= 0) {
